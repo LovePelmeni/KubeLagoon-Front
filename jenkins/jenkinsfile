@@ -1,0 +1,47 @@
+pipeline {
+
+  agent any
+  environment {
+    DOCKERHUB_CREDENTIALS=credentials("Dockerhub")
+    FRONTEND_DOCKEFILE_PATH="../"
+    INTEGRATION_TESTS_PATH="../integration_tests/"
+    ORGANIZATION_EMAIL="kirklimushin@gmail.com"
+  }
+    stages {
+        stage("build"){
+            dir(env.FRONTEND_DOCKERFILE_PATH){
+                sh "echo 'Building Docker Application'"
+                sh "docker build . -t new_front_image"
+                success "echo 'Application has been Built Successfully'"
+            }
+        }
+        stage("validating & testing"){
+            dir(env.INTEGRATION_TESTS_PATH){
+                sh "echo 'Running Http Server with New Image'"
+                sh "docker run -p 8080:8080 new_front_image -t new_server"
+                sh "echo 'Running Integration Tests'"
+                sh "npm test ./"
+                success "echo 'Tests has run successfully, Deploying Application Image'"
+            }
+        }
+        stage("deployment"){
+            withCredentials([usernamePassword(
+              credentialsId: "Dockerhub",
+              usernameVariable: env.DOCKERHUB_CREDENTIALS_USR,
+              passwordVariable: env.DOCKERHUB_CREDENTIALS_PSW,
+            )]){
+              sh "echo 'logging into docker Registry...'"
+              sh "docker login -u ${env.DOCKERHUB_CREDENTIALS_USR} -p ${env.DOCKERHUB_CREDENTIALS_PSW}"
+              sh "docker tag new_front_image crazycoderrr/infrastructure_front_app"
+              sh "docker push crazycoderrr/infrastructure_front_app"
+              success "echo 'Application Image has been Pushed'"
+            }
+            always {
+                post {
+                  emailext body: "Pipeline has been Executed, Go check for Results",
+                  subject: "Front App CI Pipeline", to: env.ORGANIZATION_EMAIL
+                }
+            }
+        }
+    }
+}
