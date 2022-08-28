@@ -1,7 +1,7 @@
 import "../configuration_preparer/preparer.js"
 
 class UserData {
-  // User Info Validation Form 
+  // User Info Validation Form
   constructor(Username: String, Email: String, Password: String) {
     this.Username = Username
     this.Email = Email
@@ -14,7 +14,7 @@ class UserData {
     var InvalidFields = []
     var RegexsPatterns = {
       "Username": new RegExp("^[0-9a-zA-Z]{1,100}$"),
-      "Email": new RegExp(""),
+      "Email": new RegExp("^[a-z0-9](\.?[a-z0-9]){5,}@g(oogle)?mail\.com$"),
       "Password": new RegExp("^[0-9a-zA-Z]{1,100}$")}
     for (PropertyKey in Object(this.DataInput).Keys()){
         Matches = RegexsPatterns[PropertyKey].match(this.DataInput[PropertyKey])
@@ -36,7 +36,7 @@ function CreateCustomerRestController(Username: String, Email: String, Password:
     var APIUrl := new url.URL("http://%s:8000/customer/create/", BACKEND_APPLICATION_HOST)
     var HttpResponse, HttpErrors := $.ajax({
       method: "POST",
-      data: UserData.DataInput.Stringify(),
+      data: JSON.Stringify(UserData.DataInput),
       url: APIUrl,
       headers: {
         "Access-Control-Allow-Origin": "*",
@@ -44,28 +44,28 @@ function CreateCustomerRestController(Username: String, Email: String, Password:
       },
       async: false,
       success: function(Response) {
-        if Response.StatusCode == 400 {
+        if (Response.StatusCode == 400) {
           return false, [Response.Error]
         }
-        if Response.StatusCode == 201 {
+        if (Response.StatusCode == 201) {
           $.SetCookie("jwt-token", Response.getCookie("jwt-token"))
           return true, []
         }
-        if Response.StatusCode == 500 {
+        if (Response.StatusCode == 500) {
           return false, ["Failed to Perform Operation, Please Call Support"]
         }
-        if Response.StatusCode == 501 {
+        if (Response.StatusCode == 501) {
           return false, ["Failed to Perform Operation, Please Call Support"]
         }
       }
       error: function(error) {
-        if Response.StatusCode == 400 {
+        if (Response.StatusCode == 400) {
           return false, [Response.Error]
         }
-        if Response.StatusCode == 500 {
+        if (Response.StatusCode == 500) {
           return false, ["Failed to Perform Operation, Please Call Support"]
         }
-        if Response.StatusCode == 501 {
+        if (Response.StatusCode == 501) {
           return false, ["Failed to Perform Operation, Please Call Support"]
         }
       }
@@ -74,8 +74,35 @@ function CreateCustomerRestController(Username: String, Email: String, Password:
 }
 
 
-function ResetPasswordRestController() {
+function ResetPasswordRestController(CustomerId: String, NewPassword: String) -> bool, list {
   // Rest Controller, that Is Responsible for Resetting Password
+  UserData = new UserData(Password=NewPassword)
+  if UserData.DataInput["Password"].match(NewPassword) != true {
+    return false, ["Invalid Password"]
+  }
+  var APIUrl = new url.URL("http://%s:8000/customer/reset/password?customer_id=%s", BACKEND_APPLICATION_HOST, CustomerId)
+  ResponseStatus, ResponseErrors = $.ajax({
+    data: {"NewPassword": NewPassword}.Stringify()
+    url: APIUrl,
+    method: "PUT",
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Credentials": "true",
+      "Authorization": $.getCookie("jwt-token")
+    },
+    success: function(Response){
+      if (Response.StatusCode == 201) {
+        return true, []
+      }
+      if (Response.StatusCode == 400 || Response.StatusCode == 501 || Response.StatusCode == 500) {
+        return false, ["Failed to Apply New Password, Contact Support"]
+      }
+    }
+    error: function(Error) {
+      return false, [Error]
+    }
+  })
+  return ResponseStatus, ResponseErrors
 }
 
 function DeleteCustomerRestController(CustomerId: String) {
@@ -95,7 +122,7 @@ function DeleteCustomerRestController(CustomerId: String) {
     },
     success: function(Response) {
       // Handling Success Response
-      if Response.StatusCode == 201 {
+      if (Response.StatusCode == 201) {
         // Removing Jwt Cookie...
         Expired = $.ExpireCookie("jwt-token")
         return Expired, []

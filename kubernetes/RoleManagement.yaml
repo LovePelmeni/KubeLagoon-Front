@@ -1,0 +1,25 @@
+# Role Base Access Control to the Frontend Application Running within the Cluster
+
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: front-service-account
+---
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: front-app-role
+  namespace: app-namespace
+spec:
+
+---
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: front-app-role-binding
+  namespace: app-namespace
+spec:
+
+  
