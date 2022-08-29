@@ -9,7 +9,6 @@ var HEALTH_METRIC_STORAGE_PORT=process.env.HEALTH_METRIC_STORAGE_PORT
 var CrontabJob = require("cron").CronJob
 
 
-
 class HealthMetricStorage {
   // healthMetric Storage based on the Redis Database
   // Is Being Used for storing Info about the healt metrics of the Virtual Machines
@@ -26,8 +25,12 @@ class HealthMetricStorage {
     newClient.on("error", (error) => return null)
     return newClient
   }
-  function SaveMetric() -> bool {
+  function SaveMetric(MetricSerializedObjectBlob: Object, MetricCount: Int) -> bool {
     // Saved Serialized Blob Of JSON Into the health Metric Storage
+    Client = this.GetConnection()
+    if (Client != null) {
+    Saved = await Client.set(
+    "vm_health_metric_%s" % MetricCount, MetricSerializedObjectBlob)}
   }
 }
 class VirtualMachineHealthStateChecker {
