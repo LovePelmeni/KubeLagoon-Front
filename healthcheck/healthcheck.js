@@ -1,8 +1,14 @@
 import "../rest/healthcheck.js"
+import {createClient} from "redis"
+
 var BACKEND_APPLICATION_HOST=process.env.BACKEND_APPLICATION_HOST
 var DEFAULT_CRONTAB_JOB_TIMEZONE=process.env.DEFAULT_CRONTAB_JOB_TIMEZONE
 var HEALTH_METRIC_STORAGE=process.env.HEALTH_METRIC_STORAGE_HOST
 var HEALTH_METRIC_STORAGE_PORT=process.env.HEALTH_METRIC_STORAGE_PORT
+
+var CrontabJob = require("cron").CronJob
+
+
 
 class HealthMetricStorage {
   // healthMetric Storage based on the Redis Database
@@ -13,6 +19,12 @@ class HealthMetricStorage {
   }
   function GetConnection() {
     // Returns Storage Connection Entity
+    newClient = createClient({
+      url: "redis://:%s@%s:%s/%s" % (HEALTH_METRIC_STORAGE_PASSWORD,
+      HEALTH_METRIC_STORAGE_HOST, HEALTH_METRIC_STORAGE_PORT)
+    })
+    newClient.on("error", (error) => return null)
+    return newClient
   }
   function SaveMetric() -> bool {
     // Saved Serialized Blob Of JSON Into the health Metric Storage
