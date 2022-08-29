@@ -4,12 +4,25 @@
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+
+import * as vm_components from "./components/VirtualMachine.vue"
 
 export default {
-  name: 'App',
+  name: 'costs'
   components: {
-    HelloWorld
+    vm_components.costs
+  }
+}
+export default {
+  name: 'resources'
+  components: {
+    vm_components.resources
+  }
+}
+export default {
+  name: 'virtualMachine'
+  components: {
+    vm_components.virtualMachine
   }
 }
 </script>

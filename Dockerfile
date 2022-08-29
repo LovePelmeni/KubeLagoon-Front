@@ -17,4 +17,4 @@ RUN npm install
 RUN npm run build
 
 # Running Http Server
-ENTRYPOINT ["http-server", "dist"]
+ENTRYPOINT ["npm", "run", "serve"]
