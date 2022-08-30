@@ -2,7 +2,7 @@
 
 <script>
 
-import "../customers/customers.js" as customers
+import * as customers from "../customers/customers.js" 
 
 function ShowCustomerProfile() {
   // Function Parses Customer Data and Shows Out Customer's Profile Component

@@ -7,7 +7,7 @@ class BaseResource {
   // So In order to make it as a puzzle and make it easy to serialize the whole CustomizedConfiguration
   // there is class called `Resource`, that basically represents the part of this CustomizedConfiguration
   // it can be: Network Resource, OsResource, etc.....
-  function GetObject() -> String {
+  function GetObject() {
     // Returns Part of the Configuration Class "Configuration for the Specific Resource"
   }
 }
@@ -15,7 +15,7 @@ class BaseResource {
 class BaseConfiguration {
   // Represents base Configuration Class, for both `Hardware Configuration` and
   // `Customized Configuration`, defines basic methods to make performance easier
-  function GetConfiguration() -> Object {
+  function GetConfiguration() {
     // Returns Configuration Object
   }
 }
@@ -30,7 +30,7 @@ class Metadata extends BaseResource {
     this.VirtualMachineId = VirtualMachineId
     this.VmOwnerId = VmOwnerId
   }
-  function GetObject(self) {
+  function GetObject() {
       // Returns Metadata converted into Object
       return {"Metadata": {
       "VirtualMachineId": this.VirtualMachineId,
@@ -83,12 +83,12 @@ class HostSystemResources extends BaseResource {
 class NetworkResources extends BaseResource {
   // Represents Network Configuration for the Virtual Machine Server
   constructor(
-  NetworkIP: String=null,
-  Hostname: String=null,
-  Gateway: String=null,
-  Netmask: String=null,
-  Enablev4: bool = true,
-  Enablev6: bool = true,
+  NetworkIP=null,
+  Hostname=null,
+  Gateway=null,
+  Netmask=null,
+  Enablev4=true,
+  Enablev6=true,
   ) {
     this.NetworkIP = NetworkIP
     this.Gateway = Gateway
@@ -97,7 +97,7 @@ class NetworkResources extends BaseResource {
     this.Enablev4 = Enablev4
     this.Enablev6 = Enablev6
   }
-  function GetObject() -> Object {
+  function GetObject() {
     return {"Network":
         {
           "IP": this.NetworkIP,
