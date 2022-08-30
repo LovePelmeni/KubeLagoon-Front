@@ -26,18 +26,17 @@ class Metadata extends BaseResource {
   // Metadata, about who performs the Request
   // is going to be put inside the Configuration
   // so the backend would recognize what VM Server to apply configuration to
-  constructor(VirtualMachineId: String, VmOwnerId: String) {
+  constructor(VirtualMachineId, VmOwnerId) {
     this.VirtualMachineId = VirtualMachineId
     this.VmOwnerId = VmOwnerId
   }
-  function GetObject() -> Object {
-    // Returns Metadata converted into Object
-    return {"Metadata": {
-    "VirtualMachineId": this.VirtualMachineId,
-    "VmOwnerId": this.VmOwnerId}}
+  function GetObject(self) {
+      // Returns Metadata converted into Object
+      return {"Metadata": {
+      "VirtualMachineId": this.VirtualMachineId,
+      "VmOwnerId": this.VmOwnerId}}
   }
 }
-
 // Resources goes there
 
 class Resources extends BaseResource {
@@ -65,18 +64,18 @@ class DiskResources extends BaseResource {
   constructor(MemoryInKB: int) {
       this.MemoryInKB = MemoryInKB
   }
-  function GetObject() -> Object {
+  function GetObject(){
     return {"Disk": {"MemoryInKB": this.MemoryInKB}}
   }
 }
 
 class HostSystemResources extends BaseResource {
   // Represents Host System Configuration for the Virtual Machine Server
-  constructor(SystemName: String, Bit: String) {
+  constructor(SystemName, Bit) {
     this.SystemName = SystemName  // System Name should include OS Name + Distribution
     this.Bit = Bit // bit version of the OS, like 64 or 32
   }
-  function GetObject() -> Object {
+  function GetObject() {
     return {"HostSystem": {"SystemName": this.SystemName, "Bit": this.Bit}}
   }
 }

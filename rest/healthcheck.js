@@ -1,6 +1,6 @@
 import "../healthcheck/healthcheck.js"
 
-function GetHealthCheckMetricsRestController(CustomerId: String, VmId: String) {
+function GetHealthCheckMetricsRestController(CustomerId, VmId) {
   // Rest Controller, that returns Metrics about the Health of the Virtual Machine Server
   var APIUrl = new url.URL("http://%s:8000/health/metrics/", BACKEND_APPLICATION_HOST)
   APIUrl.searchParams.append("CustomerId", CustomerId)
