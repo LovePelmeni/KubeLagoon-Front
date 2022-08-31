@@ -17,4 +17,4 @@ RUN npm install
 RUN npm run build
 
 # Running Http Server
-ENTRYPOINT ["npm", "run", "serve"]
+ENTRYPOINT ["npm", "run", "serve", "--", "--port", $APPLICATION_PORT]
