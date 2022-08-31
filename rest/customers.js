@@ -83,7 +83,7 @@ function DeleteCustomerRestController(CustomerId: String) {
   var APIUrl = new url.URL("http://%s:8000/customer/delete", BACKEND_APPLICATION_HOST)
   APIUrl.searchParams.append("CustomerId", CustomerId)
 
-  var Response := $.ajax({
+  var Response, Error = $.ajax({
     url: APIUrl,
     method: "DELETE",
     headers: {
@@ -105,4 +105,5 @@ function DeleteCustomerRestController(CustomerId: String) {
       if Error != null {return false, [Error]}
     }
   })
+  return Response, Error
 }

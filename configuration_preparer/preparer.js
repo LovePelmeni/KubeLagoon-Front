@@ -59,6 +59,18 @@ class Resources extends BaseResource {
   }
 }
 
+class SSlResources extends BaseResource {
+  // SSL Management for the Virtual Machine, Provides ability to setup SSL Certificate
+  // To Secure SSH Connection
+  constructor(Type) {
+    this.Type = Type
+  }
+  function GetObject() {
+    // Returns Serialized Object of the Ssh Parameters for the Virtual Machine Server
+    return {"Ssh": {"Type": this.Type}}
+  }
+}
+
 class DiskResources extends BaseResource {
   // Represents Disk Capacity Configuration for the Virtual Machine Server
   constructor(MemoryInKB: int) {
@@ -125,22 +137,24 @@ class CustomConfiguration extends BaseConfiguration {
   // where the Customer can pick up, how much memory and cpu's they want,
   // What OS and Network to pick up etc...
   constructor(
-   CpuConfig: CpuResources,
-   MemoryConfig: MemoryResources,
-   NetworkConfig: NetworkResources,
-   HostSystemConfig: HostSystemResources
-   PreInstalledToolsConfig: PreInstalledToolsResources,
-   DiskConfig: DiskResources,
+   CpuConfig,
+   MemoryConfig,
+   NetworkConfig,
+   HostSystemConfig,
+   PreInstalledToolsConfig,
+   DiskConfig,
+   SshConfig,
  ) {
     this.CpuConfig = CpuConfig
     this.MemoryConfig = MemoryConfig
     this.NetworkConfig =  NetworkConfig
     this.HostSystemConfig = HostSystemConfig
     this.DiskConfig = DiskConfig
+    this.SslConfig = SshResources,
     // Array of the Configurations
     this.ConfigArray = [this.CpuConfig,
     this.MemoryConfig, this.NetworkConfig,
-    this.HostSystemConfig, this.DiskConfig]
+    this.HostSystemConfig, this.DiskConfig, this.SshConfig]
   }
   function GetConfiguration() String {
     // Returns Serialized Custom Configuration for the Virtual Machine Server

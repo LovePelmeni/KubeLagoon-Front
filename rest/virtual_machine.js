@@ -65,27 +65,174 @@ function ApplyVirtualMachineConfigurationRestController(CustomConfiguration, Vir
 
 function StartVirtualMachineRestController(VirtualMachineId, CustomerId) {
   // Rest Controller, that Starts Virtual Machine
+  BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
+  Response, Error= $.ajax({
+    url: APIUrl,
+    method: "POST",
+    data: JSON.stringify({"HardwareConfiguration": Configuration}),
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Authorization": $.getCookie("jwt-token"),
+      "Access-Control-Allow-Credentials": "true",
+    },
+    success: function(Response){
+        // Processing Initialization Response
+        if (Response.StatusCode != 201 || Response.StatusCode != 200) {
+          return null, Error(Response.Error)
+        }else{
+          return Response.Operation, null // Returns Info About Initialized Instance
+        }
+    },
+    error: function(Error) {
+      // Processing Initialization Error
+      return null, Error(Error)
+    }
+  })
+  return Response, Error
 }
 
 function ShutdownVirtualMachineRestController(VirtualMachineId, CustomerId) {
   // Rest Controller, that Shuts Down Virtual Machine
+  BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
+  Response, Error= $.ajax({
+    url: APIUrl,
+    method: "POST",
+    data: JSON.stringify({"HardwareConfiguration": Configuration}),
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Authorization": $.getCookie("jwt-token"),
+      "Access-Control-Allow-Credentials": "true",
+    },
+    success: function(Response){
+        // Processing Initialization Response
+        if (Response.StatusCode != 201 || Response.StatusCode != 200) {
+          return null, Error(Response.Error)
+        }else{
+          return Response.Operation, null // Returns Info About Initialized Instance
+        }
+    },
+    error: function(Error) {
+      // Processing Initialization Error
+      return null, Error(Error)
+    }
+  })
+  return Response, Error
 }
 
 function RebootVirtualMachineRestController(VirtualMachineId, CustomerId) {
   // Rest Controller, that Reboots Virtual Machine
+  BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
+  Response, Error= $.ajax({
+    url: APIUrl,
+    method: "POST",
+    data: JSON.stringify({"HardwareConfiguration": Configuration}),
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Authorization": $.getCookie("jwt-token"),
+      "Access-Control-Allow-Credentials": "true",
+    },
+    success: function(Response){
+        // Processing Initialization Response
+        if (Response.StatusCode != 201 || Response.StatusCode != 200) {
+          return null, Error(Response.Error)
+        }else{
+          return Response.Operation, null // Returns Info About Initialized Instance
+        }
+    },
+    error: function(Error) {
+      // Processing Initialization Error
+      return null, Error(Error)
+    }
+  })
+  return Response, Error
 }
 
 
 
 
-function StartVmOsRestController(VirtualMachineId, CustomerId) {
+function StartVmOsRestController(VirtualMachineId) {
   // Rest Controller, that Starts Virtual Machine Os HostSystem
+  var APIUrl = new url.URL("http://%s:%s/os/start/" %
+  BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
+  APIUrl.searchParams.append("VirtualMachineId", VirtualMachineId)
+
+  Response, Error = $.ajax({
+    url: APIUrl,
+    method: "POST",
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Authorization": $.getCookie("jwt-token"),
+      "Access-Control-Allow-Credentials": "true",
+    },
+    success: function(Response){
+        // Processing Initialization Response
+        if (Response.StatusCode != 201 || Response.StatusCode != 200) {
+          return null, Error(Response.Error)
+        }else{
+          return Response.Operation, null // Returns Info About Initialized Instance
+        }
+    },
+    error: function(Error) {
+      // Processing Initialization Error
+      return null, Error(Error)
+    }
+  })
+  return Response, Error
 }
 
-function ShutdownVmOsRestController(VirtualMachineId, CustomerId) {
+function ShutdownVmOsRestController(VirtualMachineId) {
   // Rest Controller, that Shuts Down Virtual Machine Os HostSystem
+  var APIUrl = new url.URL("http://%s:%s/os/shutdown/" %
+  (BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
+  Response, Error= $.ajax({
+    url: APIUrl,
+    method: "DELETE",
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Authorization": $.getCookie("jwt-token"),
+      "Access-Control-Allow-Credentials": "true",
+    },
+    success: function(Response){
+        // Processing Initialization Response
+        if (Response.StatusCode != 201 || Response.StatusCode != 200) {
+          return null, Error(Response.Error)
+        }else{
+          return Response.Operation, null // Returns Info About Initialized Instance
+        }
+    },
+    error: function(Error) {
+      // Processing Initialization Error
+      return null, Error(Error)
+    }
+  })
+  return Response, Error
 }
 
-function RebootVmOsRestController(VirtualMachineId, CustomerId) {
+function RebootVmOsRestController(VirtualMachineId) {
   // Rest Controller, that Reboots Virtual Machine Os HostSystem
+  var APIUrl = new url.URL("http://%s:%s/os/reboot/" %
+  BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
+  APIUrl.searchParams.append("VirtualMachineId", VirtualMachineId)
+  Response, Error= $.ajax({
+    url: APIUrl,
+    method: "PUT",
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Authorization": $.getCookie("jwt-token"),
+      "Access-Control-Allow-Credentials": "true",
+    },
+    success: function(Response){
+        // Processing Initialization Response
+        if (Response.StatusCode != 201 || Response.StatusCode != 200) {
+          return null, Error(Response.Error)
+        }else{
+          return Response.Operation, null // Returns Info About Initialized Instance
+        }
+    },
+    error: function(Error) {
+      // Processing Initialization Error
+      return null, Error(Error)
+    }
+  })
+  return Response, Error
 }
