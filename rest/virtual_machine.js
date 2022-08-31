@@ -37,6 +37,7 @@ function ApplyVirtualMachineConfigurationRestController(CustomConfiguration, Vir
   var APIUrl = new url.URL("http://%s:%s/vm/apply/configuration/" % (
   BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
   APIUrl.searchParams.append("VirtualMachineId", VirtualMachineId)
+  
   Response, Error = $.ajax({
     url: APIUrl,
     method: "POST",
@@ -63,9 +64,12 @@ function ApplyVirtualMachineConfigurationRestController(CustomConfiguration, Vir
 }
 
 
-function StartVirtualMachineRestController(VirtualMachineId, CustomerId) {
+function StartVirtualMachineRestController(VirtualMachineId) {
   // Rest Controller, that Starts Virtual Machine
-  BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
+  var APIUrl = new url.URL("http://%s:%s/os/reboot/" %
+  (BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
+  APIUrl.searchParams.append("VirtualMachineId", VirtualMachineId)
+
   Response, Error= $.ajax({
     url: APIUrl,
     method: "POST",
@@ -91,9 +95,12 @@ function StartVirtualMachineRestController(VirtualMachineId, CustomerId) {
   return Response, Error
 }
 
-function ShutdownVirtualMachineRestController(VirtualMachineId, CustomerId) {
+function ShutdownVirtualMachineRestController(VirtualMachineId) {
   // Rest Controller, that Shuts Down Virtual Machine
-  BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
+  var APIUrl = new url.URL("http://%s:%s/os/reboot/" %
+  (BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
+  APIUrl.searchParams.append("VirtualMachineId", VirtualMachineId)
+
   Response, Error= $.ajax({
     url: APIUrl,
     method: "POST",
@@ -119,9 +126,12 @@ function ShutdownVirtualMachineRestController(VirtualMachineId, CustomerId) {
   return Response, Error
 }
 
-function RebootVirtualMachineRestController(VirtualMachineId, CustomerId) {
+function RebootVirtualMachineRestController(VirtualMachineId) {
   // Rest Controller, that Reboots Virtual Machine
-  BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
+  var APIUrl = new url.URL("http://%s:%s/os/reboot/" %
+  (BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
+  APIUrl.searchParams.append("VirtualMachineId", VirtualMachineId)
+
   Response, Error= $.ajax({
     url: APIUrl,
     method: "POST",
@@ -153,7 +163,7 @@ function RebootVirtualMachineRestController(VirtualMachineId, CustomerId) {
 function StartVmOsRestController(VirtualMachineId) {
   // Rest Controller, that Starts Virtual Machine Os HostSystem
   var APIUrl = new url.URL("http://%s:%s/os/start/" %
-  BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
+  (BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
   APIUrl.searchParams.append("VirtualMachineId", VirtualMachineId)
 
   Response, Error = $.ajax({
@@ -184,6 +194,8 @@ function ShutdownVmOsRestController(VirtualMachineId) {
   // Rest Controller, that Shuts Down Virtual Machine Os HostSystem
   var APIUrl = new url.URL("http://%s:%s/os/shutdown/" %
   (BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
+  APIUrl.searchParams.append("VirtualMachineId", VirtualMachineId)
+
   Response, Error= $.ajax({
     url: APIUrl,
     method: "DELETE",
@@ -211,8 +223,9 @@ function ShutdownVmOsRestController(VirtualMachineId) {
 function RebootVmOsRestController(VirtualMachineId) {
   // Rest Controller, that Reboots Virtual Machine Os HostSystem
   var APIUrl = new url.URL("http://%s:%s/os/reboot/" %
-  BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
+  (BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
   APIUrl.searchParams.append("VirtualMachineId", VirtualMachineId)
+
   Response, Error= $.ajax({
     url: APIUrl,
     method: "PUT",

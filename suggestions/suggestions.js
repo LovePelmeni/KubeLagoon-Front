@@ -3,17 +3,17 @@ import "../rest/suggestions.js"
 
 class SuggestionsReturner {
   // Class Represents Suggestion Manager
-  function GetSuggestedDatacenters() -> list {
+  GetSuggestedDatacenters = function(){
     // Returns List of avaialble Datacenters, to deploy your VM Server
     return suggestions.GetDatacenterSuggestionsRestController()
   }
 
-  function GetSuggestedOsSystems() -> list {
+  GetSuggestedOsSystems = function(){
     // Returns List of the OS Systems + Distributions, that can be used as a Main OS on the VM
     return suggestions.GetOsSystemSuggestionsRestController()
   }
 
-  function GetSuggestedPreInstallTools() -> list{
+  GetSuggestedPreInstallTools = function(){
     // Returns List of tools, that can be pre-installed on the Virtual Machine
     return suggestions.GetPreInstalledToolSuggestionsRestController()
   }

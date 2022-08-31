@@ -1,7 +1,7 @@
 var BACKEND_APPLICATION_HOST = process.env.BACKEND_APPLICATION_HOST
 var BACKEND_APPLICATION_PORT = process.env.BACKEND_APPLICATION_PORT
 
-function GetDatacenterSuggestionsRestController() -> list {
+function GetDatacenterSuggestionsRestController() {
   //  Returns Array of the Available Datacenters, so Customer can pick up, which one to choose
   var APIUrl = new url.URL("http://%s:%s/suggestion/datacenter/" % (
   BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
@@ -27,7 +27,7 @@ function GetDatacenterSuggestionsRestController() -> list {
   return Datacenters, Error
 }
 
-function GetOsSystemsSuggestionsRestController() -> list {
+function GetOsSystemsSuggestionsRestController(){
   // Returns Array of the Available Os Systems + Distributions to them
   var APIUrl = new url.URL("http://%s:%s/suggestion/os/system/" % (
   BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
@@ -53,7 +53,7 @@ function GetOsSystemsSuggestionsRestController() -> list {
   return Datacenters, Error
 }
 
-function GetPreInstallationToolSuggestionsRestController() -> list {
+function GetPreInstallationToolSuggestionsRestController(){
   // Rest Controller, that returns array of the Tools, that can be pre-installed on the Virtual Machine
   var APIUrl = new url.URL("http://%s:%s/suggestion/preinstall/tools" % (
   BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
