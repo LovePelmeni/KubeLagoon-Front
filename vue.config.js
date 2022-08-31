@@ -3,11 +3,17 @@ var APPLICATION_HOST = process.env.APPLICATION_HOST
 var HTTPS_ENABLE = process.env.HTTPS_ENABLE
 
 module.exports = {
-  transpileDependencies: true
   // devServer: {
   //   port: APPLICATION_PORT,
   //   host: APPLICATION_HOST,
   //   https: function(httpsEnable) {if (httpsEnable == "1"){return true}else{return false}}(),
   //   hotOnly: false,
   // }
+  transpileDependencies: true,
+
+  pluginOptions: {
+    vuetify: {
+			// https://github.com/vuetifyjs/vuetify-loader/tree/next/packages/vuetify-loader
+		}
+  }
 }
