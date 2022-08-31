@@ -1,5 +1,5 @@
 <template>
-  <router-link class="virtualMachine flex" :Created By="{ name: virtualMachine.CustomerName">
+  <router-link class="virtualMachine flex" :Created By="{ name: virtualMachine.CustomerName }">
 
     <div class="left flex">
       <span class="tracking-number">#{{ virtualMchine.VirtualMachineId }}</span>
@@ -8,17 +8,9 @@
     </div>
 
     <div class="right flex">
-
-      <h4>SSH Credentials</h4>
-      <span class="price">${{ virtualMachine.SshCredentials }}</span>
-
       <div class="status-button flex">
-        <span v-if="virtualMachine.invoicePaid">Paid</span>
-        <span v-if="virtualMachine.invoiceDraft">Draft</span>
-        <span v-if="virtualMachine.invoicePending">Pending</span>
-        <span v-if="virtualMachine.invoicePaid">Paid</span>
-        <span v-if="virtualMachine.invoiceDraft">Draft</span>
-        <span v-if="virtualMachine.invoicePending">Pending</span>
+        <span v-if="virtualMachine.State=='Running'">Running</span>
+        <span v-if="virtualMachine.State=='failure'">Failure</span>
       </div>
       <div class="icon">
         <img src="@/assets/icon-arrow-right.svg" alt="" />
@@ -60,6 +52,10 @@ export default {
       MemoryUsage: null,
       State: null,
       OsState: null,
+
+
+      // Health Check API Class
+      HealthAPICheckerJobName: null,
     }
   },
   methods: {
@@ -86,18 +82,19 @@ export default {
     function ShowVirtualMachineHealthMetrics(VirtualMachineId, CustomerId) {
       // Returns Health Metrics of the Virtual Machine
       HealthMetricsManager = new healthcheck.VirtualMachineHealthStateChecker()
-      Started, StartError = HealthMetricsManager.StartHealthChecker(VirtualMachineId, CustomerId)
+      JobUniqueName, StartError = HealthMetricsManager.StartHealthChecker(VirtualMachineId, CustomerId)
+
       if (StartError != null) {
         for (Item in [this.CpuUsage, this.MemoryUsage, this.State])  {
           Item = "Failed to Parse Item"
         }
+      }else{
+        this.HealthAPICheckerJobName = JobUniqueName
       }
     },
 
     function ShutdownVirtualMachineHealthMetrics(JobUniqueName){
       // Shuts down the Health Metrics API Crontab Job by stopping it using Job Unique Name
-      VirtualMachineId = document.getElementById("virtualMachineId")
-      JobUniqueName = localStorage.getItem(VirtualMachineId + "-healthMetric")
       HealthMetricsManager = new healthcheck.VirtualMachineHealthStateChecker()
       Removed, RemoveError = HealthMetricsManager.RemoveHealthChecker(JobUniqueName)
     },

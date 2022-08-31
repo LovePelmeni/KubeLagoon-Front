@@ -9,14 +9,12 @@
       <div class="right flex">
         <div @click="toggleFilterMenu" class="filter flex">
           <span
-            >Filter by status <span v-if="filteredInvoice">: {{ filteredInvoice }}</span></span
+            >Filter by status <span v-if="filteredVirtualMachines">: {{ filteredVirtualMachines }}</span></span
           >
           <img src="@/assets/icon-arrow-down.svg" alt="" />
           <ul v-show="filterMenu" class="filter-menu">
-            <li @click="filteredInvoices">Draft</li>
-            <li @click="filteredInvoices">Pending</li>
-            <li @click="filteredInvoices">Paid</li>
-            <li @click="filteredInvoices">Clear Filter</li>
+            <li @click="filterVirtualMachines">By Creation Date</li>
+            <li @click="filterVirtualMachines">Clear Filter</li>
           </ul>
         </div>
         <div @click="newInvoice" class="button flex">
@@ -27,7 +25,7 @@
         </div>
       </div>
     </div>
-    
+
     <!-- Invoices -->
     <div v-if="VirtualMachines.length > 0">
       <VirtualMachine v-for="(VirtualMachine, index) in filteredData" :invoice="virtualMachine" :key="index" />
@@ -50,7 +48,7 @@ export default {
   data() {
     return {
       filterMenu: null,
-      filteredInvoice: null,
+      filteredVirtualMachines: null,
     };
   },
   components: {
@@ -64,10 +62,20 @@ export default {
     toggleFilterMenu() {
       this.filterMenu = !this.filterMenu;
     },
-    filteredInvoices(e) {
+
+    filterVirtualMachines(e) {
       if (e.target.innerText === "Clear Filter") {
-        this.filteredInvoice = null;
+        this.filteredVirtualMachines = null;
         return;
+      }
+      if (e.target.innerText === "By Creation Date")  {
+        QueryIds = []
+        for (VirtualMachine in this.filteredVirtualMachines) {
+          QueryIds.push(VirtualMachine.VirtualMachineId)
+        }
+        VirtualMachineManager = new vm.VirtualMachineManager()
+        FilteredQueryset = VirtualMachineManager.FilterVirtualMachinesByCreationDate(QueryIds)
+        this.filterVirtualMachines = FilteredQueryset
       }
       this.filteredInvoice = e.target.innerText;
     },
