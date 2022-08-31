@@ -17,7 +17,7 @@
             <li @click="filterVirtualMachines">Clear Filter</li>
           </ul>
         </div>
-        <div @click="newInvoice" class="button flex">
+        <div @click="newVirtualMachine" class="button flex">
           <div class="inner-button flex">
             <img src="@/assets/icon-plus.svg" alt="" />
           </div>
@@ -56,9 +56,11 @@ export default {
   },
   methods: {
     ...mapMutations(["TOGGLE_INVOICE"]),
-    newInvoice() {
-      this.TOGGLE_INVOICE();
+    
+    newVirtualMachine() {
+      this.CREATE_VIRTUAL_MACHINE();
     },
+
     toggleFilterMenu() {
       this.filterMenu = !this.filterMenu;
     },
