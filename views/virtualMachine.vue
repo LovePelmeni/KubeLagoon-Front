@@ -77,14 +77,18 @@
 
 <script>
 import { mapActions, mapMutations, mapState } from "vuex";
+import * as cost from "../cost/virtualMachineCost.js"
 
+var uuidv4 = require("uuid")
 const cron = require("cron").CronJob
+
 export default {
   name: "virtualMachine",
   data() {
     return {
       currentVirtualMachine: null,
       uniqueCostJobName: null,
+      virtualMachineItemList: null,
     };
   },
   created() {
@@ -95,6 +99,11 @@ export default {
     ...mapMutations(["SET_CURRENT_INVOICE", "TOGGLE_EDIT_INVOICE", "TOGGLE_INVOICE"]),
     ...mapActions(["DELETE_INVOICE", "UPDATE_STATUS_TO_PENDING", "UPDATE_STATUS_TO_PAID"]),
 
+
+    getVirtualMachine() {
+      // Return List of the Virtual Machines, Owned by the Customer
+    },
+
     getCurrentVirtualMachine() {
       this.SET_CURRENT_VIRTUAL_MACHINE(this.$route.params.VirtualMachineId);
       this.currentVirtualMachine = this.currentVirtualMachineArray[0];
@@ -102,31 +111,33 @@ export default {
 
     DeleteVirtualMachine(VirtualMachineId) {
       // Redirects to the Delete Virtual Machine Page
-      this.$router.push({name: "DeleteVirtualMachine"})
-    }
+      this.$router.push({name: "DeleteVirtualMachine",
+      params: {"VirtualMachineId": VirtualMachineId}})
+    },
 
     UpdateVirtualMachine(VirtualMachineId) {
       // Redirects to the Update Virtual Machine Page
-      this.$router.push({name: "UpdateVirtualMachine"})
-    }
+      this.$router.push({name: "UpdateVirtualMachine",
+      params: {"VirtualMachineId": VirtualMachineId}})
+    },
 
     StartVirtualMachineCostParser(VirtualMachineId) {
       // Updates Virtual Machine Cost Topic in Real Time
-      newVirtualMachineCostManager = new cost.VirtualMachineCostManager()
-      var JobUniqueName = uid()
-      Parser, NewCost, ParseError = newVirtualMachineCostManager.StartVirtualMachineSpendCostParser(UniqueName, VirtualMachineId)
+      let newVirtualMachineCostManager = new cost.VirtualMachineCostManager()
+      let JobUniqueName = uuidv4()
+      let NewCost, ParseError = newVirtualMachineCostManager.StartVirtualMachineSpendCostParser(JobUniqueName, VirtualMachineId)
 
-      if (ParserError != null) {
+      if (ParseError != null) {
         this.CurrentVirtualMachine.TotalCost = "Failed to Get Total Cost"
       }
       this.CurrentVirtualMachine.TotalCost = NewCost
       this.uniqueCostJobName = JobUniqueName
-    }
+    },
 
     ShutdownVirtualMachineCostParser(CostJobUniqueName) {
       // Shuts Down API, that parses Virtual Machine Cost In Real Time
       // Being called, when the Customer press `Back` button
-      Job = cron.scheduleJobs[CostJobUniqueName]
+      let Job = cron.scheduleJobs[CostJobUniqueName]
       Job.stop()
     }
   },

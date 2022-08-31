@@ -127,6 +127,7 @@ import * as preparer from "../configuration_preparer/preparer.js"
 
 
 export default {
+
   name: "initializationModal",
   data() {
     return {
@@ -138,6 +139,7 @@ export default {
       CostTotal: 0,
     };
   },
+
   components: {
     Loading,
   },
@@ -151,10 +153,11 @@ export default {
       const currentVirtualMachine = this.currentVirtualMachineArray[0];
       this.VirtualMachineCreationDate = currentVirtualMachine.VirtualMachineCreationDate;
       this.VirtualMachinePending = currentVirtualMachine.VirtualMachinePending;
-      this.VirtualMachineDraft = currentVirtualMachine.invoiceDraft;
+      this.VirtualMachineDraft = currentVirtualMachine.VirtualMachineDraft;
       this.VirtualMachineItemList = currentVirtualMachine.VirtualMachineItemList;
     }
   },
+
   methods: {
 
 
@@ -162,14 +165,14 @@ export default {
     ...mapActions(["UPDATE_INVOICE", "GET_INVOICES"]),
 
     checkClick(e) {
-      if (e.target === this.$refs.invoiceWrap) {
+      if (e.target === this.$refs.virtualMachineWrap) {
         this.TOGGLE_MODAL();
       }
     },
 
     closeVirtualMachine() {
       this.TOGGLE_INVOICE();
-      if (this.editInvoice) {
+      if (this.updateVirtualMachine) {
         this.TOGGLE_EDIT_INVOICE();
       }
     },
@@ -178,7 +181,7 @@ export default {
       // Returns Queryset of the Virtual Machines, related to the Customer
       newVirtualMachineManager = new vm.VirtualMachineManager()
       VirtualMachinesQueryset, GetError = newVirtualMachineManager.GetCustomerVirtualMachines()
-      if (GetError != null) {}
+      if (GetError != null) {this.showError(GetError.error)}
       this.VirtualMachineItemList = VirtualMachinesQueryset
     },
 
@@ -187,7 +190,7 @@ export default {
       // Initializes New Virtual Machine
 
       this.VirtualMachinePending = true;
-      this.invoiceItemList.push({
+      this.VirtualMachineItemList.push({
         VirtualMachineId: "null",
         VirtualMachineName: Metadata["VirtualMachineName"],
         Status: "Pending",
@@ -218,9 +221,14 @@ export default {
             // If Apply has become successful, it should redirect to the other Root
             this.VirtualMachineItemList[-1].Status = "Running"
             var VirtualMachineId = VirtualMachineCustomizationInfo["VirtualMachineId"]
-            var VirtualMachineAPIUrl = new url.URL("http://%s:%s/vm/get/")
+
+            // Initializing New API Url
+            var VirtualMachineAPIUrl = new url.URL("http://%s:%s/vm/get/",
+            BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT)
+
             VirtualMachineAPIUrl.searchParams.append("VirtualMachineId", VirtualMachineId)
-            return window.location.replace(VirtualMachineAPIUrl)
+            return this.$router.push()
+
         }else{
           // If Applying Configuration failure has occurred, destroying Created Virtual Machine
           var VirtualMachineId = VirtualMachineCustomizationInfo["VirtualMachineId"]
@@ -436,3 +444,6 @@ export default {
   }
 }
 </style>
+
+
+

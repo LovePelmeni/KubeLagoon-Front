@@ -1,7 +1,6 @@
 import "../rest/healthcheck.js"
 
 var DEFAULT_CRONTAB_JOB_TIMEZONE=process.env.DEFAULT_CRONTAB_JOB_TIMEZONE
-
 var CrontabJob = require("cron").CronJob
 
 class VirtualMachineHealthStateChecker {
@@ -21,7 +20,7 @@ class VirtualMachineHealthStateChecker {
   AddHealthChecker = function() {
     // Adds HealthChecker Crontab Job, that is going to parse VM Server Health Metrics
     // Every 5 seconds
-    var NewHealthTask = new CrontabJob(
+    let NewHealthTask = new CrontabJob(
       "*******",
       function () {
         newMetric = healthcheck.GetHealthCheckMetricsRestController(this.VirtualMachineId)
@@ -31,6 +30,7 @@ class VirtualMachineHealthStateChecker {
       true,
       DEFAULT_CRONTAB_JOB_TIMEZONE,
     )
+    NewHealthTask.start()
   }
   RemoveHealthChecker = function(JobUniqueName){
     // Removes HealthChecker Crontab Job, once custom has left the page with the Virtual Machine Info

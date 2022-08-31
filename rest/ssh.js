@@ -1,43 +1,53 @@
-function ApplySshSupportRestController(VirtualMachineId: String) -> String {
+
+import $ from "jquery";
+var BACKEND_APPLICATION_HOST = process.env.BACKEND_APPLICATION_HOST
+var BACKEND_APPLICATION_PORT = process.env.BACKEND_APPLICATION_PORT
+
+
+var Url = require('url-parse');
+
+
+
+function ApplySshSupportRestController(VirtualMachineId){
     // Rest Controller, that Applies SSH Support to the Customer's Virtual Machine Server
 
-    var APIUrl = new url.URL("http://%s:8000/vm/ssh/")
+    var APIUrl = new Url("http://%s:8000/vm/ssh/")
     APIUrl.searchParams.append("VirtualMachineId", VirtualMachineId)
 
     try {
-        Response = $.ajax({
+        Response, Error = $.ajax({
           url: APIUrl,
           method: "POST",
           headers: {
             "Access-Control-Allow-Origin": "*",
             "Access-Control-Allow-Credentials": "true",
-            "Authorization": $.getCookie("jwt-token"),
+            "Authorization": $.cookie("jwt-token"),
           },
           success: function(Response) {
             if (Response.StatusCode == 201) {
               return Response.SshInfo
             }else{
-              return null
+              return null, Error(Response.Error)
             }
           },
           error: function(Error) {
-            return null
+            return null, Error(Error)
           }
         })
-        return Response
-  } catch (e) as APIException {
-    return null
+        return Response, Error
+  } catch (APIException) {
+    return null, APIException
   }
 }
 
-function RemoveSshKeyRestController(SshKeyPath: String, VirtualMachineId: String) {
+function RemoveSshKeyRestController(SshKeyPath, VirtualMachineId) {
   // Rest Controller, that Removes SSH Key pair from the Virtual Machine Server
 }
-function UpdateSshKeyRestController(SshKeyPath: String, VirtualMachineId: String) {
+function UpdateSshKeyRestController(SshKeyPath, VirtualMachineId) {
   // Updates SSH Keys for the Customer's Virtual Machine Server
   return ApplySshSupportRestController()
 }
 
-function DownloadSshKeyRestController(SshKeyPath: String, VirtualMachineId: String) {
+function DownloadSshKeyRestController(SshKeyPath, VirtualMachineId) {
   // Downloads SSH Public Key File to the Customer's Desktop
 }

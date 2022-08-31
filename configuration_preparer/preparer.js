@@ -7,7 +7,7 @@ class BaseResource {
   // So In order to make it as a puzzle and make it easy to serialize the whole CustomizedConfiguration
   // there is class called `Resource`, that basically represents the part of this CustomizedConfiguration
   // it can be: Network Resource, OsResource, etc.....
-  GetObject = function() {
+  static GetObject(){
     // Returfunctionns Part of the Configuration Class "Configuration for the Specific Resource"
   }
 }
@@ -15,7 +15,8 @@ class BaseResource {
 class BaseConfiguration {
   // Represents base Configuration Class, for both `Hardware Configuration` and
   // `Customized Configuration`, defines basic methods to make performance easier
-  GetConfiguration = function() {
+  static GetConfiguration() {
+    // Returns Full Configuration or Part of it
   }
 }
 
@@ -26,6 +27,7 @@ class Metadata extends BaseResource {
   // is going to be put inside the Configuration
   // so the backend would recognize what VM Server to apply configuration to
   constructor(VirtualMachineId, VmOwnerId) {
+    super();
     this.VirtualMachineId = VirtualMachineId
     this.VmOwnerId = VmOwnerId
   }
@@ -41,6 +43,7 @@ class Metadata extends BaseResource {
 class Resources extends BaseResource {
   // Represents Cpu Configuration for the Virtual Machine Server
   constructor(MaxCpuUsage, CpuNum, MaxMemoryUsage, MemoryInMegabytes) {
+    super();
     this.MaxCpuUsage = MaxCpuUsage
     this.CpuNum = CpuNum
     this.MaxMemory = MaxMemoryUsage
@@ -62,6 +65,7 @@ class SSlResources extends BaseResource {
   // SSL Management for the Virtual Machine, Provides ability to setup SSL Certificate
   // To Secure SSH Connection
   constructor(Type) {
+    super();
     this.Type = Type
   }
   GetObject = function() {
@@ -73,6 +77,7 @@ class SSlResources extends BaseResource {
 class DiskResources extends BaseResource {
   // Represents Disk Capacity Configuration for the Virtual Machine Server
   constructor(MemoryInKB) {
+      super();
       this.MemoryInKB = MemoryInKB
   }
   GetObject = function(){
@@ -83,6 +88,7 @@ class DiskResources extends BaseResource {
 class HostSystemResources extends BaseResource {
   // Represents Host System Configuration for the Virtual Machine Server
   constructor(SystemName, Bit) {
+    super();
     this.SystemName = SystemName  // System Name should include OS Name + Distribution
     this.Bit = Bit // bit version of the OS, like 64 or 32
   }
@@ -101,6 +107,7 @@ class NetworkResources extends BaseResource {
   Enablev4=true,
   Enablev6=true,
   ) {
+    super();
     this.NetworkIP = NetworkIP
     this.Gateway = Gateway
     this.Netmask = Netmask
@@ -108,6 +115,7 @@ class NetworkResources extends BaseResource {
     this.Enablev4 = Enablev4
     this.Enablev6 = Enablev6
   }
+
   GetObject = function() {
     return {"Network":
         {
@@ -124,6 +132,7 @@ class NetworkResources extends BaseResource {
 class PreInstalledToolsResources extends BaseResource {
   // Represents Pre-Installed Tools Configuration for the Virtual Machine Server
   constructor(Tools) {
+    super();
     this.Tools = Tools
   }
   GetObject = function(){
@@ -136,14 +145,17 @@ class CustomConfiguration extends BaseConfiguration {
   // where the Customer can pick up, how much memory and cpu's they want,
   // What OS and Network to pick up etc...
   constructor(
-   CpuConfig,
-   MemoryConfig,
-   NetworkConfig,
-   HostSystemConfig,
-   PreInstalledToolsConfig,
-   DiskConfig,
-   SshConfig,
+   Metadata= new Metadata(),
+   CpuConfig= new CpuResources(),
+   MemoryConfig= new MemoryResources(),
+   NetworkConfig= new NetworkResources(),
+   HostSystemConfig= new HostSystemResources(),
+   PreInstalledToolsConfig= new PreInstalledToolsConfig(),
+   DiskConfig= new DiskResources(),
+   SshConfig= new SslResources(),
  ) {
+    super();
+    this.MetadataConfig = Metadata,
     this.CpuConfig = CpuConfig
     this.MemoryConfig = MemoryConfig
     this.NetworkConfig =  NetworkConfig
@@ -152,14 +164,14 @@ class CustomConfiguration extends BaseConfiguration {
     this.SslConfig = SshConfig,
     this.PreInstalledToolsConfig =  PreInstalledToolsConfig,
     // Array of the Configurations
-    this.ConfigArray = [this.CpuConfig,
+    this.ConfigArray = [this.MetadataConfig, this.CpuConfig,
     this.MemoryConfig, this.NetworkConfig,
     this.HostSystemConfig, this.DiskConfig, this.SshConfig]
   }
   GetConfiguration = function(){
     //function Returns Serialized Custom Configuration for the Virtual Machine Server
     var FullCustomConfiguration = {}
-    for (Configuration in this.ConfigArray) {
+    for (let Configuration in this.ConfigArray) {
       Object.assign(FullCustomConfiguration, Configuration.GetObject())
     }
     return FullCustomConfiguration
@@ -170,16 +182,17 @@ class CustomConfiguration extends BaseConfiguration {
 class ConfigurationPreparer {
   // Class Returns Serialized Version of the Configurations
   constructor(Configuration) {
+    super();
     this.Configuration = Configuration
   }
   PrepareCustomConfiguration = function(){
       // Returns Serialized Customized Configuration
-      SerializedConfiguration = JSON.stringify(this.Configuration)
+      let SerializedConfiguration = JSON.stringify(this.Configuration)
       return SerializedConfiguration
   }
   PrepareHardwareConfiguration = function(){
       // Returns Serialized Hardware Configuration
-      SerializedConfiguration = JSON.stringify(this.Configuration)
+      let SerializedConfiguration = JSON.stringify(this.Configuration)
       return SerializedConfiguration
   }
 }

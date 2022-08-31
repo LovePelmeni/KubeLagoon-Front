@@ -1,6 +1,9 @@
 var BACKEND_APPLICATION_HOST = process.env.BACKEND_APPLICATION_HOST
 var BACKEND_APPLICATION_PORT = process.env.BACKEND_APPLICATION_PORT
 
+import $ from "jquery";
+var Url = require('url-parse')
+
 
 import "../configuration_preparer/preparer.js"
 
@@ -9,7 +12,7 @@ function CreateCustomerRestController(Username, Email, Password) {
     UserData = new UserData(Username=Username, Email=Email, Password=Password)
     ValidationErrors = UserData.ValidateInput()
     if (len(ValidationErrors) != 0) {return false, ValidationErrors}
-    var APIUrl = new url.URL("http://%s:%s/customer/create/" % (BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
+    var APIUrl = new Url("http://%s:%s/customer/create/" % (BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
     var HttpResponse, HttpErrors = $.ajax({
       method: "POST",
       data: JSON.Stringify(UserData.DataInput),
@@ -24,7 +27,7 @@ function CreateCustomerRestController(Username, Email, Password) {
           return false, [Response.Error]
         }
         if (Response.StatusCode == 201) {
-          $.SetCookie("jwt-token", Response.getCookie("jwt-token"))
+          $.SetCookie("jwt-token", Response.cookie("jwt-token"))
           return true, []
         }
         if (Response.StatusCode == 500) {
@@ -50,7 +53,7 @@ function ResetPasswordRestController(NewPassword){
   if (UserData.DataInput["Password"].match(NewPassword) != true) {
     return false, ["Invalid Password"]
   }
-  var APIUrl = new url.URL("http://%s:%s/customer/reset/password" % (BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
+  var APIUrl = new Url("http://%s:%s/customer/reset/password" % (BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
   ResponseStatus, ResponseErrors = $.ajax({
     data: JSON.stringify({"NewPassword": NewPassword}),
     url: APIUrl,
@@ -58,7 +61,7 @@ function ResetPasswordRestController(NewPassword){
     headers: {
       "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Credentials": "true",
-      "Authorization": $.getCookie("jwt-token")
+      "Authorization": $.cookie("jwt-token")
     },
     success: function(Response){
       if (Response.StatusCode == 201) {
@@ -78,7 +81,7 @@ function ResetPasswordRestController(NewPassword){
 function DeleteCustomerRestController(CustomerId) {
   // Rest Controller, that is used to deleting the Customer Profile
 
-  var APIUrl = new url.URL("http://%s:%s/customer/delete" % (BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
+  var APIUrl = new Url("http://%s:%s/customer/delete" % (BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
   APIUrl.searchParams.append("CustomerId", CustomerId)
 
   var Response, Error = $.ajax({
@@ -87,14 +90,14 @@ function DeleteCustomerRestController(CustomerId) {
     headers: {
       "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Credentials": "true",
-      "Authorization": $.getCookie("jwt-token"),
+      "Authorization": $.cookie("jwt-token"),
       "Content-Type": "application/json",
     },
     success: function(Response) {
       // Handling Success Response
       if (Response.StatusCode == 201) {
         // Removing Jwt Cookie...
-        Expired = $.ExpireCookie("jwt-token")
+        Expired = $.RemoveCookie("jwt-token")
         return Expired, []
       }
     },

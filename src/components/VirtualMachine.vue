@@ -10,7 +10,7 @@
     <div class="right flex">
       <div class="status-button flex">
         <span v-if="virtualMachine.State=='Running'">Running</span>
-        <span v-if="virtualMachine.State=='failure'">Failure</span>
+        <span v-if="virtualMachine.State=='Failure'">Failure</span>
       </div>
       <div class="icon">
         <img src="@/assets/icon-arrow-right.svg" alt="" />
@@ -66,26 +66,26 @@ export default {
 
     function ShowCustomerVirtualMachineInfo(VirtualMachineId, CustomerId) {
       // Returns Virtual Machine Info
-      VirtualMachineManager = new vm.VirtualMachineManager()
-      VirtualMachineInfo, ErrorValue = VirtualMachineManager.GetVirtualMachine(VirtualMachineId, CustomerId)
+      let VirtualMachineManager = new vm.VirtualMachineManager()
+      let VirtualMachineInfo, ErrorValue = VirtualMachineManager.GetVirtualMachine(VirtualMachineId, CustomerId)
       if (ErrorValue != null) {ShowError(ErrorValue.error)}
     },
 
     function ShowVirtualMachineResourceConfiguration(VirtualMachineId) {
       // Returns Virtual Machine Configuration Info
-      newVirtualMachineManager = new vm.VirtualMachineManager()
-      VirtualMachineConfiguration = newVirtualMachineManager.GetVirtualMachineConfiguration(VirtualMachineId)
+      let newVirtualMachineManager = new vm.VirtualMachineManager()
+      let VirtualMachineConfiguration = newVirtualMachineManager.GetVirtualMachineConfiguration(VirtualMachineId)
       this.MaxCpuUsage = VirtualMachineConfiguration.Resources.MaxCpuUsage
       this.MaxMemoryUsage = VirtualMachineConfiguration.Resources.MaxMemoryUsage
     },
 
     function ShowVirtualMachineHealthMetrics(VirtualMachineId, CustomerId) {
       // Returns Health Metrics of the Virtual Machine
-      HealthMetricsManager = new healthcheck.VirtualMachineHealthStateChecker()
-      JobUniqueName, StartError = HealthMetricsManager.StartHealthChecker(VirtualMachineId, CustomerId)
+      let HealthMetricsManager = new healthcheck.VirtualMachineHealthStateChecker()
+      let JobUniqueName, StartError = HealthMetricsManager.StartHealthChecker(VirtualMachineId, CustomerId)
 
       if (StartError != null) {
-        for (Item in [this.CpuUsage, this.MemoryUsage, this.State])  {
+        for (let Item in [this.CpuUsage, this.MemoryUsage, this.State])  {
           Item = "Failed to Parse Item"
         }
       }else{
@@ -95,8 +95,8 @@ export default {
 
     function ShutdownVirtualMachineHealthMetrics(JobUniqueName){
       // Shuts down the Health Metrics API Crontab Job by stopping it using Job Unique Name
-      HealthMetricsManager = new healthcheck.VirtualMachineHealthStateChecker()
-      Removed, RemoveError = HealthMetricsManager.RemoveHealthChecker(JobUniqueName)
+      let HealthMetricsManager = new healthcheck.VirtualMachineHealthStateChecker()
+      HealthMetricsManager.RemoveHealthChecker(JobUniqueName)
     },
   }
 }

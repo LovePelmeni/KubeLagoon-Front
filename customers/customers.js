@@ -1,3 +1,6 @@
+
+
+
 class CustomerInputValidator {
   // User Info Validation Form
   constructor(Username, Email, Password) {

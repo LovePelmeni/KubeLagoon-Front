@@ -2,6 +2,9 @@ import "../../configuration_preparer/preparer.js"
 var BACKEND_APPLICATION_PORT = process.env.BACKEND_APPLICATION_PORT
 var BACKEND_APPLICATION_HOST = process.env.BACKEND_APPLICATION_HOST
 
+import $ from "jquery";
+var Url = require('url-parse');
+
 
 function InitializeVirtualMachineRestController(Configuration) {
   // Rest Controller, that Initializes New Virtual Machine
@@ -13,7 +16,7 @@ function InitializeVirtualMachineRestController(Configuration) {
     data: JSON.stringify({"HardwareConfiguration": Configuration}),
     headers: {
       "Access-Control-Allow-Origin": "*",
-      "Authorization": $.getCookie("jwt-token"),
+      "Authorization": $.cookie("jwt-token"),
       "Access-Control-Allow-Credentials": "true",
     },
     success: function(Response){
@@ -37,7 +40,7 @@ function ApplyVirtualMachineConfigurationRestController(CustomConfiguration, Vir
   var APIUrl = new url.URL("http://%s:%s/vm/apply/configuration/" % (
   BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
   APIUrl.searchParams.append("VirtualMachineId", VirtualMachineId)
-  
+
   Response, Error = $.ajax({
     url: APIUrl,
     method: "POST",
@@ -46,7 +49,7 @@ function ApplyVirtualMachineConfigurationRestController(CustomConfiguration, Vir
     },
     headers: {
       "Access-Control-Allow-Origin": "*",
-      "Authorization": $.getCookie("jwt-token"),
+      "Authorization": $.cookie("jwt-token"),
       "Access-Control-Allow-Credentials": "true",
     },
     success: function (Response) {
@@ -76,7 +79,7 @@ function StartVirtualMachineRestController(VirtualMachineId) {
     data: JSON.stringify({"HardwareConfiguration": Configuration}),
     headers: {
       "Access-Control-Allow-Origin": "*",
-      "Authorization": $.getCookie("jwt-token"),
+      "Authorization": $.cookie("jwt-token"),
       "Access-Control-Allow-Credentials": "true",
     },
     success: function(Response){
@@ -107,7 +110,7 @@ function ShutdownVirtualMachineRestController(VirtualMachineId) {
     data: JSON.stringify({"HardwareConfiguration": Configuration}),
     headers: {
       "Access-Control-Allow-Origin": "*",
-      "Authorization": $.getCookie("jwt-token"),
+      "Authorization": $.cookie("jwt-token"),
       "Access-Control-Allow-Credentials": "true",
     },
     success: function(Response){
@@ -138,7 +141,7 @@ function RebootVirtualMachineRestController(VirtualMachineId) {
     data: JSON.stringify({"HardwareConfiguration": Configuration}),
     headers: {
       "Access-Control-Allow-Origin": "*",
-      "Authorization": $.getCookie("jwt-token"),
+      "Authorization": $.cookie("jwt-token"),
       "Access-Control-Allow-Credentials": "true",
     },
     success: function(Response){
@@ -171,7 +174,7 @@ function StartVmOsRestController(VirtualMachineId) {
     method: "POST",
     headers: {
       "Access-Control-Allow-Origin": "*",
-      "Authorization": $.getCookie("jwt-token"),
+      "Authorization": $.cookie("jwt-token"),
       "Access-Control-Allow-Credentials": "true",
     },
     success: function(Response){
@@ -201,7 +204,7 @@ function ShutdownVmOsRestController(VirtualMachineId) {
     method: "DELETE",
     headers: {
       "Access-Control-Allow-Origin": "*",
-      "Authorization": $.getCookie("jwt-token"),
+      "Authorization": $.cookie("jwt-token"),
       "Access-Control-Allow-Credentials": "true",
     },
     success: function(Response){
@@ -231,7 +234,7 @@ function RebootVmOsRestController(VirtualMachineId) {
     method: "PUT",
     headers: {
       "Access-Control-Allow-Origin": "*",
-      "Authorization": $.getCookie("jwt-token"),
+      "Authorization": $.cookie("jwt-token"),
       "Access-Control-Allow-Credentials": "true",
     },
     success: function(Response){

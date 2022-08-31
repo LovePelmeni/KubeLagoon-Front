@@ -1,14 +1,20 @@
-import "../configuration_preparer/preparer.js"
+import * as preparer from "../configuration_preparer/preparer.js"
+
 var BACKEND_APPLICATION_HOST = process.env.BACKEND_APPLICATION_HOST
+var BACKEND_APPLICATION_PORT = process.env.BACKEND_APPLICATION_PORT
+
+import $ from "jquery";
+var Url = require("url-parse");
 
 class VirtualMachineManager {
   // Class That Manages Virtual Machine
   InitializeVirtualMachine = function(Configuration){
     // Initializes New Empty Virtual Machine Server
-    configurationPreparer = new preparer.ConfigurationPreparer()
-    var APIUrl = new url.URL("http://%s:8000/vm/initialize/", BACKEND_APPLICATION_HOST)
+    let configurationPreparer = new preparer.ConfigurationPreparer()
+    var APIUrl = new Url("http://%s:%s/vm/initialize/",
+    BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT)
     try {
-    Response, Error = $.ajax({
+    let Response, Error = $.ajax({
       async: false,
       method: "POST",
       data: JSON.stringify(configurationPreparer.PrepareHardwareConfiguration(Configuration)),
@@ -16,7 +22,7 @@ class VirtualMachineManager {
       headers: {
         "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Credentials": "true",
-        "Authorization": $.getCookie("jwt-token"),
+        "Authorization": $.cookie("jwt-token"),
       },
       success: function(Response) {
         // Processing Response
@@ -38,17 +44,18 @@ class VirtualMachineManager {
 
   ApplyVirtualMachineConfiguration = function(CustomizedConfiguration, VirtualMachineId) {
     // Applying Configuration to the Virtual Machine
-    var APIUrl = new url.URL("http://%s:8000/vm/apply/configuration/", BACKEND_APPLICATION_HOST)
+    var APIUrl = new Url("http://%s:%s/vm/apply/configuration/" % (
+    BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
     APIUrl.searchParams.append("VirtualMachineId", VirtualMachineId)
     try {
-        Response, Error = $.ajax({
+        let Response, Error = $.ajax({
           url: APIUrl,
           method: "POST",
           data: JSON.stringify({"CustomizedConfiguration": CustomizedConfiguration}),
           headers: {
             "Access-Control-Allow-Origin": "*",
             "Access-Control-Allow-Credentials": "true",
-            "Authorization": $.getCookie("jwt-token"),
+            "Authorization": $.cookie("jwt-token"),
           },
           success: function(Response) {
             if (Response.StatusCode == 201) {
@@ -68,7 +75,8 @@ class VirtualMachineManager {
   }
   GetVirtualMachineInfo = function(VirtualMachineId) {
     // Receiving Virtual Machine Server
-    var APIUrl = new url.URL("http://%s:8000/vm/get/")
+    var APIUrl = new Url("http://%s:%s/vm/get/" % (
+    BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
     APIUrl.searchParams.append("VirtualMachineId", VirtualMachineId)
     try {
         Response = $.ajax({
@@ -77,11 +85,11 @@ class VirtualMachineManager {
           headers: {
             "Access-Control-Allow-Origin": "*",
             "Access-Control-Allow-Credentials": "true",
-            "Authorization": $.getCookie("jwt-token"),
+            "Authorization": $.cookie("jwt-token"),
           },
           success: function(Response) {
             if (Response.StatusCode == 201 || Response.StatusCode == 200) {
-              Vm = JSON.Parse(Response.VirtualMachine)
+              let Vm = JSON.Parse(Response.VirtualMachine)
               return Vm
             }else{
               return null, Error(Response.Error)
@@ -98,20 +106,21 @@ class VirtualMachineManager {
   }
   GetVirtualMachines = function() {
     // Receives all Virtual Machine Servers, belongs to the Customer
-    var APIUrl = new url.URL("http://%s:8000/vm/get/list/")
+    var APIUrl = new Url("http://%s:%s/vm/get/list/" %
+    (BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
     try {
-        Response, Error = $.ajax({
+        let Response, Error = $.ajax({
           url: APIUrl,
           method: "GET",
           headers: {
             "Access-Control-Allow-Origin": "*",
             "Access-Control-Allow-Credentials": "true",
-            "Authorization": $.getCookie("jwt-token"),
+            "Authorization": $.cookie("jwt-token"),
           },
           success: function(Response) {
             if (Response.StatusCode == 201 || Response.StatusCode == 200) {
-              VmQuerySet = JSON.Parse(Response.VirtualMachine)
-              return Vm, null
+              let VmQuerySet = JSON.Parse(Response.VirtualMachine)
+              return VmQuerySet, null
             }else{
               return null, Error(Response.Error)
             }

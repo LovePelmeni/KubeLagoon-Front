@@ -1,11 +1,11 @@
-import {createRouter, createWebHistory} import "vue-router"
+import {createRouter, createWebHistory} from "vue-router"
 
 import {VirtualMachine} from "../views/virtualMachine.vue"
-import {Home} from "../views/home.vue"
+import {HomePage} from "../views/home.vue"
 
 import {CustomerProfile} from "../views/CustomerProfile.vue"
-import {Login} from "../views/Login.vue"
-import {Register} from "../views/Register.vue"
+import {LoginPage} from "../views/LoginPage.vue"
+import {RegisterPage} from "../views/RegistrationPage.vue"
 
 
 var BASE_ROOT_URL = process.env.BASE_ROOT_URL
@@ -19,17 +19,17 @@ const Routes = [
   {
     path: "/",
     name: "main_page",
-    component: Home,
+    component: HomePage,
   },
   {
     path: "/login/",
     name: "login",
-    component: Login,
+    component: LoginPage,
   },
   {
     path: "/register/",
     name: "register",
-    component: Register,
+    component: RegisterPage,
   },
   {
     path: "/customer/profile/",
@@ -40,7 +40,7 @@ const Routes = [
 
 const newRouter = createRouter({
   history: createWebHistory(BASE_ROOT_URL),
-  Routers,
+  Routes,
 })
 
 export default newRouter

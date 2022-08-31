@@ -1,5 +1,5 @@
 <template>
-  <div class="home container">
+  <div class="home-page container">
     <!-- Header -->
     <div class="header flex">
       <div class="left flex flex-column">
@@ -26,9 +26,9 @@
       </div>
     </div>
 
-    <!-- Invoices -->
+    <!-- Virtual Machines -->
     <div v-if="VirtualMachines.length > 0">
-      <VirtualMachine v-for="(VirtualMachine, index) in filteredData" :invoice="virtualMachine" :key="index" />
+      <virtualMachine v-for="(VirtualMachine, index) in filteredData" :invoice="virtualMachine" :key="index" />
     </div>
 
     <div v-else class="empty flex flex-column">
@@ -43,20 +43,22 @@
 
 import virtualMachine from "../components/VirtualMachine.vue";
 import { mapMutations, mapState } from "vuex";
+import * as vm from "../vm/vm.js"
+
 export default {
-  name: "Home",
+  name: "HomePage",
   data() {
     return {
       filterMenu: null,
-      filteredVirtualMachines: null,
+      filteredVirtualMachines: [],
     };
   },
   components: {
-    Invoice,
+    virtualMachine,
   },
   methods: {
     ...mapMutations(["TOGGLE_INVOICE"]),
-    
+
     newVirtualMachine() {
       this.CREATE_VIRTUAL_MACHINE();
     },
@@ -71,12 +73,12 @@ export default {
         return;
       }
       if (e.target.innerText === "By Creation Date")  {
-        QueryIds = []
-        for (VirtualMachine in this.filteredVirtualMachines) {
+        let QueryIds = []
+        for (let VirtualMachine in this.filteredVirtualMachines) {
           QueryIds.push(VirtualMachine.VirtualMachineId)
         }
-        VirtualMachineManager = new vm.VirtualMachineManager()
-        FilteredQueryset = VirtualMachineManager.FilterVirtualMachinesByCreationDate(QueryIds)
+        let VirtualMachineManager = new vm.VirtualMachineManager()
+        let FilteredQueryset = VirtualMachineManager.FilterVirtualMachinesByCreationDate(QueryIds)
         this.filterVirtualMachines = FilteredQueryset
       }
       this.filteredInvoice = e.target.innerText;
@@ -85,7 +87,7 @@ export default {
   computed: {
     ...mapState(["VirtualMachines"]),
     filteredData() {
-      return this.VirtualMachinesList.filter((invoice) => {
+      return this.VirtualMachinesList.filter((virtualMachine) => {
         if (this.filteredInvoice === "Draft") {
           return virtualMachine.VirtualMachineDraft === true;
         }
@@ -95,7 +97,7 @@ export default {
         if (this.filteredInvoice === "Paid") {
           return virtualMachine.VirtualMachinePaid === true;
         }
-        return invoice;
+        return virtualMachine;
       });
     },
   },

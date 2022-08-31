@@ -14,7 +14,7 @@
 <script>
 import { mapMutations, mapState } from "vuex";
 export default {
-  name: "modal",
+  name: "confirmation_modal",
   methods: {
     ...mapMutations(["TOGGLE_MODAL", "TOGGLE_VIRTUAL_MACHINE_SETTINGS", "TOGGLE_UPDATE_VIRTUAL_MACHINE_SETTINGS"]),
     closeModal() {

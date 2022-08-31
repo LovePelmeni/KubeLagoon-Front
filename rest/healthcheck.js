@@ -1,8 +1,15 @@
 import "../healthcheck/healthcheck.js"
+import $ from "jquery";
+
+var BACKEND_APPLICATION_HOST = process.env.BACKEND_APPLICATION_HOST
+var BACKEND_APPLICATION_PORT = process.env.BACKEND_APPLICATION_PORT
+
+var Url = require('url-parse');
 
 function GetHealthCheckMetricsRestController(VirtualMachineId) {
   // Rest Controller, that returns Metrics about the Health of the Virtual Machine Server
-  var APIUrl = new url.URL("http://%s:8000/health/metrics/", BACKEND_APPLICATION_HOST)
+  var APIUrl = new Url("http://%s:%s/health/metrics/",
+  BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT)
   APIUrl.searchParams.append("VirtualMachineId", VirtualMachineId)
   try {
       ResponseData, ResponseErrors = $.ajax({
@@ -11,7 +18,7 @@ function GetHealthCheckMetricsRestController(VirtualMachineId) {
         headers: {
           "Access-Control-Allow-Origin": "*",
           "Access-Control-Allow-Credentials": "true",
-          "Authorization": $.getCookie("jwt-token"),
+          "Authorization": $.cookie("jwt-token"),
         },
         success: function(Response) {
           // Processing Success Healthchecks Model
