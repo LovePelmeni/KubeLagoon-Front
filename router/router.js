@@ -14,7 +14,7 @@ var BASE_ROOT_URL = process.env.BASE_ROOT_URL
 
 const Routes = [
   {
-    path: "/virtualMachine",
+    path: "/virtualMachine/:VirtualMachineId",
     name: "virtual_machine",
     component: VirtualMachine,
   },

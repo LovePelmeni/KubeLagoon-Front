@@ -1,5 +1,5 @@
 <template>
-  <router-link class="virtualMachine flex" :Created By="{ name: virtualMachine.CustomerName }">
+  <router-link class="virtualMachine flex" @onclick="ShutdownVirtualMachineHealthMetrics(VirtualMachine.HealthAPICheckerJobName)" :to="{name: "HomePage"}"></<router-link :to="{ name: 'HomePage'}">Go Back</router-link>
 
     <div class="left flex">
       <span class="tracking-number"># General Info</span>
@@ -57,7 +57,7 @@ function GetCustomerName() {
 }
 
 export default {
-  name: "virtualMachine",
+  name: "virtualMachineExtendedInfo",
   data() {
     return {
       // Owner Name
@@ -92,40 +92,50 @@ export default {
       HealthAPICheckerJobName: null,
     }
   },
+  created(): {
+    this.ShowtCustomerMachineInfo(),
+    this.ShowVirtualMachineHealthMetrics(),
+  },
   methods: {
 
     ShowError(ErrorMessage) {
       // Showing up and Error
+      console.log(ErrorMessage)
     },
 
-    ShowCustomerVirtualMachineInfo(VirtualMachineId) {
+    ShowCustomerVirtualMachineInfo() {
       // Returns Virtual Machine Info, (is not being changed dynamically)
+
+      let VirtualMachineId = this.$route.params.VirtualMachineId
 
       let VirtualMachineManager = new vm.VirtualMachineManager()
       let VirtualMachineInfo, ErrorValue = VirtualMachineManager.GetVirtualMachine(VirtualMachineId)
 
-      if (ErrorValue != null) {this.ShowError(ErrorValue.error)}
-      this.CustomerName = this.GetCustomerName()
+      if (ErrorValue != null) {this.ShowError(ErrorValue.error)}else{
+          this.CustomerName = this.GetCustomerName()
 
-      this.VirtualMachineId = VirtualMachineInfo["Metadata"]["VirtualMachineId"]
-      this.VirtualMachineName = VirtualMachineInfo["Metadata"]["VirtualMachineName"]
-      this.IPAddress        = VirtualMachineInfo["Metadata"]["IPAddress"]
+          this.VirtualMachineId = VirtualMachineInfo["Metadata"]["VirtualMachineId"]
+          this.VirtualMachineName = VirtualMachineInfo["Metadata"]["VirtualMachineName"]
+          this.IPAddress        = VirtualMachineInfo["Metadata"]["IPAddress"]
 
-      this.RootUserName     = VirtualMachineInfo["SshCredentials"]["RootUserName"]
-      this.RootUserPassword = VirtualMachineInfo["SshCredentials"]["RootUserPassword"]
-      this.Ssl              = VirtualMachineInfo["SshCredentials"]["Ssl"]
+          this.RootUserName     = VirtualMachineInfo["SshCredentials"]["RootUserName"]
+          this.RootUserPassword = VirtualMachineInfo["SshCredentials"]["RootUserPassword"]
+          this.Ssl              = VirtualMachineInfo["SshCredentials"]["Ssl"]
 
-      this.TotalCostThisMonth = VirtualMachineInfo["Cost"]["TotalCostThisMonth"] // Total Cost this Month, based on the VM Usage
-      this.PricePerDay      = VirtualMachineInfo["Cost"]["PricePerDay"] // Price Per Day, based on the VM Setup
+          this.TotalCostThisMonth = VirtualMachineInfo["Cost"]["TotalCostThisMonth"] // Total Cost this Month, based on the VM Usage
+          this.PricePerDay      = VirtualMachineInfo["Cost"]["PricePerDay"] // Price Per Day, based on the VM Setup
 
-      this.DatacenterName = VirtualMachineInfo["Datacenter"]["DatacenterName"]
-      this.MaxCpuUsage = VirtualMachineInfo["ResourcesLimits"]["MaxCpuUsage"]
-      this.MaxCpuUsage = VirtualMachineInfo["ResourceLimits"]["MaxMemoryUsage"]
-      this.StorageCapacity = VirtualMachineInfo["ResourceLimits"]["StorageCapacity"]
+          this.DatacenterName = VirtualMachineInfo["Datacenter"]["DatacenterName"]
+          this.MaxCpuUsage = VirtualMachineInfo["ResourcesLimits"]["MaxCpuUsage"]
+          this.MaxCpuUsage = VirtualMachineInfo["ResourceLimits"]["MaxMemoryUsage"]
+          this.StorageCapacity = VirtualMachineInfo["ResourceLimits"]["StorageCapacity"]
+    }
     },
 
-    ShowVirtualMachineHealthMetrics(VirtualMachineId) {
+    ShowVirtualMachineHealthMetrics() {
       // Returns Health Metrics of the Virtual Machine
+
+      let VirtualMachineId = this.$route.params.VirtualMachineId
       let HealthMetricsManager = new healthcheck.VirtualMachineHealthStateChecker()
       let JobUniqueName, StartError = HealthMetricsManager.StartHealthChecker(VirtualMachineId)
 

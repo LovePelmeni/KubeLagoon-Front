@@ -1,45 +1,46 @@
 <template>
   <div v-if="currentVirtualMachine" class="virtual-machine container">
-    <router-link class="nav-link flex" :to="{ name: 'Home' }">
+    <router-link class="nav-link flex" :to="{ name: 'HomePage' }">
       <img src="@/assets/icon-arrow-left.svg" @click="RedirectHome()" alt="" /> Go Back
     </router-link>
 
     <!-- Header -->
+
     <div class="header flex">
       <div class="left flex">
         <span>Status</span>
         <div>
-          <span>{{ currentVirtualMachine.Status }}</span>
+          <span>{{ CurrentVirtualMachine.Status }}</span>
         </div>
       </div>
       <div class="right flex">
-        <button @click="UpdateVirtualMachine(currentVirtualMachine.VirtualMachineId)" class="dark-purple">Edit</button>
-        <button @click="DeleteVirtualMachine(currentVirtualMachine.VirtualMachineId)" class="red">Delete</button>
+        <button @click="UpdateVirtualMachine(CurrentVirtualMachine.VirtualMachineId)" class="dark-purple">Edit</button>
+        <button @click="DeleteVirtualMachine(CurrentVirtualMachine.VirtualMachineId)" class="red">Delete</button>
       </div>
     </div>
 
     <!-- Virtual Machine Details -->
+
     <div class="virtual-machine-details flex flex-column">
       <div class="top flex">
+
         <div class="left flex flex-column">
-          <p><span>#</span>{{ currentVirtualMachine.VirtualMachineName }}</p>
+          <p><span>#</span>{{ CurrentVirtualMachine.VirtualMachineName }}</p>
           <p>Virtual Machine Server</p>
         </div>
         <div class="right flex flex-column">
           <p>KubeLagoon, Inc</p>
         </div>
       </div>
+
       <div class="middle flex">
         <div class="payment flex flex-column">
           <h4>Creation Date</h4>
           <p>
-            {{ currentVirtualMachine.VirtualMachineCreationDate }}
-          </p>
-          <h4>Payment Date</h4>
-          <p>
-            {{ currentVirtualMachine.paymentDueDate }}
+            {{ CurrentVirtualMachine.CreatedAt }}
           </p>
         </div>
+
         <div class="bill flex flex-column">
           <h4>Bill To</h4>
           <p>'KubeLagoon, Inc'</p>
@@ -49,6 +50,9 @@
           <p>kubeLagoonManager@gmail.com</p>
         </div>
       </div>
+
+      <!-- Queryset of the Virtual Machines Created By the Customer !-->
+
       <div class="bottom flex flex-column">
         <div class="billing-items">
           <div class="heading flex">
@@ -58,7 +62,8 @@
             <p>Instance State</p>
             <p>Created At</p>
           </div>
-          <div v-for="(VirtualMachine, index) in currentVirtualMachine.VirtualMachineItemList" :key="index" class="item flex">
+          <div v-for="(VirtualMachine, index) in GetVirtualMachineItemList()" :key="index" class="VirtualMachine flex">
+
             <p>{{ VirtualMachine.VirtualMachineId }}</p>
             <p>{{ VirtualMachine.VirtualMachineName }}</p>
             <p>{{ VirtualMachine.IPAddress }}</p>
@@ -66,11 +71,11 @@
             <p>{{ VirtualMachine.CreatedAt }}</p>
           </div>
         </div>
-        <div class="total flex">
+        <div class="TotalCost flex">
           <p>Total Cost This Month</p>
-          <p>{{ currentVirtualMachine.TotalCostThisMonth }}$</p>
+          <p>{{ VirtualMachine.TotalCostThisMonth }}$</p>
           <p>Cost Per Day</p>
-          <p>{{ currentVirtualMachine.PricePerDay }}$</p>
+          <p>{{ VirtualMachine.PricePerDay }}$</p>
         </div>
       </div>
     </div>
@@ -91,62 +96,79 @@ export default {
   name: "virtualMachine",
   data() {
     return {
-      currentVirtualMachine: null,
-      uniqueCostJobName: null,
-      virtualMachineItemList: null,
+      // General Virtual Machine Info
+      CurrentVirtualMachine: null,
+      VirtualMachineItemList: [],
     };
   },
   created() {
+    // Initializing Initial Variables
     this.getCurrentVirtualMachine();
+    this.getVirtualMachineList();
   },
   methods: {
 
-    ...mapMutations(["SET_CURRENT_INVOICE", "TOGGLE_EDIT_INVOICE", "TOGGLE_INVOICE"]),
-    ...mapActions(["DELETE_INVOICE", "UPDATE_STATUS_TO_PENDING", "UPDATE_STATUS_TO_PAID"]),
-
+    RedirectHome() {
+      // redirects to the Main Page
+      this.$route.push({name: 'HomePage'})
+    }
     showError(ErrorMessage) {
       // Shows up the Error Message Banner
     },
 
-    getVirtualMachine() {
-      // Return List of the Virtual Machines, Owned by the Customer
+    getCurrentVirtualMachine() {
+      // Returns Current Virtual Machine within an Array
+      let VirtualMachineId = this.$route.params.VirtualMachineId
+      this.SetCurrentVirtualMachine(VirtualMachineId)
     },
 
-    getCurrentVirtualMachine() {
-      this.SET_CURRENT_VIRTUAL_MACHINE(this.$route.params.VirtualMachineId);
-      this.currentVirtualMachine = this.currentVirtualMachineArray[0];
+    setCurrentVirtualMachine(VirtualMachineId) {
+      // Setting up Current Virtual Machine within an Array
+      let VirtualMachineData = this.getVirtualMachineInfo(VirtualMachineId)
+      this.CurrentVirtualMachine = {
+        "VirtualMachineId": VirtualMachineData["VirtualMachineId"],
+        "VirtualMachineName": VirtualMachineData["VirtualMachineName"],
+        "CreatedAt": VirtualMachineData["CreatedAt"],
+        "Status": VirtualMachineData["Status"],
+      }
     },
+
+    getVirtualMachineList() {
+      // Return List of the Virtual Machines, Owned by the Customer
+      let VirtualMachineManager = new vm.VirtualMachineManager()
+      let virtualMachineList, ListError = VirtualMachineManager.GetVirtualMachineList()
+      if (ListError == null){this.VirtualMachineItemList = []}
+      var VirtualMachines = [];
+      for (VirtualMachine in virtualMachineList) {
+        VirtualMachines.push({
+          "VirtualMachineId": VirtualMachine["VirtualMachineId"],
+          "VirtualMachineName": VirtualMachineName["VirtualMachineName"],
+          "IPAddress": VirtualMachine["IPAddress"],
+          "CreatedAt": VirtualMachine["CreatedAt"],
+          "Status": VirtualMachine["Status"],
+          "TotalCostThisMonth": VirtualMachineData["TotalCostThisMonth"],
+          "PricePerDay": VirtualMachineData["PricePerDay"],
+        })
+      }
+    },
+
+    getVirtualMachineInfo(VirtualMachineId) {
+      // Returns Virtual MachineInfo
+      let VirtualMachineManager = new vm.VirtualMachineManager()
+      let VirtualMachineInfo, VirtualMachineInfoError = VirtualMachineManager.GetVirtualMachine(VirtualMachineId)
+      return VirtualMachineInfo
+    }
 
     DeleteVirtualMachine(VirtualMachineId) {
       // Redirects to the Delete Virtual Machine Page
-      this.$router.push({name: "DeleteVirtualMachine",
+      this.$route.push({name: "DeleteVirtualMachine",
       params: {"VirtualMachineId": VirtualMachineId}})
     },
 
     UpdateVirtualMachine(VirtualMachineId) {
       // Redirects to the Update Virtual Machine Page
-      this.$router.push({name: "UpdateVirtualMachine",
+      this.$route.push({name: "UpdateVirtualMachine",
       params: {"VirtualMachineId": VirtualMachineId}})
-    },
-
-    StartVirtualMachineCostParser(VirtualMachineId) {
-      // Updates Virtual Machine Cost Topic in Real Time
-      let newVirtualMachineCostManager = new cost.VirtualMachineCostManager()
-      let JobUniqueName = uuidv4()
-      let NewCost, ParseError = newVirtualMachineCostManager.StartVirtualMachineSpendCostParser(JobUniqueName, VirtualMachineId)
-
-      if (ParseError != null) {
-        this.CurrentVirtualMachine.TotalCost = "Failed to Get Total Cost"
-      }
-      this.CurrentVirtualMachine.TotalCost = NewCost
-      this.uniqueCostJobName = JobUniqueName
-    },
-
-    ShutdownVirtualMachineCostParser(CostJobUniqueName) {
-      // Shuts Down API, that parses Virtual Machine Cost In Real Time
-      // Being called, when the Customer press `Back` button
-      let Job = cron.scheduleJobs[CostJobUniqueName]
-      Job.stop()
     },
   },
   computed: {
@@ -170,7 +192,7 @@ export default {
     }
   }
   .header,
-  .invoice-details {
+  .virtual-machine-details {
     background-color: #1e2139;
     border-radius: 20px;
   }
@@ -193,7 +215,7 @@ export default {
       }
     }
   }
-  .invoice-details {
+  .virtual-machine-details {
     padding: 48px;
     margin-top: 24px;
     .top {
@@ -313,5 +335,12 @@ export default {
       }
     }
   }
+}
+
+.red {
+  background-color: #ec5757;
+}
+.green {
+  background-color: #33d69f;
 }
 </style>

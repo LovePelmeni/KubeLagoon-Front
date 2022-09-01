@@ -171,6 +171,15 @@ export default {
       }
     }
   }
+
+
+.red {
+  background-color: #ec5757;
+}
+.green {
+  background-color: #33d69f;
+}
+
   .empty {
     margin-top: 160px;
     align-items: center;
