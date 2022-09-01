@@ -2,6 +2,8 @@
 
 <script>
 
+/* eslint-disable no-unused-vars */
+
 import * as customers from "../customers/customers.js"
 
 export default {
@@ -25,7 +27,7 @@ export default {
     },
     CreateNewCustomer(Username, Email, Password) {
       // Once Customer has been Created, It redirects to the Main Page
-      
+
       let ValidationError = this.ValidateInput(Username, Email, Password)
       if (ValidationError != null) {this.showError("Invalid Data has been Passed")}
 

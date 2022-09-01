@@ -4,6 +4,8 @@ var BACKEND_APPLICATION_PORT = process.env.BACKEND_APPLICATION_PORT
 import $ from "jquery";
 
 
+/* eslint-disable no-unused-vars */
+
 var Url = require('url-parse');
 
 function GetDatacenterSuggestionsRestController() {

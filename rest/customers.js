@@ -1,5 +1,6 @@
 var BACKEND_APPLICATION_HOST = process.env.BACKEND_APPLICATION_HOST
 var BACKEND_APPLICATION_PORT = process.env.BACKEND_APPLICATION_PORT
+/* eslint-disable no-unused-vars */
 
 import $ from "jquery";
 var Url = require('url-parse')

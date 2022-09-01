@@ -14,10 +14,13 @@
     "jquery": "^3.6.1",
     "redis": "^4.3.0",
     "roboto-fontface": "*",
+    "sass": "^1.54.8",
     "uid": "^2.0.0",
     "url-parse": "^1.5.10",
     "vue": "^3.2.13",
+    "vue-router": "^4.1.5",
     "vuetify": "^3.0.0-beta.0",
+    "vuex": "^4.0.2",
     "webfontloader": "^1.0.0"
   },
   "devDependencies": {

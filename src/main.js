@@ -4,5 +4,7 @@ import vuetify from './plugins/vuetify'
 import { loadFonts } from './plugins/webfontloader'
 import { newRouter } from "../router/router.js"
 
+/* eslint-disable no-unused-vars */
+
 loadFonts()
-createApp(App).use(vuetify).use(newRouter).mount('#app')
+createApp(App).use(vuetify).use(newRouter).mount('#mainApp')

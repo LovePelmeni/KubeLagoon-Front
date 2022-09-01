@@ -33,11 +33,11 @@
         <div class="payment flex flex-column">
           <h4>Creation Date</h4>
           <p>
-            {{ currentInvoice.VirtualMachineCreationDate }}
+            {{ currentVirtualMachine.VirtualMachineCreationDate }}
           </p>
           <h4>Payment Date</h4>
           <p>
-            {{ currentInvoice.paymentDueDate }}
+            {{ currentVirtualMachine.paymentDueDate }}
           </p>
         </div>
         <div class="bill flex flex-column">
@@ -67,8 +67,10 @@
           </div>
         </div>
         <div class="total flex">
-          <p>Total Cost</p>
-          <p>{{ currentVirtualMachine.TotalCost }}$</p>
+          <p>Total Cost This Month</p>
+          <p>{{ currentVirtualMachine.TotalCostThisMonth }}$</p>
+          <p>Cost Per Day</p>
+          <p>{{ currentVirtualMachine.PricePerDay }}$</p>
         </div>
       </div>
     </div>
@@ -76,6 +78,9 @@
 </template>
 
 <script>
+
+/* eslint-disable no-unused-vars */
+
 import { mapActions, mapMutations, mapState } from "vuex";
 import * as cost from "../cost/virtualMachineCost.js"
 
@@ -99,6 +104,9 @@ export default {
     ...mapMutations(["SET_CURRENT_INVOICE", "TOGGLE_EDIT_INVOICE", "TOGGLE_INVOICE"]),
     ...mapActions(["DELETE_INVOICE", "UPDATE_STATUS_TO_PENDING", "UPDATE_STATUS_TO_PAID"]),
 
+    showError(ErrorMessage) {
+      // Shows up the Error Message Banner
+    },
 
     getVirtualMachine() {
       // Return List of the Virtual Machines, Owned by the Customer
@@ -139,7 +147,7 @@ export default {
       // Being called, when the Customer press `Back` button
       let Job = cron.scheduleJobs[CostJobUniqueName]
       Job.stop()
-    }
+    },
   },
   computed: {
     ...mapState(["currentVirtualMachineArray", "updateVirtualMachine"]),

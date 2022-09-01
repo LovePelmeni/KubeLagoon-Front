@@ -2,15 +2,43 @@
   <router-link class="virtualMachine flex" :Created By="{ name: virtualMachine.CustomerName }">
 
     <div class="left flex">
-      <span class="tracking-number">#{{ virtualMchine.VirtualMachineId }}</span>
-      <span class="due-date">{{ virtualMachine.VirtualMachineName }}</span>
-      <span class="person">{{ virtualMachine.IPAddress }}</span>
+      <span class="tracking-number"># General Info</span>
+      <span class="person">{{ VirtualMchine.VirtualMachineId }}</span>
+      <span class="due-date">{{ VirtualMachine.VirtualMachineName }}</span>
+      <span class="person">{{ VirtualMachine.IPAddress }}</span>
+    </div>
+
+    <div class="left flex">
+      <span class="tracking-number"># SSH Info</span>
+      <span class="tracking-number" v-if="VirtualMachine.RootUserName">Root User: {{ VirtualMachine.RootUserName }}</span>
+      <span class="tracking-number" v-if="VirtualMachine.RootUserPassword">Root Password: {{ VirtualMachine.RootUserPassword }}</span>
+      <span class="tracking-number" v-if="VirtualMachine.Ssl">SSL Enabled</span>
+      <span class="tracking-number" v-if="VirtualMachine.Ssl">Certificate: {{ VirtualMachine.SslCertificate }}</span>
+    </div>
+
+    <div class="left flex">
+      <span class="tracking-number"># Cost</span>
+      <span class="tracking-number" v-if="VirtualMachine.TotalCostThisMonth">Total Cost This Month: {{ VirtualMachine.MaxCpuUsage}}</span>
+      <span class="tracking-number" v-if="VirtualMachine.PricePerDay">Price Per Day: {{ VirtualMachine.MaxCpuUsage}}</span>
+    </div>
+
+    <div class="left flex">
+      <span class="tracking-number"># Resources</span>
+      <span class="tracking-number" v-if="VirtualMachine.MaxCpuUsage">MaxCpuUsage: {{ VirtualMachine.MaxCpuUsage}}</span>
+      <span class="tracking-number" v-if="VirtualMachine.MaxMemoryUsage">MaxMemoryUsage: {{ VirtualMachine.MaxMemoryUsage }}</span>
+    </div>
+
+
+    <div class="left flex">
+      <span class="tracking-number"># Health </span>
+      <span class="tracking-number" v-if="VirtualMachine.CpuUsage">CPU Usage: {{ virtualMachine.CpuUsage }}</span>
+      <span class="tracking-number" v-if="VirtualMachine.MemoryUsage">Memory Usage: {{ virtualMachine.MemoryUsage }}</span>
     </div>
 
     <div class="right flex">
       <div class="status-button flex">
-        <span v-if="virtualMachine.State=='Running'">Running</span>
-        <span v-if="virtualMachine.State=='Failure'">Failure</span>
+        <span class="green" v-if="VirtualMachine.State=='Running'">Running</span>
+        <span class="red" v-if="VirtualMachine.State=='Failure'">Failure</span>
       </div>
       <div class="icon">
         <img src="@/assets/icon-arrow-right.svg" alt="" />
@@ -21,9 +49,8 @@
 
 <script>
 
-import "../healthcheck/healthcheck.js"
-import "../../configuration_preparer/preparer.js"
-import "../../vm/vm.js"
+import * as healthcheck from "../healthcheck/healthcheck.js"
+import * as vm from "../../vm/vm.js"
 
 function GetCustomerName() {
   // Returns Customer Name
@@ -33,12 +60,20 @@ export default {
   name: "virtualMachine",
   data() {
     return {
+      // Owner Name
       CustomerName: GetCustomerName(),
+
       // General Virtual Machine Info
       VirtualMachineId: 0,
       VirtualMachineName: null,
       IPAddress: null,
-      SshCredentials: null,
+
+      // Ssh Info
+      RootUserName: null,
+      RootUserPassword: null,
+      Ssl: null,
+
+      // Cost Info
       TotalCostThisMonth: null,
       PricePerDay: null,
 
@@ -46,13 +81,12 @@ export default {
       DatacenterName: null,
       MaxCpuUsage: null,
       MaxMemoryUsage: null,
+      StorageCapacity: null,
 
       // Health Metrics Attributes
       CpuUsage: null,
       MemoryUsage: null,
       State: null,
-      OsState: null,
-
 
       // Health Check API Class
       HealthAPICheckerJobName: null,
@@ -62,37 +96,47 @@ export default {
 
     ShowError(ErrorMessage) {
       // Showing up and Error
-    }
+    },
 
-    ShowCustomerVirtualMachineInfo(VirtualMachineId, CustomerId) {
-      // Returns Virtual Machine Info
+    ShowCustomerVirtualMachineInfo(VirtualMachineId) {
+      // Returns Virtual Machine Info, (is not being changed dynamically)
+
       let VirtualMachineManager = new vm.VirtualMachineManager()
-      let VirtualMachineInfo, ErrorValue = VirtualMachineManager.GetVirtualMachine(VirtualMachineId, CustomerId)
-      if (ErrorValue != null) {ShowError(ErrorValue.error)}
+      let VirtualMachineInfo, ErrorValue = VirtualMachineManager.GetVirtualMachine(VirtualMachineId)
+
+      if (ErrorValue != null) {this.ShowError(ErrorValue.error)}
+      this.CustomerName = this.GetCustomerName()
+
+      this.VirtualMachineId = VirtualMachineInfo["Metadata"]["VirtualMachineId"]
+      this.VirtualMachineName = VirtualMachineInfo["Metadata"]["VirtualMachineName"]
+      this.IPAddress        = VirtualMachineInfo["Metadata"]["IPAddress"]
+
+      this.RootUserName     = VirtualMachineInfo["SshCredentials"]["RootUserName"]
+      this.RootUserPassword = VirtualMachineInfo["SshCredentials"]["RootUserPassword"]
+      this.Ssl              = VirtualMachineInfo["SshCredentials"]["Ssl"]
+
+      this.TotalCostThisMonth = VirtualMachineInfo["Cost"]["TotalCostThisMonth"] // Total Cost this Month, based on the VM Usage
+      this.PricePerDay      = VirtualMachineInfo["Cost"]["PricePerDay"] // Price Per Day, based on the VM Setup
+
+      this.DatacenterName = VirtualMachineInfo["Datacenter"]["DatacenterName"]
+      this.MaxCpuUsage = VirtualMachineInfo["ResourcesLimits"]["MaxCpuUsage"]
+      this.MaxCpuUsage = VirtualMachineInfo["ResourceLimits"]["MaxMemoryUsage"]
+      this.StorageCapacity = VirtualMachineInfo["ResourceLimits"]["StorageCapacity"]
     },
 
-    ShowVirtualMachineResourceConfiguration(VirtualMachineId) {
-      // Returns Virtual Machine Configuration Info
-      let newVirtualMachineManager = new vm.VirtualMachineManager()
-      let VirtualMachineConfiguration = newVirtualMachineManager.GetVirtualMachineConfiguration(VirtualMachineId)
-      this.MaxCpuUsage = VirtualMachineConfiguration.Resources.MaxCpuUsage
-      this.MaxMemoryUsage = VirtualMachineConfiguration.Resources.MaxMemoryUsage
-    },
-
-    ShowVirtualMachineHealthMetrics(VirtualMachineId, CustomerId) {
+    ShowVirtualMachineHealthMetrics(VirtualMachineId) {
       // Returns Health Metrics of the Virtual Machine
       let HealthMetricsManager = new healthcheck.VirtualMachineHealthStateChecker()
-      let JobUniqueName, StartError = HealthMetricsManager.StartHealthChecker(VirtualMachineId, CustomerId)
+      let JobUniqueName, StartError = HealthMetricsManager.StartHealthChecker(VirtualMachineId)
 
       if (StartError != null) {
         for (let Item in [this.CpuUsage, this.MemoryUsage, this.State])  {
-          Item = "Failed to Parse Item"
+          Item.innerText = "Failed to Parse Item"
         }
       }else{
         this.HealthAPICheckerJobName = JobUniqueName
       }
     },
-
     ShutdownVirtualMachineHealthMetrics(JobUniqueName){
       // Shuts down the Health Metrics API Crontab Job by stopping it using Job Unique Name
       let HealthMetricsManager = new healthcheck.VirtualMachineHealthStateChecker()
@@ -103,9 +147,8 @@ export default {
 
 </script>
 
-
 <style lang="scss" scoped>
-.invoice {
+.virtualMachine {
   text-decoration: none;
   cursor: pointer;
   gap: 16px;

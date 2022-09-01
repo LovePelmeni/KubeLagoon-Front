@@ -1,5 +1,7 @@
 import * as preparer from "../configuration_preparer/preparer.js"
 
+/* eslint-disable no-unused-vars */
+
 var BACKEND_APPLICATION_HOST = process.env.BACKEND_APPLICATION_HOST
 var BACKEND_APPLICATION_PORT = process.env.BACKEND_APPLICATION_PORT
 
@@ -16,7 +18,7 @@ class VirtualMachineManager {
     var APIUrl = new Url("http://%s:%s/vm/initialize/",
     BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT)
     try {
-    let Response, Error = $.ajax({
+    let Response, ResponseError = $.ajax({
       async: false,
       method: "POST",
       data: JSON.stringify(configurationPreparer.PrepareHardwareConfiguration(Configuration)),
@@ -38,7 +40,7 @@ class VirtualMachineManager {
         return null, Error(Error)
       },
     })
-    return Response
+    return Response, ResponseError
   }catch (APIException){
     return null, Error(APIException)
   }
@@ -81,7 +83,7 @@ class VirtualMachineManager {
     BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
     APIUrl.searchParams.append("VirtualMachineId", VirtualMachineId)
     try {
-        Response = $.ajax({
+        let Response, ResponseError = $.ajax({
           url: APIUrl,
           method: "GET",
           headers: {
@@ -92,7 +94,7 @@ class VirtualMachineManager {
           success: function(Response) {
             if (Response.StatusCode == 201 || Response.StatusCode == 200) {
               let Vm = JSON.Parse(Response.VirtualMachine)
-              return Vm
+              return Vm, null
             }else{
               return null, Error(Response.Error)
             }
@@ -101,7 +103,7 @@ class VirtualMachineManager {
             return null, Error(Error)
           }
         })
-        return Response, Error
+        return Response, ResponseError
   } catch(APIException){
     return null, APIException
   }

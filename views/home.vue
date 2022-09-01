@@ -41,7 +41,9 @@
 
 <script>
 
-import virtualMachine from "../components/VirtualMachine.vue";
+/* eslint-disable no-unused-vars */
+
+import virtualMachine from "../src/components/VirtualMachine.vue";
 import { mapMutations, mapState } from "vuex";
 import * as vm from "../vm/vm.js"
 

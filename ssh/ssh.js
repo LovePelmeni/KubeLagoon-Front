@@ -1,5 +1,7 @@
 import "../rest/ssh.js"
 
+/* eslint-disable no-unused-vars */
+
 class SshPublicKey {
   // Represents SSH Public Key of the Virtual Machine Server
   constructor(VirtualMachineSSHPublicKeyContent, VirtualMachineIpAddress) {

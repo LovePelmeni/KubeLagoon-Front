@@ -5,6 +5,8 @@ var BACKEND_APPLICATION_HOST = process.env.BACKEND_APPLICATION_HOST
 import $ from "jquery";
 var Url = require('url-parse');
 
+/* eslint-disable no-unused-vars */
+
 
 function InitializeVirtualMachineRestController(Configuration) {
   // Rest Controller, that Initializes New Virtual Machine

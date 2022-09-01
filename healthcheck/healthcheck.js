@@ -1,4 +1,5 @@
 import "../rest/healthcheck.js"
+/* eslint-disable no-unused-vars */
 
 var DEFAULT_CRONTAB_JOB_TIMEZONE=process.env.DEFAULT_CRONTAB_JOB_TIMEZONE
 var CrontabJob = require("cron").CronJob

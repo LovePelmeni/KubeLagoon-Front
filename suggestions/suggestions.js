@@ -1,6 +1,9 @@
 import "../rest/suggestions.js"
 // Package that Parsers Suggested Resources for the Virtual Machine
 
+
+/* eslint-disable no-unused-vars */
+
 class SuggestionsReturner {
   // Class Represents Suggestion Manager
   GetSuggestedDatacenters = function(){

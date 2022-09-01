@@ -1,3 +1,6 @@
+/* eslint-disable no-unused-vars */
+
+
 class BaseResource {
   // Represents Resource (part of the CustomizedConfiguration)
   // * Explanation ---
@@ -143,6 +146,9 @@ class CustomConfiguration extends BaseConfiguration {
   // Class Represents Customized Configuration for the Virtual Machine Server
   // where the Customer can pick up, how much memory and cpu's they want,
   // What OS and Network to pick up etc...
+  constructor() {
+    super();
+  }
 
   SetupConfiguration = function(MetadataConfig, ResourceConfig, NetworkConfig, HostSystemConfig, SslConfig, PreInstalledToolsConfig) {
     // Setting up the Configuration parts and putting them inside the array
@@ -177,7 +183,6 @@ class CustomConfiguration extends BaseConfiguration {
 class ConfigurationPreparer {
   // Class Returns Serialized Version of the Configurations
   constructor(Configuration) {
-    super();
     this.Configuration = Configuration
   }
   PrepareCustomConfiguration = function(){

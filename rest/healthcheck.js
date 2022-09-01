@@ -1,6 +1,8 @@
 import "../healthcheck/healthcheck.js"
 import $ from "jquery";
 
+/* eslint-disable no-unused-vars */
+
 var BACKEND_APPLICATION_HOST = process.env.BACKEND_APPLICATION_HOST
 var BACKEND_APPLICATION_PORT = process.env.BACKEND_APPLICATION_PORT
 

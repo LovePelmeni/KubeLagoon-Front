@@ -7,6 +7,8 @@ import {CustomerProfile} from "../views/CustomerProfile.vue"
 import {LoginPage} from "../views/LoginPage.vue"
 import {RegistrationPage} from "../views/RegistrationPage.vue"
 
+/* eslint-disable no-unused-vars */
+
 
 var BASE_ROOT_URL = process.env.BASE_ROOT_URL
 

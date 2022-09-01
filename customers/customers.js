@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable no-useless-escape */
 
 class CustomerInputValidator {
   // User Info Validation Form
@@ -14,9 +16,9 @@ class CustomerInputValidator {
   ValidateRegistrationInput = function() {
     // Validates Registration Input
   }
-  
+
   ValidateInput = function() {
-    Validates Initial Property Input
+    // Validates Initial Property Input
     var InvalidFields = []
     var RegexsPatterns = {
       "Username": new RegExp("^[0-9a-zA-Z]{1,100}$"),
@@ -35,13 +37,13 @@ class CustomerInputValidator {
 }
 
 class CustomerManager {
-    // CreateCustomer = function() {
-    //   // Creates New Customer
-    // }
-    // DeleteCustomer = function() {
-    //   // Deletes Existing Customer's Profile
-    // }
-    // ResetPassword = function() {
-    //   // Resets password
-    // }
+    CreateCustomer = function() {
+      // Creates New Customer
+    }
+    DeleteCustomer = function() {
+      // Deletes Existing Customer's Profile
+    }
+    ResetPassword = function() {
+      // Resets password
+    }
 }

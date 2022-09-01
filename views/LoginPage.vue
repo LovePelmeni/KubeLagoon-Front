@@ -2,6 +2,8 @@
 
 <script>
 
+/* eslint-disable no-unused-vars */
+
 import * as customers from "../customers/customers.js"
 
 export default {
@@ -17,7 +19,7 @@ export default {
       // Logs Customer Inside and Setting up new Refreshed JWT Token
       let ValidData, ValidError = this.ValidateInput(Username, Password)
       if (ValidError != null) {this.showError(ValidError)}
-      CustomerManager = new customers.CustomerManager()
+      let CustomerManager = new customers.CustomerManager()
       let LoginError = CustomerManager.Login(ValidData)
       if (LoginError != null) {this.showError(LoginError)}
     },
