@@ -60,18 +60,18 @@ export default {
   },
   methods: {
 
-    function ShowError(ErrorMessage) {
+    ShowError(ErrorMessage) {
       // Showing up and Error
     }
 
-    function ShowCustomerVirtualMachineInfo(VirtualMachineId, CustomerId) {
+    ShowCustomerVirtualMachineInfo(VirtualMachineId, CustomerId) {
       // Returns Virtual Machine Info
       let VirtualMachineManager = new vm.VirtualMachineManager()
       let VirtualMachineInfo, ErrorValue = VirtualMachineManager.GetVirtualMachine(VirtualMachineId, CustomerId)
       if (ErrorValue != null) {ShowError(ErrorValue.error)}
     },
 
-    function ShowVirtualMachineResourceConfiguration(VirtualMachineId) {
+    ShowVirtualMachineResourceConfiguration(VirtualMachineId) {
       // Returns Virtual Machine Configuration Info
       let newVirtualMachineManager = new vm.VirtualMachineManager()
       let VirtualMachineConfiguration = newVirtualMachineManager.GetVirtualMachineConfiguration(VirtualMachineId)
@@ -79,7 +79,7 @@ export default {
       this.MaxMemoryUsage = VirtualMachineConfiguration.Resources.MaxMemoryUsage
     },
 
-    function ShowVirtualMachineHealthMetrics(VirtualMachineId, CustomerId) {
+    ShowVirtualMachineHealthMetrics(VirtualMachineId, CustomerId) {
       // Returns Health Metrics of the Virtual Machine
       let HealthMetricsManager = new healthcheck.VirtualMachineHealthStateChecker()
       let JobUniqueName, StartError = HealthMetricsManager.StartHealthChecker(VirtualMachineId, CustomerId)
@@ -93,7 +93,7 @@ export default {
       }
     },
 
-    function ShutdownVirtualMachineHealthMetrics(JobUniqueName){
+    ShutdownVirtualMachineHealthMetrics(JobUniqueName){
       // Shuts down the Health Metrics API Crontab Job by stopping it using Job Unique Name
       let HealthMetricsManager = new healthcheck.VirtualMachineHealthStateChecker()
       HealthMetricsManager.RemoveHealthChecker(JobUniqueName)

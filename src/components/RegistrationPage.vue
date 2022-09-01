@@ -14,13 +14,14 @@ export default {
   },
   methods: {
 
-    function ShowError(Errors) {
+    ShowError(Errors) {
       // Shows Exceptions on the Page
+      console.log(Errors)
     },
-    function ValidateInput() {
+    ValidateInput() {
       // Validates Customer Input
     },
-    function ProcessFormRequest() {
+    ProcessFormRequest() {
       // Creates New Customer
     }
   },

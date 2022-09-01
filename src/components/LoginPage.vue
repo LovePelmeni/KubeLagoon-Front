@@ -13,10 +13,10 @@ export default {
     }
   },
   methods: {
-    function ValidateInput() {
+    ValidateInput() {
         // Validates Customer's Initial Input
     },
-    function ProcessFormRequest() {
+    ProcessFormRequest() {
       // Logging Customer In
     }
   }

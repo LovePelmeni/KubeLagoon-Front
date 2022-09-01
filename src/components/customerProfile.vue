@@ -26,14 +26,14 @@ export default {
       },
         methods: {
 
-          function ShowCustomerProfile() {
+          ShowCustomerProfile() {
             // Function Parses Customer Data and Shows Out Customer's Profile Component
             CustomerId = $.getCookie("jwt-token")["UserId"]
             newCustomerManager = new customers.CustomerManager()
             CustomerProfile = newCustomerManager.GetCustomerProfile(CustomerId)
           },
 
-          function Logout() {
+          Logout() {
             // Logging out the Customer from the Profile
 
             var LoginRedirectUrl = new url.URL("http://%s:%s/customer/login"
@@ -44,7 +44,7 @@ export default {
               return this.$router.push({name: "login_page"})
             }
           },
-          function Login() {
+          Login() {
             // Logs Customer in the Profile
             return this.$router.push({name: "login_page"})
           }

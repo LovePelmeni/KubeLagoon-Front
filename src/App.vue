@@ -1,10 +1,10 @@
 <template>
-  <div v-if="invoicesLoaded">
+  <div v-if="virtualMachineLoaded">
     <div v-if="!mobile" class="app flex flex-column">
       <navigationPage />
       <div class="app-content flex flex-column">
         <Modal v-if="modalActive" />
-        <transition name="invoice">
+        <transition name="virtualMachine">
           <initializationModal v-if="initializationModal" />
         </transition>
         <router-view />
@@ -23,6 +23,7 @@ import navigationPage from "./components/NavigationPage";
 import initializationModal from "./components/initializationModal";
 import Modal from "./components/Modal";
 export default {
+  name: "mainApp",
   data() {
     return {
       mobile: null,
