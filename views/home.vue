@@ -28,7 +28,8 @@
 
     <!-- Virtual Machines -->
     <div v-if="VirtualMachines.length > 0">
-      <virtualMachine v-for="(VirtualMachine, index) in filteredData" :invoice="virtualMachine" :key="index" />
+      <virtualMachine v-for="(VirtualMachine, index) in filteredData" :virtualMachine="virtualMachine" :key="index" />
+
     </div>
 
     <div v-else class="empty flex flex-column">
@@ -48,6 +49,8 @@ import { mapMutations, mapState } from "vuex";
 import * as vm from "../vm/vm.js"
 
 export default {
+
+  ...addMutations("TOGGLE_VM_INITIALIZATION_MODAL")
   name: "HomePage",
   data() {
     return {
@@ -58,11 +61,26 @@ export default {
   components: {
     virtualMachine,
   },
+  computed: {
+    ...addState(["VirtualMachines"])
+    filteredData() {
+      // Filters Data
+      return this.filteredVirtualMachines.filter(function(VirtualMachine) => {
+        if VirtualMachine.Status == "Running" {
+          return VirtualMachine.Status === "Running"
+        }
+        if VirtualMachine.Status == "Shutdown" {
+          return VirtualMachine.Status === "Shutdown"
+        }
+      }
+    }
+  }
   methods: {
-    ...mapMutations(["TOGGLE_INVOICE"]),
+    ...mapMutations(["TOGGLE_INIITIALIZATION_MODAL"]),
 
     newVirtualMachine() {
-      this.CREATE_VIRTUAL_MACHINE();
+      // Receiving Virtual Machine Initialization Modal
+      this.TOGGLE_VM_INITIALIZATION_MODAL()
     },
 
     toggleFilterMenu() {
@@ -83,20 +101,21 @@ export default {
         let FilteredQueryset = VirtualMachineManager.FilterVirtualMachinesByCreationDate(QueryIds)
         this.filterVirtualMachines = FilteredQueryset
       }
-      this.filteredInvoice = e.target.innerText;
+      this.filteredVirtualMachines = e.target.innerText;
     },
   },
+
   computed: {
     ...mapState(["VirtualMachines"]),
     filteredData() {
       return this.VirtualMachinesList.filter((virtualMachine) => {
-        if (this.filteredInvoice === "Draft") {
+        if (this.filteredVirtualMachines === "Draft") {
           return virtualMachine.VirtualMachineDraft === true;
         }
-        if (this.filteredInvoice === "Pending") {
+        if (this.filteredVirtualMachines === "Pending") {
           return virtualMachine.VirtualMachinePending === true;
         }
-        if (this.filteredInvoice === "Paid") {
+        if (this.filteredVirtualMachines === "Paid") {
           return virtualMachine.VirtualMachinePaid === true;
         }
         return virtualMachine;
@@ -104,6 +123,7 @@ export default {
     },
   },
 };
+
 </script>
 
 <style lang="scss" scoped>
