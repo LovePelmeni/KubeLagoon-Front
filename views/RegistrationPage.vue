@@ -1,7 +1,5 @@
 
 
-
-
 <script>
 
 import * as customers from "../customers/customers.js"
@@ -16,21 +14,24 @@ export default {
     }
   },
   methods: {
-    function showError(Error) {
+    showError(Error) {
       // Showing Up an Exception Banner
     },
-    function ValidateInput(Username, Email, Password) {
+    ValidateInput(Username, Email, Password) {
       // Validates Registration Input
-      newValidator = new customers.RegistrationValidationInput()
-      newValidData, Error  = newValidator.ValidateInput(Username, Email, Password)
+      let newValidator = new customers.RegistrationValidationInput()
+      let newValidData, Error  = newValidator.ValidateInput(Username, Email, Password)
       return newValidData, Error
     },
-    function CreateNewCustomer(Username, Email, Password) {
+    CreateNewCustomer(Username, Email, Password) {
       // Once Customer has been Created, It redirects to the Main Page
-      ValidatedData, Error = this.ValidateInput(Username, Email, Password)
-      CustomerManager = new customers.CustomerManager()
-      Created, Error = CustomerManager.CreateCustomer(Username, Email, Password)
-      if (Error != null || Created != true) {this.showError(Error)}
+      
+      let ValidationError = this.ValidateInput(Username, Email, Password)
+      if (ValidationError != null) {this.showError("Invalid Data has been Passed")}
+
+      let CustomerManager = new customers.CustomerManager()
+      let Created, CreationError = CustomerManager.CreateCustomer(Username, Email, Password)
+      if (CreationError != null || Created != true) {this.showError(Error)}
       this.$router.push({name: "main_page"})
     }
   }

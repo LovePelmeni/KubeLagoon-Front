@@ -1,12 +1,12 @@
 <template>
-  <div @click="checkClick" ref="invoiceWrap" class="invoice-wrap flex flex-column">
+  <div @click="checkClick" ref="virtualMachineWrap" class="virtualMachineWrap flex flex-column">
     <form @submit.prevent="submitForm" class="invoice-content">
       <Loading v-show="loading" />
       <h1 v-if="!updateVirtualMachine">New Virtual Machine</h1>
       <h1 v-else>Update VirtualMachine</h1>
 
-      <!-- Bill From -->
-      <div class="bill-from flex flex-column">
+      <!-- Hardware Configuration  -->
+      <div class="hardwareConfiguration flex flex-column">
         <h4>Hardware Configuration</h4>
         <div class="input flex flex-column">
           <label for="Datacenter">Datacenter</label>
@@ -14,9 +14,9 @@
         </div>
       </div>
 
-      <!-- Bill To -->
+      <!-- resource Configuration -->
 
-      <div class="bill-to flex flex-column">
+      <div class="resourceConfiguration flex flex-column">
         <h4>Resource Configuration</h4>
         <div class="input flex flex-column">
           <label for="Cpu">CPU</label>
@@ -32,7 +32,7 @@
           <input required type="text" id="memoryInMegabytes" v-model="MemoryInMegabytes" />
         </div>
 
-        <div class="location-details flex">
+        <div class="resources-details flex">
           <div class="input flex flex-column">
             <label for="MaxMemory">Max Memory</label>
             <input required type="text" id="maxMemory" v-model="maxMemory" />
@@ -46,11 +46,11 @@
       </div>
 
       <!-- Invoice Work Details -->
-      <div class="invoice-work flex flex-column">
+      <div class="virtual-machine-work flex flex-column">
         <div class="payment flex">
 
           <div class="input flex flex-column">
-            <label for="invoiceDate">Creation Date</label>
+            <label for="virtualMachineCreationDate">Creation Date</label>
             <input disabled type="text" id="VirtualMachineCreationDate" v-model="VirtualMachineCreationDate" />
           </div>
 
@@ -88,8 +88,8 @@
               <td class="item-name"><input type="text" v-model="item.VirtualMachineName" /></td>
               <td class="qty"><input type="text" v-model="VirtualMachine.qty" /></td>
               <td class="price"><input type="text" v-model="VirtualMachine.price" /></td>
-              <td class="total flex">${{ (item.total = item.qty * VirtualMachine.price) }}</td>
-              <img @click="deleteVirtualMachine(item.VirtualMachineId)" src="@/assets/icon-delete.svg" alt="" />
+              <td class="total flex">${{ (VirtualMachine.TotalCost = VirtualMachine.qty * VirtualMachine.ResourcePrice)}}</td>
+              <img @click="deleteVirtualMachine(VirtualMachine.VirtualMachineId)" src="@/assets/icon-delete.svg" alt="" />
             </tr>
 
           </table>
@@ -146,8 +146,8 @@ export default {
   created() {
     // get current date for invoice date field
     if (!this.updateVirtualMachine) {
-      this.invoiceDateUnix = Date.now();
-      this.invoiceDate = new Date(this.invoiceDateUnix).toLocaleDateString("en-us", this.dateOptions);
+      this.virtualMachineDateUnix = Date.now();
+      this.virtualMachineCreationDate = new Date(this.virtualMachineDateUnix).toLocaleDateString("en-us", this.dateOptions);
     }
     if (this.updateVirtualMachine) {
       const currentVirtualMachine = this.currentVirtualMachineArray[0];
@@ -307,7 +307,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.invoice-wrap {
+.virtual-machine-wrap {
   position: fixed;
   top: 0;
   left: 0;
@@ -320,7 +320,7 @@ export default {
   @media (min-width: 900px) {
     left: 90px;
   }
-  .invoice-content {
+  .virtual-machine-content {
     position: relative;
     padding: 56px;
     max-width: 700px;
@@ -343,8 +343,8 @@ export default {
       margin-bottom: 24px;
     }
     // Bill To / Bill From
-    .bill-to,
-    .bill-from {
+    .hardwareConfiguration,
+    .resourceConfiguration {
       margin-bottom: 48px;
       .location-details {
         gap: 16px;
@@ -353,8 +353,7 @@ export default {
         }
       }
     }
-    // Invoice Work
-    .invoice-work {
+    .virtual-machine-work {
       .payment {
         gap: 24px;
         div {
@@ -444,6 +443,3 @@ export default {
   }
 }
 </style>
-
-
-

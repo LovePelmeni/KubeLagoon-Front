@@ -3,6 +3,7 @@
 <script>
 
 import * as customers from "../customers/customers.js"
+
 export default {
   name: "LoginPage",
   data() {
@@ -12,17 +13,22 @@ export default {
     }
   },
   methods: {
-    function Login(Username, Password) {
+    Login(Username, Password) {
       // Logs Customer Inside and Setting up new Refreshed JWT Token
-      ValidData, Error = this.ValidateInput(Username, Password)
+      let ValidData, ValidError = this.ValidateInput(Username, Password)
+      if (ValidError != null) {this.showError(ValidError)}
+      CustomerManager = new customers.CustomerManager()
+      let LoginError = CustomerManager.Login(ValidData)
+      if (LoginError != null) {this.showError(LoginError)}
     },
-    function showError() {
+    showError(ExpectedError) {
       // Shows up an Exceptions Banner on the Page
-    }
-    function ValidateInput(Username, Password) {
-      CustomerInputValidator = new customers.CustomerLoginInputValidator()
-      Valid, Error = CustomerInputValidator.ValidateLoginInput(Username, Password)
-      if (Error != null){this.showError()}
+      console.log(ExpectedError)
+    },
+    ValidateInput(Username, Password) {
+      let CustomerInputValidator = new customers.CustomerLoginInputValidator()
+      let Valid, ValidError = CustomerInputValidator.ValidateLoginInput(Username, Password)
+      if (ValidError != null || Valid != true){return ValidError}
     }
   }
 }

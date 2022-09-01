@@ -1,11 +1,11 @@
 <template>
   <div v-if="invoicesLoaded">
     <div v-if="!mobile" class="app flex flex-column">
-      <Navigation />
+      <navigationPage />
       <div class="app-content flex flex-column">
         <Modal v-if="modalActive" />
         <transition name="invoice">
-          <InvoiceModal v-if="invoiceModal" />
+          <initializationModal v-if="initializationModal" />
         </transition>
         <router-view />
       </div>
@@ -19,8 +19,8 @@
 
 <script>
 import { mapState, mapActions } from "vuex";
-import Navigation from "./components/Navigation";
-import InvoiceModal from "./components/InvoiceModal";
+import navigationPage from "./components/NavigationPage";
+import initializationModal from "./components/initializationModal";
 import Modal from "./components/Modal";
 export default {
   data() {
@@ -29,8 +29,8 @@ export default {
     };
   },
   components: {
-    Navigation,
-    InvoiceModal,
+    navigationPage,
+    initializationModal,
     Modal,
   },
   created() {
@@ -39,7 +39,7 @@ export default {
     window.addEventListener("resize", this.checkScreen);
   },
   methods: {
-    ...mapActions(["GET_INVOICES"]),
+    ...mapActions(["GET_VIRTUAL_MACHINES"]),
     checkScreen() {
       const windowWidth = window.innerWidth;
       if (windowWidth <= 750) {
@@ -50,9 +50,10 @@ export default {
     },
   },
   computed: {
-    ...mapState(["invoiceModal", "modalActive", "invoicesLoaded"]),
+    ...mapState(["initializationModal", "modalActive", "VirtualMachinesLoaded"]),
   },
 };
+
 </script>
 
 <style lang="scss">

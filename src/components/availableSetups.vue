@@ -1,17 +1,20 @@
-// Template Goes There
-
-<template>
-
-</template>
 
 <script>
 
-function GetAvailableSetupSuggestions() {
-  // Returns Avaialable Resources Setup Suggestions
+export default {
+  name: "setupSuggestions"
+  data() {
+    return {
+      Suggestions: null,
+    }
+  }
+  methods: {
+    GetAvailableSetupSuggestions() {
+      // Returns Available Setup Suggestions
+    }
+  }
 }
-
 </script>
-
 
 <style>
 
