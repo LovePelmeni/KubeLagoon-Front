@@ -5,7 +5,7 @@ import {HomePage} from "../views/home.vue"
 
 import {CustomerProfile} from "../views/CustomerProfile.vue"
 import {LoginPage} from "../views/LoginPage.vue"
-import {RegisterPage} from "../views/RegistrationPage.vue"
+import {RegistrationPage} from "../views/RegistrationPage.vue"
 
 
 var BASE_ROOT_URL = process.env.BASE_ROOT_URL
@@ -23,17 +23,17 @@ const Routes = [
   },
   {
     path: "/login/",
-    name: "login",
+    name: "login_page",
     component: LoginPage,
   },
   {
     path: "/register/",
-    name: "register",
-    component: RegisterPage,
+    name: "register_page",
+    component: RegistrationPage,
   },
   {
     path: "/customer/profile/",
-    name: "profile",
+    name: "customer_profile",
     component: CustomerProfile,
   }
 ]

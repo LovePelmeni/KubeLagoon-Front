@@ -29,13 +29,13 @@ class Metadata extends BaseResource {
   constructor(VirtualMachineId, VmOwnerId) {
     super();
     this.VirtualMachineId = VirtualMachineId
-    this.VmOwnerId = VmOwnerId
+    this.VirtualMachineOwnerId = VmOwnerId
   }
   GetObject = function() {
       // Retfunctionurns Metadata converted into Object
       return {"Metadata": {
       "VirtualMachineId": this.VirtualMachineId,
-      "VmOwnerId": this.VmOwnerId}}
+      "VmOwnerId": this.VirtualMachineOwnerId}}
   }
 }
 // Resources goes there
@@ -104,7 +104,6 @@ class NetworkResources extends BaseResource {
   Hostname=null,
   Gateway=null,
   Netmask=null,
-  Enablev4=true,
   Enablev6=true,
   ) {
     super();
@@ -112,7 +111,7 @@ class NetworkResources extends BaseResource {
     this.Gateway = Gateway
     this.Netmask = Netmask
     this.Hostname = Hostname
-    this.Enablev4 = Enablev4
+    this.Enablev4 = true
     this.Enablev6 = Enablev6
   }
 
@@ -136,7 +135,7 @@ class PreInstalledToolsResources extends BaseResource {
     this.Tools = Tools
   }
   GetObject = function(){
-    return {"functionExtraTools": this.Tools}
+    return {"Tools": {"ExtraTools": this.Tools}}
   }
 }
 
@@ -144,34 +143,30 @@ class CustomConfiguration extends BaseConfiguration {
   // Class Represents Customized Configuration for the Virtual Machine Server
   // where the Customer can pick up, how much memory and cpu's they want,
   // What OS and Network to pick up etc...
-  constructor(
-   Metadata= new Metadata(),
-   CpuConfig= new CpuResources(),
-   MemoryConfig= new MemoryResources(),
-   NetworkConfig= new NetworkResources(),
-   HostSystemConfig= new HostSystemResources(),
-   PreInstalledToolsConfig= new PreInstalledToolsConfig(),
-   DiskConfig= new DiskResources(),
-   SshConfig= new SslResources(),
- ) {
-    super();
-    this.MetadataConfig = Metadata,
-    this.CpuConfig = CpuConfig
-    this.MemoryConfig = MemoryConfig
-    this.NetworkConfig =  NetworkConfig
-    this.HostSystemConfig = HostSystemConfig
-    this.DiskConfig = DiskConfig
-    this.SslConfig = SshConfig,
-    this.PreInstalledToolsConfig =  PreInstalledToolsConfig,
-    // Array of the Configurations
-    this.ConfigArray = [this.MetadataConfig, this.CpuConfig,
-    this.MemoryConfig, this.NetworkConfig,
-    this.HostSystemConfig, this.DiskConfig, this.SshConfig]
+
+  SetupConfiguration = function(MetadataConfig, ResourceConfig, NetworkConfig, HostSystemConfig, SslConfig, PreInstalledToolsConfig) {
+    // Setting up the Configuration parts and putting them inside the array
+
+    let Metadata = new Metadata(MetadataConfig["VirtualMachineId"], Metadata["VirtualMachineOwnerId"])
+    let Resources = new Resources(ResourceConfig["MaxCpuUsage"], ResourceConfig["CpuUsage"],
+    ResourceConfig["MaxMemoryUsage"], ResourceConfig["MemoryUsage"])
+
+    let Network = new NetworkResources(NetworkConfig["NetworkIP"], NetworkConfig["Hostname"], NetworkConfig["Gateway"],
+    NetworkConfig["Netmask"], NetworkConfig["Enablev6"])
+
+    let HostSystem = new HostSystemResources(HostSystemConfig["SystemName"], HostSystemConfig["Bit"])
+    let Ssl = new SslConfig(SslConfig["Type"])
+    let PreInstalledTools = new PreInstalledToolsResources(PreInstalledToolsConfig["Tools"])
+
+    let Configurations = [Metadata, Resources, Ssl, PreInstalledTools, Network, HostSystem]
+    return Configurations
   }
-  GetConfiguration = function(){
+
+  GetConfiguration = function(ConfigurationParts){
     //function Returns Serialized Custom Configuration for the Virtual Machine Server
+
     var FullCustomConfiguration = {}
-    for (let Configuration in this.ConfigArray) {
+    for (let Configuration in ConfigurationParts) {
       Object.assign(FullCustomConfiguration, Configuration.GetObject())
     }
     return FullCustomConfiguration
