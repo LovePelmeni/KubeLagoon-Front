@@ -23,7 +23,7 @@
 
 import { mapState, mapActions } from "vuex";
 import navigationPage from "./components/NavigationPage";
-import initializationModal from "./components/initializationModal";
+import initializationModal from "./components/InitializationModal";
 import Modal from "./components/Modal";
 
 export default {

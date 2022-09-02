@@ -135,8 +135,8 @@ import * as vm from "../vm/vm.js"
 import * as preparer from "../configuration_preparer/preparer.js"
 
 
-export default {
-  name: "hardwareConfiguration",
+export const hardwareConfiguration = {
+
   data() {
     return {
       Datacenters: [],
@@ -173,10 +173,10 @@ export default {
       this.PreInstalledTools = PreInstalledTools
     },
   }
-},
+};
 
-export default {
-  name: "resourceConfiguration",
+export const resourceConfiguration = {
+
   data() {
     return {
       // CPU Resources
@@ -202,14 +202,14 @@ export default {
         this.CpuNum = VirtualMachineInfo["Resources"]["CpuNum"],
         this.MaxCpu = VirtualMachineInfo["Resources"]["MaxCpu"],
         this.MaxMemory = VirtualMachineInfo["Resources"]["MaxMemory"],
-        this.Memory = VirtualMachineInfo["Resources"]["Memory"],
+        this.Memory = VirtualMachineInfo["Resources"]["Memory"]
       }
-    },
+    }
   }
-}
+};
 
-export default {
-  name: "sslConfiguration",
+export const sslConfiguration = {
+
   data() {
     return {
       // SSL Secure Info
@@ -221,7 +221,7 @@ export default {
   },
   created() {
     this.GetVirtualMachineInfo()
-  }
+  },
   methods: {
     GetVirtualMachineInfo() {
       // Returns Virtual Machines Info about the SSL Configuration
@@ -233,11 +233,12 @@ export default {
         this.RootUsername = VirtualMachineInfo["Ssl"]["RootUsername"],
         this.RootPassword = VirtualMachineInfo["Ssl"]["RootPassword"],
         this.RootCertificate = VirtualMachineInfo["Ssl"]["RootCertificate"],
-        this.Secure = VirtualMachineInfo["Ssl"]["Secure"],
+        this.Secure = VirtualMachineInfo["Ssl"]["Secure"]
       }
-    },
+    }
   }
-}
+};
+
 export default {
 
   name: "initializationModal",
@@ -274,10 +275,10 @@ export default {
   },
 
   methods: {
-    ...mapMutations(["TOGGLE_VM_INITIALIZATIONMODAL", "TOGGLE_UPDATE_VIRTUAL_MACHINE"]),
+    ...mapMutations(["TOGGLE_VIRTUAL_MACHINE", "TOGGLE_UPDATE_VIRTUAL_MACHINE"]),
     ...mapActions(["UPDATE_VIRTUAL_MACHINE", "GET_VIRTUAL_MACHINES", "GET_VIRTUAL_MACHINE"]),
 
-    checkClick(e) {/
+    checkClick(e) {
       if (e.target === this.$refs.virtualMachineWrap) {
         this.TOGGLE_MODAL();
       }
@@ -299,7 +300,7 @@ export default {
     },
 
     // Virtual Machine Functions Goes There
-    CreateNewVirtualMachine(HardwareConfiguration, CustomizedConfiguration, Metadata) {
+    CreateNewVirtualMachine(hardwareConfigurationData, customizedConfigurationData, Metadata) {
       // Initializes New Virtual Machine
 
       this.VirtualMachinePending = true;
@@ -322,13 +323,12 @@ export default {
       let HardwareConfiguration = new preparer.HardwareConfiguration()
       let newVirtualMachineManager = new vm.VirtualMachineManager()
 
-      let InitializedVirtualMachineInfo, InitilizationError = newVirtualMachineManager.initializeNewVirtualMachine(
-      let HardwareConfiguration)
+      let InitializedVirtualMachineInfo, InitilizationError = newVirtualMachineManager.initializeNewVirtualMachine(HardwareConfiguration)
 
       if (InitilizationError == null && IninitializedVirtualMachineInfo != null) {
         // Updating State of the Virtual Machine View
         this.VirtualMachineItemList[-1].Status = "Applying Configuration"
-        let VirtualMachineCustomizationInfo, ApplyError = newVirtualMachineManager.ApplyConfiguration(CustomizedConfiguration)
+        let VirtualMachineCustomizationInfo, ApplyError = newVirtualMachineManager.ApplyConfiguration(customizedConfigurationData)
 
         if (ApplyError == null) {
             // If Apply has become successful, it should redirect to the other Root
@@ -346,7 +346,7 @@ export default {
           // If Applying Configuration failure has occurred, destroying Created Virtual Machine
           var VirtualMachineId = VirtualMachineCustomizationInfo["VirtualMachineId"]
           this.VirtualMachineItemList[-1].Status = "Failure"
-          await newVirtualMachineManager.DeleteVirtualMachine(VirtualMachineId)
+          newVirtualMachineManager.DeleteVirtualMachine(VirtualMachineId)
         }
       }
     },
@@ -378,8 +378,8 @@ export default {
       this.loading = true;
       this.calInvoiceTotal();
       this.loading = false;
-      this.TOGGLE_INVOICE();
-      this.GET_INVOICES();
+      this.TOGGLE_VIRTUAL_MACHINE();
+      this.GET_VIRTUAL_MACHINES();
     },
 
     async updateVirtualMachine(NewConfiguration) {
@@ -417,6 +417,7 @@ export default {
     },
   },
 };
+
 </script>
 
 <style lang="scss" scoped>

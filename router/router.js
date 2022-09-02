@@ -6,7 +6,6 @@ import {HomePage} from "../views/home.vue"
 import {CustomerProfile} from "../views/CustomerProfile.vue"
 import {LoginPage} from "../views/LoginPage.vue"
 import {RegistrationPage} from "../views/RegistrationPage.vue"
-import {DeleteVirtualMachine} from "../views/DeleteVirtualMachine.vue"
 
 /* eslint-disable no-unused-vars */
 

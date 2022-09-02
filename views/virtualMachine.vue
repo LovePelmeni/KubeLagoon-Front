@@ -26,7 +26,7 @@
 
           <button @click="toggleUpdateVirtualMachine" class="dark-purple">Edit</button>
           <button @click="deleteVirtualMachine(currentVirtualMachine.VirtualMachineId)" class="red">Delete</button>
-          <button id="shutdownButton"@click="updateVirtualMachine(currentVirtualMachine.VirtualMachineId)" v-if="currentInvoice.Deploying" class="orange">
+          <button id="shutdownButton" @click="updateVirtualMachine(currentVirtualMachine.VirtualMachineId)" v-if="currentInvoice.Deploying" class="orange">
            Shutdown
           </button>
           <button id="runButton"
@@ -133,18 +133,13 @@ export default {
   },
   methods: {
 
-   ...mapMutations(["SET_CURRENT_VIRTUAL_MACHINE", "TOGGLE_UPDATE_VIRTUAL_MACHINE", "TOGGLE_VIRTUAL_MACHINE", "RUN_VIRTUAL_MACHINE", "SHUTDOWN_VIRTUAL_MACHINE"]),
+   ...mapMutations(["SET_CURRENT_VIRTUAL_MACHINE", "TOGGLE_UPDATE_VIRTUAL_MACHINE", "TOGGLE_VIRTUAL_MACHINE", "RUN_VIRTUAL_MACHINE", "SHUTDOWN_VIRTUAL_MACHINE", "SHOW_ERROR"]),
    ...mapActions(["DELETE_VIRTUAL_MACHINE", "UPDATE_STATUS_TO_RUNNING", "UPDATE_STATUS_TO_SHUTDOWN", "UPDATE_STATUS_TO_DEPLOYING"]),
 
 
     RedirectHome() {
       // redirects to the Main Page
       this.$route.push({name: 'HomePage'})
-    },
-
-    showError(ErrorMessage) {
-      // Shows up the Error Message Banner
-      console.log(ErrorMessage)
     },
 
     getCurrentVirtualMachine() {
@@ -163,35 +158,35 @@ export default {
       // Shutting down the Virtual Machine Server
       document.getElementById("shutdownButton").innerText = "Shutting Down..."
       let ShutdownError = this.SHUTDOWN_VIRTUAL_MACHINE()
-      if (ShutdownErorr != null) {this.showError(
+      if (ShutdownError != null) {this.SHOW_ERROR(
       "Failed to Shutdown Virtual Machine, " + ShutdownError.error)} else{
       this.toggleShutdownVirtualMachine(VirtualMachineId)}
-    }
+    },
 
     RunVirtualMachine(VirtualMachineId) {
       // Running the Virtual Machine Server
       document.getElementById("runButton").innerText = "Running..."
       let RunError = this.RUN_VIRTUAL_MACHINE(VirtualMachineId)
-      if (RunError != null ) {this.showError(
+      if (RunError != null ) {this.SHOW_ERROR(
       "Failed to Run Virtual Machine, " + RunError.error); return; }else{
       this.toggleRunVirtualMachine(VirtualMachineId)}
-    }
+    },
 
     toggleRunVirtualMachine(VirtualMachineId) {
       // Mark Virtual Machine as Running
       this.UPDATE_STATUS_TO_RUNNING(VirtualMachineId)
-    }
+    },
 
     toggleShutdownVirtualMachine(VirtualMachineId) {
       // Mark Virtual Machine as Shutdowned one
       this.UPDATE_STATUS_TO_SHUTDOWN(VirtualMachineId)
-    }
+    },
 
     toggleUpdateVirtualMachine() {
       // Toggles Virtual Machine Status
       this.TOGGLE_UPDATE_VIRTUAL_MACHINE();
       this.TOGGLE_VIRTUAL_MACHINE();
-    }
+    },
 
     DeleteVirtualMachine(VirtualMachineId) {
       // Redirects to the Delete Virtual Machine Page
@@ -379,4 +374,5 @@ export default {
 .green {
   background-color: #33d69f;
 }
+
 </style>

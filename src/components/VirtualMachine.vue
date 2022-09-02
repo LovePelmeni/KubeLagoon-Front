@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
   <router-link class="virtualMachine flex" @onclick="ShutdownVirtualMachineHealthMetrics(VirtualMachine.HealthAPICheckerJobName)" :to="{name: "HomePage"}"></<router-link :to="{ name: 'HomePage'}">Go Back</router-link>
 
     <div class="left flex">
@@ -192,4 +192,4 @@ export default {
       font-weight: 600px;
     }
   }
-}
+} -->

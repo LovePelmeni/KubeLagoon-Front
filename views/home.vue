@@ -13,7 +13,6 @@
           >
           <img src="@/assets/icon-arrow-down.svg" alt="" />
           <ul v-show="filterMenu" class="filter-menu">
-            <li @click="filteredVirtualMachine">By Date</li>
             <li @click="filteredVirtualMachine">Running</li>
             <li @click="filteredVirtualMachine">Shutdown</li>
             <li @click="filteredVirtualMachine">Deploying</li>
@@ -67,7 +66,7 @@ export default {
     newVirtualMachine() {
       // Initializes Empty Form for the Virtual Machine Configuration
       this.TOGGLE_VIRTUAL_MACHINE()
-    }
+    },
 
     toggleFilterMenu() {
       this.filterMenu = !this.filterMenu;
@@ -86,26 +85,24 @@ export default {
     ...mapState(["virtualMachineData"]),
     filteredData() {
       return this.virtualMachineData.filter((virtualMachine) => {
+
         if (this.filteredVirtualMachine === "Clear") {
           this.filteredVirtualMachine = null
           return true
         }
-        if (this.filteredVirtualMachine === "By Date") {
-          return this.filteredVirtualMachine()
-        }
-        if (e.target.innerText === "Running") {
+        if (this.filteredVirtualMachine === "Running") {
           return virtualMachine.Running === true;
         }
-        if (e.target.innerText === "Shutdown") {
+        if (this.filteredVirtualMachine === "Shutdown") {
           return virtualMachine.Shutdown === true;
         }
-        if (e.target.innerText === "Deploying") {
+        if (this.filteredVirtualMachine === "Deploying") {
           return virtualMachine.Deploying === true;
         }
         return virtualMachine;
       });
   },
-};
+},
 }
 
 </script>
