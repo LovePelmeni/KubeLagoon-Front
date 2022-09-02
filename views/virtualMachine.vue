@@ -9,76 +9,100 @@
     <div class="header flex">
       <div class="left flex">
         <span>Status</span>
-        <div>
-          <span>{{ CurrentVirtualMachine.Status }}</span>
-        </div>
-      </div>
-      <div class="right flex">
-        <button @click="UpdateVirtualMachine(CurrentVirtualMachine.VirtualMachineId)" class="dark-purple">Edit</button>
-        <button @click="DeleteVirtualMachine(CurrentVirtualMachine.VirtualMachineId)" class="red">Delete</button>
+         <div
+           class="status-button flex"
+           :class="{
+             running: currentVirtualMachine.Running,
+             shutdown: currentVirtualMachine.Shutdown,
+             deploying: currentVirtualMachine.Deploying,
+           }"
+         >
+           <span v-if="currentVirtualMachine.Running">Running</span>
+           <span v-if="currentVirtualMachine.Shutdown">Shutdown</span>
+           <span v-if="currentVirtualMachine.Deploying">Deploying</span>
+         </div>
+
+         <div class="right flex">
+
+          <button @click="toggleUpdateVirtualMachine" class="dark-purple">Edit</button>
+          <button @click="deleteVirtualMachine(currentVirtualMachine.VirtualMachineId)" class="red">Delete</button>
+          <button id="shutdownButton"@click="updateVirtualMachine(currentVirtualMachine.VirtualMachineId)" v-if="currentInvoice.Deploying" class="orange">
+           Shutdown
+          </button>
+          <button id="runButton"
+            v-if="currentVirtualMachine.virtualMachineDraft || currentVirtualMachine.Shutdown"
+            @click="u(currentVirtualMachine.VirtualMachineId)"
+            class="green"
+          >
+            Run
+          </button>
       </div>
     </div>
 
-    <!-- Virtual Machine Details -->
-
+    <!-- Invoice Details -->
     <div class="virtual-machine-details flex flex-column">
       <div class="top flex">
-
         <div class="left flex flex-column">
-          <p><span>#</span>{{ CurrentVirtualMachine.VirtualMachineName }}</p>
+          <p><span>#</span>{{ currentVirtualMachine.VirtualMachineName }}</p>
           <p>Virtual Machine Server</p>
         </div>
         <div class="right flex flex-column">
-          <p>KubeLagoon, Inc</p>
+          <p>All the Bills will be address to</p>
+          <p>{{ currentVirtualMachine.billerStreetAddress }}</p>
+          <p>{{ currentVirtualMachine.billerCity }}</p>
+          <p>{{ currentVirtualMachine.billerZipCode }}</p>
+          <p>{{ currentVirtualMachine.billerCountry }}</p>
         </div>
       </div>
-
       <div class="middle flex">
         <div class="payment flex flex-column">
           <h4>Creation Date</h4>
           <p>
-            {{ CurrentVirtualMachine.CreatedAt }}
+            {{ currentVirtualMachine.CreatedAt }}
+          </p>
+          <h4>Payment Date</h4>
+          <p>
+            {{ currentVirtualMachine.paymentDueDate }}
           </p>
         </div>
-
         <div class="bill flex flex-column">
           <h4>Bill To</h4>
-          <p>'KubeLagoon, Inc'</p>
+          <p>{{ currentVirtualMachine.clientName }}</p>
+          <p>{{ currentVirtualMachine.clientStreetAddress }}</p>
+          <p>{{ currentVirtualMachine.clientCity }}</p>
+          <p>{{ currentVirtualMachine.clientZipCode }}</p>
+          <p>{{ currentVirtualMachine.clientCountry }}</p>
         </div>
         <div class="send-to flex flex-column">
           <h4>Sent To</h4>
-          <p>kubeLagoonManager@gmail.com</p>
+          <p>{{ currentVirtualMachine.OwnerEmail }}</p>
         </div>
       </div>
-
-      <!-- Queryset of the Virtual Machines Created By the Customer !-->
-
       <div class="bottom flex flex-column">
         <div class="billing-items">
           <div class="heading flex">
             <p>ID</p>
             <p>Name</p>
-            <p>IP</p>
-            <p>Instance State</p>
-            <p>Created At</p>
+            <p>Status</p>
+            <p>Price Per Day</p>
+            <p>TotalCost Per Month</p>
           </div>
-          <div v-for="(VirtualMachine, index) in GetVirtualMachineItemList()" :key="index" class="VirtualMachine flex">
-
-            <p>{{ VirtualMachine.VirtualMachineId }}</p>
-            <p>{{ VirtualMachine.VirtualMachineName }}</p>
-            <p>{{ VirtualMachine.IPAddress }}</p>
-            <p>{{ VirtualMachine.State }}</p>
-            <p>{{ VirtualMachine.CreatedAt }}</p>
+          <div v-for="(virtualMachine, index) in currentVirtualMachine.VirtualMachineItemList" :key="index" class="VirtualMachine flex">
+            <p>{{ virtualMachine.VirtualMachineId }}</p>
+            <p>{{ virtualMachine.VirtualMachineName }}</p>
+            <p>{{ virtualMachine.Status }}</p>
+            <p>{{ virtualMachine.PricePerDay }}</p>
+            <p>{{ virtualMachine.TotalCost }}</p>
           </div>
         </div>
-        <div class="TotalCost flex">
-          <p>Total Cost This Month</p>
-          <p>{{ VirtualMachine.TotalCostThisMonth }}$</p>
-          <p>Cost Per Day</p>
-          <p>{{ VirtualMachine.PricePerDay }}$</p>
+        <div class="total flex">
+          <p>In Total This Month</p>
+          <p>{{ currentVirtualMachine.TotalCost }}</p>
         </div>
       </div>
     </div>
+  </div>
+
   </div>
 </template>
 
@@ -88,6 +112,8 @@
 
 import { mapActions, mapMutations, mapState } from "vuex";
 import * as cost from "../cost/virtualMachineCost.js"
+import * as vm from "../vm/vm.js"
+
 
 var uuidv4 = require("uuid")
 const cron = require("cron").CronJob
@@ -97,82 +123,92 @@ export default {
   data() {
     return {
       // General Virtual Machine Info
-      CurrentVirtualMachine: null,
+      currentVirtualMachine: null,
       VirtualMachineItemList: [],
     };
   },
   created() {
     // Initializing Initial Variables
     this.getCurrentVirtualMachine();
-    this.getVirtualMachineList();
   },
   methods: {
+
+   ...mapMutations(["SET_CURRENT_VIRTUAL_MACHINE", "TOGGLE_UPDATE_VIRTUAL_MACHINE", "TOGGLE_VIRTUAL_MACHINE", "RUN_VIRTUAL_MACHINE", "SHUTDOWN_VIRTUAL_MACHINE"]),
+   ...mapActions(["DELETE_VIRTUAL_MACHINE", "UPDATE_STATUS_TO_RUNNING", "UPDATE_STATUS_TO_SHUTDOWN", "UPDATE_STATUS_TO_DEPLOYING"]),
+
 
     RedirectHome() {
       // redirects to the Main Page
       this.$route.push({name: 'HomePage'})
-    }
+    },
+
     showError(ErrorMessage) {
       // Shows up the Error Message Banner
+      console.log(ErrorMessage)
     },
 
     getCurrentVirtualMachine() {
       // Returns Current Virtual Machine within an Array
-      let VirtualMachineId = this.$route.params.VirtualMachineId
-      this.SetCurrentVirtualMachine(VirtualMachineId)
+      var VirtualMachineId = this.$route.params.VirtualMachineId
+      this.setCurrentVirtualMachine(VirtualMachineId)
+      this.CurrentVirtualMachine = this.CurrentVirtualMachineArray[0]
     },
 
     setCurrentVirtualMachine(VirtualMachineId) {
       // Setting up Current Virtual Machine within an Array
-      let VirtualMachineData = this.getVirtualMachineInfo(VirtualMachineId)
-      this.CurrentVirtualMachine = {
-        "VirtualMachineId": VirtualMachineData["VirtualMachineId"],
-        "VirtualMachineName": VirtualMachineData["VirtualMachineName"],
-        "CreatedAt": VirtualMachineData["CreatedAt"],
-        "Status": VirtualMachineData["Status"],
-      }
+      this.SET_CURRENT_VIRTUAL_MACHINE(VirtualMachineId)
     },
 
-    getVirtualMachineList() {
-      // Return List of the Virtual Machines, Owned by the Customer
-      let VirtualMachineManager = new vm.VirtualMachineManager()
-      let virtualMachineList, ListError = VirtualMachineManager.GetVirtualMachineList()
-      if (ListError == null){this.VirtualMachineItemList = []}
-      var VirtualMachines = [];
-      for (VirtualMachine in virtualMachineList) {
-        VirtualMachines.push({
-          "VirtualMachineId": VirtualMachine["VirtualMachineId"],
-          "VirtualMachineName": VirtualMachineName["VirtualMachineName"],
-          "IPAddress": VirtualMachine["IPAddress"],
-          "CreatedAt": VirtualMachine["CreatedAt"],
-          "Status": VirtualMachine["Status"],
-          "TotalCostThisMonth": VirtualMachineData["TotalCostThisMonth"],
-          "PricePerDay": VirtualMachineData["PricePerDay"],
-        })
-      }
-    },
+    ShutdownVirtualMachine(VirtualMachineId) {
+      // Shutting down the Virtual Machine Server
+      document.getElementById("shutdownButton").innerText = "Shutting Down..."
+      let ShutdownError = this.SHUTDOWN_VIRTUAL_MACHINE()
+      if (ShutdownErorr != null) {this.showError(
+      "Failed to Shutdown Virtual Machine, " + ShutdownError.error)} else{
+      this.toggleShutdownVirtualMachine(VirtualMachineId)}
+    }
 
-    getVirtualMachineInfo(VirtualMachineId) {
-      // Returns Virtual MachineInfo
-      let VirtualMachineManager = new vm.VirtualMachineManager()
-      let VirtualMachineInfo, VirtualMachineInfoError = VirtualMachineManager.GetVirtualMachine(VirtualMachineId)
-      return VirtualMachineInfo
+    RunVirtualMachine(VirtualMachineId) {
+      // Running the Virtual Machine Server
+      document.getElementById("runButton").innerText = "Running..."
+      let RunError = this.RUN_VIRTUAL_MACHINE(VirtualMachineId)
+      if (RunError != null ) {this.showError(
+      "Failed to Run Virtual Machine, " + RunError.error); return; }else{
+      this.toggleRunVirtualMachine(VirtualMachineId)}
+    }
+
+    toggleRunVirtualMachine(VirtualMachineId) {
+      // Mark Virtual Machine as Running
+      this.UPDATE_STATUS_TO_RUNNING(VirtualMachineId)
+    }
+
+    toggleShutdownVirtualMachine(VirtualMachineId) {
+      // Mark Virtual Machine as Shutdowned one
+      this.UPDATE_STATUS_TO_SHUTDOWN(VirtualMachineId)
+    }
+
+    toggleUpdateVirtualMachine() {
+      // Toggles Virtual Machine Status
+      this.TOGGLE_UPDATE_VIRTUAL_MACHINE();
+      this.TOGGLE_VIRTUAL_MACHINE();
     }
 
     DeleteVirtualMachine(VirtualMachineId) {
       // Redirects to the Delete Virtual Machine Page
+      this.DELETE_VIRTUAL_MACHINE(VirtualMachineId)
       this.$route.push({name: "DeleteVirtualMachine",
-      params: {"VirtualMachineId": VirtualMachineId}})
-    },
-
-    UpdateVirtualMachine(VirtualMachineId) {
-      // Redirects to the Update Virtual Machine Page
-      this.$route.push({name: "UpdateVirtualMachine",
       params: {"VirtualMachineId": VirtualMachineId}})
     },
   },
   computed: {
-    ...mapState(["currentVirtualMachineArray", "updateVirtualMachine"]),
+  ...mapState(["currentVirtualMachineArray", "updateVirtualMachine"]),
+},
+  watch: {
+    updateVirtualMachine() {
+      if (!this.updateVirtualMachine) {
+        this.currentVirtualMachine = this.currentVirtualMachineArray[0];
+      }
+    },
   },
 };
 

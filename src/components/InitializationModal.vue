@@ -45,6 +45,14 @@
         </div>
       </div>
 
+      <div class="sslConfiguration flex flex-column">
+        <h4>SSL Configuration</h4>
+        <div class="input flex flex-column">
+          <label for="secure">Secure</label>
+          <input required type="text" id="cpuNum" v-model="Secure" />
+        </div>
+        </div>
+
       <!-- Invoice Work Details -->
       <div class="virtual-machine-work flex flex-column">
         <div class="payment flex">
@@ -119,6 +127,7 @@
 
 <script>
 
+
 import { mapActions, mapMutations, mapState } from "vuex";
 import { uid } from "uid";
 
@@ -126,6 +135,109 @@ import * as vm from "../vm/vm.js"
 import * as preparer from "../configuration_preparer/preparer.js"
 
 
+export default {
+  name: "hardwareConfiguration",
+  data() {
+    return {
+      Datacenters: [],
+      OperationalSystems: [],
+      PreInstalledTools: [],
+    }
+  },
+  created() {
+    this.GetSuggestedDatacenters()
+    this.GetSuggestedOperationalSystems()
+    this.GetSuggestedPreInstalledTools()
+  },
+  methods: {
+    GetSuggestionsManager() {
+      let SuggestionManager = new suggestions.NewSuggestManager()
+      return SuggestionManager
+    },
+    GetSuggestedDatacenters() {
+      // Returns Array of the Available Datacenters
+      let newManager = this.GetSuggestionsManager()
+      let Datacenters = newManager.GetAvailableDatacenters()
+      this.Datacenters = Datacenters
+    },
+    GetSuggestedOperationalSystems() {
+      // Returns Array of the Available Distributions for the Virtual Machine  Server
+      let newManager = this.GetSuggestionsManager()
+      let OperationalSystems = newManager.GetAvailableOperationalSystems()
+      this.OperationalSystems = OperationalSystems
+    },
+    GetSuggestedPreInstalledTools() {
+      // Returns Array of the Available Preinstalled Tools, that you can pre install, on your OS
+      let newManager = this.GetSuggstionsManager()
+      let PreInstalledTools = newManager.GetAvailablePreInstalledTools()
+      this.PreInstalledTools = PreInstalledTools
+    },
+  }
+},
+
+export default {
+  name: "resourceConfiguration",
+  data() {
+    return {
+      // CPU Resources
+      CpuNum: null,
+      MaxCpu: null,
+
+      // Memory Resources
+      MaxMemory: null,
+      Memory: null,
+    }
+  },
+  created() {
+    this.GetVirtualMachineInfo()
+  },
+  methods: {
+    GetVirtualMachineInfo() {
+      // Returns Info About the Resources of the Virtual Machine
+      let VirtualMachineId = this.$route.params.VirtualMachineId
+      let VirtualMachineManager = new vm.VirtualMachineManager()
+      let VirtualMachineInfo, VirtualMachineError = VirtualMachineManager.GetVirtualMachine(VirtualMachineId)
+
+      if (VirtualMachineError == null) {
+        this.CpuNum = VirtualMachineInfo["Resources"]["CpuNum"],
+        this.MaxCpu = VirtualMachineInfo["Resources"]["MaxCpu"],
+        this.MaxMemory = VirtualMachineInfo["Resources"]["MaxMemory"],
+        this.Memory = VirtualMachineInfo["Resources"]["Memory"],
+      }
+    },
+  }
+}
+
+export default {
+  name: "sslConfiguration",
+  data() {
+    return {
+      // SSL Secure Info
+      RootUsername: null,
+      RootPassword: null,
+      RootCertificate: null,
+      Secure: null,
+    }
+  },
+  created() {
+    this.GetVirtualMachineInfo()
+  }
+  methods: {
+    GetVirtualMachineInfo() {
+      // Returns Virtual Machines Info about the SSL Configuration
+      let VirtualMachineId = this.$route.params.VirtualMachineId
+      let VirtualMachineManager = new vm.VirtualMachineManager()
+      let VirtualMachineInfo, VirtualMachineError = VirtualMachineManager.GetVirtualMachine(VirtualMachineId)
+
+      if (VirtualMachineError == null) {
+        this.RootUsername = VirtualMachineInfo["Ssl"]["RootUsername"],
+        this.RootPassword = VirtualMachineInfo["Ssl"]["RootPassword"],
+        this.RootCertificate = VirtualMachineInfo["Ssl"]["RootCertificate"],
+        this.Secure = VirtualMachineInfo["Ssl"]["Secure"],
+      }
+    },
+  }
+}
 export default {
 
   name: "initializationModal",
@@ -142,6 +254,9 @@ export default {
 
   components: {
     Loading,
+    hardwareConfiguration,
+    resourceConfiguration,
+    sslConfiguration,
   },
   created() {
     // get current date for invoice date field
@@ -159,28 +274,26 @@ export default {
   },
 
   methods: {
+    ...mapMutations(["TOGGLE_VM_INITIALIZATIONMODAL", "TOGGLE_UPDATE_VIRTUAL_MACHINE"]),
+    ...mapActions(["UPDATE_VIRTUAL_MACHINE", "GET_VIRTUAL_MACHINES", "GET_VIRTUAL_MACHINE"]),
 
-
-    ...mapMutations(["TOGGLE_INVOICE", "TOGGLE_MODAL", "TOGGLE_EDIT_INVOICE"]),
-    ...mapActions(["UPDATE_INVOICE", "GET_INVOICES"]),
-
-    checkClick(e) {
+    checkClick(e) {/
       if (e.target === this.$refs.virtualMachineWrap) {
         this.TOGGLE_MODAL();
       }
     },
 
     closeVirtualMachine() {
-      this.TOGGLE_INVOICE();
+      this.TOGGLE_VM_INIITIALIZATION_MODAL();
       if (this.updateVirtualMachine) {
-        this.TOGGLE_EDIT_INVOICE();
+        this.TOGGLE_UDPDATE_VIRTUAL_MACHINE();
       }
     },
 
     GetVirtualMachines() {
       // Returns Queryset of the Virtual Machines, related to the Customer
-      newVirtualMachineManager = new vm.VirtualMachineManager()
-      VirtualMachinesQueryset, GetError = newVirtualMachineManager.GetCustomerVirtualMachines()
+      let newVirtualMachineManager = new vm.VirtualMachineManager()
+      let VirtualMachinesQueryset, GetError = newVirtualMachineManager.GetCustomerVirtualMachines()
       if (GetError != null) {this.showError(GetError.error)}
       this.VirtualMachineItemList = VirtualMachinesQueryset
     },
@@ -201,21 +314,21 @@ export default {
       // Initializing Virtual Machine
 
       // Initializing New Resources
-      CpuResources = new preparer.CpuResources()
-      MemoryResources = new preparer.MemoryResources()
-      DatacenterResources = new preparer.DatacenterResources()
-      MetadataResources = new preparer.MetadataResources()
+      let CpuResources = new preparer.CpuResources()
+      let MemoryResources = new preparer.MemoryResources()
+      let DatacenterResources = new preparer.DatacenterResources()
+      let MetadataResources = new preparer.MetadataResources()
 
-      HardwareConfiguration = new preparer.HardwareConfiguration()
-      newVirtualMachineManager = new vm.VirtualMachineManager()
+      let HardwareConfiguration = new preparer.HardwareConfiguration()
+      let newVirtualMachineManager = new vm.VirtualMachineManager()
 
-      InitializedVirtualMachineInfo, InitilizationError = newVirtualMachineManager.initializeNewVirtualMachine(
-      HardwareConfiguration)
+      let InitializedVirtualMachineInfo, InitilizationError = newVirtualMachineManager.initializeNewVirtualMachine(
+      let HardwareConfiguration)
 
       if (InitilizationError == null && IninitializedVirtualMachineInfo != null) {
         // Updating State of the Virtual Machine View
         this.VirtualMachineItemList[-1].Status = "Applying Configuration"
-        VirtualMachineCustomizationInfo, ApplyError = newVirtualMachineManager.ApplyConfiguration(CustomizedConfiguration)
+        let VirtualMachineCustomizationInfo, ApplyError = newVirtualMachineManager.ApplyConfiguration(CustomizedConfiguration)
 
         if (ApplyError == null) {
             // If Apply has become successful, it should redirect to the other Root
@@ -241,8 +354,8 @@ export default {
     deleteVirtualMachine(VirtualMachineId) {
       // Deletes Selected Virtual Machine, Activates Warning before doing that Operation
 
-      newVirtualMachineManager = new vm.VirtualMachineManager()
-      Deleted, DeleteError = newVirtualMachineManager.DeleteCustomerVirtualMachine()
+      let newVirtualMachineManager = new vm.VirtualMachineManager()
+      let Deleted, DeleteError = newVirtualMachineManager.DeleteCustomerVirtualMachine()
       this.VirtualMachineItemList = this.VirtualMachineItemList.filter((item) => item.id !== VirtualMachineId);
 
     },

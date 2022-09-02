@@ -1,4 +1,11 @@
 
+<template>
+  <div class="LoginPage flex">
+    <form class="" action="" method="post">
+
+    </form>
+  </div>
+</template>
 
 <script>
 

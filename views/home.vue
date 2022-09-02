@@ -1,37 +1,37 @@
 <template>
-  <div class="home-page container">
+  <div class="HomePage container">
     <!-- Header -->
     <div class="header flex">
       <div class="left flex flex-column">
-        <h1>Loggings</h1>
-        <span>There are {{ VirtualMachines.length }} Total Virtual Machines</span>
+        <h1>Virtual Machines</h1>
+        <span>You have {{ virtualMachineData.length }} total Virtual Machines</span>
       </div>
       <div class="right flex">
         <div @click="toggleFilterMenu" class="filter flex">
           <span
-            >Filter by status <span v-if="filteredVirtualMachines">: {{ filteredVirtualMachines }}</span></span
+            >Filter by status <span v-if="filteredVirtualMachine">: {{ filteredVirtualMachines }}</span></span
           >
           <img src="@/assets/icon-arrow-down.svg" alt="" />
           <ul v-show="filterMenu" class="filter-menu">
-            <li @click="filterVirtualMachines">By Creation Date</li>
-            <li @click="filterVirtualMachines">Clear Filter</li>
+            <li @click="filteredVirtualMachine">By Date</li>
+            <li @click="filteredVirtualMachine">Running</li>
+            <li @click="filteredVirtualMachine">Shutdown</li>
+            <li @click="filteredVirtualMachine">Deploying</li>
+            <li @click="filteredVirtualMachine">Clear</li>
           </ul>
         </div>
         <div @click="newVirtualMachine" class="button flex">
           <div class="inner-button flex">
             <img src="@/assets/icon-plus.svg" alt="" />
           </div>
-          <span>New Virtual Machine</span>
+          <span>New VirtualMachine</span>
         </div>
       </div>
     </div>
-
-    <!-- Virtual Machines -->
-    <div v-if="VirtualMachines.length > 0">
-      <virtualMachine v-for="(VirtualMachine, index) in filteredData" :virtualMachine="virtualMachine" :key="index" />
-
+    <!-- Invoices -->
+    <div v-if="virtualMachineData.length > 0">
+      <Invoice v-for="(VirtualMachine, index) in filteredData" :invoice="VirtualMachine" :key="index" />
     </div>
-
     <div v-else class="empty flex flex-column">
       <img src="@/assets/illustration-empty.svg" alt="" />
       <h3>There is nothing here</h3>
@@ -50,79 +50,63 @@ import * as vm from "../vm/vm.js"
 
 export default {
 
-  ...addMutations("TOGGLE_VM_INITIALIZATION_MODAL")
   name: "HomePage",
   data() {
     return {
       filterMenu: null,
-      filteredVirtualMachines: [],
+      filteredVirtualMachine: null,
     };
   },
   components: {
     virtualMachine,
   },
-  computed: {
-    ...addState(["VirtualMachines"])
-    filteredData() {
-      // Filters Data
-      return this.filteredVirtualMachines.filter(function(VirtualMachine) => {
-        if VirtualMachine.Status == "Running" {
-          return VirtualMachine.Status === "Running"
-        }
-        if VirtualMachine.Status == "Shutdown" {
-          return VirtualMachine.Status === "Shutdown"
-        }
-      }
-    }
-  }
   methods: {
-    ...mapMutations(["TOGGLE_INIITIALIZATION_MODAL"]),
+
+     ...mapMutations(["TOGGLE_VIRTUAL_MACHINE"]),
 
     newVirtualMachine() {
-      // Receiving Virtual Machine Initialization Modal
-      this.TOGGLE_VM_INITIALIZATION_MODAL()
-    },
+      // Initializes Empty Form for the Virtual Machine Configuration
+      this.TOGGLE_VIRTUAL_MACHINE()
+    }
 
     toggleFilterMenu() {
       this.filterMenu = !this.filterMenu;
     },
 
-    filterVirtualMachines(e) {
-      if (e.target.innerText === "Clear Filter") {
-        this.filteredVirtualMachines = null;
+    filterVirtualMachine(e) {
+      if (e.target.innerText === "Clear") {
+        this.filteredVirtualMachine = null;
         return;
       }
-      if (e.target.innerText === "By Creation Date")  {
-        let QueryIds = []
-        for (let VirtualMachine in this.filteredVirtualMachines) {
-          QueryIds.push(VirtualMachine.VirtualMachineId)
-        }
-        let VirtualMachineManager = new vm.VirtualMachineManager()
-        let FilteredQueryset = VirtualMachineManager.FilterVirtualMachinesByCreationDate(QueryIds)
-        this.filterVirtualMachines = FilteredQueryset
-      }
-      this.filteredVirtualMachines = e.target.innerText;
+      this.filteredVirtualMachine = e.target.innerText;
     },
   },
 
   computed: {
-    ...mapState(["VirtualMachines"]),
+    ...mapState(["virtualMachineData"]),
     filteredData() {
-      return this.VirtualMachinesList.filter((virtualMachine) => {
-        if (this.filteredVirtualMachines === "Draft") {
-          return virtualMachine.VirtualMachineDraft === true;
+      return this.virtualMachineData.filter((virtualMachine) => {
+        if (this.filteredVirtualMachine === "Clear") {
+          this.filteredVirtualMachine = null
+          return true
         }
-        if (this.filteredVirtualMachines === "Pending") {
-          return virtualMachine.VirtualMachinePending === true;
+        if (this.filteredVirtualMachine === "By Date") {
+          return this.filteredVirtualMachine()
         }
-        if (this.filteredVirtualMachines === "Paid") {
-          return virtualMachine.VirtualMachinePaid === true;
+        if (e.target.innerText === "Running") {
+          return virtualMachine.Running === true;
+        }
+        if (e.target.innerText === "Shutdown") {
+          return virtualMachine.Shutdown === true;
+        }
+        if (e.target.innerText === "Deploying") {
+          return virtualMachine.Deploying === true;
         }
         return virtualMachine;
       });
-    },
   },
 };
+}
 
 </script>
 

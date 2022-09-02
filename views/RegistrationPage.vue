@@ -1,4 +1,10 @@
+<template>
+  <div class="RegistrationPage flex">
+    <form class="" action="" method="post">
 
+    </form>
+  </div>
+</template>
 
 <script>
 
