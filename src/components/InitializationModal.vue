@@ -8,6 +8,7 @@
       <!-- Hardware Configuration  -->
       <div class="hardwareConfiguration flex flex-column">
         <h4>Hardware Configuration</h4>
+
         <div class="input flex flex-column">
           <label for="Datacenter">Datacenter</label>
           <input required type="text" id="Datacenter" v-model="Datacenter" />
@@ -56,7 +57,7 @@
                     <th class="item-name">Version</th>
                 </tr>
                 <tr class="table-items flex" v-for="(Tool, index) in PreInstalledTools" :key="index">
-                    <td class="item-name"><input type="text" v-model="Tool.Name"/></td> 
+                    <td class="item-name"><input type="text" v-model="Tool.Name"/></td>
                     <td class="item-name"><input type="text" v-model="Tool.Version" /></td>
                     <img @click="addPreInstalledTools(Tool.Name)" src="@/assets/icon-delete.svg" alt="" />
                 </tr>
@@ -197,8 +198,8 @@ export const hardwareConfiguration = {
       OperationalSystems: [],
       PreInstalledTools: [],
 
-      AddedDatacenter: null, 
-      AddedOperationalSystem: null, 
+      AddedDatacenter: null,
+      AddedOperationalSystem: null,
       AddedInstalledTools: [],
     }
   },
@@ -233,7 +234,7 @@ export const hardwareConfiguration = {
     },
 
     selectDatacenter(DatacenterItemPath) {
-      // Selects Datacenter, that Is going to be Used for the Virtual Machine Server Deployment 
+      // Selects Datacenter, that Is going to be Used for the Virtual Machine Server Deployment
       this.AddedDatacenter = DatacenterItemPath
     },
     selectOperationalSystem(OSName, Version, Bit) {
@@ -318,37 +319,6 @@ export default {
   name: "initializationModal",
   data() {
     return {
-
-    // Hardware Configuration 
-
-      // Available Resources to Suggest
-      Datacenters: [],
-      OperationalSystems: [],
-      PreInstalledTools: [],
-
-      // Items, selected By Customer 
-      AddedDatacenter: null, 
-      AddedOperationalSystem: null, 
-      AddedInstalledTools: [],
-
-
-    // Customized Configuration 
-
-      // CPU Resources
-      CpuNum: null,
-      MaxCpu: null,
-
-      // Memory Resources
-      MaxMemory: null,
-      Memory: null,
-
-      // SSL Secure Info
-      RootUsername: null,
-      RootPassword: null,
-      RootCertificate: null,
-      Secure: null,
-
-
       // General Extra Attributes
       dateOptions: { year: "numeric", month: "short", day: "numeric" },
       loading: null,
@@ -367,7 +337,7 @@ export default {
   created() {
     // get current date for invoice date field
 
-    
+
     if (!this.updateVirtualMachine) {
       this.virtualMachineDateUnix = Date.now();
       this.virtualMachineCreationDate = new Date(this.virtualMachineDateUnix).toLocaleDateString("en-us", this.dateOptions);
