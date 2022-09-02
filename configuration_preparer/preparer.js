@@ -15,6 +15,13 @@ class BaseResource {
   }
 }
 
+class BaseConfigurationValidator {
+  static ValidateInput(Configuration) {
+    // Validates Input Configuration and Returns Error Strings
+    // if the Value for the Field is not valid.
+  }
+}
+
 class BaseConfiguration {
   // Represents base Configuration Class, for both `Hardware Configuration` and
   // `Customized Configuration`, defines basic methods to make performance easier
@@ -23,6 +30,19 @@ class BaseConfiguration {
   }
 }
 
+
+class HardwareConfigurationValidator {
+  // Validator for the hardware Configuration
+  ValidateInput = function(Configuration) {
+    // Validates Hardware Configuration, Customized by the Client
+  }
+}
+
+class CustomizedConfigurationValidator {
+  ValidateInput = function(Configuration) {
+    // Validates Customized Configuration by the Client
+  }
+}
 
 class Metadata extends BaseResource {
   // Part of the `CustomizedConfiguration`.

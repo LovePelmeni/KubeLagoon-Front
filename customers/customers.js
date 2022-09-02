@@ -1,5 +1,15 @@
+import * as customers_rest from "../rest/customers.js"
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-useless-escape */
+
+class CustomerRegistrationForm {
+  // Entity, that represents Customer Registration Form Data
+  constructor(Username, Email, Password) {
+    this.Username = Username
+    this.Email = Email
+    this.Password = Password
+  }
+}
 
 class CustomerInputValidator {
   // User Info Validation Form
@@ -37,13 +47,27 @@ class CustomerInputValidator {
 }
 
 class CustomerManager {
+  // Class, represents Management tool for handling Customer's Operations
+
     CreateCustomer = function() {
       // Creates New Customer
+      let newRegistrationForm = new CustomerRegistrationForm()
+      let newCustomer, CustomerError = customers_rest.CreateCustomerRestController(CustomerRegistrationForm)
+      if (CustomerError != null){return null, CustomerError}
+      return newCustomer, CustomerError
     }
+
     DeleteCustomer = function() {
       // Deletes Existing Customer's Profile
+      let Deleted, DeleteError = customers_rest.DeleteCustomerRestController()
+      if (DeleteError != null) {return null, DeleteError}
+      return Deleted, DeleteError
     }
-    ResetPassword = function() {
-      // Resets password
+    
+    ResetPassword = function(newPassword) {
+      // Resets password for the Customer's Profile
+      let Reset, ResetError = customers_rest.ResetPasswordRestController(newPassword)
+      if (ResetError != null){return null, ResetError}
+      return Reset, ResetError
     }
 }

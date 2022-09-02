@@ -1,4 +1,4 @@
-import "../rest/suggestions.js"
+import * as suggestions from "../rest/suggestions.js"
 // Package that Parsers Suggested Resources for the Virtual Machine
 
 

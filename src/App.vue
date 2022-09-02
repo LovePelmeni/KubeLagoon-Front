@@ -3,7 +3,7 @@
     <div v-if="!mobile" class="app flex flex-column">
       <navigationPage />
       <div class="app-content flex flex-column">
-        <Modal v-if="modalActive" />
+        <modalPage v-if="modalActive" />
         <transition name="virtualMachine">
           <initializationModal v-if="initializationModal" />
         </transition>
@@ -22,9 +22,9 @@
 /* eslint-disable no-unused-vars */
 
 import { mapState, mapActions } from "vuex";
-import navigationPage from "./components/NavigationPage";
-import initializationModal from "./components/InitializationModal";
-import Modal from "./components/Modal";
+import {navigationPage} from "./components/NavigationPage";
+import {initializationModal} from "./components/InitializationModal";
+import {modalPage} from "./components/ModalWindow";
 
 export default {
   name: "mainApp",
@@ -36,7 +36,7 @@ export default {
   components: {
     navigationPage,
     initializationModal,
-    Modal,
+    modalPage,
   },
   created() {
     this.GET_VIRTUAL_MACHINES();

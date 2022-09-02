@@ -12,7 +12,7 @@ function GetDatacenterSuggestionsRestController() {
   //  Returns Array of the Available Datacenters, so Customer can pick up, which one to choose
   var APIUrl = new Url("http://%s:%s/suggestion/datacenter/" % (
   BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
-  Datacenters, Error = $.ajax({
+  let Datacenters, Error = $.ajax({
     url: APIUrl,
     method: "GET",
     headers: {
@@ -38,7 +38,7 @@ function GetOsSystemsSuggestionsRestController(){
   // Returns Array of the Available Os Systems + Distributions to them
   var APIUrl = new Url("http://%s:%s/suggestion/os/system/" % (
   BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
-  Datacenters, Error = $.ajax({
+  let Datacenters, Error = $.ajax({
     url: APIUrl,
     method: "GET",
     headers: {
@@ -53,8 +53,8 @@ function GetOsSystemsSuggestionsRestController(){
       }else{
       return Response.QuerySet, null}
     },
-    error: function(Error) {
-      return null, Error(Error)
+    error: function(ResponseError) {
+      return null, Error(ResponseError)
     },
   })
   return Datacenters, Error
@@ -64,7 +64,7 @@ function GetPreInstallationToolSuggestionsRestController(){
   // Rest Controller, that returns array of the Tools, that can be pre-installed on the Virtual Machine
   var APIUrl = new Url("http://%s:%s/suggestion/preinstall/tools" % (
   BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
-  Datacenters, Error = $.ajax({
+  let Datacenters, DatacentersError = $.ajax({
     url: APIUrl,
     method: "GET",
     headers: {
@@ -79,9 +79,9 @@ function GetPreInstallationToolSuggestionsRestController(){
       }else{
       return Response.QuerySet, null}
     },
-    error: function(Error) {
-      return null, Error(Error)
+    error: function(ResponseError) {
+      return null, Error(ResponseError)
     },
   })
-  return Datacenters, Error
+  return Datacenters, DatacentersError
 }

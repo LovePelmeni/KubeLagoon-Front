@@ -114,10 +114,6 @@ import { mapActions, mapMutations, mapState } from "vuex";
 import * as cost from "../cost/virtualMachineCost.js"
 import * as vm from "../vm/vm.js"
 
-
-var uuidv4 = require("uuid")
-const cron = require("cron").CronJob
-
 export default {
   name: "virtualMachine",
   data() {

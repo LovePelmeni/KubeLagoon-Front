@@ -45,7 +45,6 @@
 
 import virtualMachine from "../src/components/VirtualMachine.vue";
 import { mapMutations, mapState } from "vuex";
-import * as vm from "../vm/vm.js"
 
 export default {
 

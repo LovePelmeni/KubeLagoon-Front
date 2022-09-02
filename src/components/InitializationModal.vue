@@ -12,6 +12,55 @@
           <label for="Datacenter">Datacenter</label>
           <input required type="text" id="Datacenter" v-model="Datacenter" />
         </div>
+
+        <table v-if="Datacenters.length > 0" class="item-list">
+
+            <tr class="table-heading flex">
+              <th class="item-name"></th>
+            </tr>
+
+            <tr class="table-items flex" v-for="(Datacenter, index) in Datacenters" :key="index">
+              <td class="item-name"><input type="text" v-model="Datacenter.DatacenterName" /></td>
+              <img @click="selectDatacenter(Datacenter.ItemPath)" src="@/assets/icon-delete.svg" alt="" />
+            </tr>
+          </table>
+
+          <div class="input flex flex-column">
+          <label for="Datacenter">Operational System</label>
+          <input required type="text" id="Datacenter" v-model="OperationalSystem" />
+          </div>
+
+        <table v-if="OperationalSystems.length > 0" class="item-list">
+
+              <tr class="table-heading flex">
+              <th class="item-name">Name</th>
+              <th class="item-name">Version</th>
+              </tr>
+
+              <tr class="table-items flex" v-for="(OperationalSystem, index) in OperationalSystems" :key="index">
+                <td class="item-name"><input type="text" v-model="OperationalSystem.Name" /></td>
+                <td class="item-name"><input type="text" v-model="OperationalSystem.Version" /></td>
+                <img @click="selectOperationalSystem(OperationalSystem.Name)" src="@/assets/icon-delete.svg" alt="" />
+              </tr>
+          </table>
+
+        <div class="input flex flex-column">
+          <label for="Datacenter">Pre Installed Tools</label>
+          <input required type="text" id="Datacenter" v-model="PreInstalledTool" />
+        </div>
+
+        <table v-if="PreInstalledTools.length > 0" class="item-list">
+
+                <tr class="table-heading flex">
+                    <th class="item-name">Tool</th>
+                    <th class="item-name">Version</th>
+                </tr>
+                <tr class="table-items flex" v-for="(Tool, index) in PreInstalledTools" :key="index">
+                    <td class="item-name"><input type="text" v-model="Tool.Name"/></td> 
+                    <td class="item-name"><input type="text" v-model="Tool.Version" /></td>
+                    <img @click="addPreInstalledTools(Tool.Name)" src="@/assets/icon-delete.svg" alt="" />
+                </tr>
+          </table>
       </div>
 
       <!-- resource Configuration -->
@@ -128,22 +177,32 @@
 <script>
 
 
+/* eslint-disable no-unused-vars */
+
+
 import { mapActions, mapMutations, mapState } from "vuex";
 import { uid } from "uid";
 
-import * as vm from "../vm/vm.js"
-import * as preparer from "../configuration_preparer/preparer.js"
+import * as vm from "../../vm/vm.js"
+import * as preparer from "../../configuration_preparer/preparer.js"
+import * as suggestions from "../../suggestions/suggestions.js"
+import {loadingPage} from "./LoadingPage.vue"
 
 
 export const hardwareConfiguration = {
-
+  name: "hardwareConfiguration",
   data() {
     return {
       Datacenters: [],
       OperationalSystems: [],
       PreInstalledTools: [],
+
+      AddedDatacenter: null, 
+      AddedOperationalSystem: null, 
+      AddedInstalledTools: [],
     }
   },
+
   created() {
     this.GetSuggestedDatacenters()
     this.GetSuggestedOperationalSystems()
@@ -172,11 +231,26 @@ export const hardwareConfiguration = {
       let PreInstalledTools = newManager.GetAvailablePreInstalledTools()
       this.PreInstalledTools = PreInstalledTools
     },
+
+    selectDatacenter(DatacenterItemPath) {
+      // Selects Datacenter, that Is going to be Used for the Virtual Machine Server Deployment 
+      this.AddedDatacenter = DatacenterItemPath
+    },
+    selectOperationalSystem(OSName, Version, Bit) {
+      // Selects Operational System for the Virtual Machine Server
+      this.selectOperationalSystem = {"SystemName": OSName + Version, "Bit": Bit}
+    },
+    addPreInstalledTools() {
+      // Adds pre Installed Tools to the Array
+    },
+    markAsSelected() {
+      // Marks Element as Selected
+    }
   }
 };
 
 export const resourceConfiguration = {
-
+  name: "resourceConfiguration",
   data() {
     return {
       // CPU Resources
@@ -223,7 +297,7 @@ export const sslConfiguration = {
     this.GetVirtualMachineInfo()
   },
   methods: {
-    GetVirtualMachineInfo() {
+    GetVirtualMachineSSLRootInfo() {
       // Returns Virtual Machines Info about the SSL Configuration
       let VirtualMachineId = this.$route.params.VirtualMachineId
       let VirtualMachineManager = new vm.VirtualMachineManager()
@@ -244,6 +318,38 @@ export default {
   name: "initializationModal",
   data() {
     return {
+
+    // Hardware Configuration 
+
+      // Available Resources to Suggest
+      Datacenters: [],
+      OperationalSystems: [],
+      PreInstalledTools: [],
+
+      // Items, selected By Customer 
+      AddedDatacenter: null, 
+      AddedOperationalSystem: null, 
+      AddedInstalledTools: [],
+
+
+    // Customized Configuration 
+
+      // CPU Resources
+      CpuNum: null,
+      MaxCpu: null,
+
+      // Memory Resources
+      MaxMemory: null,
+      Memory: null,
+
+      // SSL Secure Info
+      RootUsername: null,
+      RootPassword: null,
+      RootCertificate: null,
+      Secure: null,
+
+
+      // General Extra Attributes
       dateOptions: { year: "numeric", month: "short", day: "numeric" },
       loading: null,
       VirtualMachinePending: null,
@@ -252,15 +358,16 @@ export default {
       CostTotal: 0,
     };
   },
-
   components: {
-    Loading,
+    loadingPage,
     hardwareConfiguration,
     resourceConfiguration,
     sslConfiguration,
   },
   created() {
     // get current date for invoice date field
+
+    
     if (!this.updateVirtualMachine) {
       this.virtualMachineDateUnix = Date.now();
       this.virtualMachineCreationDate = new Date(this.virtualMachineDateUnix).toLocaleDateString("en-us", this.dateOptions);
@@ -300,62 +407,38 @@ export default {
     },
 
     // Virtual Machine Functions Goes There
-    CreateNewVirtualMachine(hardwareConfigurationData, customizedConfigurationData, Metadata) {
+    CreateNewVirtualMachine(hardwareConfigurationData, customizedConfigurationData) {
       // Initializes New Virtual Machine
 
-      this.VirtualMachinePending = true;
-      this.VirtualMachineItemList.push({
-        VirtualMachineId: "null",
-        VirtualMachineName: Metadata["VirtualMachineName"],
-        Status: "Pending",
-        qty: "",
-        price: 0,
-        totalThisMonth: 0,
-      });
-      // Initializing Virtual Machine
-
       // Initializing New Resources
-      let CpuResources = new preparer.CpuResources()
-      let MemoryResources = new preparer.MemoryResources()
-      let DatacenterResources = new preparer.DatacenterResources()
-      let MetadataResources = new preparer.MetadataResources()
+      let CpuResources = new preparer.CpuResources(
+      customizedConfigurationData["Resources"]["Cpu"])
 
-      let HardwareConfiguration = new preparer.HardwareConfiguration()
-      let newVirtualMachineManager = new vm.VirtualMachineManager()
+      let SslResources = new preparer.SshlResources(
+      customizedConfigurationData["Ssh"])
 
-      let InitializedVirtualMachineInfo, InitilizationError = newVirtualMachineManager.initializeNewVirtualMachine(HardwareConfiguration)
+      let MemoryResources = new preparer.MemoryResources(
+      hardwareConfigurationData["Resources"]["Memory"])
 
-      if (InitilizationError == null && IninitializedVirtualMachineInfo != null) {
-        // Updating State of the Virtual Machine View
-        this.VirtualMachineItemList[-1].Status = "Applying Configuration"
-        let VirtualMachineCustomizationInfo, ApplyError = newVirtualMachineManager.ApplyConfiguration(customizedConfigurationData)
+      let DatacenterResources = new preparer.DatacenterResources(
+      hardwareConfiguration["Datacenter"])
 
-        if (ApplyError == null) {
-            // If Apply has become successful, it should redirect to the other Root
-            this.VirtualMachineItemList[-1].Status = "Running"
-            var VirtualMachineId = VirtualMachineCustomizationInfo["VirtualMachineId"]
+      let StorageResources = new preparer.StorageResources(
+      customizedConfigurationData["Storage"]["Capacity"])
 
-            // Initializing New API Url
-            var VirtualMachineAPIUrl = new url.URL("http://%s:%s/vm/get/",
-            BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT)
+      let MetadataResources = new preparer.MetadataResources(
+      customizedConfigurationData["Metadata"])
 
-            VirtualMachineAPIUrl.searchParams.append("VirtualMachineId", VirtualMachineId)
-            return this.$router.push()
+      let HardwareConfiguration = new preparer.HardwareConfiguration(DatacenterResources)
+      let CustomizedConfiguration = new preparer.CustomizedConfiguration(CpuResources, MemoryResources, MetadataResources, StorageResources, SslResources)
 
-        }else{
-          // If Applying Configuration failure has occurred, destroying Created Virtual Machine
-          var VirtualMachineId = VirtualMachineCustomizationInfo["VirtualMachineId"]
-          this.VirtualMachineItemList[-1].Status = "Failure"
-          newVirtualMachineManager.DeleteVirtualMachine(VirtualMachineId)
-        }
-      }
+      this.CREATE_VIRTUAL_MACHINE(
+      HardwareConfiguration, CustomizedConfiguration)
     },
 
     deleteVirtualMachine(VirtualMachineId) {
       // Deletes Selected Virtual Machine, Activates Warning before doing that Operation
-
-      let newVirtualMachineManager = new vm.VirtualMachineManager()
-      let Deleted, DeleteError = newVirtualMachineManager.DeleteCustomerVirtualMachine()
+      this.DELETE_VIRTUAL_MACHINE(VirtualMachineId)
       this.VirtualMachineItemList = this.VirtualMachineItemList.filter((item) => item.id !== VirtualMachineId);
 
     },
@@ -396,7 +479,7 @@ export default {
         UpdatedConfiguration: NewConfiguration,
       };
 
-      this.UPDATE_INVOICE(data);
+      this.UPDATE_VIRTUAL_MACHINE(data);
     },
     submitForm() {
       if (this.editInvoice) {

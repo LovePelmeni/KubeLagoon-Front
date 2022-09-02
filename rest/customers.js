@@ -8,19 +8,17 @@ var Url = require('url-parse')
 
 import "../configuration_preparer/preparer.js"
 
-function CreateCustomerRestController(Username, Email, Password) {
+function CreateCustomerRestController(CustomerData) {
   // Rest Controller, that is responsible for creating new Customer Profile
-    UserData = new UserData(Username=Username, Email=Email, Password=Password)
-    ValidationErrors = UserData.ValidateInput()
-    if (len(ValidationErrors) != 0) {return false, ValidationErrors}
+
     var APIUrl = new Url("http://%s:%s/customer/create/" % (BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
     var HttpResponse, HttpErrors = $.ajax({
       method: "POST",
-      data: JSON.Stringify(UserData.DataInput),
+      data: JSON.stringify(CustomerData),
       url: APIUrl,
       headers: {
         "Access-Control-Allow-Origin": "*",
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
       async: false,
       success: function(Response) {
@@ -49,13 +47,8 @@ function CreateCustomerRestController(Username, Email, Password) {
 function ResetPasswordRestController(NewPassword){
   // Rest Controller, that Is Responsible for Resetting Password
 
-
-  UserData = new UserData(Password=NewPassword)
-  if (UserData.DataInput["Password"].match(NewPassword) != true) {
-    return false, ["Invalid Password"]
-  }
   var APIUrl = new Url("http://%s:%s/customer/reset/password" % (BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
-  ResponseStatus, ResponseErrors = $.ajax({
+  let ResponseStatus, ResponseErrors = $.ajax({
     data: JSON.stringify({"NewPassword": NewPassword}),
     url: APIUrl,
     method: "PUT",
@@ -72,19 +65,17 @@ function ResetPasswordRestController(NewPassword){
         return false, ["Failed to Apply New Password, Contact Support"]
       }
     },
-    error: function(Error) {
-      return false, [Error]
+    error: function(APIError) {
+      return false, [APIError]
     }
   })
   return ResponseStatus, ResponseErrors
 }
 
-function DeleteCustomerRestController(CustomerId) {
+function DeleteCustomerRestController() {
   // Rest Controller, that is used to deleting the Customer Profile
 
   var APIUrl = new Url("http://%s:%s/customer/delete" % (BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
-  APIUrl.searchParams.append("CustomerId", CustomerId)
-
   var Response, Error = $.ajax({
     url: APIUrl,
     method: "DELETE",
@@ -98,7 +89,7 @@ function DeleteCustomerRestController(CustomerId) {
       // Handling Success Response
       if (Response.StatusCode == 201) {
         // Removing Jwt Cookie...
-        Expired = $.RemoveCookie("jwt-token")
+        let Expired = $.RemoveCookie("jwt-token")
         return Expired, []
       }
     },

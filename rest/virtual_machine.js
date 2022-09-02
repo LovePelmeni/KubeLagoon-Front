@@ -7,10 +7,9 @@ var Url = require('url-parse');
 
 /* eslint-disable no-unused-vars */
 
-
 function InitializeVirtualMachineRestController(Configuration) {
   // Rest Controller, that Initializes New Virtual Machine
-  var APIUrl = new url.URL("http://%s:%s/vm/initialize/" % (
+  var APIUrl = new Url("http://%s:%s/vm/initialize/" % (
   BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
   Response, Error= $.ajax({
     url: APIUrl,
@@ -39,7 +38,7 @@ function InitializeVirtualMachineRestController(Configuration) {
 
 function ApplyVirtualMachineConfigurationRestController(CustomConfiguration, VirtualMachineId) {
   // Rest Controller, that Applying Custom Configuration to the Initialized Virtual Machine
-  var APIUrl = new url.URL("http://%s:%s/vm/apply/configuration/" % (
+  var APIUrl = new Url("http://%s:%s/vm/apply/configuration/" % (
   BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
   APIUrl.searchParams.append("VirtualMachineId", VirtualMachineId)
 
@@ -71,7 +70,7 @@ function ApplyVirtualMachineConfigurationRestController(CustomConfiguration, Vir
 
 function StartVirtualMachineRestController(VirtualMachineId) {
   // Rest Controller, that Starts Virtual Machine
-  var APIUrl = new url.URL("http://%s:%s/os/reboot/" %
+  var APIUrl = new Url("http://%s:%s/os/reboot/" %
   (BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
   APIUrl.searchParams.append("VirtualMachineId", VirtualMachineId)
 
@@ -102,7 +101,7 @@ function StartVirtualMachineRestController(VirtualMachineId) {
 
 function ShutdownVirtualMachineRestController(VirtualMachineId) {
   // Rest Controller, that Shuts Down Virtual Machine
-  var APIUrl = new url.URL("http://%s:%s/os/reboot/" %
+  var APIUrl = new Url("http://%s:%s/os/reboot/" %
   (BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
   APIUrl.searchParams.append("VirtualMachineId", VirtualMachineId)
 
@@ -133,7 +132,7 @@ function ShutdownVirtualMachineRestController(VirtualMachineId) {
 
 function RebootVirtualMachineRestController(VirtualMachineId) {
   // Rest Controller, that Reboots Virtual Machine
-  var APIUrl = new url.URL("http://%s:%s/os/reboot/" %
+  var APIUrl = new Url("http://%s:%s/os/reboot/" %
   (BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
   APIUrl.searchParams.append("VirtualMachineId", VirtualMachineId)
 
@@ -167,7 +166,7 @@ function RebootVirtualMachineRestController(VirtualMachineId) {
 
 function StartVmOsRestController(VirtualMachineId) {
   // Rest Controller, that Starts Virtual Machine Os HostSystem
-  var APIUrl = new url.URL("http://%s:%s/os/start/" %
+  var APIUrl = new Url("http://%s:%s/os/start/" %
   (BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
   APIUrl.searchParams.append("VirtualMachineId", VirtualMachineId)
 
@@ -197,7 +196,7 @@ function StartVmOsRestController(VirtualMachineId) {
 
 function ShutdownVmOsRestController(VirtualMachineId) {
   // Rest Controller, that Shuts Down Virtual Machine Os HostSystem
-  var APIUrl = new url.URL("http://%s:%s/os/shutdown/" %
+  var APIUrl = new Url("http://%s:%s/os/shutdown/" %
   (BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
   APIUrl.searchParams.append("VirtualMachineId", VirtualMachineId)
 
@@ -227,7 +226,7 @@ function ShutdownVmOsRestController(VirtualMachineId) {
 
 function RebootVmOsRestController(VirtualMachineId) {
   // Rest Controller, that Reboots Virtual Machine Os HostSystem
-  var APIUrl = new url.URL("http://%s:%s/os/reboot/" %
+  var APIUrl = new Url("http://%s:%s/os/reboot/" %
   (BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
   APIUrl.searchParams.append("VirtualMachineId", VirtualMachineId)
 
