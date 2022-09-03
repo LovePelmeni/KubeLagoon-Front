@@ -1,7 +1,8 @@
 <template>
   <div @click="checkClick" ref="virtualMachineWrap" class="virtualMachineWrap flex flex-column">
-    <form @submit.prevent="submitForm" class="invoice-content">
+    <form @submit.prevent="submitForm" class="virtual-machine-content">
       <Loading v-show="loading" />
+
       <h1 v-if="!updateVirtualMachine">New Virtual Machine</h1>
       <h1 v-else>Update VirtualMachine</h1>
 
@@ -23,12 +24,13 @@
             <tr class="table-items flex" v-for="(Datacenter, index) in Datacenters" :key="index">
               <td class="item-name"><input type="text" v-model="Datacenter.DatacenterName" /></td>
               <img @click="hardwareConfiguration.selectDatacenter(Datacenter.ItemPath)" src="@/assets/icon-delete.svg" alt="" />
+              <span v-if="errors[Datacenter.DatacenterName]">{{ errors[Datacenter.DatacenterName] }}</span>
             </tr>
           </table>
 
           <div class="input flex flex-column">
           <label for="Datacenter">Operational System</label>
-          <input required type="text" id="Datacenter" v-model="OperationalSystem" />
+          <input required type="text" id="Datacenter" v-model="OperationalSystem" /
           </div>
 
         <table v-if="OperationalSystems.length > 0" class="item-list">
@@ -42,6 +44,7 @@
                 <td class="item-name"><input type="text" v-model="OperationalSystem.Name" /></td>
                 <td class="item-name"><input type="text" v-model="OperationalSystem.Version" /></td>
                 <img @click="hardwareConfiguration.selectOperationalSystem(OperationalSystem.Name)" src="@/assets/icon-delete.svg" alt="" />
+                <span v-if="errors[OperationalSystem.SystemName]">{{ errors[OperationalSystem.SystemName] }}</span>
               </tr>
           </table>
 
@@ -60,6 +63,7 @@
                     <td class="item-name"><input type="text" v-model="Tool.Name"/></td>
                     <td class="item-name"><input type="text" v-model="Tool.Version" /></td>
                     <img @click="hardwareConfiguration.addPreInstalledTools(Tool.Name)" src="@/assets/icon-delete.svg" alt="" />
+                    <span v-if="errors[Tool.Name]">{{ errors[Tool.Name] }}</span>
                 </tr>
           </table>
       </div>
@@ -71,25 +75,30 @@
         <div class="input flex flex-column">
           <label for="Cpu">CPU</label>
           <input required type="text" id="cpuNum" v-model="cpuNum" />
+          <span v-if="errors.Cpu">{{ errors.cpuNum }}</span>
         </div>
 
         <div class="input flex flex-column">
           <label for="MaxCpu">Max CPU</label>
           <input required type="text" id="maxCpu" v-model="maxCpu" />
+          <span v-if="errors.MaxCpu">{{ errors.MaxCpu }}</span>
         </div>
         <div class="input flex flex-column">
           <label for="Memory">Memory</label>
           <input required type="text" id="memoryInMegabytes" v-model="MemoryInMegabytes" />
+          <span v-if="errors.Memory">{{ errors.Memory }}</span>
         </div>
 
         <div class="resources-details flex">
           <div class="input flex flex-column">
             <label for="MaxMemory">Max Memory</label>
             <input required type="text" id="maxMemory" v-model="maxMemory" />
+            <span v-if="errors.MaxMemory">{{ errors.MaxMemory }}</span>
           </div>
           <div class="input flex flex-column">
             <label for="Storage">Storage</label>
             <input required type="text" id="storageCapacity" v-model="storageCapacity" />
+            <span v-if="errors.Storage">{{ errors.Storage }}</span>
           </div>
 
         </div>
@@ -100,6 +109,7 @@
         <div class="input flex flex-column">
           <label for="secure">Secure</label>
           <input required type="text" id="Secure" v-model="Secure" />
+          <span v-if="errors.Secure">{{ errors.Secure }}</span>
         </div>
         </div>
 
@@ -188,6 +198,31 @@ import * as preparer from "../../configuration_preparer/preparer.js"
 import {SuggestionsManager} from "../../suggestions/suggestions.js"
 import {loadingPage} from "./LoadingPage.vue"
 
+
+export const InitializationFormValidator {
+  // Validation Component, That Validates Initialization Modal Before the Submit
+  props: {
+    FieldsSpecifications: {
+      // Contains Field Name + Property Type
+    }
+  }
+
+  data() {
+    return {
+      errors: {},
+    }
+  }
+  methods: {
+
+    Validate() {
+      // Validates Input depending on the Type of the Fields
+      for (FieldValue)
+    }
+  },
+  computed: {
+    this.Validate()
+  },
+}
 
 export const hardwareConfiguration = {
   name: "hardwareConfiguration",
@@ -369,15 +404,23 @@ export default {
       }
     },
 
-    addVirtualMachineToList() {
+    addVirtualMachineToList(NewVirtualMachine) {
       // Adds new Object to the Customer's Virtual Machine List
       this.VirtualMachineItemList.push({
-
+        "ID": NewVirtualMachine.VirtualMachineId,
+        "Name": NewVirtualMachine.VirtualMachineName,
+        "Status": NewVirtualMachine.Status,
+        "Price": NewVirtualMachine.Price,
+        "TotalCost": NewVirtualMachine.TotalCost,
       })
     },
-    removeVirtualMachineFromList() {
+    removeVirtualMachineFromList(VirtualMachineId) {
       // Removes Virtual Machine Info Object from the Customer's Virtual Machines List
-    }
+      let UpdatedVirtualMachineItemList = this.VirtualMachineItemList.filter((VirtualMachine) => {
+          return VirtualMachine.VirtualMachineId === VirtualMachineId
+      })
+      this.VirtualMachineItemList = UpdatedVirtualMachineItemList
+    },
 
     closeVirtualMachineSettings() {
       this.TOGGLE_VIRTUAL_MACHINE();
@@ -420,11 +463,17 @@ export default {
       let HardwareConfiguration = new preparer.HardwareConfiguration(DatacenterResources)
       let CustomizedConfiguration = new preparer.CustomizedConfiguration(CpuResources, MemoryResources, MetadataResources, StorageResources, SslResources)
 
-      VirtualMachineInfo, CreationError = this.CREATE_VIRTUAL_MACHINE(
+      let VirtualMachineInfo, CreationError = this.CREATE_VIRTUAL_MACHINE(
       HardwareConfiguration, CustomizedConfiguration)
 
+
+      // If the Virtual Machine Has been Successfully Initialized and Created
+      // Adding it to the Customer's Virtual Machine Item List
+
       if (CreationError == null) {
-        this.VirtualMachineItemList.
+        let VmManager = new vm.VirtualMachineManager()
+        let VirtualMachine = VmManager.GetVirtualMachine(VirtualMachineInfo["VirtualMachineId"])
+        this.addVirtualMachineToList(VirtualMachine)
       }
     },
 
