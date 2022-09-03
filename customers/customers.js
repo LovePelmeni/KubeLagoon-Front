@@ -49,6 +49,16 @@ class CustomerInputValidator {
 class CustomerManager {
   // Class, represents Management tool for handling Customer's Operations
 
+    LoginCustomer = function(Username, Password) {
+      let LoggedIn, LoggedInError = customers_rest.LoginCustomerRestController(Username, Password)
+      return LoggedIn, LoggedInError
+    }
+
+    LogoutCustomer = function() {
+      let LoggedOut, LoggoutError = customers_rest.LogoutCustomerRestController()
+      return LoggedOut, LoggoutError
+    }
+
     CreateCustomer = function() {
       // Creates New Customer
       let newRegistrationForm = new CustomerRegistrationForm()
@@ -63,7 +73,7 @@ class CustomerManager {
       if (DeleteError != null) {return null, DeleteError}
       return Deleted, DeleteError
     }
-    
+
     ResetPassword = function(newPassword) {
       // Resets password for the Customer's Profile
       let Reset, ResetError = customers_rest.ResetPasswordRestController(newPassword)

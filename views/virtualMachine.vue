@@ -1,6 +1,6 @@
 <template>
   <div v-if="currentVirtualMachine" class="virtual-machine container">
-    <router-link class="nav-link flex" :to="{ name: 'HomePage' }">
+    <router-link class="nav-link flex" :to="{ name: 'main_page' }">
       <img src="@/assets/icon-arrow-left.svg" @click="RedirectHome()" alt="" /> Go Back
     </router-link>
 
@@ -113,6 +113,7 @@
 import { mapActions, mapMutations, mapState } from "vuex";
 import * as cost from "../cost/virtualMachineCost.js"
 import * as vm from "../vm/vm.js"
+import {newRouter} from "../router/router.js"
 
 export default {
   name: "virtualMachine",
@@ -135,7 +136,7 @@ export default {
 
     RedirectHome() {
       // redirects to the Main Page
-      this.$route.push({name: 'HomePage'})
+      newRouter.push({name: 'main_page'})
     },
 
     getCurrentVirtualMachine() {

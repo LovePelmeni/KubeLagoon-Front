@@ -1,44 +1,45 @@
-<!-- <template>
-  <router-link class="virtualMachine flex" @onclick="ShutdownVirtualMachineHealthMetrics(VirtualMachine.HealthAPICheckerJobName)" :to="{name: "HomePage"}"></<router-link :to="{ name: 'HomePage'}">Go Back</router-link>
+<template>
+  <router-link class="virtualMachine flex" @onclick="RedirectHome()" :to="{name: 'main_page'}">
+  <router-link :to="{ name: 'main_page'}">Go Back</router-link>
 
     <div class="left flex">
       <span class="tracking-number"># General Info</span>
-      <span class="person">{{ VirtualMchine.VirtualMachineId }}</span>
-      <span class="due-date">{{ VirtualMachine.VirtualMachineName }}</span>
-      <span class="person">{{ VirtualMachine.IPAddress }}</span>
+      <span class="person">{{ VirtualMachineId }}</span>
+      <span class="due-date">{{ VirtualMachineName }}</span>
+      <span class="person">{{ IPAddress }}</span>
     </div>
 
     <div class="left flex">
       <span class="tracking-number"># SSH Info</span>
-      <span class="tracking-number" v-if="VirtualMachine.RootUserName">Root User: {{ VirtualMachine.RootUserName }}</span>
-      <span class="tracking-number" v-if="VirtualMachine.RootUserPassword">Root Password: {{ VirtualMachine.RootUserPassword }}</span>
-      <span class="tracking-number" v-if="VirtualMachine.Ssl">SSL Enabled</span>
-      <span class="tracking-number" v-if="VirtualMachine.Ssl">Certificate: {{ VirtualMachine.SslCertificate }}</span>
+      <span class="tracking-number" v-if="RootUserName">Root User: {{ VirtualMachine.RootUserName }}</span>
+      <span class="tracking-number" v-if="RootUserPassword">Root Password: {{ VirtualMachine.RootUserPassword }}</span>
+      <span class="tracking-number" v-if="SslEnabled">SSL Enabled</span>
+      <span class="tracking-number" v-if="RootCertificate">Certificate: {{ VirtualMachine.SslCertificate }}</span>
     </div>
 
     <div class="left flex">
       <span class="tracking-number"># Cost</span>
-      <span class="tracking-number" v-if="VirtualMachine.TotalCostThisMonth">Total Cost This Month: {{ VirtualMachine.MaxCpuUsage}}</span>
-      <span class="tracking-number" v-if="VirtualMachine.PricePerDay">Price Per Day: {{ VirtualMachine.MaxCpuUsage}}</span>
+      <span class="tracking-number" v-if="TotalCostThisMonth">Total Cost This Month: {{ VirtualMachine.MaxCpuUsage}}</span>
+      <span class="tracking-number" v-if="PricePerDay">Price Per Day: {{ VirtualMachine.MaxCpuUsage}}</span>
     </div>
 
     <div class="left flex">
       <span class="tracking-number"># Resources</span>
-      <span class="tracking-number" v-if="VirtualMachine.MaxCpuUsage">MaxCpuUsage: {{ VirtualMachine.MaxCpuUsage}}</span>
-      <span class="tracking-number" v-if="VirtualMachine.MaxMemoryUsage">MaxMemoryUsage: {{ VirtualMachine.MaxMemoryUsage }}</span>
+      <span class="tracking-number" v-if="MaxCpuUsage">MaxCpuUsage: {{ VirtualMachine.MaxCpuUsage}}</span>
+      <span class="tracking-number" v-if="MaxMemoryUsage">MaxMemoryUsage: {{ VirtualMachine.MaxMemoryUsage }}</span>
     </div>
 
 
     <div class="left flex">
       <span class="tracking-number"># Health </span>
-      <span class="tracking-number" v-if="VirtualMachine.CpuUsage">CPU Usage: {{ virtualMachine.CpuUsage }}</span>
-      <span class="tracking-number" v-if="VirtualMachine.MemoryUsage">Memory Usage: {{ virtualMachine.MemoryUsage }}</span>
+      <span class="tracking-number" v-if="CpuUsage">CPU Usage: {{ virtualMachine.CpuUsage }}</span>
+      <span class="tracking-number" v-if="MemoryUsage">Memory Usage: {{ virtualMachine.MemoryUsage }}</span>
     </div>
 
     <div class="right flex">
       <div class="status-button flex">
-        <span class="green" v-if="VirtualMachine.State=='Running'">Running</span>
-        <span class="red" v-if="VirtualMachine.State=='Failure'">Failure</span>
+        <span class="green" v-if="Status=='Running'">Running</span>
+        <span class="red" v-if="Status=='Failure'">Failure</span>
       </div>
       <div class="icon">
         <img src="@/assets/icon-arrow-right.svg" alt="" />
@@ -51,27 +52,28 @@
 
 import * as healthcheck from "../healthcheck/healthcheck.js"
 import * as vm from "../../vm/vm.js"
+import {newRouter} from "../../router/router.js"
 
 function GetCustomerName() {
   // Returns Customer Name
 }
 
 export default {
-  name: "virtualMachineExtendedInfo",
+  name: "virtualMachineInfo",
   data() {
     return {
       // Owner Name
       CustomerName: GetCustomerName(),
 
       // General Virtual Machine Info
-      VirtualMachineId: 0,
+      VirtualMachineId: null,
       VirtualMachineName: null,
       IPAddress: null,
 
       // Ssh Info
       RootUserName: null,
       RootUserPassword: null,
-      Ssl: null,
+      SslEnabled: null,
 
       // Cost Info
       TotalCostThisMonth: null,
@@ -86,17 +88,23 @@ export default {
       // Health Metrics Attributes
       CpuUsage: null,
       MemoryUsage: null,
-      State: null,
+      Status: null,
 
       // Health Check API Class
       HealthAPICheckerJobName: null,
     }
   },
-  created(): {
-    this.ShowtCustomerMachineInfo(),
-    this.ShowVirtualMachineHealthMetrics(),
+  created() {
+    this.ShowtCustomerMachineInfo()
+    this.ShowVirtualMachineHealthMetrics()
   },
   methods: {
+
+    RedirectHome() {
+      // Redirect Back to the Main Page
+      this.HideVirtualMachineHealthMetrics(this.HealthAPICheckerJobName)
+      newRouter.push({name: "main_page"})
+    },
 
     ShowError(ErrorMessage) {
       // Showing up and Error
@@ -111,7 +119,10 @@ export default {
       let VirtualMachineManager = new vm.VirtualMachineManager()
       let VirtualMachineInfo, ErrorValue = VirtualMachineManager.GetVirtualMachine(VirtualMachineId)
 
-      if (ErrorValue != null) {this.ShowError(ErrorValue.error)}else{
+      if (ErrorValue != null) {
+        this.ShowError(ErrorValue.error)
+      }else{
+
           this.CustomerName = this.GetCustomerName()
 
           this.VirtualMachineId = VirtualMachineInfo["Metadata"]["VirtualMachineId"]
@@ -120,7 +131,8 @@ export default {
 
           this.RootUserName     = VirtualMachineInfo["SshCredentials"]["RootUserName"]
           this.RootUserPassword = VirtualMachineInfo["SshCredentials"]["RootUserPassword"]
-          this.Ssl              = VirtualMachineInfo["SshCredentials"]["Ssl"]
+          this.RootCertificate = VirtualMachineInfo["SshCredentials"]["RootCertificate"]
+          this.SslEnabled       = VirtualMachineInfo["SshCredentials"]["SslEnabled"]
 
           this.TotalCostThisMonth = VirtualMachineInfo["Cost"]["TotalCostThisMonth"] // Total Cost this Month, based on the VM Usage
           this.PricePerDay      = VirtualMachineInfo["Cost"]["PricePerDay"] // Price Per Day, based on the VM Setup
@@ -140,24 +152,26 @@ export default {
       let JobUniqueName, StartError = HealthMetricsManager.StartHealthChecker(VirtualMachineId)
 
       if (StartError != null) {
-        for (let Item in [this.CpuUsage, this.MemoryUsage, this.State])  {
+        for (let Item in [this.CpuUsage, this.MemoryUsage, this.Status])  {
           Item.innerText = "Failed to Parse Item"
         }
       }else{
         this.HealthAPICheckerJobName = JobUniqueName
       }
     },
-    ShutdownVirtualMachineHealthMetrics(JobUniqueName){
+    HideVirtualMachineHealthMetrics(JobUniqueName){
       // Shuts down the Health Metrics API Crontab Job by stopping it using Job Unique Name
       let HealthMetricsManager = new healthcheck.VirtualMachineHealthStateChecker()
       HealthMetricsManager.RemoveHealthChecker(JobUniqueName)
     },
-  }
+  },
 }
 
 </script>
 
+
 <style lang="scss" scoped>
+
 .virtualMachine {
   text-decoration: none;
   cursor: pointer;
@@ -192,4 +206,4 @@ export default {
       font-weight: 600px;
     }
   }
-} -->
+}

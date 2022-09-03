@@ -45,12 +45,16 @@ export default createStore({
 
     RUN_VIRTUAL_MACHINE(virtualMachineId) {
       // Runs Virtual Machine Server
-
+      let vmManager = new vm.VirtualMachineManager()
+      let Started, StartError = vmManager.StartVirtualMachine(virtualMachineId)
+      if (StartError != null || Started != true) {this.SHOW_ERROR(StartError)}
     },
 
     SHUTDOWN_VIRTUAL_MACHINE(virtualMachineId) {
       // Shuts down the Virtual Machine  Server
-
+      let vmManager = new vm.VirtualMachineManager()
+      let Shutdown, ShutdownError = vmManager.ShutdownVirtualMachine(virtualMachineId)
+      if (Shutdown != true || ShutdownError != null) {this.SHOW_ERROR(ShutdownError)}
     },
 
     INSERT_NEW_VIRTUAL_MACHINE(list, virtualMachine) {

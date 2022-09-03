@@ -22,7 +22,7 @@
 
             <tr class="table-items flex" v-for="(Datacenter, index) in Datacenters" :key="index">
               <td class="item-name"><input type="text" v-model="Datacenter.DatacenterName" /></td>
-              <img @click="selectDatacenter(Datacenter.ItemPath)" src="@/assets/icon-delete.svg" alt="" />
+              <img @click="hardwareConfiguration.selectDatacenter(Datacenter.ItemPath)" src="@/assets/icon-delete.svg" alt="" />
             </tr>
           </table>
 
@@ -41,7 +41,7 @@
               <tr class="table-items flex" v-for="(OperationalSystem, index) in OperationalSystems" :key="index">
                 <td class="item-name"><input type="text" v-model="OperationalSystem.Name" /></td>
                 <td class="item-name"><input type="text" v-model="OperationalSystem.Version" /></td>
-                <img @click="selectOperationalSystem(OperationalSystem.Name)" src="@/assets/icon-delete.svg" alt="" />
+                <img @click="hardwareConfiguration.selectOperationalSystem(OperationalSystem.Name)" src="@/assets/icon-delete.svg" alt="" />
               </tr>
           </table>
 
@@ -59,7 +59,7 @@
                 <tr class="table-items flex" v-for="(Tool, index) in PreInstalledTools" :key="index">
                     <td class="item-name"><input type="text" v-model="Tool.Name"/></td>
                     <td class="item-name"><input type="text" v-model="Tool.Version" /></td>
-                    <img @click="addPreInstalledTools(Tool.Name)" src="@/assets/icon-delete.svg" alt="" />
+                    <img @click="hardwareConfiguration.addPreInstalledTools(Tool.Name)" src="@/assets/icon-delete.svg" alt="" />
                 </tr>
           </table>
       </div>
@@ -167,7 +167,7 @@
         </div>
         <div class="right flex">
           <button v-if="!updateVirtualMachine" type="submit" @click="saveVirtualMachineDraft" class="dark-purple">Save Draft</button>
-          <button v-if="!updateVirtualMachine" type="submit" @click="initializaVirtualMachine" class="purple">Create New Virtual Machine</button>
+          <button v-if="!updateVirtualMachine" type="submit" @click="createVirtualMachine" class="purple">Create New Virtual Machine</button>
           <button v-if="updateVirtualMachine" type="sumbit" class="purple">Update Virtual Machine</button>
         </div>
       </div>
@@ -179,6 +179,8 @@
 
 
 /* eslint-disable no-unused-vars */
+
+/* eslint-disable vue/no-unused-components */
 
 
 import { mapActions, mapMutations, mapState } from "vuex";
@@ -209,6 +211,7 @@ export const hardwareConfiguration = {
     this.GetSuggestedOperationalSystems()
     this.GetSuggestedPreInstalledTools()
   },
+
   methods: {
     GetSuggestionsManager() {
       let SuggestionManager = new suggestions.NewSuggestManager()

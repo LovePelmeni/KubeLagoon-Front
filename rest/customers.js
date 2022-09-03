@@ -100,3 +100,35 @@ function DeleteCustomerRestController() {
   })
   return Response, Error
 }
+
+
+function LoginCustomerRestController(Username, Password) {
+  // Logs in Customer into the Profile
+  var APIUrl = Url("http://%s:%s/login/" % (
+  BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
+  var Response, ResponseError = $.ajax({
+    url: APIUrl,
+    data: JSON.stringify({"Username": Username, "Password": Password}),
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Authorization": $.cookie("jwt-token"),
+    },
+    success: function(Response) {
+      // Processing Success Login Request
+      if (Response.StatusCode == 200 || Response.StatusCode == 201) {
+        return true, null
+      }
+    },
+    error: function(ResponseError) {
+      // Processing Exception
+      return false, ResponseError
+    },
+  })
+  return Response, ResponseError
+}
+
+function LogoutCustomerRestController() {
+  // Logouts Customer from their Profile
+  let Removed = $.RemoveCookie("jwt-token")
+  return Removed, null
+}
