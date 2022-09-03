@@ -5,7 +5,6 @@ var BACKEND_APPLICATION_PORT = process.env.BACKEND_APPLICATION_PORT
 import $ from "jquery";
 var Url = require('url-parse')
 
-
 import "../configuration_preparer/preparer.js"
 
 function CreateCustomerRestController(CustomerData) {
@@ -100,7 +99,6 @@ function DeleteCustomerRestController() {
   })
   return Response, Error
 }
-
 
 function LoginCustomerRestController(Username, Password) {
   // Logs in Customer into the Profile

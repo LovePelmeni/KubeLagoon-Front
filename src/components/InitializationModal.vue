@@ -23,8 +23,12 @@
 
             <tr class="table-items flex" v-for="(Datacenter, index) in Datacenters" :key="index">
               <td class="item-name"><input type="text" v-model="Datacenter.DatacenterName" /></td>
-              <img @click="hardwareConfiguration.selectDatacenter(Datacenter.ItemPath)" src="@/assets/icon-delete.svg" alt="" />
+
+              <img @click="hardwareConfiguration.selectDatacenter(Datacenter.ItemPath)" v-if="Datacenter != AddedDatacenter" src="@/assets/icon-delete.svg" alt="" />
+              <img v-else="" />Added</img>
+
               <span v-if="errors[Datacenter.DatacenterName]">{{ errors[Datacenter.DatacenterName] }}</span>
+
             </tr>
           </table>
 
@@ -43,8 +47,13 @@
               <tr class="table-items flex" v-for="(OperationalSystem, index) in OperationalSystems" :key="index">
                 <td class="item-name"><input type="text" v-model="OperationalSystem.Name" /></td>
                 <td class="item-name"><input type="text" v-model="OperationalSystem.Version" /></td>
-                <img @click="hardwareConfiguration.selectOperationalSystem(OperationalSystem.Name)" src="@/assets/icon-delete.svg" alt="" />
+
+
+                <img @click="hardwareConfiguration.selectOperationalSystem(OperationalSystem.Name)" v-if="OperationalSystem " src="@/assets/icon-delete.svg" alt="" />
+                <img v-else="" />Added</img>
+
                 <span v-if="errors[OperationalSystem.SystemName]">{{ errors[OperationalSystem.SystemName] }}</span>
+
               </tr>
           </table>
 
@@ -62,7 +71,10 @@
                 <tr class="table-items flex" v-for="(Tool, index) in PreInstalledTools" :key="index">
                     <td class="item-name"><input type="text" v-model="Tool.Name"/></td>
                     <td class="item-name"><input type="text" v-model="Tool.Version" /></td>
-                    <img @click="hardwareConfiguration.addPreInstalledTools(Tool.Name)" src="@/assets/icon-delete.svg" alt="" />
+
+                    <img @click="hardwareConfiguration.addPreInstalledTools(Tool.Name)" v-if="!(Tool in AddedPreInstalledTools)" src="@/assets/icon-delete.svg" alt="" />
+                    <img v-else="" />Added</img>
+                    
                     <span v-if="errors[Tool.Name]">{{ errors[Tool.Name] }}</span>
                 </tr>
           </table>
@@ -201,22 +213,21 @@ import {loadingPage} from "./LoadingPage.vue"
 
 export const InitializationFormValidator {
   // Validation Component, That Validates Initialization Modal Before the Submit
+  name: "InitializationFormValidator",
   props: {
     FieldsSpecifications: {
       // Contains Field Name + Property Type
     }
-  }
-
+  },
   data() {
     return {
       errors: {},
     }
-  }
+  },
   methods: {
 
     Validate() {
-      // Validates Input depending on the Type of the Fields
-      for (FieldValue)
+      // Validates Input depending on the Type of the Field
     }
   },
   computed: {
@@ -225,6 +236,7 @@ export const InitializationFormValidator {
 }
 
 export const hardwareConfiguration = {
+
   name: "hardwareConfiguration",
   data() {
     return {
@@ -234,7 +246,7 @@ export const hardwareConfiguration = {
 
       AddedDatacenter: null,
       AddedOperationalSystem: null,
-      AddedInstalledTools: [],
+      AddedPreInstalledTools: [],
     }
   },
 
@@ -263,29 +275,46 @@ export const hardwareConfiguration = {
     },
     GetSuggestedPreInstalledTools() {
       // Returns Array of the Available Preinstalled Tools, that you can pre install, on your OS
-      let newManager = this.GetSuggstionsManager()
+      let newManager = this.GetSuggestionsManager()
       let PreInstalledTools = newManager.GetSuggestedPreInstalledTools()
       this.PreInstalledTools = PreInstalledTools
     },
 
     selectDatacenter(DatacenterItemPath) {
       // Selects Datacenter, that Is going to be Used for the Virtual Machine Server Deployment
+      let Datacenter = this.GetDatacenter(DatacenterItemPath)
       this.AddedDatacenter = DatacenterItemPath
     },
     selectOperationalSystem(OSName, Version, Bit) {
       // Selects Operational System for the Virtual Machine Server
-      this.selectOperationalSystem = {"SystemName": OSName + Version, "Bit": Bit}
+      let OperationalSystem = this.GetOperationalSystem(OSName, Version, Bit)
+      this.selectOperationalSystem = {
+      "SystemName": OperationalSystem.OSName + OperationalSystem.Version,
+      "Version": OperationalSystem.Version,
+      "Bit": OperationalSystem.Bit}
     },
-    addPreInstalledTools() {
+    selectPreInstalledTools(ToolName) {
       // Adds pre Installed Tools to the Array
+      this.PreInstalledTools.push(ToolName)
+    },
+
+    unSelectDatacenter() {
+
+    },
+    unSelectOperationalSystem() {
+
+    },
+    unSelectPreInstalledTool(Tool) {
+
     },
     markAsSelected() {
       // Marks Element as Selected
-    }
+    },
   }
 };
 
 export const resourceConfiguration = {
+
   name: "resourceConfiguration",
   data() {
     return {
@@ -320,6 +349,7 @@ export const resourceConfiguration = {
 
 export const sslConfiguration = {
 
+  name: "sslConfiguration",
   data() {
     return {
       // SSL Secure Info
@@ -346,7 +376,7 @@ export const sslConfiguration = {
         this.Secure = VirtualMachineInfo["Ssl"]["Secure"]
       }
     }
-  }
+  },
 };
 
 export default {
@@ -491,9 +521,11 @@ export default {
       this.VirtualMachineCostTotal += item.TotalCost;
       });
     },
+
     saveDraft() {
       this.VirtualMachineDraft = true;
     },
+
     async uploadVirtualMachine() {
       if (this.invoiceItemList.length <= 0) {
         alert("Please ensure you filled out work items!");
@@ -519,9 +551,9 @@ export default {
         VirtualMachineId: this.$route.params.VirtualMachineId,
         UpdatedConfiguration: NewConfiguration,
       };
-
       this.UPDATE_VIRTUAL_MACHINE(data);
     },
+
     submitForm() {
       if (this.editInvoice) {
         this.updateVirtualMachine();
@@ -529,10 +561,12 @@ export default {
       }
       this.uploadVirtualMachine();
     },
+
   },
   computed: {
     ...mapState(["updateVirtualMachine", "currentVirtualMachineArray"]),
   },
+
   watch: {
     paymentTerms() {
       const futureDate = new Date();
@@ -540,11 +574,13 @@ export default {
       this.paymentDueDate = new Date(this.paymentDueDateUnix).toLocaleDateString("en-us", this.dateOptions);
     },
   },
+
 };
 
 </script>
 
 <style lang="scss" scoped>
+
 .virtual-machine-wrap {
   position: fixed;
   top: 0;

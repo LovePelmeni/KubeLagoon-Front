@@ -3,7 +3,6 @@ var BACKEND_APPLICATION_PORT = process.env.BACKEND_APPLICATION_PORT
 
 import $ from "jquery";
 
-
 /* eslint-disable no-unused-vars */
 
 var Url = require('url-parse');
@@ -13,6 +12,7 @@ function GetDatacenterSuggestionsRestController() {
   var APIUrl = new Url("http://%s:%s/suggestion/datacenter/" % (
   BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
   let Datacenters, Error = $.ajax({
+    async: false,
     url: APIUrl,
     method: "GET",
     headers: {
@@ -39,6 +39,7 @@ function GetOsSystemsSuggestionsRestController(){
   var APIUrl = new Url("http://%s:%s/suggestion/os/system/" % (
   BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
   let Datacenters, Error = $.ajax({
+    async: false,
     url: APIUrl,
     method: "GET",
     headers: {
@@ -65,6 +66,7 @@ function GetPreInstallationToolSuggestionsRestController(){
   var APIUrl = new Url("http://%s:%s/suggestion/preinstall/tools" % (
   BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
   let Datacenters, DatacentersError = $.ajax({
+    async: false,
     url: APIUrl,
     method: "GET",
     headers: {

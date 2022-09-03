@@ -12,6 +12,7 @@ function InitializeVirtualMachineRestController(Configuration) {
   var APIUrl = new Url("http://%s:%s/vm/initialize/" % (
   BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
   Response, Error= $.ajax({
+    async: false,
     url: APIUrl,
     method: "POST",
     data: JSON.stringify({"HardwareConfiguration": Configuration}),
@@ -43,6 +44,7 @@ function ApplyVirtualMachineConfigurationRestController(CustomConfiguration, Vir
   APIUrl.searchParams.append("VirtualMachineId", VirtualMachineId)
 
   Response, Error = $.ajax({
+    async: false,
     url: APIUrl,
     method: "POST",
     data: {
@@ -75,6 +77,7 @@ function StartVirtualMachineRestController(VirtualMachineId) {
   APIUrl.searchParams.append("VirtualMachineId", VirtualMachineId)
 
   Response, Error= $.ajax({
+    async: false,
     url: APIUrl,
     method: "POST",
     data: JSON.stringify({"HardwareConfiguration": Configuration}),
@@ -106,6 +109,7 @@ function ShutdownVirtualMachineRestController(VirtualMachineId) {
   APIUrl.searchParams.append("VirtualMachineId", VirtualMachineId)
 
   Response, Error= $.ajax({
+    async: false,
     url: APIUrl,
     method: "POST",
     data: JSON.stringify({"HardwareConfiguration": Configuration}),
@@ -137,6 +141,7 @@ function RebootVirtualMachineRestController(VirtualMachineId) {
   APIUrl.searchParams.append("VirtualMachineId", VirtualMachineId)
 
   Response, Error= $.ajax({
+    async: false,
     url: APIUrl,
     method: "POST",
     data: JSON.stringify({"HardwareConfiguration": Configuration}),
@@ -171,6 +176,7 @@ function StartVmOsRestController(VirtualMachineId) {
   APIUrl.searchParams.append("VirtualMachineId", VirtualMachineId)
 
   Response, Error = $.ajax({
+    async: false,
     url: APIUrl,
     method: "POST",
     headers: {
@@ -201,6 +207,7 @@ function ShutdownVmOsRestController(VirtualMachineId) {
   APIUrl.searchParams.append("VirtualMachineId", VirtualMachineId)
 
   Response, Error= $.ajax({
+    async: false,
     url: APIUrl,
     method: "DELETE",
     headers: {
@@ -231,6 +238,7 @@ function RebootVmOsRestController(VirtualMachineId) {
   APIUrl.searchParams.append("VirtualMachineId", VirtualMachineId)
 
   Response, Error= $.ajax({
+    async: false,
     url: APIUrl,
     method: "PUT",
     headers: {

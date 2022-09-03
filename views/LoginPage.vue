@@ -1,4 +1,3 @@
-
 <template>
   <div class="LoginPage flex">
     <form class="" action="" method="post">
@@ -12,6 +11,17 @@
 /* eslint-disable no-unused-vars */
 
 import * as customers from "../customers/customers.js"
+
+export const LoginValidator {
+  methods: {
+    Validate() {
+      // Validates Input, that has been Passed to the Form
+    }
+  },
+  computed: {
+    this.Validate()
+  },
+};
 
 export default {
   name: "LoginPage",
@@ -32,7 +42,7 @@ export default {
     },
     showError(ExpectedError) {
       // Shows up an Exceptions Banner on the Page
-      console.log(ExpectedError)
+      this.SHOW_ERROR(ExpectedError)
     },
     ValidateInput(Username, Password) {
       let CustomerInputValidator = new customers.CustomerLoginInputValidator()
