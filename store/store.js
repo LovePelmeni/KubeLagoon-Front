@@ -98,7 +98,7 @@ export default createStore({
       })
     },
 
-    UPDATE_INSERT_VIRTUAL_MACHINE(list, virtualMachineId, virtualMachine) {
+    UPDATE_INSERT_VIRTUAL_MACHINE(list, virtualMachineId, UpdatedVirtualMachineData) {
 
       oldVirtualMachine = list.filter((virtualMachine) => {
         return virtualMachine.VirtualMachineId === virtualMachineId;
@@ -107,38 +107,38 @@ export default createStore({
       if (oldVirtualMachine != null){
                     // General Information about the Customer's Virtual Machine
 
-                    oldVirtualMachine.virtualMachineId: virtualMachine.VirtualMachineid,
-                    oldVirtualMachine.virtualMachineName: virtualMachine.VirtualMachineName,
-                    oldVirtualMachine.clientEmail: virtualMachine.OwnerEmail,
+                    oldVirtualMachine.virtualMachineId: UpdatedVirtualMachineData.VirtualMachineid,
+                    oldVirtualMachine.virtualMachineName: UpdatedVirtualMachineData.VirtualMachineName,
+                    oldVirtualMachine.clientEmail: UpdatedVirtualMachineData.OwnerEmail,
 
                     // SSH Credentials for the Virtual Machine
-                    oldVirtualMachine.RootUsername: virtualMachine.Ssh.RootUsername,
-                    oldVirtualMachine.RootPassword: virtualMachine.Ssh.RootPassword,
-                    oldVirtualMachine.Secure: virtualMachine.Ssh.Secure,
-                    oldVirtualMachine.RootCertificate: virtualMachine.RootCertificate,
+                    oldVirtualMachine.RootUsername: UpdatedVirtualMachineData.Ssh.RootUsername,
+                    oldVirtualMachine.RootPassword: UpdatedVirtualMachineData.Ssh.RootPassword,
+                    oldVirtualMachine.Secure: UpdatedVirtualMachineData.Ssh.Secure,
+                    oldVirtualMachine.RootCertificate: UpdatedVirtualMachineData.RootCertificate,
 
                     // Creation Date Info
-                    oldVirtualMachine.virtualMachineDateUnix: virtualMachine.CreatedAt.Unix(),
-                    oldVirtualMachine.virtualMachineDate: virtualMachine.CreatedAt,
+                    oldVirtualMachine.virtualMachineDateUnix: UpdatedVirtualMachineData.CreatedAt.Unix(),
+                    oldVirtualMachine.virtualMachineDate: UpdatedVirtualMachineData.CreatedAt,
 
                     // Pay Terms + Setting up Current Date for the Payment
-                    oldVirtualMachine.paymentTerms: virtualMachine.PaymentTerms,
-                    oldVirtualMachine.paymentDueDateUnix: virtualMachine.paymentCreatedAt.Unix(),
-                    oldVirtualMachine.paymentDueDate: virtualMachine.paymentCreatedAt,
+                    oldVirtualMachine.paymentTerms: UpdatedVirtualMachineData.PaymentTerms,
+                    oldVirtualMachine.paymentDueDateUnix: UpdatedVirtualMachineData.paymentCreatedAt.Unix(),
+                    oldVirtualMachine.paymentDueDate: UpdatedVirtualMachineData.paymentCreatedAt,
 
                     // Information about the Customer Billing Account and where the Payments Is Going to be Addressed
-                    oldVirtualMachine.billerStreetAddress: currentVirtualMachine.billerStreetAddress,
-                    oldVirtualMachine.billerStreetCity: currentVirtualMachine.billerCity,
-                    oldVirtualMachine.billerZipCode: currentVirtualMachine.billerZipCode,
-                    oldVirtualMachine.billerCountry: currentVirtualMachine.billerCountry,
+                    oldVirtualMachine.billerStreetAddress: UpdatedVirtualMachineData.billerStreetAddress,
+                    oldVirtualMachine.billerStreetCity: UpdatedurrentVirtualMachineData.billerCity,
+                    oldVirtualMachine.billerZipCode: UpdatedVirtualMachineData.billerZipCode,
+                    oldVirtualMachine.billerCountry: UpdatedVirtualMachineData.billerCountry,
 
                     // Description
-                    oldVirtualMachine.virtualMachineItemList: virtualMachine.VirtualMachineItemList,
-                    oldVirtualMachine.TotalCost: doc.data().invoiceTotal,
+                    oldVirtualMachine.virtualMachineItemList: UpdatedVirtualMachineData.VirtualMachineItemList,
+                    oldVirtualMachine.TotalCost: UpdatedVirtualMachineData.TotalCost,
 
-                    oldVirtualMachine.Running: virtualMachine.Running,
-                    oldVirtualMachine.Shutdown: virtualMachine.Shutdown,
-                    oldVirtualMachine.Deploying: virtualMachine.Deploying,
+                    oldVirtualMachine.Running: UpdatedVirtualMachineData.Running,
+                    oldVirtualMachine.Shutdown: UpdatedVirtualMachineData.Shutdown,
+                    oldVirtualMachine.Deploying: UpdatedVirtualMachineData.Deploying,
     }},
 
     CREATE_VIRTUAL_MACHINE(state, payload) {
@@ -161,15 +161,11 @@ export default createStore({
 
           let appliedInfo, applyError = vmManager.ApplyConfiguration(customizedConfiguration)
           if (applyError != null) {
-
-            let virtualMachine = vmManager.GetVirtualMachine(appliedInfo["VirtualMachineId"])
-            this.INSERT_NEW_VIRTUAL_MACHINE(state.virtualMachineData, virtualMachine)
-
+            return appliedInfo, applyError
           }else{
             this.SHOW_ERROR("Failed to Apply Configuration")
             return;
           }
-
         }else{
           this.SHOW_ERROR("Failed to Initialize Virtual Machine")
           return;

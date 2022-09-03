@@ -1,10 +1,6 @@
 import { createApp } from 'vue'
-import App from './App.vue'
-import vuetify from './plugins/vuetify'
-import { loadFonts } from './plugins/webfontloader'
-import { newRouter } from "../router/router.js"
+import {App} from './App.vue'
+import { router } from "../router/router.js"
 
 /* eslint-disable no-unused-vars */
-
-loadFonts()
-createApp(App).use(vuetify).use(newRouter).mount('#mainApp')
+createApp(App).use(router).mount('#app')

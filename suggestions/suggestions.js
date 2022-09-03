@@ -4,7 +4,7 @@ import * as suggestions from "../rest/suggestions.js"
 
 /* eslint-disable no-unused-vars */
 
-class SuggestionsReturner {
+class SuggestionsManager {
   // Class Represents Suggestion Manager
   GetSuggestedDatacenters = function(){
     // Returns List of avaialble Datacenters, to deploy your VM Server

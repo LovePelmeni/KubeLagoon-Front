@@ -99,17 +99,17 @@
         <h4>SSL Configuration</h4>
         <div class="input flex flex-column">
           <label for="secure">Secure</label>
-          <input required type="text" id="cpuNum" v-model="Secure" />
+          <input required type="text" id="Secure" v-model="Secure" />
         </div>
         </div>
 
-      <!-- Invoice Work Details -->
+      <!-- Virtual Machine Work Details -->
       <div class="virtual-machine-work flex flex-column">
         <div class="payment flex">
 
           <div class="input flex flex-column">
             <label for="virtualMachineCreationDate">Creation Date</label>
-            <input disabled type="text" id="VirtualMachineCreationDate" v-model="VirtualMachineCreationDate" />
+            <input disabled type="text" id="virtualMachineCreationDate" v-model="virtualMachineCreationDate" />
           </div>
 
           <div class="input flex flex-column">
@@ -127,32 +127,30 @@
           </select>
         </div>
 
-        <div class="input flex flex-column">
-          <label for="VirtualMachineConfigInfo">Config Info</label>
-          <input required type="text" id="VirtualMachineConfigInfo" v-model="VirtualMachineConfigInfo" />
-        </div>
         <div class="work-items">
           <h3>Virtual Machines</h3>
           <table class="item-list">
 
             <tr class="table-heading flex">
-              <th class="item-name">Name</th>
-              <th class="qty">Qty</th>
-              <th class="price">Price per day</th>
+              <th class="item-name">ID</th>
+              <th class="qty">Name</th>
+              <th class="price">Status</th>
+              <th class="total">Price Per Day</th>
               <th class="total">Total this Month</th>
             </tr>
 
             <tr class="table-items flex" v-for="(VirtualMachine, index) in VirtualMachineItemList" :key="index">
-              <td class="item-name"><input type="text" v-model="item.VirtualMachineName" /></td>
-              <td class="qty"><input type="text" v-model="VirtualMachine.qty" /></td>
-              <td class="price"><input type="text" v-model="VirtualMachine.price" /></td>
-              <td class="total flex">${{ (VirtualMachine.TotalCost = VirtualMachine.qty * VirtualMachine.ResourcePrice)}}</td>
+              <td class="virtual-machine-id"><input type="text" v-model="VirtualMachine.VirtualMachineId" /></td>
+              <td class="virtual-machine-name"><input type="text" v-model="VirtualMachine.VirtualMachineName" /></td>
+              <td class="status"><input type="text" v-model="VirtualMachine.Status" /></td>
+              <td class="price"><input type="text" v-model="VirtualMachine.Price" /></td>
+              <td class="total flex">${{ VirtualMachine.TotalThisMonth }}</td>
               <img @click="deleteVirtualMachine(VirtualMachine.VirtualMachineId)" src="@/assets/icon-delete.svg" alt="" />
             </tr>
 
           </table>
 
-          <div @click="initializeNewVirtualMachine" class="flex button">
+          <div @click="CreateNewVirtualMachine" class="flex button">
             <img src="@/assets/icon-plus.svg" alt="" />
             Add New Virtual Machine
           </div>
@@ -167,7 +165,7 @@
         </div>
         <div class="right flex">
           <button v-if="!updateVirtualMachine" type="submit" @click="saveVirtualMachineDraft" class="dark-purple">Save Draft</button>
-          <button v-if="!updateVirtualMachine" type="submit" @click="createVirtualMachine" class="purple">Create New Virtual Machine</button>
+          <button v-if="!updateVirtualMachine" type="submit" @click="CreateNewVirtualMachine" class="purple">Create New Virtual Machine</button>
           <button v-if="updateVirtualMachine" type="sumbit" class="purple">Update Virtual Machine</button>
         </div>
       </div>
@@ -177,7 +175,6 @@
 
 <script>
 
-
 /* eslint-disable no-unused-vars */
 
 /* eslint-disable vue/no-unused-components */
@@ -186,9 +183,9 @@
 import { mapActions, mapMutations, mapState } from "vuex";
 import { uid } from "uid";
 
-import * as vm from "../../vm/vm.js"
+import {VirtualMachineManager} from "../../vm/vm.js"
 import * as preparer from "../../configuration_preparer/preparer.js"
-import * as suggestions from "../../suggestions/suggestions.js"
+import {SuggestionsManager} from "../../suggestions/suggestions.js"
 import {loadingPage} from "./LoadingPage.vue"
 
 
@@ -214,25 +211,25 @@ export const hardwareConfiguration = {
 
   methods: {
     GetSuggestionsManager() {
-      let SuggestionManager = new suggestions.NewSuggestManager()
+      let SuggestionManager = new SuggestionsManager()
       return SuggestionManager
     },
     GetSuggestedDatacenters() {
       // Returns Array of the Available Datacenters
       let newManager = this.GetSuggestionsManager()
-      let Datacenters = newManager.GetAvailableDatacenters()
+      let Datacenters = newManager.GetSuggestedDatacenters()
       this.Datacenters = Datacenters
     },
     GetSuggestedOperationalSystems() {
       // Returns Array of the Available Distributions for the Virtual Machine  Server
       let newManager = this.GetSuggestionsManager()
-      let OperationalSystems = newManager.GetAvailableOperationalSystems()
+      let OperationalSystems = newManager.GetSuggestedOperationalSystems()
       this.OperationalSystems = OperationalSystems
     },
     GetSuggestedPreInstalledTools() {
       // Returns Array of the Available Preinstalled Tools, that you can pre install, on your OS
       let newManager = this.GetSuggstionsManager()
-      let PreInstalledTools = newManager.GetAvailablePreInstalledTools()
+      let PreInstalledTools = newManager.GetSuggestedPreInstalledTools()
       this.PreInstalledTools = PreInstalledTools
     },
 
@@ -273,7 +270,7 @@ export const resourceConfiguration = {
     GetVirtualMachineInfo() {
       // Returns Info About the Resources of the Virtual Machine
       let VirtualMachineId = this.$route.params.VirtualMachineId
-      let VirtualMachineManager = new vm.VirtualMachineManager()
+      let VirtualMachineManager = new VirtualMachineManager()
       let VirtualMachineInfo, VirtualMachineError = VirtualMachineManager.GetVirtualMachine(VirtualMachineId)
 
       if (VirtualMachineError == null) {
@@ -304,7 +301,7 @@ export const sslConfiguration = {
     GetVirtualMachineSSLRootInfo() {
       // Returns Virtual Machines Info about the SSL Configuration
       let VirtualMachineId = this.$route.params.VirtualMachineId
-      let VirtualMachineManager = new vm.VirtualMachineManager()
+      let VirtualMachineManager = new VirtualMachineManager()
       let VirtualMachineInfo, VirtualMachineError = VirtualMachineManager.GetVirtualMachine(VirtualMachineId)
 
       if (VirtualMachineError == null) {
@@ -325,10 +322,16 @@ export default {
       // General Extra Attributes
       dateOptions: { year: "numeric", month: "short", day: "numeric" },
       loading: null,
+
+      virtualMachineCreationDate: null,
+      virtualMachineDateUnix: null,
+      paymentDueDate: null,
+
+      updateVirtualMachine: false,
       VirtualMachinePending: null,
       VirtualMachineDraft: null,
-      VirtualMachinesList: [],
-      CostTotal: 0,
+      VirtualMachineItemList: [],
+      TotalCost: 0,
     };
   },
   components: {
@@ -340,10 +343,12 @@ export default {
   created() {
     // get current date for invoice date field
 
+    this.GetCustomerVirtualMachines()
 
     if (!this.updateVirtualMachine) {
       this.virtualMachineDateUnix = Date.now();
       this.virtualMachineCreationDate = new Date(this.virtualMachineDateUnix).toLocaleDateString("en-us", this.dateOptions);
+      this.paymentDueDate = new Date(this.virtualMachineDateUnix).toLocaleDateString("en-us", this.dateOptions);
     }
     if (this.updateVirtualMachine) {
       const currentVirtualMachine = this.currentVirtualMachineArray[0];
@@ -364,16 +369,26 @@ export default {
       }
     },
 
-    closeVirtualMachine() {
-      this.TOGGLE_VM_INIITIALIZATION_MODAL();
+    addVirtualMachineToList() {
+      // Adds new Object to the Customer's Virtual Machine List
+      this.VirtualMachineItemList.push({
+
+      })
+    },
+    removeVirtualMachineFromList() {
+      // Removes Virtual Machine Info Object from the Customer's Virtual Machines List
+    }
+
+    closeVirtualMachineSettings() {
+      this.TOGGLE_VIRTUAL_MACHINE();
       if (this.updateVirtualMachine) {
         this.TOGGLE_UDPDATE_VIRTUAL_MACHINE();
       }
     },
 
-    GetVirtualMachines() {
+    GetCustomerVirtualMachines() {
       // Returns Queryset of the Virtual Machines, related to the Customer
-      let newVirtualMachineManager = new vm.VirtualMachineManager()
+      let newVirtualMachineManager = new VirtualMachineManager()
       let VirtualMachinesQueryset, GetError = newVirtualMachineManager.GetCustomerVirtualMachines()
       if (GetError != null) {this.showError(GetError.error)}
       this.VirtualMachineItemList = VirtualMachinesQueryset
@@ -405,8 +420,12 @@ export default {
       let HardwareConfiguration = new preparer.HardwareConfiguration(DatacenterResources)
       let CustomizedConfiguration = new preparer.CustomizedConfiguration(CpuResources, MemoryResources, MetadataResources, StorageResources, SslResources)
 
-      this.CREATE_VIRTUAL_MACHINE(
+      VirtualMachineInfo, CreationError = this.CREATE_VIRTUAL_MACHINE(
       HardwareConfiguration, CustomizedConfiguration)
+
+      if (CreationError == null) {
+        this.VirtualMachineItemList.
+      }
     },
 
     deleteVirtualMachine(VirtualMachineId) {
@@ -538,10 +557,14 @@ export default {
           .table-items {
             gap: 16px;
             font-size: 12px;
-            .item-name {
+
+            .virtual-machine-id {
               flex-basis: 50%;
             }
-            .qty {
+            .virtual-machine-name{
+              flex-basis: 10%;
+            }
+            .status{
               flex-basis: 10%;
             }
             .price {

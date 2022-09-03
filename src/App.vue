@@ -27,7 +27,7 @@ import {initializationModal} from "./components/InitializationModal";
 import {modalPage} from "./components/ModalWindow";
 
 export default {
-  name: "mainApp",
+  name: "App",
   data() {
     return {
       mobile: null,
