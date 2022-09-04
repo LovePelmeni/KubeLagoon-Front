@@ -19,6 +19,8 @@ export const InitializationFormValidator {
   // Validation Component, That Validates Initialization Modal Before the Submit
   name: "InitializationFormValidator",
   props: {
+
+
     FieldsSpecifications: {
       // Contains Field Name + Property Type
       Datacenter: {},
@@ -27,39 +29,81 @@ export const InitializationFormValidator {
       Resources: {},
       SSH: {},
     }
-  },
-  data() {
-    return {
-      errors: {
-        Datacenter: {},
-        OS: {},
-        Tool: {},
-        Resources: {},
-        SSH: {},
-      },
+    errors: {
+      Datacenter: {},
+      OS: {},
+      Tool: {},
+      Resources: {},
+      SSH: {},
     }
   },
   methods: {
 
-    ValidateDatacenter() {
-        // Validates Selected Datacenter by the Customer
+    ValidateDatacenter(Datacenter) {
+      // Validates Selected Datacenter by the Customer
+      if Datacenter.DatacenterName.length == 0 {
+        this.errors['Datacenter'] = "This field is required"
+      }
     },
-    ValidateOs() {
+    ValidateOs(OperationalSystem) {
         //  Validates Operational System, picked up by the Customer
+        if Datacenter.DatacenterName.length == 0 {
+          this.errors["OS"] = "This field is required"
+        }
     },
-    ValidateResources() {
+
+    ValidateLoadBalancer(LoadBalancer) {
+      // Validates Load Balancer Configuration
+      if LoadBalancer.Type.length == 0 {
+        this.errors["LoadBalancer"]["Type"] = "This field is required"
+      }
+      if LoadBalancer.Port != 0 {
+        this.errors["LoadBalancer"]["Port"] = "Please specify the default value"
+      }
+    }
+    ValidateCpuResources(MaxCpu, CpuUsage) {
         // Validates Resources, Selected by the Customer
+        if String(MaxCpu).length == 0 {
+          this.errors["Resources"]["MaxCpu"] = "This field is required"
+        }
+        if String(CpuUsage).length == 0 {
+          this.errors["Resources"]["CpuUsage"] = "This field is required"
+        }
+        if !MaxCpu.TypeOf() == int {
+          this.errors["Resources"]["MaxCpu"] = "Invalid Value for Max CPU"
+        }
+        if !CpuUsage.TypeOf() == int {
+          this.errors["Resources"]["CpuUsage"] = "Invalid Value for CPU"
+        }
     },
-    ValidateSsh() {
+    ValidateMemoryResources(MaxMemory, MemoryUsage) {
+      // Validates Operational Memory Configuration Resources
+      if String(MaxMemory).length == 0 {
+        this.errors["Resources"]["MaxMemory"] = "This field is required"
+      }
+      if String(MemoryUsage).length == 0 {
+        this.errors["Resources"]["MemoryUsage"] = "This field is required"
+      }
+      if !MaxMemory.TypeOf() == int {
+        this.errors["Resources"]["MaxCpu"] = "Invalid Value for Max Memory"
+      }
+      if !Memory.TypeOf() == int {
+        this.errors["Resources"]["CpuUsage"] = "Invalid Value for Memory"
+      }
+    }
+    ValidateSsh(SslConfiguration) {
         // Validates SSH Option, selected by the Customer
+        if SslConfiguration.Type.length == 0 {
+          this.errors["SSL"]["Type"] = "This field is required"
+        }
     }
 
-    Validate() {
+    ValidateInput() {
       // Validates the Entire Form, filled up by the Customer
     }
   },
   computed: {
-    this.Validate()
+    this.ValidateInput()
   },
 }
 
@@ -348,7 +392,11 @@ export default {
       paymentDueDate: null,
 
       updateVirtualMachine: false,
-      VirtualMachinePending: null,
+
+      VirtualMachineRunning: null,
+      VirtualMachineDeploying: null,
+      VirtualMachineShutdown: null,
+
       VirtualMachineDraft: null,
       VirtualMachineItemList: [],
       TotalCost: 0,
@@ -381,7 +429,7 @@ export default {
   },
   render() {
     return `<div @click="checkClick" ref="virtualMachineWrap" class="virtualMachineWrap flex flex-column">
-        <form @submit.prevent="submitForm" class="virtual-machine-content">
+        <form @submit.prevent="ValidateInput" class="virtual-machine-content">
           <Loading v-show="loading" />
 
           <h1 v-if="!updateVirtualMachine">New Virtual Machine</h1>
