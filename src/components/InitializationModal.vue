@@ -1,206 +1,10 @@
 <template>
-  <div @click="checkClick" ref="virtualMachineWrap" class="virtualMachineWrap flex flex-column">
-    <form @submit.prevent="submitForm" class="virtual-machine-content">
-      <Loading v-show="loading" />
-
-      <h1 v-if="!updateVirtualMachine">New Virtual Machine</h1>
-      <h1 v-else>Update VirtualMachine</h1>
-
-      <!-- Hardware Configuration  -->
-      <div class="hardwareConfiguration flex flex-column">
-        <h4>Hardware Configuration</h4>
-
-        <div class="input flex flex-column">
-          <label for="Datacenter">Datacenter</label>
-          <input required type="text" id="Datacenter" v-model="Datacenter" />
-        </div>
-
-        <table v-if="Datacenters.length > 0" class="item-list">
-
-            <tr class="table-heading flex">
-              <th class="item-name"></th>
-            </tr>
-
-            <tr class="table-items flex" v-for="(Datacenter, index) in Datacenters" :key="index">
-              <td class="item-name"><input type="text" v-model="Datacenter.DatacenterName" /></td>
-
-              <img @click="hardwareConfiguration.selectDatacenter(Datacenter.ItemPath)" v-if="Datacenter != AddedDatacenter" src="@/assets/icon-delete.svg" alt="" />
-              <img v-else="" />Added</img>
-
-              <span v-if="errors[Datacenter.DatacenterName]">{{ errors[Datacenter.DatacenterName] }}</span>
-
-            </tr>
-          </table>
-
-          <div class="input flex flex-column">
-          <label for="Datacenter">Operational System</label>
-          <input required type="text" id="Datacenter" v-model="OperationalSystem" /
-          </div>
-
-        <table v-if="OperationalSystems.length > 0" class="item-list">
-
-              <tr class="table-heading flex">
-              <th class="item-name">Name</th>
-              <th class="item-name">Version</th>
-              </tr>
-
-              <tr class="table-items flex" v-for="(OperationalSystem, index) in OperationalSystems" :key="index">
-                <td class="item-name"><input type="text" v-model="OperationalSystem.Name" /></td>
-                <td class="item-name"><input type="text" v-model="OperationalSystem.Version" /></td>
-
-
-                <img @click="hardwareConfiguration.selectOperationalSystem(OperationalSystem.Name)" v-if="OperationalSystem " src="@/assets/icon-delete.svg" alt="" />
-                <img v-else="" />Added</img>
-
-                <span v-if="errors[OperationalSystem.SystemName]">{{ errors[OperationalSystem.SystemName] }}</span>
-
-              </tr>
-          </table>
-
-        <div class="input flex flex-column">
-          <label for="Datacenter">Pre Installed Tools</label>
-          <input required type="text" id="Datacenter" v-model="PreInstalledTool" />
-        </div>
-
-        <table v-if="PreInstalledTools.length > 0" class="item-list">
-
-                <tr class="table-heading flex">
-                    <th class="item-name">Tool</th>
-                    <th class="item-name">Version</th>
-                </tr>
-                <tr class="table-items flex" v-for="(Tool, index) in PreInstalledTools" :key="index">
-                    <td class="item-name"><input type="text" v-model="Tool.Name"/></td>
-                    <td class="item-name"><input type="text" v-model="Tool.Version" /></td>
-
-                    <img @click="hardwareConfiguration.addPreInstalledTools(Tool.Name)" v-if="!(Tool in AddedPreInstalledTools)" src="@/assets/icon-delete.svg" alt="" />
-                    <img v-else="" />Added</img>
-                    
-                    <span v-if="errors[Tool.Name]">{{ errors[Tool.Name] }}</span>
-                </tr>
-          </table>
-      </div>
-
-      <!-- resource Configuration -->
-
-      <div class="resourceConfiguration flex flex-column">
-        <h4>Resource Configuration</h4>
-        <div class="input flex flex-column">
-          <label for="Cpu">CPU</label>
-          <input required type="text" id="cpuNum" v-model="cpuNum" />
-          <span v-if="errors.Cpu">{{ errors.cpuNum }}</span>
-        </div>
-
-        <div class="input flex flex-column">
-          <label for="MaxCpu">Max CPU</label>
-          <input required type="text" id="maxCpu" v-model="maxCpu" />
-          <span v-if="errors.MaxCpu">{{ errors.MaxCpu }}</span>
-        </div>
-        <div class="input flex flex-column">
-          <label for="Memory">Memory</label>
-          <input required type="text" id="memoryInMegabytes" v-model="MemoryInMegabytes" />
-          <span v-if="errors.Memory">{{ errors.Memory }}</span>
-        </div>
-
-        <div class="resources-details flex">
-          <div class="input flex flex-column">
-            <label for="MaxMemory">Max Memory</label>
-            <input required type="text" id="maxMemory" v-model="maxMemory" />
-            <span v-if="errors.MaxMemory">{{ errors.MaxMemory }}</span>
-          </div>
-          <div class="input flex flex-column">
-            <label for="Storage">Storage</label>
-            <input required type="text" id="storageCapacity" v-model="storageCapacity" />
-            <span v-if="errors.Storage">{{ errors.Storage }}</span>
-          </div>
-
-        </div>
-      </div>
-
-      <div class="sslConfiguration flex flex-column">
-        <h4>SSL Configuration</h4>
-        <div class="input flex flex-column">
-          <label for="secure">Secure</label>
-          <input required type="text" id="Secure" v-model="Secure" />
-          <span v-if="errors.Secure">{{ errors.Secure }}</span>
-        </div>
-        </div>
-
-      <!-- Virtual Machine Work Details -->
-      <div class="virtual-machine-work flex flex-column">
-        <div class="payment flex">
-
-          <div class="input flex flex-column">
-            <label for="virtualMachineCreationDate">Creation Date</label>
-            <input disabled type="text" id="virtualMachineCreationDate" v-model="virtualMachineCreationDate" />
-          </div>
-
-          <div class="input flex flex-column">
-            <label for="paymentDueDate">Payment Due</label>
-            <input disabled type="text" id="paymentDueDate" v-model="paymentDueDate" />
-          </div>
-
-        </div>
-
-        <div class="input flex flex-column">
-          <label for="paymentTerms">Payment Terms</label>
-          <select required type="text" id="paymentTerms" v-model="paymentTerms">
-            <option value="30">Net 30 Days</option>
-            <option value="60">Net 60 Days</option>
-          </select>
-        </div>
-
-        <div class="work-items">
-          <h3>Virtual Machines</h3>
-          <table class="item-list">
-
-            <tr class="table-heading flex">
-              <th class="item-name">ID</th>
-              <th class="qty">Name</th>
-              <th class="price">Status</th>
-              <th class="total">Price Per Day</th>
-              <th class="total">Total this Month</th>
-            </tr>
-
-            <tr class="table-items flex" v-for="(VirtualMachine, index) in VirtualMachineItemList" :key="index">
-              <td class="virtual-machine-id"><input type="text" v-model="VirtualMachine.VirtualMachineId" /></td>
-              <td class="virtual-machine-name"><input type="text" v-model="VirtualMachine.VirtualMachineName" /></td>
-              <td class="status"><input type="text" v-model="VirtualMachine.Status" /></td>
-              <td class="price"><input type="text" v-model="VirtualMachine.Price" /></td>
-              <td class="total flex">${{ VirtualMachine.TotalThisMonth }}</td>
-              <img @click="deleteVirtualMachine(VirtualMachine.VirtualMachineId)" src="@/assets/icon-delete.svg" alt="" />
-            </tr>
-
-          </table>
-
-          <div @click="CreateNewVirtualMachine" class="flex button">
-            <img src="@/assets/icon-plus.svg" alt="" />
-            Add New Virtual Machine
-          </div>
-
-        </div>
-      </div>
-
-      <!-- Save/Exit -->
-      <div class="save flex">
-        <div class="left">
-          <button type="button" @click="closeVirtualMachineSettings" class="red">Cancel</button>
-        </div>
-        <div class="right flex">
-          <button v-if="!updateVirtualMachine" type="submit" @click="saveVirtualMachineDraft" class="dark-purple">Save Draft</button>
-          <button v-if="!updateVirtualMachine" type="submit" @click="CreateNewVirtualMachine" class="purple">Create New Virtual Machine</button>
-          <button v-if="updateVirtualMachine" type="sumbit" class="purple">Update Virtual Machine</button>
-        </div>
-      </div>
-    </form>
-  </div>
+  <initializationModal />
 </template>
 
 <script>
 
 /* eslint-disable no-unused-vars */
-
-/* eslint-disable vue/no-unused-components */
-
 
 import { mapActions, mapMutations, mapState } from "vuex";
 import { uid } from "uid";
@@ -217,17 +21,41 @@ export const InitializationFormValidator {
   props: {
     FieldsSpecifications: {
       // Contains Field Name + Property Type
+      Datacenter: {},
+      OS: {},
+      Tool: {},
+      Resources: {},
+      SSH: {},
     }
   },
   data() {
     return {
-      errors: {},
+      errors: {
+        Datacenter: {},
+        OS: {},
+        Tool: {},
+        Resources: {},
+        SSH: {},
+      },
     }
   },
   methods: {
 
+    ValidateDatacenter() {
+        // Validates Selected Datacenter by the Customer
+    },
+    ValidateOs() {
+        //  Validates Operational System, picked up by the Customer
+    },
+    ValidateResources() {
+        // Validates Resources, Selected by the Customer
+    },
+    ValidateSsh() {
+        // Validates SSH Option, selected by the Customer
+    }
+
     Validate() {
-      // Validates Input depending on the Type of the Field
+      // Validates the Entire Form, filled up by the Customer
     }
   },
   computed: {
@@ -248,6 +76,81 @@ export const hardwareConfiguration = {
       AddedOperationalSystem: null,
       AddedPreInstalledTools: [],
     }
+  },
+
+  render() {
+    return `<div class="hardwareConfiguration flex flex-column">
+            <h4>Hardware Configuration</h4>
+
+            <div class="input flex flex-column">
+              <label for="Datacenter">Datacenter</label>
+              <input required type="text" id="Datacenter" v-model="Datacenter" />
+            </div>
+
+            <table v-if="Datacenters.length > 0" class="item-list">
+
+                <tr class="table-heading flex">
+                  <th class="item-name"></th>
+                </tr>
+
+                <tr class="table-items flex" v-for="(Datacenter, index) in Datacenters" :key="index">
+                  <td class="item-name"><input type="text" v-model="Datacenter.DatacenterName" /></td>
+
+                  <img @click="selectDatacenter(Datacenter.DatacenterName)" v-if="Datacenter != AddedDatacenter" src="@/assets/icon-delete.svg" alt="" />
+                  <img v-else="unSelecteDatacenter(Datacenter.DatacenterName)" />Remove</img>
+
+                  <span v-if="errors['Datacenter'][Datacenter.DatacenterName]">{{ errors['Datacenter'][Datacenter.DatacenterName] }}</span>
+
+                </tr>
+              </table>
+
+              <div class="input flex flex-column">
+              <label for="Datacenter">Operational System</label>
+              <input required type="text" id="Datacenter" v-model="OperationalSystem" /
+              </div>
+
+            <table v-if="OperationalSystems.length > 0" class="item-list">
+
+                  <tr class="table-heading flex">
+                  <th class="item-name">Name</th>
+                  <th class="item-name">Version</th>
+                  </tr>
+
+                  <tr class="table-items flex" v-for="(OperationalSystem, index) in OperationalSystems" :key="index">
+                    <td class="item-name"><input type="text" v-model="OperationalSystem.Name" /></td>
+                    <td class="item-name"><input type="text" v-model="OperationalSystem.Version" /></td>
+
+
+                    <img @click="selectOperationalSystem(OperationalSystem.Name)" v-if="OperationalSystem " src="@/assets/icon-delete.svg" alt="" />
+                    <img v-else="unSelectOperationalSystem(OperationalSystem.Name)" />Remove</img>
+
+                    <span v-if="errors['OS'][OperationalSystem.SystemName]">{{ errors['OS'][OperationalSystem.SystemName] }}</span>
+
+                  </tr>
+              </table>
+
+            <div class="input flex flex-column">
+              <label for="Datacenter">Pre Installed Tools</label>
+              <input required type="text" id="Datacenter" v-model="PreInstalledTool" />
+            </div>
+
+            <table v-if="PreInstalledTools.length > 0" class="item-list">
+
+                    <tr class="table-heading flex">
+                        <th class="item-name">Tool</th>
+                        <th class="item-name">Version</th>
+                    </tr>
+                    <tr class="table-items flex" v-for="(Tool, index) in PreInstalledTools" :key="index">
+                        <td class="item-name"><input type="text" v-model="Tool.Name"/></td>
+                        <td class="item-name"><input type="text" v-model="Tool.Version" /></td>
+
+                        <img @click="addPreInstalledTools(Tool.Name)" v-if="!(Tool in AddedPreInstalledTools)" src="@/assets/icon-delete.svg" alt="" />
+                        <img v-else="unSelectPreInstalledTool(Tool.Name)" src="@/assets/icon-delete.svg" />Remove</img>
+
+                        <span v-if="errors['Tool'][Tool.Name]">{{ errors['Tool'][Tool.Name] }}</span>
+                    </tr>
+              </table>
+          </div>`
   },
 
   created() {
@@ -295,23 +198,29 @@ export const hardwareConfiguration = {
     },
     selectPreInstalledTools(ToolName) {
       // Adds pre Installed Tools to the Array
-      this.PreInstalledTools.push(ToolName)
+      this.AddedPreInstalledTools.push(ToolName)
     },
 
     unSelectDatacenter() {
-
+      this.AddedDatacenter = null
     },
+
     unSelectOperationalSystem() {
-
+      this.AddedOperationalSystem = null
     },
-    unSelectPreInstalledTool(Tool) {
 
+    unSelectPreInstalledTool(ToolName) {
+      NewSelectedItemTools = this.AddedPreInstalledTools.filter((Tool) => {
+        return Tool.Name !=== ToolName
+      })
+      this.AddedPreInstalledTools = NewSelectedItemTools
     },
     markAsSelected() {
       // Marks Element as Selected
     },
   }
 };
+
 
 export const resourceConfiguration = {
 
@@ -329,6 +238,42 @@ export const resourceConfiguration = {
   },
   created() {
     this.GetVirtualMachineInfo()
+  },
+  render() {
+    return `<div class="resourceConfiguration flex flex-column">
+          <h4>Resource Configuration</h4>
+          <div class="input flex flex-column">
+            <label for="CpuNum">CPU</label>
+            <input required type="text" id="CpuNum" v-model="CpuNum" />
+            <span v-if="errors['Resources']['CpuNum']">{{ errors['Resources']['CpuNum'] }}</span>
+          </div>
+
+          <div class="input flex flex-column">
+            <label for="MaxCpu">Max CPU</label>
+            <input required type="text" id="MaxCpu" v-model="MaxCpu" />
+            <span v-if="errors['Resources']['MaxCpu']">{{ errors['Resources']['MaxCpu'] }}</span>
+          </div>
+          <div class="input flex flex-column">
+            <label for="MemoryInMegabytes">Memory</label>
+            <input required type="text" id="MemoryInMegabytes" v-model="MemoryInMegabytes" />
+            <span v-if="errors['Resources']['MemoryInMegabytes']">{{ errors['Resources']['MemoryInMegabytes'] }}</span>
+          </div>
+
+          <div class="resources-details flex">
+            <div class="input flex flex-column">
+              <label for="MaxMemory">Max Memory</label>
+              <input required type="text" id="maxMemory" v-model="maxMemory" />
+              <span v-if="errors['Resources']['MaxMemory']">{{ errors['Resources']['MaxMemory'] }}</span>
+            </div>
+            <div class="input flex flex-column">
+              <label for="Storage">Storage</label>
+              <input required type="text" id="storageCapacity" v-model="storageCapacity" />
+              <span v-if="errors['Resources']['StorageInKB']">{{ errors['Resources']['StorageINKB'] }}</span>
+            </div>
+
+          </div>
+        </div>
+`
   },
   methods: {
     GetVirtualMachineInfo() {
@@ -361,6 +306,16 @@ export const sslConfiguration = {
   },
   created() {
     this.GetVirtualMachineInfo()
+  },
+  render() {
+    return `<div class="sslConfiguration flex flex-column">
+        <h4>SSL Configuration</h4>
+        <div class="input flex flex-column">
+          <label for="secure">Secure</label>
+          <input required type="text" id="Secure" v-model="Secure" />
+          <span v-if="errors['SSH']['Secure']">{{ errors['SSH']['Secure'] }}</span>
+        </div>
+        </div>`
   },
   methods: {
     GetVirtualMachineSSLRootInfo() {
@@ -400,6 +355,7 @@ export default {
     };
   },
   components: {
+    InitializationFormValidator,
     loadingPage,
     hardwareConfiguration,
     resourceConfiguration,
@@ -422,6 +378,96 @@ export default {
       this.VirtualMachineDraft = currentVirtualMachine.VirtualMachineDraft;
       this.VirtualMachineItemList = currentVirtualMachine.VirtualMachineItemList;
     }
+  },
+  render() {
+    return `<div @click="checkClick" ref="virtualMachineWrap" class="virtualMachineWrap flex flex-column">
+        <form @submit.prevent="submitForm" class="virtual-machine-content">
+          <Loading v-show="loading" />
+
+          <h1 v-if="!updateVirtualMachine">New Virtual Machine</h1>
+          <h1 v-else>Update VirtualMachine</h1>
+
+          <!-- Hardware Configuration  -->
+
+          <hardwareConfiguration />
+
+          <!-- resource Configuration -->
+
+          <resourceConfiguration />
+
+          <!-- SSH Configuration -->
+
+          <sslConfiguration />
+
+          <!-- Virtual Machine Work Details -->
+          <div class="virtual-machine-work flex flex-column">
+            <div class="payment flex">
+
+              <div class="input flex flex-column">
+                <label for="virtualMachineCreationDate">Creation Date</label>
+                <input disabled type="text" id="virtualMachineCreationDate" v-model="virtualMachineCreationDate" />
+              </div>
+
+              <div class="input flex flex-column">
+                <label for="paymentDueDate">Payment Due</label>
+                <input disabled type="text" id="paymentDueDate" v-model="paymentDueDate" />
+              </div>
+
+            </div>
+
+            <div class="input flex flex-column">
+              <label for="paymentTerms">Payment Terms</label>
+              <select required type="text" id="paymentTerms" v-model="paymentTerms">
+                <option value="30">Net 30 Days</option>
+                <option value="60">Net 60 Days</option>
+              </select>
+            </div>
+
+            <div class="work-items">
+              <h3>Virtual Machines</h3>
+              <table class="item-list">
+
+                <tr class="table-heading flex">
+                  <th class="item-name">ID</th>
+                  <th class="qty">Name</th>
+                  <th class="price">Status</th>
+                  <th class="total">Price Per Day</th>
+                  <th class="total">Total this Month</th>
+                </tr>
+
+                <tr class="table-items flex" v-for="(VirtualMachine, index) in VirtualMachineItemList" :key="index">
+                  <td class="virtual-machine-id"><input type="text" v-model="VirtualMachine.VirtualMachineId" /></td>
+                  <td class="virtual-machine-name"><input type="text" v-model="VirtualMachine.VirtualMachineName" /></td>
+                  <td class="status"><input type="text" v-model="VirtualMachine.Status" /></td>
+                  <td class="price"><input type="text" v-model="VirtualMachine.Price" /></td>
+                  <td class="total flex">$ {{ VirtualMachine.TotalThisMonth }}</td>
+                  <img @click="deleteVirtualMachine(VirtualMachine.VirtualMachineId)" src="@/assets/icon-delete.svg" alt="" />
+                </tr>
+
+              </table>
+
+              <div @click="CreateNewVirtualMachine" class="flex button">
+                <img src="@/assets/icon-plus.svg" alt="" />
+                Add New Virtual Machine
+              </div>
+
+            </div>
+          </div>
+
+          <!-- Save/Exit -->
+
+          <div class="save flex">
+            <div class="left">
+              <button type="button" @click="closeVirtualMachineSettings" class="red">Cancel</button>
+            </div>
+            <div class="right flex">
+              <button v-if="!updateVirtualMachine" type="submit" @click="saveVirtualMachineDraft" class="dark-purple">Save Draft</button>
+              <button v-if="!updateVirtualMachine" type="submit" @click="CreateNewVirtualMachine" class="purple">Create New Virtual Machine</button>
+              <button v-if="updateVirtualMachine" type="sumbit" class="purple">Update Virtual Machine</button>
+            </div>
+          </div>
+        </form>
+      </div>`
   },
 
   methods: {
@@ -472,6 +518,7 @@ export default {
       // Initializes New Virtual Machine
 
       // Initializing New Resources
+
       let CpuResources = new preparer.CpuResources(
       customizedConfigurationData["Resources"]["Cpu"])
 
@@ -484,11 +531,19 @@ export default {
       let DatacenterResources = new preparer.DatacenterResources(
       hardwareConfiguration["Datacenter"])
 
+      let OperationalSystemResources = new preparer.OperationalSystemResources(
+      hardwareConfiguration["OS"])
+
+      let PreInstalledTools = new preparer.PreInstalledTools(
+      hardwareConfiguration["PreInstalledTools"])
+
       let StorageResources = new preparer.StorageResources(
       customizedConfigurationData["Storage"]["Capacity"])
 
       let MetadataResources = new preparer.MetadataResources(
       customizedConfigurationData["Metadata"])
+
+
 
       let HardwareConfiguration = new preparer.HardwareConfiguration(DatacenterResources)
       let CustomizedConfiguration = new preparer.CustomizedConfiguration(CpuResources, MemoryResources, MetadataResources, StorageResources, SslResources)

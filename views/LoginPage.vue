@@ -10,9 +10,16 @@
 
 /* eslint-disable no-unused-vars */
 
-import * as customers from "../customers/customers.js"
+import * as customers from "../customers/customers.js";
+import {mapMutations} from "vuex";
 
 export const LoginValidator {
+  data() {
+    return {
+      username: null,
+      password: null,
+    }
+  },
   methods: {
     Validate() {
       // Validates Input, that has been Passed to the Form
@@ -32,6 +39,7 @@ export default {
     }
   },
   methods: {
+    ...mapMutations(["SHOW_ERROR"])
     Login(Username, Password) {
       // Logs Customer Inside and Setting up new Refreshed JWT Token
       let ValidData, ValidError = this.ValidateInput(Username, Password)

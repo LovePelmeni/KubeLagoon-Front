@@ -161,21 +161,21 @@ button,
   padding: 8px 30px;
   border-radius: 10px;
 }
-.paid {
+.running {
   &::before {
     background-color: #33d69f;
   }
   color: #33d69f;
   background-color: rgba(51, 214, 160, 0.1);
 }
-.pending {
+.deploying {
   &::before {
     background-color: #ff8f00;
   }
   color: #ff8f00;
   background-color: rgba(255, 145, 0, 0.1);
 }
-.draft {
+.shutdown {
   &::before {
     background-color: #dfe3fa;
   }

@@ -11,26 +11,52 @@
 /* eslint-disable no-unused-vars */
 
 import * as customers from "../customers/customers.js"
+import {mapMutations} from "vuex"
 
-export default {
-  name: "RegistrationPage",
+export const RegistrationValidator {
+  name: "RegistrationValidator",
+  methods: {
+    Validate() {
+      // Validates Input of the Registration Form
+    }
+  },
+  created() {
+    this.Validate()
+  },
   data() {
     return {
       Username: null,
       Email: null,
       Password: null,
+
+      Country: null,
+      ZipCode: null,
+      Street: null,
+    }
+  }
+};
+
+export default {
+  name: "RegistrationPage",
+  data() {
+    return {
+      // Customer Info
+      Username: null,
+      Email: null,
+      Password: null,
+
+      // Location Parameters
+      Country: null,
+      ZipCode: null,
+      Street: null,
     }
   },
+  components: {
+    RegisrationValidator,
+  },
   methods: {
-    showError(Error) {
-      // Showing Up an Exception Banner
-    },
-    ValidateInput(Username, Email, Password) {
-      // Validates Registration Input
-      let newValidator = new customers.RegistrationValidationInput()
-      let newValidData, Error  = newValidator.ValidateInput(Username, Email, Password)
-      return newValidData, Error
-    },
+    ...mapMutations(["SHOW_ERROR"])
+
     CreateNewCustomer(Username, Email, Password) {
       // Once Customer has been Created, It redirects to the Main Page
 
