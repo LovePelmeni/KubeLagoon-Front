@@ -7,8 +7,6 @@ var BACKEND_APPLICATION_PORT = process.env.BACKEND_APPLICATION_PORT
 
 import $ from "jquery";
 var Url = require("url-parse");
-var newVirtualMachineManager = new VirtualMachineManager()
-
 
 class VirtualMachineManager {
   // Class That Manages Virtual Machine

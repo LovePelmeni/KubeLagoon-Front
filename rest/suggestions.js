@@ -7,6 +7,34 @@ import $ from "jquery";
 
 var Url = require('url-parse');
 
+
+function GetLoadBalancerSuggestionsRestController() {
+  // Returns Array of the Available Load Balancers
+  var APIUrl = new Url("http://%s:%s/suggestions/load/balancer/" % (
+  BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
+  
+  let LoadBalancers, ResponseError = $.ajax({
+    url: APIUrl,
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Credentials": "true",
+    },
+    async: false,
+    method: "GET",
+    success: function(Response) {
+      // Processing an Response
+      if (Response.StatusCode == 200) {
+      return Response.QuerySet, null}
+      return null, Error(Response.Error)
+    },
+    error: function(ResponseError) {
+      // Processing an Response Exception
+      return null, Error(ResponseError)
+    }
+  })
+  return LoadBalancers, ResponseError
+}
+
 function GetDatacenterSuggestionsRestController() {
   //  Returns Array of the Available Datacenters, so Customer can pick up, which one to choose
   var APIUrl = new Url("http://%s:%s/suggestion/datacenter/" % (

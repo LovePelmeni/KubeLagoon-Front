@@ -15,6 +15,7 @@
       <p>To use this app, please use a Laptop or Another Device</p>
     </div>
   </div>
+
 </template>
 
 <script>

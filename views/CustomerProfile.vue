@@ -10,6 +10,8 @@
     <label>Created At</label>
     <a> {{ CreatedAt }}</a>
   </div>
+  <router-view/>
+
 </template>
 
 <script>

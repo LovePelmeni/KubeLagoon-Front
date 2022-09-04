@@ -6,6 +6,11 @@ import * as suggestions from "../rest/suggestions.js"
 
 class SuggestionsManager {
   // Class Represents Suggestion Manager
+
+  GetSuggstedLoadBalancers = function() {
+    // Returns List of the Avaialable Load Balancers
+    return suggestions.GetLoadBalancerSuggestionsRestController()
+  }
   GetSuggestedDatacenters = function(){
     // Returns List of avaialble Datacenters, to deploy your VM Server
     return suggestions.GetDatacenterSuggestionsRestController()

@@ -1,4 +1,46 @@
 <template>
+  <!-- Login Page !-->
+  <LoginPage />
+  <router-view/>
+</template>
+
+<script>
+
+import * as customers from "../customers/customers.js"
+import {mapMutations} from "vuex";
+
+export default {
+  name: 'LoginPage',
+  data: () => ({
+
+    loading:false,
+
+    snackbar:false,
+
+    passwordShow:false,
+
+    Username: '',
+    UsernameRules: [
+      username => !!username || 'Username is required',
+      username => `^[a-z][A-Z][0-9]{1,100}$`.test(username) || 'Invalid Username',
+      username => (username && username.length >= 10) || 'Username should be 10 characters or more!',
+    ],
+
+    Email: '',
+    EmailRules: [
+      email => !!email || 'E-mail is required',
+      email => /.+@.+\..+/.test(email) || 'E-mail must be valid',
+      email => (email && email.length >= 11) || 'E-mail must be at least 11 characters'
+    ],
+
+    Password: '',
+    PasswordRules: [
+      password => !!password || 'Password is required',
+      password => (password && password.length >= 10) || 'Password must be 10 characters or more!',
+    ],
+  }),
+
+  template: `
   <v-app>
     <div class="background"></div>
     <v-main class="d-flex justify-center align-center">
@@ -23,7 +65,7 @@
               />
               <v-text-field
                       v-model="password"
-                      :rules="passwordRules"
+                      :rules="PasswordRules"
                       :type="passwordShow?'text':'password'"
                       label="Password"
                       placeholder="Password"
@@ -47,64 +89,10 @@
       Login success
     </v-snackbar>
   </v-app>
-</template>
-
-<script>
-import * as customers from "../customers/customers.js"
-import {mapMutations} from "vuex";
-
-export default {
-  name: 'LoginPage',
-  data: () => ({
-
-    loading:false,
-
-    snackbar:false,
-
-    passwordShow:false,
-
-    Username: '',
-    UsernameRules: [
-      username => !!username || 'Username is required',
-      username => `^[a-z][A-Z][0-9]{1,100}$`.test(username) || 'Invalid Username'
-    ],
-
-    Email: '',
-    EmailRules: [
-      v => !!v || 'E-mail is required',
-      v => /.+@.+\..+/.test(v) || 'E-mail must be valid',
-    ],
-
-    Password: '',
-    passwordRules: [
-      v => !!v || 'Password is required',
-      v => (v && v.length >= 10) || 'Password must be 10 characters or more!',
-    ],
-
-
-    Country: '',
-    countryRules: [
-      country => !!username || 'Country is required',
-      country => `^[a-z][A-Z][0-9]{1,100}$`.test(username) || 'Invalid Username'
-    ],
-
-
-    ZipCode: '',
-    zipCodeRules: [
-      zipcode => !!username || 'Zip Code is required',
-      zipcode => `^[a-z][A-Z][0-9]{1,100}$`.test(username) || 'Invalid Username'
-    ],
-
-    Street: '',
-      StreetRules: [
-        street => !!username || 'Street is required',
-        street => `^[a-z][A-Z][0-9]{1,100}$`.test(username) || 'Invalid Username'
-    ],
-
-  }),
+  `,
   methods: {
 
-    ...mapMutations(["SHOW_ERROR"])
+    ...mapMutations(["SHOW_ERROR"]),
     submitLoginForm(){
       if (this.$refs.form.validate()){
           this.loading = true
@@ -117,7 +105,7 @@ export default {
     loginCustomer() {
       let newCustomerManager = new customers.CustomerManager()
       let loggedIn, LogError = newCustomerManager.LoginCustomer(this.email, this.password)
-      if (LogError != null){this.SHOW_ERROR(LogError)}
+      if (LogError != null && loggedIn != true){this.SHOW_ERROR(LogError)}
     }
   }
 };
