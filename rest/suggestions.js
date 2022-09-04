@@ -12,7 +12,7 @@ function GetLoadBalancerSuggestionsRestController() {
   // Returns Array of the Available Load Balancers
   var APIUrl = new Url("http://%s:%s/suggestions/load/balancer/" % (
   BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
-  
+
   let LoadBalancers, ResponseError = $.ajax({
     url: APIUrl,
     headers: {
@@ -114,4 +114,11 @@ function GetPreInstallationToolSuggestionsRestController(){
     },
   })
   return Datacenters, DatacentersError
+}
+
+export {
+  GetPreInstallationToolSuggestionsRestController,
+  GetOsSystemsSuggestionsRestController,
+  GetDatacenterSuggestionsRestController,
+  GetLoadBalancerSuggestionsRestController,
 }

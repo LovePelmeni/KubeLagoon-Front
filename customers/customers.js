@@ -1,4 +1,5 @@
-import * as customers_rest from "../rest/customers.js"
+import * as customers_rest from "../rest/customers.js";
+
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-useless-escape */
 
@@ -7,6 +8,13 @@ class CustomerRegistrationForm {
   constructor(Username, Email, Password) {
     this.Username = Username
     this.Email = Email
+    this.Password = Password
+  }
+}
+
+class CustomerLoginForm {
+  constructor(Username, Password) {
+    this.Username = Username
     this.Password = Password
   }
 }
@@ -81,3 +89,5 @@ class CustomerManager {
       return Reset, ResetError
     }
 }
+
+export {CustomerManager, CustomerInputValidator, CustomerRegistrationForm, CustomerLoginForm};

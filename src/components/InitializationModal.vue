@@ -383,7 +383,7 @@ export const resourceConfiguration = {
         storageCapacity => !!storageCapacity || 'This field is required',
         storageCapacity => String(storageCapacity).length == 0 || 'This field is required',
         storageCapacity => Number(storageCapacity) == null || 'Invalid Storage Capacity',
-      ], 
+      ],
 
       MaxCpuRules: [
         maxCpu => !!maxCpu || 'This field is required',

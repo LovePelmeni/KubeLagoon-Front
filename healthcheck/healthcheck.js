@@ -39,3 +39,5 @@ class VirtualMachineHealthStateChecker {
     return JobStopped
   }
 }
+
+export {VirtualMachineHealthStateChecker};

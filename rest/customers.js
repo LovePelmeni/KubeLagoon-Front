@@ -130,3 +130,9 @@ function LogoutCustomerRestController() {
   let Removed = $.RemoveCookie("jwt-token")
   return Removed, null
 }
+
+export {CreateCustomerRestController,
+DeleteCustomerRestController,
+LoginCustomerRestController,
+LogoutCustomerRestController,
+ResetPasswordRestController}

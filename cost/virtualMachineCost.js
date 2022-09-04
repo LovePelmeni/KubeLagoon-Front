@@ -75,3 +75,6 @@ class VirtualMachineCostCalculator {
       return TotalBillCheck
    }
 }
+
+
+export {VirtualMachineCostCalculator, CpuUsageBillCalculator, MemoryUsageBillCalculator, StorageUsageBillCalculator};

@@ -1,6 +1,6 @@
 import * as lb from "../rest/load_balancer_rest.js"
 
-class LoadBalancerInitParams {
+class LoadBalancerConfiguration {
   // Initialization Parameters for the Load Balancer
   constructor(VirtualMachineId) {
     this.VirtualMachineId = VirtualMachineId
@@ -9,8 +9,8 @@ class LoadBalancerInitParams {
 
 class LoadBalancerManager {
   // Interface represents Base Load Balancer Entity
-  constructor(LoadBalancerInitParams) {
-    this.LoadBalancerInitParams = LoadBalancerInitParams
+  constructor(LoadBalancerConfiguration) {
+    this.LoadBalancerInitParams = LoadBalancerConfiguration
   }
   Create = function() {
     // Creates New Load Balancer
@@ -34,3 +34,5 @@ class LoadBalancerManager {
     return Deleted, ResponseError
   }
 }
+
+export {LoadBalancerManager, LoadBalancerConfiguration};

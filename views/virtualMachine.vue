@@ -114,7 +114,7 @@
 import { mapActions, mapMutations, mapState } from "vuex";
 import * as cost from "../cost/virtualMachineCost.js"
 import * as vm from "../vm/vm.js"
-import {newRouter} from "../router/router.js"
+import {router} from "../router/router.js"
 
 export default {
   name: "virtualMachine",
@@ -137,7 +137,7 @@ export default {
 
     RedirectHome() {
       // redirects to the Main Page
-      newRouter.push({name: 'main_page'})
+      router.$refs.push({name: 'main_page'})
     },
 
     getCurrentVirtualMachine() {

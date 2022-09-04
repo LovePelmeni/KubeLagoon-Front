@@ -70,6 +70,32 @@ function ApplyVirtualMachineConfigurationRestController(CustomConfiguration, Vir
 }
 
 
+function DestroyVirtualMachineRestController(VirtualMachineId) {
+  // Rest Controller, deletes Virtual Machine Server, that Customer is desired to
+  var APIUrl = new Url("http://%s:%s/vm/destroy/" % (
+  BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
+  let Response, ResponseError = $.ajax({
+    url: APIUrl,
+    async: false,
+    method: "DELETE",
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Credentials": "true"
+    },
+    success: function(Response) {
+      // Processing Success Response
+      if !(Response.StatusCode in (200, 201)) {
+        return null, Error(Response.Error)
+      }
+    },
+    error: function(ResponseError) {
+      // Processing Error Response
+      return null, Error(ResponseError)
+    }
+  })
+  return Response, ResponseError
+}
+
 function StartVirtualMachineRestController(VirtualMachineId) {
   // Rest Controller, that Starts Virtual Machine
   var APIUrl = new Url("http://%s:%s/os/reboot/" %
@@ -260,4 +286,16 @@ function RebootVmOsRestController(VirtualMachineId) {
     }
   })
   return Response, Error
+}
+
+export {
+  InitializeVirtualMachineRestController,
+        ApplyVirtualMachineConfigurationRestController,
+        DestroyVirtualMachineRestController,
+        StartVirtualMachineRestController,
+        ShutdownVirtualMachineRestController,
+        RebootVirtualMachineRestController,
+        StartVmOsRestController,
+        ShutdownVmOsRestController,
+        RebootVmOsRestController,
 }

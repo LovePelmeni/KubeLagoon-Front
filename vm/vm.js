@@ -136,3 +136,5 @@ class VirtualMachineManager {
     return null, APIException
   }
 }}
+
+export {VirtualMachineManager};

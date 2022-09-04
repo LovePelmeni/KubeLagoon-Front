@@ -89,3 +89,7 @@ function DeleteLoadBalancerRestController(VirtualMachineId) {
   })
   return Response, ResponseError
 }
+
+export {CreateLoadBalancerRestController,
+DeleteLoadBalancerRestController,
+GetLoadBalancerInfoRestController}

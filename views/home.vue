@@ -46,7 +46,6 @@
 
 /* eslint-disable no-unused-vars */
 
-import {virtualMachineInfo} from "../src/components/VirtualMachine.vue";
 import { mapMutations, mapState } from "vuex";
 
 export default {

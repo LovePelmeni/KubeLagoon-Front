@@ -35,3 +35,5 @@ function GetHealthCheckMetricsRestController(VirtualMachineId) {
     return null, Error(APIException)
   }
 }
+
+export {GetHealthCheckMetricsRestController}
