@@ -1,4 +1,4 @@
-<!-- <template>
+<template>
   <router-link class="virtualMachine flex" @onclick="RedirectHome()" :to="{name: 'main_page'}">
   <router-link :to="{ name: 'main_page'}">Go Back</router-link>
 
@@ -206,4 +206,4 @@ export default {
       font-weight: 600px;
     }
   }
-} -->
+}

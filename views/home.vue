@@ -30,9 +30,9 @@
         </div>
       </div>
     </div>
-    <!-- Invoices -->
+    <!-- Virtual Machines -->
     <div v-if="virtualMachineData.length > 0">
-      <Invoice v-for="(VirtualMachine, index) in filteredData" :VirtualMachine="VirtualMachine" :key="index" />
+      <VirtualMachineBannerInfo v-for="(VirtualMachine, index) in filteredData" :VirtualMachine="VirtualMachine" :key="index" />
     </div>
     <div v-else class="empty flex flex-column">
       <img src="@/assets/illustration-empty.svg" alt="" />
@@ -47,6 +47,7 @@
 /* eslint-disable no-unused-vars */
 
 import { mapMutations, mapState } from "vuex";
+import VirtualMachineBannerInfo from "../src/components/VirtualMachineBannerInfo.vue"
 
 export default {
 
@@ -77,6 +78,10 @@ export default {
       }
       this.filteredVirtualMachine = e.target.innerText;
     },
+  },
+
+  components: {
+    VirtualMachineBannerInfo,
   },
 
   computed: {

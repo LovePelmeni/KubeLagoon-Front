@@ -1,8 +1,8 @@
-import { createStore } from "vuex";
 import * as vm from "../vm/vm.js"
 import * as preparer from "../configuration_preparer/preparer.js"
+import Vuex from "vuex";
 
-const store = createStore({
+const store = new Vuex.Store({
   state: {
     virtualMachineData: [],
     initializationModal: null,

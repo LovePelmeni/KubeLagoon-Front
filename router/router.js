@@ -9,7 +9,6 @@ import { createRouter, createWebHistory } from "vue-router";
 
 /* eslint-disable no-unused-vars */
 
-
 const routes = [
   {
     path: '/',
