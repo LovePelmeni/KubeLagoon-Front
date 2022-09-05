@@ -1,7 +1,8 @@
 import { createStore } from "vuex";
 import * as vm from "../vm/vm.js"
+import * as preparer from "../configuration_preparer/preparer.js"
 
-export default createStore({
+const store = createStore({
   state: {
     virtualMachineData: [],
     initializationModal: null,
@@ -41,6 +42,7 @@ export default createStore({
 
     SHOW_ERROR(ErrorMessage) {
       // Shows up Exception Banner
+      console.log(ErrorMessage)
     },
 
     RUN_VIRTUAL_MACHINE(virtualMachineId) {
@@ -59,7 +61,7 @@ export default createStore({
 
     INSERT_NEW_VIRTUAL_MACHINE(list, virtualMachine) {
       // Inserts new Virtual Machine Objecg  Inside the List
-      list = list.push({
+      list.push({
 
                     // General Information about the Customer's Virtual Machine
 
@@ -83,14 +85,14 @@ export default createStore({
                     paymentDueDate: virtualMachine.paymentCreatedAt,
 
                     // Information about the Customer Billing Account and where the Payments Is Going to be Addressed
-                    billerStreetAddress: currentVirtualMachine.billerStreetAddress,
-                    billerStreetCity: currentVirtualMachine.billerCity,
-                    billerZipCode: currentVirtualMachine.billerZipCode,
-                    billerCountry: currentVirtualMachine.billerCountry,
+                    billerStreetAddress: virtualMachine.billerStreetAddress,
+                    billerStreetCity: virtualMachine.billerCity,
+                    billerZipCode: virtualMachine.billerZipCode,
+                    billerCountry: virtualMachine.billerCountry,
 
                     // Description
                     virtualMachineItemList: virtualMachine.VirtualMachineItemList,
-                    TotalCost: doc.data().invoiceTotal,
+                    TotalCost: virtualMachine.TotalCost,
 
                     Running: virtualMachine.Running,
                     Shutdown: virtualMachine.Shutdown,
@@ -100,45 +102,45 @@ export default createStore({
 
     UPDATE_INSERT_VIRTUAL_MACHINE(list, virtualMachineId, UpdatedVirtualMachineData) {
 
-      oldVirtualMachine = list.filter((virtualMachine) => {
+      let oldVirtualMachine = list.filter((virtualMachine) => {
         return virtualMachine.VirtualMachineId === virtualMachineId;
       });
 
       if (oldVirtualMachine != null){
                     // General Information about the Customer's Virtual Machine
 
-                    oldVirtualMachine.virtualMachineId: UpdatedVirtualMachineData.VirtualMachineid,
-                    oldVirtualMachine.virtualMachineName: UpdatedVirtualMachineData.VirtualMachineName,
-                    oldVirtualMachine.clientEmail: UpdatedVirtualMachineData.OwnerEmail,
+                    oldVirtualMachine.virtualMachineId =  UpdatedVirtualMachineData.VirtualMachineid,
+                    oldVirtualMachine.virtualMachineName =  UpdatedVirtualMachineData.VirtualMachineName,
+                    oldVirtualMachine.clientEmail = UpdatedVirtualMachineData.OwnerEmail,
 
                     // SSH Credentials for the Virtual Machine
-                    oldVirtualMachine.RootUsername: UpdatedVirtualMachineData.Ssh.RootUsername,
-                    oldVirtualMachine.RootPassword: UpdatedVirtualMachineData.Ssh.RootPassword,
-                    oldVirtualMachine.Secure: UpdatedVirtualMachineData.Ssh.Secure,
-                    oldVirtualMachine.RootCertificate: UpdatedVirtualMachineData.RootCertificate,
+                    oldVirtualMachine.RootUsername = UpdatedVirtualMachineData.Ssh.RootUsername
+                    oldVirtualMachine.RootPassword = UpdatedVirtualMachineData.Ssh.RootPassword
+                    oldVirtualMachine.Secure = UpdatedVirtualMachineData.Ssh.Secure
+                    oldVirtualMachine.RootCertificate = UpdatedVirtualMachineData.RootCertificate
 
                     // Creation Date Info
-                    oldVirtualMachine.virtualMachineDateUnix: UpdatedVirtualMachineData.CreatedAt.Unix(),
-                    oldVirtualMachine.virtualMachineDate: UpdatedVirtualMachineData.CreatedAt,
+                    oldVirtualMachine.virtualMachineDateUnix = UpdatedVirtualMachineData.CreatedAt.Unix()
+                    oldVirtualMachine.virtualMachineDate = UpdatedVirtualMachineData.CreatedAt
 
                     // Pay Terms + Setting up Current Date for the Payment
-                    oldVirtualMachine.paymentTerms: UpdatedVirtualMachineData.PaymentTerms,
-                    oldVirtualMachine.paymentDueDateUnix: UpdatedVirtualMachineData.paymentCreatedAt.Unix(),
-                    oldVirtualMachine.paymentDueDate: UpdatedVirtualMachineData.paymentCreatedAt,
+                    oldVirtualMachine.paymentTerms = UpdatedVirtualMachineData.PaymentTerms
+                    oldVirtualMachine.paymentDueDateUnix =  UpdatedVirtualMachineData.paymentCreatedAt.Unix()
+                    oldVirtualMachine.paymentDueDate = UpdatedVirtualMachineData.paymentCreatedAt
 
                     // Information about the Customer Billing Account and where the Payments Is Going to be Addressed
-                    oldVirtualMachine.billerStreetAddress: UpdatedVirtualMachineData.billerStreetAddress,
-                    oldVirtualMachine.billerStreetCity: UpdatedurrentVirtualMachineData.billerCity,
-                    oldVirtualMachine.billerZipCode: UpdatedVirtualMachineData.billerZipCode,
-                    oldVirtualMachine.billerCountry: UpdatedVirtualMachineData.billerCountry,
+                    oldVirtualMachine.billerStreetAddress = UpdatedVirtualMachineData.billerStreetAddress
+                    oldVirtualMachine.billerStreetCity = UpdatedVirtualMachineData.billerCity
+                    oldVirtualMachine.billerZipCode = UpdatedVirtualMachineData.billerZipCode
+                    oldVirtualMachine.billerCountry = UpdatedVirtualMachineData.billerCountry
 
                     // Description
-                    oldVirtualMachine.virtualMachineItemList: UpdatedVirtualMachineData.VirtualMachineItemList,
-                    oldVirtualMachine.TotalCost: UpdatedVirtualMachineData.TotalCost,
+                    oldVirtualMachine.virtualMachineItemList = UpdatedVirtualMachineData.VirtualMachineItemList
+                    oldVirtualMachine.TotalCost = UpdatedVirtualMachineData.TotalCost
 
-                    oldVirtualMachine.Running: UpdatedVirtualMachineData.Running,
-                    oldVirtualMachine.Shutdown: UpdatedVirtualMachineData.Shutdown,
-                    oldVirtualMachine.Deploying: UpdatedVirtualMachineData.Deploying,
+                    oldVirtualMachine.Running = UpdatedVirtualMachineData.Running
+                    oldVirtualMachine.Shutdown = UpdatedVirtualMachineData.Shutdown
+                    oldVirtualMachine.Deploying = UpdatedVirtualMachineData.Deploying
     }},
 
     CREATE_VIRTUAL_MACHINE(state, payload) {
@@ -148,19 +150,24 @@ export default createStore({
       let vmManager = new vm.VirtualMachineManager()
 
       // Initializing Hardware Configuration
-      let hardwareConfiguration = new preparer.hardwareConfiguration()
+      let hardwareConfiguration = new preparer.hardwareConfiguration(payload["hardwareConfiguration"])
 
       // Initializing Customized Configuration with the Resources, Custom OS, Preinstalled Tools etc...
-      let customizedConfiguration = new preparer.customizedConfiguration()
+      let customizedConfiguration = new preparer.customizedConfiguration(payload["customizedConfiguration"])
 
       // Initializing Empty Virtual Machine Server Instance
       let initialized, initializationError = vmManager.InitializeVirtualMachine(hardwareConfiguration)
 
-        if (initialized && initializionError == null) {
+        if (initialized && initializationError == null) {
           // Applying Customized Configuration
 
           let appliedInfo, applyError = vmManager.ApplyConfiguration(customizedConfiguration)
-          if (applyError != null) {
+          if (applyError != null && appliedInfo != null) {
+            let virtualMachine = vmManager.GetVirtualMachine(appliedInfo["VirtualMachineId"])
+            virtualMachine["Running"] = true
+            virtualMachine["Shutdown"] = false
+            virtualMachine["Deploying"] = false
+            this.INSERT_NEW_VIRTUAL_MACHINE(state.VirtualMachineData, virtualMachine)
             return appliedInfo, applyError
           }else{
             this.SHOW_ERROR("Failed to Apply Configuration")
@@ -172,13 +179,13 @@ export default createStore({
         }
     },
 
-    DELETE_VIRTUAL_MACHINE(state, payload, virtualMachineId) {
+    DELETE_VIRTUAL_MACHINE(state, payload) {
       // Deletes Virtual Machine Server
       let vmManager = new vm.VirtualMachineManager()
-      let deleted, deletionError = vmManager.DeleteVirtualMachine()
+      let deleted, deletionError = vmManager.DeleteVirtualMachine(payload["VirtualMachineId"])
       if (deleted && deletionError == null) {
         state.VirtualMachineData = state.VirtualMachineData.filter(
-        (virtualMachineId) => virtualMachine.VirtualMachineId !== payload);
+        (virtualMachine) => virtualMachine !== payload);
       }else {
         this.SHOW_ERROR("Failed to Delete Virtual Machine")
       }
@@ -193,9 +200,10 @@ export default createStore({
 
       let updatedInfo, updateError = vmManager.UpdateVirtualMachine(virtualMachineId, hardwareConfiguration, customizedConfiguration)
       if (updateError == null) {
-        let virtualMachine = vmManager.GetVirtualMachine(updatedInfo["VirtualMachineId"])
 
+        let virtualMachine = vmManager.GetVirtualMachine(updatedInfo["VirtualMachineId"])
         this.INSERT_NEW_VIRTUAL_MACHINE(state.virtualMachineData, virtualMachine)
+
       }else{
         this.SHOW_ERROR("Failed To Update Virtual Machine")
       }
@@ -203,7 +211,7 @@ export default createStore({
 
     UPDATE_STATUS_TO_RUNNING(state, payload) {
       // Updates Visualized Status to Running
-      state.invoiceData.forEach((invoice) => {
+      state.virtualMachineData.forEach((virtualMachine) => {
         if (virtualMachine.VirtualMachineId === payload) {
           virtualMachine.Running = true;
           virtualMachine.Shutdown = false;
@@ -235,14 +243,22 @@ export default createStore({
     },
   },
   actions: {
-    async GET_VIRTUAL_MACHINES({ commit, state }) {
+
+    GET_VIRTUAL_MACHINE(VirtualMachineId) {
+      // Returns A Virtual Machine Server Object Info
+      let virtualMachineManager = new vm.VirtualMachineManager()
+      let virtualMachine = virtualMachineManager.GetVirtualMachine(VirtualMachineId)
+      return virtualMachine
+    },
+
+    GET_VIRTUAL_MACHINES({ commit, state }) {
       // Returns List of the Virtual Machine Servers, belongs To Customer
 
       let VirtualMachineManager = new vm.VirtualMachineManager()
       const results = VirtualMachineManager.GetVirtualMachines()
 
       results.forEach((virtualMachine) => {
-        if (!state.VirtualMachineData.some((virtualMachine) => virtualMachine.VirtualMachineId === virtualMachine.id)) {
+        if (!state.VirtualMachineData.some((virtualMachine) => virtualMachine.VirtualMachineId === virtualMachine.VirtualMachineId)) {
           const data = {
 
             // General Information about the Customer's Virtual Machine
@@ -267,14 +283,14 @@ export default createStore({
             paymentDueDate: virtualMachine.paymentCreatedAt,
 
             // Information about the Customer Billing Account and where the Payments Is Going to be Addressed
-            billerStreetAddress: currentVirtualMachine.billerStreetAddress,
-            billerStreetCity: currentVirtualMachine.billerCity,
-            billerZipCode: currentVirtualMachine.billerZipCode,
-            billerCountry: currentVirtualMachine.billerCountry,
+            billerStreetAddress: virtualMachine.billerStreetAddress,
+            billerStreetCity: virtualMachine.billerCity,
+            billerZipCode: virtualMachine.billerZipCode,
+            billerCountry: virtualMachine.billerCountry,
 
             // Description
             virtualMachineItemList: virtualMachine.VirtualMachineItemList,
-            TotalCost: doc.data().invoiceTotal,
+            TotalCost: virtualMachine.TotalCost,
 
             Running: virtualMachine.Running,
             Shutdown: virtualMachine.Shutdown,
@@ -301,3 +317,6 @@ export default createStore({
   },
   modules: {},
 });
+
+
+export { store };
