@@ -3,7 +3,7 @@
     <router-link class="nav-link flex" :to="{ name: 'main_page' }">
       <img src="@/assets/icon-arrow-left.svg" @click="RedirectHome()" alt="" /> Go Back
     </router-link>
-    <router-view/>
+    <router-view></router-view>
 
     <!-- Header -->
 

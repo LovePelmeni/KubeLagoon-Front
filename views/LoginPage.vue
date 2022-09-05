@@ -1,7 +1,7 @@
 <template>
   <!-- Login Page !-->
   <LoginPage />
-  <router-view/>
+  <router-view></router-view>
 </template>
 
 <script>

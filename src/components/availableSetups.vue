@@ -11,7 +11,7 @@ export default {
   methods: {
     GetAvailableSetupSuggestions() {
       // Returns Available Setup Suggestions
-    }
+    },
   }
 }
 </script>

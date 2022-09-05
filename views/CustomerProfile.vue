@@ -10,7 +10,7 @@
     <label>Created At</label>
     <a> {{ CreatedAt }}</a>
   </div>
-  <router-view/>
+  <router-view></router-view>
 
 </template>
 

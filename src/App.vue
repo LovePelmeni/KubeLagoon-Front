@@ -1,6 +1,5 @@
 <script>
 
-
 /* eslint-disable no-unused-vars */
 
 import { mapState, mapActions } from "vuex";

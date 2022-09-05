@@ -2,7 +2,7 @@ import * as vm from "../vm/vm.js"
 import * as preparer from "../configuration_preparer/preparer.js"
 import Vuex from "vuex";
 
-const store = new Vuex.Store({
+export default new Vuex.Store({
   state: {
     virtualMachineData: [],
     initializationModal: null,
@@ -255,9 +255,9 @@ const store = new Vuex.Store({
       // Returns List of the Virtual Machine Servers, belongs To Customer
 
       let VirtualMachineManager = new vm.VirtualMachineManager()
-      const results = VirtualMachineManager.GetVirtualMachines()
+      let results = VirtualMachineManager.GetVirtualMachines()
 
-      results.forEach((virtualMachine) => {
+      for (let virtualMachine in results){
         if (!state.VirtualMachineData.some((virtualMachine) => virtualMachine.VirtualMachineId === virtualMachine.VirtualMachineId)) {
           const data = {
 
@@ -298,7 +298,7 @@ const store = new Vuex.Store({
           };
           commit("SET_VIRTUAL_MACHINE_DATA", data);
         }
-      });
+      }
       commit("VIRTUAL_MACHINES_LOADED");
     },
 
@@ -317,6 +317,3 @@ const store = new Vuex.Store({
   },
   modules: {},
 });
-
-
-export { store };
