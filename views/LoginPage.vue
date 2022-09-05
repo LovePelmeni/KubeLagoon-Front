@@ -7,7 +7,7 @@
 <script>
 
 import * as customers from "../customers/customers.js"
-import {mapMutations} from "vuex";
+import { mapMutations } from "vuex";
 
 export default {
   name: 'LoginPage',
@@ -24,13 +24,6 @@ export default {
       username => !!username || 'Username is required',
       username => `^[a-z][A-Z][0-9]{1,100}$`.test(username) || 'Invalid Username',
       username => (username && username.length >= 10) || 'Username should be 10 characters or more!',
-    ],
-
-    Email: '',
-    EmailRules: [
-      email => !!email || 'E-mail is required',
-      email => /.+@.+\..+/.test(email) || 'E-mail must be valid',
-      email => (email && email.length >= 11) || 'E-mail must be at least 11 characters'
     ],
 
     Password: '',

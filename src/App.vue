@@ -1,31 +1,12 @@
-<template>
-  <div v-if="virtualMachineLoaded">
-    <div v-if="!mobile" class="app flex flex-column">
-      <navigationPage />
-      <div class="app-content flex flex-column">
-        <modalPage v-if="modalActive" />
-        <transition name="virtualMachine">
-          <initializationModal v-if="initializationModal" />
-        </transition>
-        <router-view />
-      </div>
-    </div>
-    <div v-else class="mobile-message flex flex-column">
-      <h2>Sorry, this app is not supported on Mobile Devices</h2>
-      <p>To use this app, please use a Laptop or Another Device</p>
-    </div>
-  </div>
-
-</template>
-
 <script>
+
 
 /* eslint-disable no-unused-vars */
 
 import { mapState, mapActions } from "vuex";
-import {navigationPage} from "./components/NavigationPage";
-import {initializationModal} from "./components/InitializationModal";
-import {modalPage} from "./components/ModalWindow";
+import navigationPage from "./components/NavigationPage";
+import initializationModal from "./components/InitializationModal";
+import modalPage from "./components/ModalWindow";
 
 export default {
   name: "App",
@@ -34,6 +15,24 @@ export default {
       mobile: null,
     };
   },
+  template: `
+  <div v-if="virtualMachineLoaded">
+      <div v-if="!mobile" class="app flex flex-column">
+        <navigationPage />
+        <div class="app-content flex flex-column">
+          <modalPage v-if="modalActive" />
+          <transition name="virtualMachine">
+            <initializationModal v-if="initializationModal" />
+          </transition>
+          <router-view />
+        </div>
+      </div>
+      <div v-else class="mobile-message flex flex-column">
+        <h2>Sorry, this app is not supported on Mobile Devices</h2>
+        <p>To use this app, please use a Laptop or Another Device</p>
+      </div>
+    </div>
+  `,
   components: {
     navigationPage,
     initializationModal,

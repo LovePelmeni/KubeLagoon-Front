@@ -1,11 +1,11 @@
-import * as virtual_machine from "../views/virtualMachine.vue";
-import * as home_page from "../views/home.vue";
+import VirtualMachine from "../views/virtualMachine.vue";
+import HomePage from "../views/home.vue";
 
-import * as customer_profile from "../views/CustomerProfile.vue";
-import * as login_page from "../views/LoginPage.vue";
-import * as register_page from "../views/RegistrationPage.vue";
+import CustomerProfile from "../views/CustomerProfile.vue";
+import LoginPage from "../views/LoginPage.vue";
+import RegistrationPage from "../views/RegistrationPage.vue";
 
-import {createRouter, createWebHistory} from "vue-router";
+import { createRouter, createWebHistory } from "vue-router";
 
 /* eslint-disable no-unused-vars */
 
@@ -14,27 +14,27 @@ const routes = [
   {
     path: '/',
     name: 'main_page',
-    component: home_page.HomePage,
+    component: HomePage,
   },
   {
     path: '/login/',
     name: 'login_page',
-    component: login_page.LoginPage,
+    component: LoginPage,
   },
   {
     path: '/register/',
     name: 'register_page',
-    component: register_page.RegistrationPage,
+    component: RegistrationPage,
   },
   {
     path: '/virtual/machine/:VirtualMachineId',
     name: 'virtual_machine',
-    component: virtual_machine.VirtualMachine,
+    component: VirtualMachine,
   },
   {
     path: '/customer/profile/',
     name: 'customer_profile',
-    component: customer_profile.CustomerProfile,
+    component: CustomerProfile,
   }
 ]
 

@@ -47,4 +47,5 @@ class VirtualMachineSshManager {
   }
 }
 
-export {VirtualMachineSshManager, SshPublicKey};
+
+export { VirtualMachineSshManager, SshPublicKey };

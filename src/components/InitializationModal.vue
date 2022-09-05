@@ -97,12 +97,12 @@
 /* eslint-disable no-unused-vars */
 
 import { mapActions, mapMutations, mapState } from "vuex";
-import { uid } from "uid";
+import uid from "uid";
 
 import * as preparer from "../../configuration_preparer/preparer.js"
-import {SuggestionsManager} from "../../suggestions/suggestions.js"
-import {loadingPage} from "./LoadingPage.vue"
-import {VirtualMachineManager} from "../../vm/vm.js"
+import SuggestionsManager from "../../suggestions/suggestions.js"
+import loadingPage from "./LoadingPage.vue"
+import VirtualMachineManager from "../../vm/vm.js"
 
 
 export const hardwareConfiguration = {
