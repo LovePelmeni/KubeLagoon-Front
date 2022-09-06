@@ -249,8 +249,7 @@ export const hardwareConfiguration = {
   },
 
   methods: {
-
-
+    // Validation Methods for the Form
     ValidateDatacenter(Datacenter) {
       // Validates Selected Datacenter by the Customer
       if (Datacenter.DatacenterName.length == 0) {
@@ -738,7 +737,6 @@ export default {
       this.paymentDueDate = new Date(this.paymentDueDateUnix).toLocaleDateString("en-us", this.dateOptions);
     },
   },
-
 };
 
 </script>

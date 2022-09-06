@@ -1,8 +1,12 @@
 import "../rest/healthcheck.js"
 /* eslint-disable no-unused-vars */
 
+
+
 var DEFAULT_CRONTAB_JOB_TIMEZONE=process.env.DEFAULT_CRONTAB_JOB_TIMEZONE
 var CrontabJob = require("cron").CronJob
+
+
 
 class VirtualMachineHealthStateChecker {
   // Class, that parses info about the Health State of the whole Virtual Machine Server

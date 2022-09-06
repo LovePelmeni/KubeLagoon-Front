@@ -15,7 +15,7 @@ export default {
     };
   },
   template: `
-  <div v-if="virtualMachineLoaded">
+  <div v-if="virtualMachinesLoaded">
       <div v-if="!mobile" class="app flex flex-column">
         <navigationPage />
         <div class="app-content flex flex-column">
@@ -43,7 +43,10 @@ export default {
     window.addEventListener("resize", this.checkScreen);
   },
   methods: {
+
+    ...mapState(["virtualMachinesLoaded"]),
     ...mapActions(["GET_VIRTUAL_MACHINES"]),
+
     checkScreen() {
       const windowWidth = window.innerWidth;
       if (windowWidth <= 750) {

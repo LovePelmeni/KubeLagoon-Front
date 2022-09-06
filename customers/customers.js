@@ -3,6 +3,7 @@ import * as customers_rest from "../rest/customers.js";
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-useless-escape */
 
+
 class CustomerRegistrationForm {
   // Entity, that represents Customer Registration Form Data
   constructor(Username, Email, Password) {
