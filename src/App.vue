@@ -23,7 +23,6 @@ export default {
           <transition name="virtualMachine">
             <initializationModal v-if="initializationModal" />
           </transition>
-          <router-view />
         </div>
       </div>
       <div v-else class="mobile-message flex flex-column">

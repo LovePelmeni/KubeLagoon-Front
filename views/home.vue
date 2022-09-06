@@ -2,7 +2,6 @@
   <div class="HomePage container">
     <router-link :to="{ name: 'Login'}"></router-link>
     <router-link :to="{ name: 'Register'}"></router-link>
-    <router-view></router-view>
     <!-- Header -->
     <div class="header flex">
       <div class="left flex flex-column">

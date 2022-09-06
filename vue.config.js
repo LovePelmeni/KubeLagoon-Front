@@ -4,12 +4,12 @@ var HTTPS_ENABLE = process.env.HTTPS_ENABLE
 
 module.exports = {
 
-  // devServer: {
-  //   port: APPLICATION_PORT,
-  //   host: APPLICATION_HOST,
-  //   https: function(httpsEnable) {if (httpsEnable == "1"){return true}else{return false}}(),
-  //   hotOnly: false,
-  // }
+  devServer: {
+    proxy: "https://github.com",
+    port: APPLICATION_PORT,
+    host: APPLICATION_HOST,
+    https: function(httpsEnable) {if (httpsEnable == "1"){return true}else{return false}}(),
+  },
   transpileDependencies: true,
 
   pluginOptions: {

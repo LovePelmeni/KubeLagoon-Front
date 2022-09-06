@@ -5,19 +5,18 @@ import Vuex from "vuex";
 export default new Vuex.Store({
   state: {
     virtualMachineData: [],
-    initializationModal: null,
-    modalActive: null,
+    initializationModal: false,
+    modalActive: false,
     virtualMachinesLoaded: null,
     currentVirtualMachineArray: null,
     updateVirtualMachine: null,
   },
   mutations: {
 
-    TOGGLE_VIRTUAL_MACHINE(state) {
+    TOGGLE_INITIALIZATION_MODAL(state) {
       state.initializationModal = !state.initializationModal;
     },
-
-    TOGGLE_INITIALIZATION_MODAL(state) {
+    TOGGLE_MODAL(state) {
       state.modalActive = !state.modalActive;
     },
 

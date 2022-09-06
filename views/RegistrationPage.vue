@@ -172,6 +172,14 @@ export default {
 
 <style lang="scss">
 
+
+.app-content {
+  padding: 0 20px;
+  flex: 1;
+  position: relative;
+}
+
+
   .background{
     // background-image: url(./assets/Order-Banner.jpg) !important;
     // height: 300px;
@@ -182,6 +190,11 @@ export default {
     // background-size: cover;
     // position: relative;
 
+   background-color: #141625;
+   min-height: 100vh;
+   @media (min-width: 900px) {
+    flex-direction: row !important;
+   }
    padding: 56px;
    max-width: 700px;
    width: 100%;

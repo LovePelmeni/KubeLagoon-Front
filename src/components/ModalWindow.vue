@@ -16,14 +16,14 @@ import { mapMutations, mapState } from "vuex";
 export default {
   name: "modalPage",
   methods: {
-    ...mapMutations(["TOGGLE_MODAL", "TOGGLE_VIRTUAL_MACHINE_SETTINGS", "TOGGLE_UPDATE_VIRTUAL_MACHINE_SETTINGS"]),
+    ...mapMutations(["TOGGLE_MODAL", "TOGGLE_INITIALIZATION_MODAL", "TOGGLE_VIRTUAL_MACHINE_SETTINGS", "TOGGLE_UPDATE_VIRTUAL_MACHINE_SETTINGS"]),
     closeModal() {
       this.TOGGLE_MODAL();
     },
     closeVirtualMachineSettings() {
       this.TOGGLE_MODAL();
-      this.TOGGLE_VIRTUAL_MACHINE();
-      if (this.editInvoice) {
+      this.TOGGLE_INITIALIZATION_MODAL();
+      if (this.updateVirtualMachine) {
         this.TOGGLE_UPDATE_VIRTUAL_MACHINE_SETTINGS();
       }
     },
