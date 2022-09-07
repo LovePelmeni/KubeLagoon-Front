@@ -1,7 +1,7 @@
 <template>
   <div v-if="currentVirtualMachine" class="virtual-machine container">
     <router-link class="nav-link flex" :to="{ name: 'main_page' }">
-      <img src="@/assets/icon-arrow-left.svg" @click="RedirectHome()" alt="" /> Go Back
+      <img :src="icon_arrow_left" @click="RedirectHome()" alt="" /> Go Back
     </router-link>
 
     <!-- Header -->

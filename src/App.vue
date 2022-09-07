@@ -6,6 +6,7 @@ import initializationModal from "./components/InitializationModal.vue";
 import modalPage from "./components/ModalWindow.vue";
 
 export default {
+
   name: "App",
   data() {
     return {
@@ -56,6 +57,7 @@ export default {
     ...mapState(["initializationModal", "modalActive", "VirtualMachinesLoaded"]),
   },
 };
+
 </script>
 
 <style lang="scss">

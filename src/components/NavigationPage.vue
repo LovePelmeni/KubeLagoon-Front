@@ -1,15 +1,17 @@
 <template>
   <header class="flex">
     <div class="branding flex">
-      <img src="@assets/file-invoice-dollar-solid.png" alt="" />
+      <img :src="require('@/assets/dollar_solid.png')" alt="dollar_solid" />
     </div>
   </header>
 </template>
 
 <script>
+
 export default {
   name: "navigationPage",
 };
+
 </script>
 
 <style lang="scss" scoped>

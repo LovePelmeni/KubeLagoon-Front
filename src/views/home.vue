@@ -8,8 +8,8 @@
 
     <div class="header flex">
       <div class="left flex flex-column">
-        <h1>Virtual Machines</h1>
-        <span>You have {{ virtualMachineData.length }} total Virtual Machines</span>
+        <h1>Virtual Servers</h1>
+        <span>You have {{ virtualMachineData.length }} Virtual Servers</span>
       </div>
 
       <div class="right flex">
@@ -17,7 +17,7 @@
           <span
             >Filter by status <span v-if="filteredVirtualMachine">: {{ filteredVirtualMachines }}</span></span
           >
-          <img src="@/assets/icon-arrow-down.svg" alt="" />
+          <img :src="require('@/assets/icon_arrow_down.svg')" alt="icon_arrow_down" />
           <ul v-show="filterMenu" class="filter-menu">
             <li @click="filteredVirtualMachine">Running</li>
             <li @click="filteredVirtualMachine">Shutdown</li>
@@ -32,7 +32,7 @@
 
         <div @click="newVirtualMachine()" class="button flex">
           <div class="inner-button flex">
-            <img src="@/assets/icon-plus.svg" alt="" />
+            <img :src="require('@/assets/icon_plus.svg')" alt="icon_plus" />
           </div>
           <span>New Virtual Machine</span>
         </div>
@@ -45,9 +45,9 @@
       <VirtualMachineBannerInfo v-for="(VirtualMachine, index) in filteredData" :VirtualMachine="VirtualMachine" :key="index" />
     </div>
     <div v-else class="empty flex flex-column">
-      <img src="@/assets/illustration-empty.svg" alt="" />
+      <img :src="require('@/assets/illustration_empty.svg')" alt="illustration_empty" />
       <h3>There is nothing here</h3>
-      <p>Create a new invoice by clicking the New Invoice button and get started</p>
+      <p>Let's create a new Virtual Server Now!</p>
     </div>
   </div>
 </template>
@@ -60,11 +60,20 @@ import { mapMutations, mapState } from "vuex";
 import VirtualMachineBannerInfo from "../components/VirtualMachineBannerInfo.vue";
 import initializationModal from "../components/InitializationModal.vue";
 
+import illustration_empty from "../assets/illustration_empty.svg"
+import icon_plus from "../assets/icon_plus.svg"
+import  icon_arrow_down from "../assets/icon_arrow_down.svg"
+
 export default {
 
   name: "HomePage",
   data() {
     return {
+      // Setting Up Images Urls.
+      illustration_empty: illustration_empty,
+      icon_plus: icon_plus,
+      icon_arrow_down: icon_arrow_down,
+
       filterMenu: null,
       filteredVirtualMachine: null,
     };
@@ -127,6 +136,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
 .home {
   color: #fff;
   .header {
@@ -191,15 +201,6 @@ export default {
       }
     }
   }
-
-
-.red {
-  background-color: #ec5757;
-}
-.green {
-  background-color: #33d69f;
-}
-
   .empty {
     margin-top: 160px;
     align-items: center;
@@ -219,11 +220,6 @@ export default {
       margin-top: 16px;
     }
   }
-}
-
-.router-link-exact-active {
-  //your desired design when link is clicked
-  font-weight: 700;
 }
 
 </style>

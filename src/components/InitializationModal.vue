@@ -63,7 +63,7 @@
               <td class="status"><input type="text" v-model="VirtualMachine.Status" /></td>
               <td class="price"><input type="text" v-model="VirtualMachine.Price" /></td>
               <td class="total flex">$ {{ VirtualMachine.TotalThisMonth }}</td>
-              <img @click="deleteVirtualMachine(VirtualMachine.VirtualMachineId)" src="@/assets/icon-delete.svg" alt="" />
+              <img @click="deleteVirtualMachine(VirtualMachine.VirtualMachineId)" :src="icon_delete" alt="" />
             </tr>
 
           </table>
@@ -97,12 +97,13 @@
 /* eslint-disable no-unused-vars */
 
 import { mapActions, mapMutations, mapState } from "vuex";
-import uid from "uid";
 
 import * as preparer from "../../configuration_preparer/preparer.js"
 import SuggestionsManager from "../../suggestions/suggestions.js"
 import loadingPage from "./LoadingPage.vue"
 import VirtualMachineManager from "../../vm/vm.js"
+
+import icon_delete  from "../assets/icon_delete.svg"
 
 
 export const hardwareConfiguration = {
@@ -165,8 +166,8 @@ export const hardwareConfiguration = {
 
               <td class="item-name"><input type="text" v-model="LoadBalancer.Name" /></td>
 
-              <img @click="selectLoadBalancer(LoadBalancer.Name)" v-if="LoadBalancer != AddedLoadBalancer" src="load-balancer-avatar" alt="" />
-              <img @click="unSelectLoadBalancer(LoadBalancer.Name)" v-else src="@/assets/icon-delete.svg"/>
+              <img @click="selectLoadBalancer(LoadBalancer.Name)" v-if="LoadBalancer != AddedLoadBalancer" :src="LoadBalancer.Avatar" alt="" />
+              <img @click="unSelectLoadBalancer(LoadBalancer.Name)" v-else :src="icon_delete"/>
 
               <span v-if="errors['LoadBalancer'][LoadBalancer.Name]">{{ errors['LoadBalancer'][LoadBalancer.Name] }}</span>
             </tr>
@@ -185,8 +186,8 @@ export const hardwareConfiguration = {
             <tr class="table-items flex" v-for="(Datacenter, index) in Datacenters" :key="index">
               <td class="item-name"><input type="text" v-model="Datacenter.DatacenterName" /></td>
 
-              <img @click="selectDatacenter(Datacenter.DatacenterName)" v-if="Datacenter != AddedDatacenter" src="datacenter-avatar" alt="" />
-              <img @click="unSelecteDatacenter(Datacenter.DatacenterName)" v-else src="@/assets/icon-delete.svg"/>
+              <img @click="selectDatacenter(Datacenter.DatacenterName)" v-if="Datacenter != AddedDatacenter" :src="Datacenter.Avatar" alt="" />
+              <img @click="unSelecteDatacenter(Datacenter.DatacenterName)" v-else :src="icon_delete"/>
 
               <span v-if="errors['Datacenter'][Datacenter.DatacenterName]">{{ errors['Datacenter'][Datacenter.DatacenterName] }}</span>
 
@@ -209,8 +210,8 @@ export const hardwareConfiguration = {
                 <td class="item-name"><input type="text" v-model="OperationalSystem.Version" /></td>
 
 
-                <img @click="selectOperationalSystem(OperationalSystem.Name)" v-if="OperationalSystem.SystemName" src="Operational-system-image" alt="" />
-                <img @click="unSelectOperationalSystem(OperationalSystem.Name)" v-else src="@/assets/icon-delete.svg" />
+                <img @click="selectOperationalSystem(OperationalSystem.Name)" v-if="OperationalSystem.SystemName" :src="OperationalSystem.Avatar" alt="" />
+                <img @click="unSelectOperationalSystem(OperationalSystem.Name)" v-else :src="icon_delete" />
 
                 <span v-if="errors['OS'][OperationalSystem.SystemName]">{{ errors['OS'][OperationalSystem.SystemName] }}</span>
 
@@ -232,8 +233,8 @@ export const hardwareConfiguration = {
                     <td class="item-name"><input type="text" v-model="Tool.Name"/></td>
                     <td class="item-name"><input type="text" v-model="Tool.Version" /></td>
 
-                    <img @click="addPreInstalledTools(Tool.Name)" v-if="!(Tool in AddedPreInstalledTools)" src="preinstalled-tool-image" alt="" />
-                    <img @click="unSelectPreInstalledTool(Tool.Name)" v-else src="@/assets/icon-delete.svg" />
+                    <img @click="addPreInstalledTools(Tool.Name)" v-if="!(Tool in AddedPreInstalledTools)" :src="Tool.Avatar" alt="" />
+                    <img @click="unSelectPreInstalledTool(Tool.Name)" v-else :src="icon_delete" />
 
                     <span v-if="errors['Tool'][Tool.Name]">{{ errors['Tool'][Tool.Name] }}</span>
                 </tr>
@@ -536,6 +537,11 @@ export default {
   name: "initializationModal",
   data() {
     return {
+
+      // Avatar Configuration Images 
+      icon_delete: icon_delete,
+
+      
       // General Extra Attributes
       dateOptions: { year: "numeric", month: "short", day: "numeric" },
       loading: null,
