@@ -1,11 +1,9 @@
 <script>
-
 /* eslint-disable no-unused-vars */
-
 import { mapState, mapActions } from "vuex";
-import navigationPage from "./components/NavigationPage";
-import initializationModal from "./components/InitializationModal";
-import modalPage from "./components/ModalWindow";
+import navigationPage from "./components/NavigationPage.vue";
+import initializationModal from "./components/InitializationModal.vue";
+import modalPage from "./components/ModalWindow.vue";
 
 export default {
   name: "App",
@@ -24,6 +22,7 @@ export default {
             <initializationModal v-if="initializationModal" />
           </transition>
         </div>
+        <router-view />
       </div>
       <div v-else class="mobile-message flex flex-column">
         <h2>Sorry, this app is not supported on Mobile Devices</h2>
@@ -42,10 +41,8 @@ export default {
     window.addEventListener("resize", this.checkScreen);
   },
   methods: {
-
     ...mapState(["virtualMachinesLoaded"]),
     ...mapActions(["GET_VIRTUAL_MACHINES"]),
-
     checkScreen() {
       const windowWidth = window.innerWidth;
       if (windowWidth <= 750) {
@@ -59,7 +56,6 @@ export default {
     ...mapState(["initializationModal", "modalActive", "VirtualMachinesLoaded"]),
   },
 };
-
 </script>
 
 <style lang="scss">
@@ -182,5 +178,26 @@ button,
   }
   color: #dfe3fa;
   background-color: rgba(223, 227, 250, 0.1);
+}
+
+#app {
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2c3e50;
+}
+
+nav {
+  padding: 30px;
+
+  a {
+    font-weight: bold;
+    color: #2c3e50;
+
+    &.router-link-exact-active {
+      color: #42b983;
+    }
+  }
 }
 </style>

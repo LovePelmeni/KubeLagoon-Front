@@ -3,7 +3,6 @@
     <router-link class="nav-link flex" :to="{ name: 'main_page' }">
       <img src="@/assets/icon-arrow-left.svg" @click="RedirectHome()" alt="" /> Go Back
     </router-link>
-    <router-view></router-view>
 
     <!-- Header -->
 
@@ -112,9 +111,9 @@
 /* eslint-disable no-unused-vars */
 
 import { mapActions, mapMutations, mapState } from "vuex";
-import * as cost from "../cost/virtualMachineCost.js"
-import * as vm from "../vm/vm.js"
-import {router} from "../router/router.js"
+import * as cost from "../../cost/virtualMachineCost.js"
+import * as vm from "../../vm/vm.js"
+import {router} from "../router/index.js"
 
 export default {
   name: "virtualMachine",

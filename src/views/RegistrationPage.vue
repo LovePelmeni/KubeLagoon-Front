@@ -1,11 +1,10 @@
 <template>
   <!-- Registration Page !-->
   <RegistrationPage />
-  <router-view></router-view>
 </template>
 
 <script>
-import * as customers from "../customers/customers.js"
+import * as customers from "../../customers/customers.js"
 import {mapMutations} from "vuex";
 
 export default {

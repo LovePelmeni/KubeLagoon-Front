@@ -240,7 +240,6 @@ export const hardwareConfiguration = {
           </table>
       </div>
   `,
-
   created() {
     this.GetSuggestedLoadBalancers()
     this.GetSuggestedDatacenters()

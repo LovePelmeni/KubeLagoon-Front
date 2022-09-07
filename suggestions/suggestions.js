@@ -26,5 +26,4 @@ class SuggestionsManager {
   }
 }
 
-
 export {SuggestionsManager};

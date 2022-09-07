@@ -10,7 +10,6 @@
     <label>Created At</label>
     <a> {{ CreatedAt }}</a>
   </div>
-  <router-view></router-view>
 
 </template>
 
@@ -18,7 +17,7 @@
 
 /* eslint-disable no-unused-vars */
 
-import * as customers from "../customers/customers.js"
+import * as customers from "../../customers/customers.js"
 import $ from "jquery"
 
 

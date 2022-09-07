@@ -1,13 +1,17 @@
 <template>
   <div class="HomePage container">
-    <router-link :to="{ name: 'Login'}"></router-link>
-    <router-link :to="{ name: 'Register'}"></router-link>
+    <router-link :to="{ name: 'login_page'}"></router-link>
+    <router-link :to="{ name: 'register_page'}"></router-link>
+    <router-link :to="{ name: 'customer_profile'}"></router-link>
+
     <!-- Header -->
+
     <div class="header flex">
       <div class="left flex flex-column">
         <h1>Virtual Machines</h1>
         <span>You have {{ virtualMachineData.length }} total Virtual Machines</span>
       </div>
+
       <div class="right flex">
         <div @click="toggleFilterMenu" class="filter flex">
           <span
@@ -21,15 +25,22 @@
             <li @click="filteredVirtualMachine">Clear</li>
           </ul>
         </div>
-        <div @click="newVirtualMachine" class="button flex">
+
+        <transition name="virtualMachine">
+          <initializationModal v-if="initializationModal" />
+        </transition>
+
+        <div @click="newVirtualMachine()" class="button flex">
           <div class="inner-button flex">
             <img src="@/assets/icon-plus.svg" alt="" />
           </div>
-          <span>New VirtualMachine</span>
+          <span>New Virtual Machine</span>
         </div>
       </div>
     </div>
+
     <!-- Virtual Machines -->
+
     <div v-if="virtualMachineData.length > 0">
       <VirtualMachineBannerInfo v-for="(VirtualMachine, index) in filteredData" :VirtualMachine="VirtualMachine" :key="index" />
     </div>
@@ -46,7 +57,8 @@
 /* eslint-disable no-unused-vars */
 
 import { mapMutations, mapState } from "vuex";
-import VirtualMachineBannerInfo from "../src/components/VirtualMachineBannerInfo.vue"
+import VirtualMachineBannerInfo from "../components/VirtualMachineBannerInfo.vue";
+import initializationModal from "../components/InitializationModal.vue";
 
 export default {
 
@@ -59,11 +71,15 @@ export default {
   },
   methods: {
 
-     ...mapMutations(["TOGGLE_VIRTUAL_MACHINE"]),
+     ...mapMutations(["TOGGLE_INITIALIZATION_MODAL", "TOGGLE_MODAL"]),
 
     newVirtualMachine() {
       // Initializes Empty Form for the Virtual Machine Configuration
-      this.TOGGLE_VIRTUAL_MACHINE()
+      this.TOGGLE_INITIALIZATION_MODAL()
+    },
+
+    saveDraft() {
+      this.TOGGLE_INITIALIZATION_MODAL()
     },
 
     toggleFilterMenu() {
@@ -81,6 +97,7 @@ export default {
 
   components: {
     VirtualMachineBannerInfo,
+    initializationModal,
   },
 
   computed: {
@@ -203,4 +220,10 @@ export default {
     }
   }
 }
+
+.router-link-exact-active {
+  //your desired design when link is clicked
+  font-weight: 700;
+}
+
 </style>
