@@ -2,12 +2,12 @@
 <script>
 
 export default {
-  name: "setupSuggestions"
+  name: "setupSuggestions",
   data() {
     return {
       Suggestions: null,
     }
-  }
+  },
   methods: {
     GetAvailableSetupSuggestions() {
       // Returns Available Setup Suggestions
@@ -16,6 +16,3 @@ export default {
 }
 </script>
 
-<style>
-
-</style>

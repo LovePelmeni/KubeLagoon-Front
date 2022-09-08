@@ -17,7 +17,7 @@
           <span
             >Filter by status <span v-if="filteredVirtualMachine">: {{ filteredVirtualMachines }}</span></span
           >
-          <img :src="require('@/assets/icon_arrow_down.svg')" alt="icon_arrow_down" />
+          <img :src="require('@/assets/icon-arrow-down.svg')" alt="icon-arrow-down" style="width:10%;height:10%"/>
           <ul v-show="filterMenu" class="filter-menu">
             <li @click="filteredVirtualMachine">Running</li>
             <li @click="filteredVirtualMachine">Shutdown</li>
@@ -30,9 +30,9 @@
           <initializationModal v-if="initializationModal" />
         </transition>
 
-        <div @click="newVirtualMachine()" class="button flex">
+        <div @click="newVirtualMachine" class="button flex">
           <div class="inner-button flex">
-            <img :src="require('@/assets/icon_plus.svg')" alt="icon_plus" />
+            <img :src="require('@/assets/icon-plus.svg')" style="width: 100%" alt="icon_plus" />
           </div>
           <span>New Virtual Machine</span>
         </div>
@@ -45,7 +45,7 @@
       <VirtualMachineBannerInfo v-for="(VirtualMachine, index) in filteredData" :VirtualMachine="VirtualMachine" :key="index" />
     </div>
     <div v-else class="empty flex flex-column">
-      <img :src="require('@/assets/illustration_empty.svg')" alt="illustration_empty" />
+      <img :src="require('@/assets/illustration-empty.svg')" style="width: 50%; height: 50%" alt="illustration-empty" />
       <h3>There is nothing here</h3>
       <p>Let's create a new Virtual Server Now!</p>
     </div>
@@ -60,9 +60,9 @@ import { mapMutations, mapState } from "vuex";
 import VirtualMachineBannerInfo from "../components/VirtualMachineBannerInfo.vue";
 import initializationModal from "../components/InitializationModal.vue";
 
-import illustration_empty from "../assets/illustration_empty.svg"
-import icon_plus from "../assets/icon_plus.svg"
-import  icon_arrow_down from "../assets/icon_arrow_down.svg"
+import illustration_empty from "../assets/illustration-empty.svg"
+import icon_plus from "../assets/icon-plus.svg"
+import  icon_arrow_down from "../assets/icon-arrow-down.svg"
 
 export default {
 
@@ -70,6 +70,7 @@ export default {
   data() {
     return {
       // Setting Up Images Urls.
+      initializationModal: false,
       illustration_empty: illustration_empty,
       icon_plus: icon_plus,
       icon_arrow_down: icon_arrow_down,
@@ -81,6 +82,8 @@ export default {
   methods: {
 
      ...mapMutations(["TOGGLE_INITIALIZATION_MODAL", "TOGGLE_MODAL"]),
+     ...mapState(["initializationModal"]),
+
 
     newVirtualMachine() {
       // Initializes Empty Form for the Virtual Machine Configuration

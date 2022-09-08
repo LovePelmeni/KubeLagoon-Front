@@ -111,8 +111,6 @@
 /* eslint-disable no-unused-vars */
 
 import { mapActions, mapMutations, mapState } from "vuex";
-import * as cost from "../../cost/virtualMachineCost.js"
-import * as vm from "../../vm/vm.js"
 import {router} from "../router/index.js"
 
 export default {

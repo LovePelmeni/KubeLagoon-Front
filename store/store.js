@@ -5,7 +5,7 @@ import Vuex from "vuex";
 export default new Vuex.Store({
   state: {
     virtualMachineData: [],
-    initializationModal: false,
+    initializationModal: null,
     modalActive: false,
     virtualMachinesLoaded: null,
     currentVirtualMachineArray: null,
@@ -142,30 +142,31 @@ export default new Vuex.Store({
                     oldVirtualMachine.Deploying = UpdatedVirtualMachineData.Deploying
     }},
 
-    CREATE_VIRTUAL_MACHINE(state, payload) {
+    CREATE_VIRTUAL_MACHINE(state, customizedConfiguration, hardwareConfiguration) {
       // Creates New Virtual Machine Server
 
       // Initializing New Virtual Machine Manager
       let vmManager = new vm.VirtualMachineManager()
 
       // Initializing Hardware Configuration
-      let hardwareConfiguration = new preparer.hardwareConfiguration(payload["hardwareConfiguration"])
+      let HardwareConfiguration = new preparer.hardwareConfiguration(hardwareConfiguration)
 
       // Initializing Customized Configuration with the Resources, Custom OS, Preinstalled Tools etc...
-      let customizedConfiguration = new preparer.customizedConfiguration(payload["customizedConfiguration"])
+      let CustomizedConfiguration = new preparer.customizedConfiguration(customizedConfiguration)
 
       // Initializing Empty Virtual Machine Server Instance
-      let initialized, initializationError = vmManager.InitializeVirtualMachine(hardwareConfiguration)
-
+      let initialized, initializationError = vmManager.InitializeVirtualMachine(HardwareConfiguration)
         if (initialized && initializationError == null) {
           // Applying Customized Configuration
 
-          let appliedInfo, applyError = vmManager.ApplyConfiguration(customizedConfiguration)
+          let appliedInfo, applyError = vmManager.ApplyConfiguration(CustomizedConfiguration)
           if (applyError != null && appliedInfo != null) {
+
             let virtualMachine = vmManager.GetVirtualMachine(appliedInfo["VirtualMachineId"])
             virtualMachine["Running"] = true
             virtualMachine["Shutdown"] = false
             virtualMachine["Deploying"] = false
+
             this.INSERT_NEW_VIRTUAL_MACHINE(state.VirtualMachineData, virtualMachine)
             return appliedInfo, applyError
           }else{
@@ -242,6 +243,42 @@ export default new Vuex.Store({
     },
   },
   actions: {
+
+    CreateNewVirtualMachine(customizedConfigurationData, hardwareConfiguration) {
+
+    let CpuResources = new preparer.CpuResources(
+    customizedConfigurationData["Resources"]["Cpu"])
+
+    let SslResources = new preparer.SshlResources(
+    customizedConfigurationData["Ssh"])
+
+    let MemoryResources = new preparer.MemoryResources(
+    hardwareConfiguration["Resources"]["Memory"])
+
+    let DatacenterResources = new preparer.DatacenterResources(
+    hardwareConfiguration["Datacenter"])
+
+    let OperationalSystemResources = new preparer.OperationalSystemResources(
+    hardwareConfiguration["OS"])
+
+    let PreInstalledTools = new preparer.PreInstalledTools(
+    hardwareConfiguration["PreInstalledTools"])
+
+    let StorageResources = new preparer.StorageResources(
+    customizedConfigurationData["Storage"]["Capacity"])
+
+    let MetadataResources = new preparer.MetadataResources(
+    customizedConfigurationData["Metadata"])
+
+
+    let HardwareConfiguration = new preparer.HardwareConfiguration(DatacenterResources)
+    let CustomizedConfiguration = new preparer.CustomizedConfiguration(CpuResources, MemoryResources, MetadataResources, StorageResources,
+    SslResources, OperationalSystemResources, PreInstalledTools)
+
+    let VirtualMachineInfo, CreationError = this.CREATE_VIRTUAL_MACHINE(HardwareConfiguration, CustomizedConfiguration)
+    return VirtualMachineInfo, CreationError
+  },
+
 
     GET_VIRTUAL_MACHINE(VirtualMachineId) {
       // Returns A Virtual Machine Server Object Info

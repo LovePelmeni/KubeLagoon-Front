@@ -16,7 +16,7 @@
         <span v-if="VirtualMachine.Deploying">Deploying</span>
       </div>
       <div class="icon">
-        <img src="@/assets/icon-arrow-right.svg" alt="" />
+        <img :src="require('@/assets/icon-arrow-right.svg')" alt="arrow-right" />
       </div>
     </div>
   </router-link>

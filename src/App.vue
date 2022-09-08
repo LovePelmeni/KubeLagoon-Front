@@ -2,7 +2,6 @@
 /* eslint-disable no-unused-vars */
 import { mapState, mapActions } from "vuex";
 import navigationPage from "./components/NavigationPage.vue";
-import initializationModal from "./components/InitializationModal.vue";
 import modalPage from "./components/ModalWindow.vue";
 
 export default {
@@ -19,9 +18,6 @@ export default {
         <navigationPage />
         <div class="app-content flex flex-column">
           <modalPage v-if="modalActive" />
-          <transition name="virtualMachine">
-            <initializationModal v-if="initializationModal" />
-          </transition>
         </div>
         <router-view />
       </div>
@@ -33,7 +29,6 @@ export default {
   `,
   components: {
     navigationPage,
-    initializationModal,
     modalPage,
   },
   created() {
@@ -54,7 +49,7 @@ export default {
     },
   },
   computed: {
-    ...mapState(["initializationModal", "modalActive", "VirtualMachinesLoaded"]),
+    ...mapState(["modalActive", "VirtualMachinesLoaded"]),
   },
 };
 

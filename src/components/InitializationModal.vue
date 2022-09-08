@@ -63,13 +63,13 @@
               <td class="status"><input type="text" v-model="VirtualMachine.Status" /></td>
               <td class="price"><input type="text" v-model="VirtualMachine.Price" /></td>
               <td class="total flex">$ {{ VirtualMachine.TotalThisMonth }}</td>
-              <img @click="deleteVirtualMachine(VirtualMachine.VirtualMachineId)" :src="icon_delete" alt="" />
+              <img @click="deleteVirtualMachine(VirtualMachine.VirtualMachineId)" :src="require('@/assets/icon-delete.svg')" alt="icon-delete" />
             </tr>
 
           </table>
 
           <div @click="CreateNewVirtualMachine" class="flex button">
-            <img src="@/assets/icon-plus.svg" alt="" />
+            <img :src="require('@/assets/icon-plus.svg')" alt="icon-plus" />
             Add New Virtual Machine
           </div>
 
@@ -97,13 +97,9 @@
 /* eslint-disable no-unused-vars */
 
 import { mapActions, mapMutations, mapState } from "vuex";
-
-import * as preparer from "../../configuration_preparer/preparer.js"
 import SuggestionsManager from "../../suggestions/suggestions.js"
 import loadingPage from "./LoadingPage.vue"
 import VirtualMachineManager from "../../vm/vm.js"
-
-import icon_delete  from "../assets/icon_delete.svg"
 
 
 export const hardwareConfiguration = {
@@ -167,7 +163,7 @@ export const hardwareConfiguration = {
               <td class="item-name"><input type="text" v-model="LoadBalancer.Name" /></td>
 
               <img @click="selectLoadBalancer(LoadBalancer.Name)" v-if="LoadBalancer != AddedLoadBalancer" :src="LoadBalancer.Avatar" alt="" />
-              <img @click="unSelectLoadBalancer(LoadBalancer.Name)" v-else :src="icon_delete"/>
+              <img @click="unSelectLoadBalancer(LoadBalancer.Name)" v-else :src="require('@/assets/icon-delete.svg') alt='icon-delete'"/>
 
               <span v-if="errors['LoadBalancer'][LoadBalancer.Name]">{{ errors['LoadBalancer'][LoadBalancer.Name] }}</span>
             </tr>
@@ -187,7 +183,7 @@ export const hardwareConfiguration = {
               <td class="item-name"><input type="text" v-model="Datacenter.DatacenterName" /></td>
 
               <img @click="selectDatacenter(Datacenter.DatacenterName)" v-if="Datacenter != AddedDatacenter" :src="Datacenter.Avatar" alt="" />
-              <img @click="unSelecteDatacenter(Datacenter.DatacenterName)" v-else :src="icon_delete"/>
+              <img @click="unSelecteDatacenter(Datacenter.DatacenterName)" v-else :src="require('@/assets/icon-delete.svg')" alt='icon-delete'/>
 
               <span v-if="errors['Datacenter'][Datacenter.DatacenterName]">{{ errors['Datacenter'][Datacenter.DatacenterName] }}</span>
 
@@ -211,7 +207,7 @@ export const hardwareConfiguration = {
 
 
                 <img @click="selectOperationalSystem(OperationalSystem.Name)" v-if="OperationalSystem.SystemName" :src="OperationalSystem.Avatar" alt="" />
-                <img @click="unSelectOperationalSystem(OperationalSystem.Name)" v-else :src="icon_delete" />
+                <img @click="unSelectOperationalSystem(OperationalSystem.Name)" v-else :src="require('@/assets/icon-delete.svg')" alt='icon-delete'" />
 
                 <span v-if="errors['OS'][OperationalSystem.SystemName]">{{ errors['OS'][OperationalSystem.SystemName] }}</span>
 
@@ -234,7 +230,7 @@ export const hardwareConfiguration = {
                     <td class="item-name"><input type="text" v-model="Tool.Version" /></td>
 
                     <img @click="addPreInstalledTools(Tool.Name)" v-if="!(Tool in AddedPreInstalledTools)" :src="Tool.Avatar" alt="" />
-                    <img @click="unSelectPreInstalledTool(Tool.Name)" v-else :src="icon_delete" />
+                    <img @click="unSelectPreInstalledTool(Tool.Name)" v-else :src="require('@/assets/icon-delete.svg')" alt='icon-delete'" />
 
                     <span v-if="errors['Tool'][Tool.Name]">{{ errors['Tool'][Tool.Name] }}</span>
                 </tr>
@@ -538,10 +534,6 @@ export default {
   data() {
     return {
 
-      // Avatar Configuration Images 
-      icon_delete: icon_delete,
-
-      
       // General Extra Attributes
       dateOptions: { year: "numeric", month: "short", day: "numeric" },
       loading: null,
@@ -610,6 +602,7 @@ export default {
         "TotalCost": NewVirtualMachine.TotalCost,
       })
     },
+
     removeVirtualMachineFromList(VirtualMachineId) {
       // Removes Virtual Machine Info Object from the Customer's Virtual Machines List
       let UpdatedVirtualMachineItemList = this.VirtualMachineItemList.filter((VirtualMachine) => {
@@ -635,40 +628,12 @@ export default {
 
     // Virtual Machine Functions Goes There
     CreateNewVirtualMachine(hardwareConfigurationData, customizedConfigurationData) {
-      // Initializes New Virtual Machine
 
+      // Initializes New Virtual Machine
       // Initializing New Resources
 
-      let CpuResources = new preparer.CpuResources(
-      customizedConfigurationData["Resources"]["Cpu"])
-
-      let SslResources = new preparer.SshlResources(
-      customizedConfigurationData["Ssh"])
-
-      let MemoryResources = new preparer.MemoryResources(
-      hardwareConfigurationData["Resources"]["Memory"])
-
-      let DatacenterResources = new preparer.DatacenterResources(
-      hardwareConfiguration["Datacenter"])
-
-      let OperationalSystemResources = new preparer.OperationalSystemResources(
-      hardwareConfiguration["OS"])
-
-      let PreInstalledTools = new preparer.PreInstalledTools(
-      hardwareConfiguration["PreInstalledTools"])
-
-      let StorageResources = new preparer.StorageResources(
-      customizedConfigurationData["Storage"]["Capacity"])
-
-      let MetadataResources = new preparer.MetadataResources(
-      customizedConfigurationData["Metadata"])
-
-
-
-      let HardwareConfiguration = new preparer.HardwareConfiguration(DatacenterResources)
-      let CustomizedConfiguration = new preparer.CustomizedConfiguration(CpuResources, MemoryResources, MetadataResources, StorageResources, SslResources)
-
-      let VirtualMachineInfo, CreationError = this.CREATE_VIRTUAL_MACHINE(HardwareConfiguration, CustomizedConfiguration)
+      let VirtualMachineInfo, CreationError = this.CREATE_VIRTUAL_MACHINE(
+      hardwareConfigurationData, customizedConfigurationData)
 
       // If the Virtual Machine Has been Successfully Initialized and Created
       // Adding it to the Customer's Virtual Machine Item List

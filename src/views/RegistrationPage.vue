@@ -149,6 +149,7 @@ export default {
 
     ...mapMutations(["SHOW_ERROR"]),
 
+
     submitRegisterForm(){
       if (this.$refs.form.validate()){
           this.loading = true

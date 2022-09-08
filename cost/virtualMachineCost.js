@@ -9,12 +9,17 @@ class BillCalculator {
   //
   static CalculateForCpu(StockPrice, UsedCpuNums) {
     // Calculates CPU Cost for the Virtual Machine, Depending on the Stock Price
+    return StockPrice * UsedCpuNums
   }
   static CalculateForMemory(StockPrice, UsedMemoryInMegabytes) {
     //  Calculating Memory Cost for the Virtual Machine, Depending on the Stock Price
+    return StockPrice * UsedMemoryInMegabytes
   }
   static CalculateForStorage(StockPrice, UsedStorageInMegabytes) {
     // Calculates Storage Cost for the Virtual Machine, Depending on the Stock Price
+    // It is going to be a persistent volume and customer will only need to pay for it once,
+    // and use it as many as they want
+    return StockPrice * UsedStorageInMegabytes
   }
 }
 
@@ -60,6 +65,7 @@ class VirtualMachineCostCalculator {
   // Calculates Total Bill for the Virtual Machine Cost Resource Usage
 
   constructor(CpuNumsUsage, MemoryUsageInMegabytes, StorageUsageInMegabytes) {
+    // Initial Cost Parameters, to determine the Total Price
     let CpuCalculator = new CpuUsageBillCalculator(CpuNumsUsage)
     let MemoryCalculator = new MemoryUsageBillCalculator(MemoryUsageInMegabytes)
     let StorageCalculator = new StorageUsageBillCalculator(StorageUsageInMegabytes)
@@ -77,4 +83,6 @@ class VirtualMachineCostCalculator {
 }
 
 
-export {VirtualMachineCostCalculator, CpuUsageBillCalculator, MemoryUsageBillCalculator, StorageUsageBillCalculator};
+export {VirtualMachineCostCalculator,
+CpuUsageBillCalculator, MemoryUsageBillCalculator,
+StorageUsageBillCalculator};
