@@ -7,11 +7,6 @@
     <!-- Header -->
 
     <div class="header flex">
-      <div class="left flex flex-column">
-        <h1>Virtual Servers</h1>
-        <span>You have {{ virtualMachineData.length }} Virtual Servers</span>
-      </div>
-
       <div class="right flex">
         <div @click="toggleFilterMenu" class="filter flex">
           <span
@@ -32,7 +27,7 @@
 
         <div @click="newVirtualMachine" class="button flex">
           <div class="inner-button flex">
-            <img :src="require('@/assets/icon-plus.svg')" style="width: 100%" alt="icon_plus" />
+            <img :src="require('@/assets/icon-plus.svg')" alt="icon_plus" />
           </div>
           <span>New Virtual Machine</span>
         </div>
@@ -42,10 +37,14 @@
     <!-- Virtual Machines -->
 
     <div v-if="virtualMachineData.length > 0">
+      <div class="left flex flex-column">
+        <h1>Virtual Servers</h1>
+        <span>You have {{ virtualMachineData.length }} Virtual Servers</span>
+      </div>
       <VirtualMachineBannerInfo v-for="(VirtualMachine, index) in filteredData" :VirtualMachine="VirtualMachine" :key="index" />
     </div>
     <div v-else class="empty flex flex-column">
-      <img :src="require('@/assets/illustration-empty.svg')" style="width: 50%; height: 50%" alt="illustration-empty" />
+      <img :src="require('@/assets/illustration-empty.svg')" style="width: 50%; height: 50%; margin" alt="illustration-empty" />
       <h3>There is nothing here</h3>
       <p>Let's create a new Virtual Server Now!</p>
     </div>
@@ -60,21 +59,11 @@ import { mapMutations, mapState } from "vuex";
 import VirtualMachineBannerInfo from "../components/VirtualMachineBannerInfo.vue";
 import initializationModal from "../components/InitializationModal.vue";
 
-import illustration_empty from "../assets/illustration-empty.svg"
-import icon_plus from "../assets/icon-plus.svg"
-import  icon_arrow_down from "../assets/icon-arrow-down.svg"
-
 export default {
 
   name: "HomePage",
   data() {
     return {
-      // Setting Up Images Urls.
-      initializationModal: false,
-      illustration_empty: illustration_empty,
-      icon_plus: icon_plus,
-      icon_arrow_down: icon_arrow_down,
-
       filterMenu: null,
       filteredVirtualMachine: null,
     };
@@ -87,7 +76,7 @@ export default {
 
     newVirtualMachine() {
       // Initializes Empty Form for the Virtual Machine Configuration
-      this.TOGGLE_INITIALIZATION_MODAL()
+      this.TOGGLE_INITIALIZATION_MODAL(this)
     },
 
     saveDraft() {
@@ -137,6 +126,7 @@ export default {
 }
 
 </script>
+
 
 <style lang="scss" scoped>
 

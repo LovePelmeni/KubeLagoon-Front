@@ -6,7 +6,7 @@ import * as suggestions from "../rest/suggestions.js"
 class SuggestionsManager {
   // Class Represents Suggestion Manager
 
-  GetSuggstedLoadBalancers = function() {
+  GetSuggestedLoadBalancers = function() {
     // Returns List of the Avaialable Load Balancers
     return suggestions.GetLoadBalancerSuggestionsRestController()
   }

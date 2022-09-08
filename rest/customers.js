@@ -54,7 +54,7 @@ function ResetPasswordRestController(NewPassword){
     headers: {
       "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Credentials": "true",
-      "Authorization": $.cookie("jwt-token")
+      "Authorization": $.cookie("jwt-token"),
     },
     success: function(Response){
       if (Response.StatusCode == 201) {

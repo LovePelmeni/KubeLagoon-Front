@@ -97,9 +97,9 @@
 /* eslint-disable no-unused-vars */
 
 import { mapActions, mapMutations, mapState } from "vuex";
-import SuggestionsManager from "../../suggestions/suggestions.js"
+import * as suggestions from "../../suggestions/suggestions.js"
 import loadingPage from "./LoadingPage.vue"
-import VirtualMachineManager from "../../vm/vm.js"
+import * as vm from "../../vm/vm.js"
 
 
 export const hardwareConfiguration = {
@@ -159,11 +159,10 @@ export const hardwareConfiguration = {
             </tr>
 
             <tr class="table-items flex" v-for="(LoadBalancer, index) in LoadBalancers" :key="index">
-
               <td class="item-name"><input type="text" v-model="LoadBalancer.Name" /></td>
 
               <img @click="selectLoadBalancer(LoadBalancer.Name)" v-if="LoadBalancer != AddedLoadBalancer" :src="LoadBalancer.Avatar" alt="" />
-              <img @click="unSelectLoadBalancer(LoadBalancer.Name)" v-else :src="require('@/assets/icon-delete.svg') alt='icon-delete'"/>
+              <img @click="unSelectLoadBalancer(LoadBalancer.Name)" v-else :src="require('@/assets/icon-delete.svg')" alt="icon-delete" />
 
               <span v-if="errors['LoadBalancer'][LoadBalancer.Name]">{{ errors['LoadBalancer'][LoadBalancer.Name] }}</span>
             </tr>
@@ -183,7 +182,7 @@ export const hardwareConfiguration = {
               <td class="item-name"><input type="text" v-model="Datacenter.DatacenterName" /></td>
 
               <img @click="selectDatacenter(Datacenter.DatacenterName)" v-if="Datacenter != AddedDatacenter" :src="Datacenter.Avatar" alt="" />
-              <img @click="unSelecteDatacenter(Datacenter.DatacenterName)" v-else :src="require('@/assets/icon-delete.svg')" alt='icon-delete'/>
+              <img @click="unSelectDatacenter(Datacenter.DatacenterName)" v-else :src="require('@/assets/icon-delete.svg')" alt="icon-delete"/>
 
               <span v-if="errors['Datacenter'][Datacenter.DatacenterName]">{{ errors['Datacenter'][Datacenter.DatacenterName] }}</span>
 
@@ -207,7 +206,7 @@ export const hardwareConfiguration = {
 
 
                 <img @click="selectOperationalSystem(OperationalSystem.Name)" v-if="OperationalSystem.SystemName" :src="OperationalSystem.Avatar" alt="" />
-                <img @click="unSelectOperationalSystem(OperationalSystem.Name)" v-else :src="require('@/assets/icon-delete.svg')" alt='icon-delete'" />
+                <img @click="unSelectOperationalSystem(OperationalSystem.Name)" v-else :src="require('@/assets/icon-delete.svg')" alt="icon-delete" />
 
                 <span v-if="errors['OS'][OperationalSystem.SystemName]">{{ errors['OS'][OperationalSystem.SystemName] }}</span>
 
@@ -230,7 +229,7 @@ export const hardwareConfiguration = {
                     <td class="item-name"><input type="text" v-model="Tool.Version" /></td>
 
                     <img @click="addPreInstalledTools(Tool.Name)" v-if="!(Tool in AddedPreInstalledTools)" :src="Tool.Avatar" alt="" />
-                    <img @click="unSelectPreInstalledTool(Tool.Name)" v-else :src="require('@/assets/icon-delete.svg')" alt='icon-delete'" />
+                    <img @click="unSelectPreInstalledTool(Tool.Name)" v-else :src="require('@/assets/icon-delete.svg')" alt="icon-delete" />
 
                     <span v-if="errors['Tool'][Tool.Name]">{{ errors['Tool'][Tool.Name] }}</span>
                 </tr>
@@ -270,7 +269,7 @@ export const hardwareConfiguration = {
     },
 
     GetSuggestionsManager() {
-      let SuggestionManager = new SuggestionsManager()
+      let SuggestionManager = new suggestions.SuggestionsManager()
       return SuggestionManager
     },
 
@@ -279,6 +278,7 @@ export const hardwareConfiguration = {
       let newManager = this.GetSuggestionsManager()
       let LoadBalancers, _ = newManager.GetSuggestedLoadBalancers()
       if (LoadBalancers != null) {this.LoadBalancers = LoadBalancers}
+      this.LoadBalancers = LoadBalancers
     },
 
     GetSuggestedDatacenters() {
@@ -406,7 +406,6 @@ export const resourceConfiguration = {
     }
   },
   template: `
-
         <div class="resourceConfiguration flex flex-column">
             <h4>Resource Configuration</h4>
             <div class="input flex flex-column">
@@ -541,6 +540,7 @@ export default {
       virtualMachineCreationDate: null,
       virtualMachineDateUnix: null,
       paymentDueDate: null,
+      paymentTerms: null,
 
       updateVirtualMachine: false,
 
@@ -579,7 +579,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(["TOGGLE_VIRTUAL_MACHINE", "TOGGLE_UPDATE_VIRTUAL_MACHINE"]),
+    ...mapMutations(["TOGGLE_VIRTUAL_MACHINE", "TOGGLE_UPDATE_VIRTUAL_MACHINE", "SHOW_ERROR"]),
     ...mapActions(["UPDATE_VIRTUAL_MACHINE", "GET_VIRTUAL_MACHINES", "GET_VIRTUAL_MACHINE"]),
 
     checkClick(e) {
@@ -620,9 +620,9 @@ export default {
 
     GetCustomerVirtualMachines() {
       // Returns Queryset of the Virtual Machines, related to the Customer
-      let newVirtualMachineManager = new VirtualMachineManager()
+      let newVirtualMachineManager = new vm.VirtualMachineManager()
       let VirtualMachinesQueryset, GetError = newVirtualMachineManager.GetCustomerVirtualMachines()
-      if (GetError != null) {this.showError(GetError.error)}
+      if (GetError != null) {this.SHOW_ERROR(GetError.error)}
       this.VirtualMachineItemList = VirtualMachinesQueryset
     },
 
@@ -639,25 +639,25 @@ export default {
       // Adding it to the Customer's Virtual Machine Item List
 
       if (CreationError == null) {
-        let VmManager = new VirtualMachineManager()
+        let VmManager = new vm.VirtualMachineManager()
         let VirtualMachine = VmManager.GetVirtualMachine(VirtualMachineInfo["VirtualMachineId"])
         this.addVirtualMachineToList(VirtualMachine)
       }
     },
 
+
     DeleteVirtualMachine(VirtualMachineId) {
       // Deletes Selected Virtual Machine, Activates Warning before doing that Operation
       this.DELETE_VIRTUAL_MACHINE(VirtualMachineId)
       this.VirtualMachineItemList = this.VirtualMachineItemList.filter((item) => item.id !== VirtualMachineId);
-
     },
 
     getVirtualMachineCostTotal() {
       // Returns Total Amount of the Money, that Customer will need to pay for All Virtual Machines Maintainance Monthly
       this.TotalCost = 0;
-      this.VirtualMachineItemList.forEach((item) => {
-      this.VirtualMachineCostTotal += item.TotalCost;
-      });
+      for (let item in this.VirtualMachineItemList){
+        this.VirtualMachineCostTotal += item.TotalCost;
+      }
     },
 
     saveDraft() {

@@ -3,6 +3,7 @@ import * as preparer from "../configuration_preparer/preparer.js"
 import Vuex from "vuex";
 
 export default new Vuex.Store({
+
   state: {
     virtualMachineData: [],
     initializationModal: null,
@@ -11,6 +12,7 @@ export default new Vuex.Store({
     currentVirtualMachineArray: null,
     updateVirtualMachine: null,
   },
+
   mutations: {
 
     TOGGLE_INITIALIZATION_MODAL(state) {
@@ -46,6 +48,7 @@ export default new Vuex.Store({
 
     RUN_VIRTUAL_MACHINE(virtualMachineId) {
       // Runs Virtual Machine Server
+
       let vmManager = new vm.VirtualMachineManager()
       let Started, StartError = vmManager.StartVirtualMachine(virtualMachineId)
       if (StartError != null || Started != true) {this.SHOW_ERROR(StartError)}
@@ -53,6 +56,7 @@ export default new Vuex.Store({
 
     SHUTDOWN_VIRTUAL_MACHINE(virtualMachineId) {
       // Shuts down the Virtual Machine  Server
+
       let vmManager = new vm.VirtualMachineManager()
       let Shutdown, ShutdownError = vmManager.ShutdownVirtualMachine(virtualMachineId)
       if (Shutdown != true || ShutdownError != null) {this.SHOW_ERROR(ShutdownError)}
@@ -191,6 +195,7 @@ export default new Vuex.Store({
       }
     },
 
+
     UPDATE_VIRTUAL_MACHINE(state, payload, virtualMachineId) {
       // Updates Virtual Machine Server
 
@@ -209,6 +214,7 @@ export default new Vuex.Store({
       }
     },
 
+
     UPDATE_STATUS_TO_RUNNING(state, payload) {
       // Updates Visualized Status to Running
       state.virtualMachineData.forEach((virtualMachine) => {
@@ -219,6 +225,7 @@ export default new Vuex.Store({
         }
       });
     },
+
 
     UPDATE_STATUS_TO_SHUTDOWN(state, payload) {
       // Updates Visualized Status to Shutdown
@@ -231,6 +238,7 @@ export default new Vuex.Store({
       });
     },
 
+
     UPDATE_STATUS_TO_DEPLOYING(state, payload) {
       // Updates Visualized Status to Deploying
       state.virtualMachineData.forEach((virtualMachine) => {
@@ -242,6 +250,7 @@ export default new Vuex.Store({
       });
     },
   },
+
   actions: {
 
     CreateNewVirtualMachine(customizedConfigurationData, hardwareConfiguration) {
@@ -283,15 +292,16 @@ export default new Vuex.Store({
     GET_VIRTUAL_MACHINE(VirtualMachineId) {
       // Returns A Virtual Machine Server Object Info
       let virtualMachineManager = new vm.VirtualMachineManager()
-      let virtualMachine = virtualMachineManager.GetVirtualMachine(VirtualMachineId)
+      let virtualMachine = virtualMachineManager.GetCustomerVirtualMachine(VirtualMachineId)
       return virtualMachine
     },
+
 
     GET_VIRTUAL_MACHINES({ commit, state }) {
       // Returns List of the Virtual Machine Servers, belongs To Customer
 
       let VirtualMachineManager = new vm.VirtualMachineManager()
-      let results = VirtualMachineManager.GetVirtualMachines()
+      let results = VirtualMachineManager.GetCustomerVirtualMachines()
 
       for (let virtualMachine in results){
         if (!state.VirtualMachineData.some((virtualMachine) => virtualMachine.VirtualMachineId === virtualMachine.VirtualMachineId)) {
