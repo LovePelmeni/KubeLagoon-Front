@@ -2,19 +2,22 @@ var BACKEND_APPLICATION_HOST = process.env.BACKEND_APPLICATION_HOST
 var BACKEND_APPLICATION_PORT = process.env.BACKEND_APPLICATION_PORT
 /* eslint-disable no-unused-vars */
 
-import $ from "jquery";
-var Url = require('url-parse')
+var $ = global.jQuery;
+window.$ = $;
 
+var Url = require('url-parse')
 import "../configuration_preparer/preparer.js"
+
 
 function CreateCustomerRestController(CustomerData) {
   // Rest Controller, that is responsible for creating new Customer Profile
 
     var APIUrl = new Url("http://%s:%s/customer/create/" % (BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
     var HttpResponse, HttpErrors = $.ajax({
-      method: "POST",
+      type: "POST",
       data: JSON.stringify(CustomerData),
-      url: APIUrl,
+      dataType: "json",
+      URL: APIUrl,
       headers: {
         "Access-Control-Allow-Origin": "*",
         "Content-Type": "application/json",
@@ -25,7 +28,7 @@ function CreateCustomerRestController(CustomerData) {
           return false, [Response.Error]
         }
         if (Response.StatusCode == 201) {
-          $.SetCookie("jwt-token", Response.cookie("jwt-token"))
+          $.SetCookie("jwt-token", Response.getResponseHeader("jwt-token"))
           return true, []
         }
         if (Response.StatusCode == 500) {
@@ -49,8 +52,9 @@ function ResetPasswordRestController(NewPassword){
   var APIUrl = new Url("http://%s:%s/customer/reset/password" % (BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
   let ResponseStatus, ResponseErrors = $.ajax({
     data: JSON.stringify({"NewPassword": NewPassword}),
-    url: APIUrl,
-    method: "PUT",
+    dataType: "json",
+    URL: APIUrl,
+    type: "PUT",
     headers: {
       "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Credentials": "true",
@@ -76,12 +80,12 @@ function DeleteCustomerRestController() {
 
   var APIUrl = new Url("http://%s:%s/customer/delete" % (BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
   var Response, Error = $.ajax({
-    url: APIUrl,
-    method: "DELETE",
+    URL: APIUrl,
+    type: "DELETE",
     headers: {
       "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Credentials": "true",
-      "Authorization": $.cookie("jwt-token"),
+      "Authorization": $.cookie('jwt-token'),
       "Content-Type": "application/json",
     },
     success: function(Response) {
@@ -105,11 +109,11 @@ function LoginCustomerRestController(Username, Password) {
   var APIUrl = Url("http://%s:%s/login/" % (
   BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
   var Response, ResponseError = $.ajax({
-    url: APIUrl,
+    type: "POST",
+    URL: APIUrl,
     data: JSON.stringify({"Username": Username, "Password": Password}),
     headers: {
       "Access-Control-Allow-Origin": "*",
-      "Authorization": $.cookie("jwt-token"),
     },
     success: function(Response) {
       // Processing Success Login Request
@@ -124,13 +128,9 @@ function LoginCustomerRestController(Username, Password) {
   })
   return Response, ResponseError
 }
-
 function LogoutCustomerRestController() {
-  // Logouts Customer from their Profile
-  let Removed = $.RemoveCookie("jwt-token")
-  return Removed, null
+  // Deletes the Jwt auth token
 }
-
 export {CreateCustomerRestController,
 DeleteCustomerRestController,
 LoginCustomerRestController,

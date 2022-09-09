@@ -1,12 +1,17 @@
-<template>
-  <router-link class="virtual_machine flex" :to="{ name: 'virtual_machine', params: { VirtualMachineId: VirtualMachine.VirtualMachine } }">
+<script>
+
+export default {
+  name: "VirtualMachineBannerInfo",
+  props: ["VirtualMachine"],
+  template: `
+  <router-link class="virtual_machine flex" :to="{ name: 'virtual_machine', params: { VirtualMachineId: VirtualMachine.VirtualMachineId } }">
     <div class="left flex">
       <span class="tracking-number">#{{ VirtualMachine.VirtualMachineId }}</span>
       <span class="due-date">{{ VirtualMachine.paymentDueDate }}</span>
       <span class="person">{{ VirtualMachine.CustomerName }}</span>
     </div>
     <div class="right flex">
-      <span class="price">${{ VirtualMachine.TotalCost }}</span>
+      <span class="price">{{ VirtualMachine.TotalCost }}$</span>
       <div
         class="status-button flex"
         :class="{ running: VirtualMachine.Running, shutdown: VirtualMachine.Shutdown, deploying: VirtualMachine.Deploying }"
@@ -19,17 +24,12 @@
         <img :src="require('@/assets/icon-arrow-right.svg')" alt="arrow-right" />
       </div>
     </div>
-  </router-link>
-</template>
-
-<script>
-export default {
-  name: "VirtualMachineBannerInfo",
-  props: ["VirtualMachine"],
+  </router-link>`,
 };
 </script>
 
 <style lang="scss" scoped>
+
 .virtual_machine {
   text-decoration: none;
   cursor: pointer;

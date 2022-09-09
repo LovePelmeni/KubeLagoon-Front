@@ -1,4 +1,4 @@
-import * as preparer from "../configuration_preparer/preparer.js"
+import * as vm_rest from "../rest/virtual_machine.js"
 
 /* eslint-disable no-unused-vars */
 
@@ -12,327 +12,50 @@ var Url = require("url-parse");
 
 class VirtualMachineManager {
   // Class That Manages Virtual Machine
-  InitializeVirtualMachine = function(Configuration){
-    // Initializes New Empty Virtual Machine Server
-    let configurationPreparer = new preparer.ConfigurationPreparer()
-    var APIUrl = new Url("http://%s:%s/vm/initialize/",
-    BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT)
-    try {
-    let Response, ResponseError = $.ajax({
-      async: false,
-      method: "POST",
-      data: JSON.stringify(configurationPreparer.PrepareHardwareConfiguration(Configuration)),
-      url: APIUrl,
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Credentials": "true",
-        "Authorization": $.cookie("jwt-token"),
-      },
-      success: function(Response) {
-        // Processing Response
-        if (Response.StatusCode == 201) {
-          return Response.InitializedVmInfo // Consists of the Virtual Machine ID
-        }else{
-          return null, Error(Response.Error)
-        }
-      },
-      error: function(Error) {
-        return null, Error(Error)
-      },
-    })
-    return Response, ResponseError
-  }catch (APIException){
-    return null, Error(APIException)
-  }
-  }
 
-  ApplyVirtualMachineConfiguration = function(CustomizedConfiguration, VirtualMachineId) {
-    // Applying Configuration to the Virtual Machine
-    var APIUrl = new Url("http://%s:%s/vm/apply/configuration/" % (
-    BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
-    APIUrl.searchParams.append("VirtualMachineId", VirtualMachineId)
-    try {
-        let Response, Error = $.ajax({
-          async: false,
-          url: APIUrl,
-          method: "POST",
-          data: JSON.stringify({"CustomizedConfiguration": CustomizedConfiguration}),
-          headers: {
-            "Access-Control-Allow-Origin": "*",
-            "Access-Control-Allow-Credentials": "true",
-            "Authorization": $.cookie("jwt-token"),
-          },
-          success: function(Response) {
-            if (Response.StatusCode == 201) {
-              return Response.VmInfo, null
-            }else{
-              return null, Error(Response.Error)
-            }
-          },
-          error: function(Error) {
-            return null, Error(Error)
-          }
-        })
-    return Response, Error
-  } catch(APIException){
-      return null, APIException
+    InitializeVirtualMachine = function(Configuration){
+      // Initializes New Empty Virtual Machine Serve
+      return vm_rest.InitializeVirtualMachineRestController(Configuration)
     }
-  }
 
-  StartVirtualMachine = function(VirtualMachineId) {
-    // Applying Configuration to the Virtual Machine
-    var APIUrl = new Url("http://%s:%s/vm/start/" % (
-    BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
-    APIUrl.searchParams.append("VirtualMachineId", VirtualMachineId)
-    try {
-        let Response, Error = $.ajax({
-          async: false,
-          url: APIUrl,
-          method: "POST",
-          headers: {
-            "Access-Control-Allow-Origin": "*",
-            "Access-Control-Allow-Credentials": "true",
-            "Authorization": $.cookie("jwt-token"),
-          },
-          success: function(Response) {
-            if (Response.StatusCode == 201) {
-              return Response.VmInfo, null
-            }else{
-              return null, Error(Response.Error)
-            }
-          },
-          error: function(Error) {
-            return null, Error(Error)
-          }
-        })
-    return Response, Error
-  } catch(APIException){
-      return null, APIException
+    ApplyVirtualMachineConfiguration = function(CustomizedConfiguration, VirtualMachineId) {
+      // Applying Configuration to the Virtual Machine
+      return vm_rest.ApplyVirtualMachineConfigurationRestController(CustomizedConfiguration, VirtualMachineId)
     }
-  }
 
     RebootVirtualMachine = function(VirtualMachineId) {
     // Applying Configuration to the Virtual Machine
-    var APIUrl = new Url("http://%s:%s/vm/reboot/" % (
-    BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
-    APIUrl.searchParams.append("VirtualMachineId", VirtualMachineId)
-    try {
-        let Response, Error = $.ajax({
-          async: false,
-          url: APIUrl,
-          method: "PUT",
-          headers: {
-            "Access-Control-Allow-Origin": "*",
-            "Access-Control-Allow-Credentials": "true",
-            "Authorization": $.cookie("jwt-token"),
-          },
-          success: function(Response) {
-            if (Response.StatusCode == 201) {
-              return Response.VmInfo, null
-            }else{
-              return null, Error(Response.Error)
-            }
-          },
-          error: function(Error) {
-            return null, Error(Error)
-          }
-        })
-    return Response, Error
-  } catch(APIException){
-      return null, APIException
+      return vm_rest.RebootVirtualMachineRestController(VirtualMachineId)
     }
-  }
 
     ShutdownVirtualMachine = function(VirtualMachineId) {
     // Applying Configuration to the Virtual Machine
-    var APIUrl = new Url("http://%s:%s/vm/shutdown/" % (
-    BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
-    APIUrl.searchParams.append("VirtualMachineId", VirtualMachineId)
-    try {
-        let Response, Error = $.ajax({
-          async: false,
-          url: APIUrl,
-          method: "DELETE",
-          headers: {
-            "Access-Control-Allow-Origin": "*",
-            "Access-Control-Allow-Credentials": "true",
-            "Authorization": $.cookie("jwt-token"),
-          },
-          success: function(Response) {
-            if (Response.StatusCode == 201) {
-              return Response.VmInfo, null
-            }else{
-              return null, Error(Response.Error)
-            }
-          },
-          error: function(Error) {
-            return null, Error(Error)
-          }
-        })
-    return Response, Error
-  } catch(APIException){
-      return null, APIException
+      return vm_rest.ShutdownVirtualMachineRestController(VirtualMachineId)
     }
-  }
 
     StartVirtualMachineOperationalSystem = function(VirtualMachineId) {
     // Applying Configuration to the Virtual Machine
-    var APIUrl = new Url("http://%s:%s/vm/apply/configuration/" % (
-    BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
-    APIUrl.searchParams.append("VirtualMachineId", VirtualMachineId)
-    try {
-        let Response, Error = $.ajax({
-          async: false,
-          url: APIUrl,
-          method: "POST",
-          headers: {
-            "Access-Control-Allow-Origin": "*",
-            "Access-Control-Allow-Credentials": "true",
-            "Authorization": $.cookie("jwt-token"),
-          },
-          success: function(Response) {
-            if (Response.StatusCode == 201) {
-              return Response.VmInfo, null
-            }else{
-              return null, Error(Response.Error)
-            }
-          },
-          error: function(Error) {
-            return null, Error(Error)
-          }
-        })
-    return Response, Error
-  } catch(APIException){
-      return null, APIException
+      return vm_rest.StartVirtualMachineRestController(VirtualMachineId)
     }
-  }
 
     RebootVirtualMachineOperationalSystem = function(VirtualMachineId) {
     // Applying Configuration to the Virtual Machine
-    var APIUrl = new Url("http://%s:%s/vm/apply/configuration/" % (
-    BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
-    APIUrl.searchParams.append("VirtualMachineId", VirtualMachineId)
-    try {
-        let Response, Error = $.ajax({
-          async: false,
-          url: APIUrl,
-          method: "PUT",
-          headers: {
-            "Access-Control-Allow-Origin": "*",
-            "Access-Control-Allow-Credentials": "true",
-            "Authorization": $.cookie("jwt-token"),
-          },
-          success: function(Response) {
-            if (Response.StatusCode == 201) {
-              return Response.VmInfo, null
-            }else{
-              return null, Error(Response.Error)
-            }
-          },
-          error: function(Error) {
-            return null, Error(Error)
-          }
-        })
-    return Response, Error
-  } catch(APIException){
-      return null, APIException
+      return vm_rest.RebootVmOsRestController(VirtualMachineId)
     }
-  }
 
     ShutdownVirtualMachineOperationalSystem = function(VirtualMachineId) {
     // Applying Configuration to the Virtual Machine
-    var APIUrl = new Url("http://%s:%s/vm/apply/configuration/" % (
-    BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
-    APIUrl.searchParams.append("VirtualMachineId", VirtualMachineId)
-    try {
-        let Response, Error = $.ajax({
-          async: false,
-          url: APIUrl,
-          method: "DELETE",
-          headers: {
-            "Access-Control-Allow-Origin": "*",
-            "Access-Control-Allow-Credentials": "true",
-            "Authorization": $.cookie("jwt-token"),
-          },
-          success: function(Response) {
-            if (Response.StatusCode == 201) {
-              return Response.VmInfo, null
-            }else{
-              return null, Error(Response.Error)
-            }
-          },
-          error: function(Error) {
-            return null, Error(Error)
-          }
-        })
-    return Response, Error
-  } catch(APIException){
-      return null, APIException
+      return vm_rest.ShutdownVmOsRestController(VirtualMachineId)
     }
-  }
 
-  GetCustomerVirtualMachineInfo = function(VirtualMachineId) {
-    // Receiving Virtual Machine Server
-    var APIUrl = new Url("http://%s:%s/vm/get/" % (
-    BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
-    APIUrl.searchParams.append("VirtualMachineId", VirtualMachineId)
-    try {
-        let Response, ResponseError = $.ajax({
-          async: false,
-          url: APIUrl,
-          method: "GET",
-          headers: {
-            "Access-Control-Allow-Origin": "*",
-            "Access-Control-Allow-Credentials": "true",
-            "Authorization": $.cookie("jwt-token"),
-          },
-          success: function(Response) {
-            if (Response.StatusCode == 201 || Response.StatusCode == 200) {
-              let Vm = JSON.Parse(Response.VirtualMachine)
-              return Vm, null
-            }else{
-              return {}, Error(Response.Error)
-            }
-          },
-          error: function(Error) {
-            return {}, Error(Error)
-          }
-        })
-        return Response, ResponseError
-  } catch(APIException){
-    return {}, APIException
-  }
-  }
-  GetCustomerVirtualMachines = function() {
-    // Receives all Virtual Machine Servers, belongs to the Customer
-    var APIUrl = new Url("http://%s:%s/vm/get/list/" %
-    (BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
-    try {
-        let Response, Error = $.ajax({
-          async: false,
-          url: APIUrl,
-          method: "GET",
-          headers: {
-            "Access-Control-Allow-Origin": "*",
-            "Access-Control-Allow-Credentials": "true",
-            "Authorization": $.cookie("jwt-token"),
-          },
-          success: function(Response) {
-            if (Response.StatusCode == 201 || Response.StatusCode == 200) {
-              let VmQuerySet = JSON.Parse(Response.VirtualMachine)
-              return VmQuerySet, null
-            }else{
-              return [], Error(Response.Error)
-            }
-          },
-          error: function(Error) {
-            return [], Error(Error)
-          }
-        })
-        return Response, Error
-  } catch(APIException)  {
-    return [], APIException
-  }
-}}
+    GetCustomerVirtualMachineInfo = function(VirtualMachineId) {
+      // Receives Info About Customers Virtual Machine
+      return vm_rest.GetVirtualMachineRestController(VirtualMachineId)
+    }
+    GetCustomerVirtualMachines = function() {
+      // Receives all Virtual Machine Servers, belongs to the Customer
+        return vm_rest.GetVirtualMachinesRestController()
+    }
+}
 
 export {VirtualMachineManager};

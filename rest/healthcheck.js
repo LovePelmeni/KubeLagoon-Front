@@ -1,10 +1,11 @@
 import "../healthcheck/healthcheck.js"
-import $ from "jquery";
-
 /* eslint-disable no-unused-vars */
 
 var BACKEND_APPLICATION_HOST = process.env.BACKEND_APPLICATION_HOST
 var BACKEND_APPLICATION_PORT = process.env.BACKEND_APPLICATION_PORT
+
+var $ = global.jQuery;
+window.$ = $;
 
 var Url = require('url-parse');
 
@@ -15,8 +16,8 @@ function GetHealthCheckMetricsRestController(VirtualMachineId) {
   APIUrl.searchParams.append("VirtualMachineId", VirtualMachineId)
   try {
       ResponseData, ResponseErrors = $.ajax({
-        url: APIUrl,
-        method: "GET",
+        URL: APIUrl,
+        type: "GET",
         headers: {
           "Access-Control-Allow-Origin": "*",
           "Access-Control-Allow-Credentials": "true",

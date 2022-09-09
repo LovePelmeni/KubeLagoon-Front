@@ -1,20 +1,78 @@
-import "../../configuration_preparer/preparer.js"
+import "../configuration_preparer/preparer.js"
 var BACKEND_APPLICATION_PORT = process.env.BACKEND_APPLICATION_PORT
 var BACKEND_APPLICATION_HOST = process.env.BACKEND_APPLICATION_HOST
 
-import $ from "jquery";
+var $ = global.jQuery;
+window.$ = $;
 var Url = require('url-parse');
 
 /* eslint-disable no-unused-vars */
+
+function GetVirtualMachineRestController(VirtualMachineId) {
+  // Rest Controller, that returns Info about the Virtual Machine
+  var APIUrl = new Url("http://%s:%s/vm/get/" % (
+  BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
+  APIUrl.searchParams.append("VirtualMachineId", VirtualMachineId)
+  var Response, ResponseError = $.ajax({
+    URL: APIUrl,
+    type: "GET",
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Credentials": "true",
+      "Authorization": $.cookie("jwt-token"),
+    },
+    success: function() {
+      // Returns Virtual Machine
+      if (Response.StatusCode == 200 && Response.StatusCode == 201) {
+        return Response.QuerySet, null
+      }else{
+        return {}, Error(Response.Error)
+      }
+    },
+    error: function(Error) {
+      // Returns Exception
+      return {}, Error(Error)
+    },
+  })
+  return Response, ResponseError
+}
+
+function GetVirtualMachinesRestController() {
+  // Rest Controller, that returns Queryset of the Customer's Virtual Machines
+  var APIUrl = new Url("http://%s:%s/vm/get/list/" % (
+  BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
+  var Response, ResponseError = $.ajax({
+    URL: APIUrl,
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Credentials": "true",
+      "Authorization": $.cookie("jwt-token"),
+    },
+    type: "GET",
+    success: function(Response) {
+        if (Response.StatusCode == 201 && Response.StatusCode == 200) {
+          return Response.QuerySet, null
+        }else{
+          return [], Error(Response.Error)
+        }
+    },
+    error: function(Error) {
+      return [], Error(Error)
+    },
+  })
+  return Response, ResponseError
+}
+
+
 
 function InitializeVirtualMachineRestController(Configuration) {
   // Rest Controller, that Initializes New Virtual Machine
   var APIUrl = new Url("http://%s:%s/vm/initialize/" % (
   BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
-  Response, Error= $.ajax({
+  let Response, Error= $.ajax({
     async: false,
-    url: APIUrl,
-    method: "POST",
+    URL: APIUrl,
+    type: "POST",
     data: JSON.stringify({"HardwareConfiguration": Configuration}),
     headers: {
       "Access-Control-Allow-Origin": "*",
@@ -23,7 +81,7 @@ function InitializeVirtualMachineRestController(Configuration) {
     },
     success: function(Response){
         // Processing Initialization Response
-        if (Response.StatusCode != 201 || Response.StatusCode != 200) {
+        if (Response.StatusCode != 201 && Response.StatusCode != 200) {
           return null, Error(Response.Error)
         }else{
           return Response.VmInfo, null // Returns Info About Initialized Instance
@@ -43,20 +101,19 @@ function ApplyVirtualMachineConfigurationRestController(CustomConfiguration, Vir
   BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
   APIUrl.searchParams.append("VirtualMachineId", VirtualMachineId)
 
-  Response, Error = $.ajax({
+  let Response, Error = $.ajax({
     async: false,
-    url: APIUrl,
-    method: "POST",
-    data: {
-      "CustomizedConfiguration": CustomConfiguration,
-    },
+    URL: APIUrl,
+    type: "POST",
+    data: JSON.stringify({"CustomizedConfiguration": CustomConfiguration}),
+    dataType: "json",
     headers: {
       "Access-Control-Allow-Origin": "*",
       "Authorization": $.cookie("jwt-token"),
       "Access-Control-Allow-Credentials": "true",
     },
     success: function (Response) {
-      if (Response.StatusCode != 200 || Response.StatusCode != 201) {
+      if (Response.StatusCode != 200 && Response.StatusCode != 201) {
         return null, Error(Response.Error)
       }else{
         return Response.SshInfo, null
@@ -75,17 +132,20 @@ function DestroyVirtualMachineRestController(VirtualMachineId) {
   var APIUrl = new Url("http://%s:%s/vm/destroy/" % (
   BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
   let Response, ResponseError = $.ajax({
-    url: APIUrl,
+    URL: APIUrl,
     async: false,
-    method: "DELETE",
+    type: "DELETE",
     headers: {
       "Access-Control-Allow-Origin": "*",
-      "Access-Control-Allow-Credentials": "true"
+      "Access-Control-Allow-Credentials": "true",
+      "Authorization": $.cookie('jwt-token'),
     },
     success: function(Response) {
       // Processing Success Response
-      if !(Response.StatusCode in (200, 201)) {
+      if (Response.StatusCode != 200 && Response.StatusCode != 201) {
         return null, Error(Response.Error)
+      }else{
+        return "Successfully Removed", null
       }
     },
     error: function(ResponseError) {
@@ -102,11 +162,10 @@ function StartVirtualMachineRestController(VirtualMachineId) {
   (BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
   APIUrl.searchParams.append("VirtualMachineId", VirtualMachineId)
 
-  Response, Error= $.ajax({
+  let Response, Error = $.ajax({
     async: false,
-    url: APIUrl,
-    method: "POST",
-    data: JSON.stringify({"HardwareConfiguration": Configuration}),
+    URL: APIUrl,
+    type: "POST",
     headers: {
       "Access-Control-Allow-Origin": "*",
       "Authorization": $.cookie("jwt-token"),
@@ -114,10 +173,10 @@ function StartVirtualMachineRestController(VirtualMachineId) {
     },
     success: function(Response){
         // Processing Initialization Response
-        if (Response.StatusCode != 201 || Response.StatusCode != 200) {
+        if (Response.StatusCode != 201 && Response.StatusCode != 200) {
           return null, Error(Response.Error)
         }else{
-          return Response.Operation, null // Returns Info About Initialized Instance
+          return "Successfully Started", null // Returns Info About Initialized Instance
         }
     },
     error: function(Error) {
@@ -134,11 +193,10 @@ function ShutdownVirtualMachineRestController(VirtualMachineId) {
   (BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
   APIUrl.searchParams.append("VirtualMachineId", VirtualMachineId)
 
-  Response, Error= $.ajax({
+  let Response, Error = $.ajax({
     async: false,
-    url: APIUrl,
-    method: "POST",
-    data: JSON.stringify({"HardwareConfiguration": Configuration}),
+    URL: APIUrl,
+    type: "DELETE",
     headers: {
       "Access-Control-Allow-Origin": "*",
       "Authorization": $.cookie("jwt-token"),
@@ -146,8 +204,8 @@ function ShutdownVirtualMachineRestController(VirtualMachineId) {
     },
     success: function(Response){
         // Processing Initialization Response
-        if (Response.StatusCode != 201 || Response.StatusCode != 200) {
-          return null, Error(Response.Error)
+        if (Response.StatusCode != 201 && Response.StatusCode != 200) {
+          return "Successfully Shutdown", Error(Response.Error)
         }else{
           return Response.Operation, null // Returns Info About Initialized Instance
         }
@@ -166,11 +224,10 @@ function RebootVirtualMachineRestController(VirtualMachineId) {
   (BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
   APIUrl.searchParams.append("VirtualMachineId", VirtualMachineId)
 
-  Response, Error= $.ajax({
+  let Response, Error = $.ajax({
     async: false,
-    url: APIUrl,
-    method: "POST",
-    data: JSON.stringify({"HardwareConfiguration": Configuration}),
+    URL: APIUrl,
+    type: "PUT",
     headers: {
       "Access-Control-Allow-Origin": "*",
       "Authorization": $.cookie("jwt-token"),
@@ -178,8 +235,8 @@ function RebootVirtualMachineRestController(VirtualMachineId) {
     },
     success: function(Response){
         // Processing Initialization Response
-        if (Response.StatusCode != 201 || Response.StatusCode != 200) {
-          return null, Error(Response.Error)
+        if (Response.StatusCode != 201 && Response.StatusCode != 200) {
+          return "Successfully Rebooted", Error(Response.Error)
         }else{
           return Response.Operation, null // Returns Info About Initialized Instance
         }
@@ -201,10 +258,10 @@ function StartVmOsRestController(VirtualMachineId) {
   (BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
   APIUrl.searchParams.append("VirtualMachineId", VirtualMachineId)
 
-  Response, Error = $.ajax({
+  let Response, Error = $.ajax({
     async: false,
-    url: APIUrl,
-    method: "POST",
+    URL: APIUrl,
+    type: "POST",
     headers: {
       "Access-Control-Allow-Origin": "*",
       "Authorization": $.cookie("jwt-token"),
@@ -212,10 +269,10 @@ function StartVmOsRestController(VirtualMachineId) {
     },
     success: function(Response){
         // Processing Initialization Response
-        if (Response.StatusCode != 201 || Response.StatusCode != 200) {
+        if (Response.StatusCode != 201 && Response.StatusCode != 200) {
           return null, Error(Response.Error)
         }else{
-          return Response.Operation, null // Returns Info About Initialized Instance
+          return "OS Successfully Started", null // Returns Info About Initialized Instance
         }
     },
     error: function(Error) {
@@ -232,10 +289,10 @@ function ShutdownVmOsRestController(VirtualMachineId) {
   (BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
   APIUrl.searchParams.append("VirtualMachineId", VirtualMachineId)
 
-  Response, Error= $.ajax({
+  let Response, Error = $.ajax({
     async: false,
-    url: APIUrl,
-    method: "DELETE",
+    URL: APIUrl,
+    type: "DELETE",
     headers: {
       "Access-Control-Allow-Origin": "*",
       "Authorization": $.cookie("jwt-token"),
@@ -243,10 +300,10 @@ function ShutdownVmOsRestController(VirtualMachineId) {
     },
     success: function(Response){
         // Processing Initialization Response
-        if (Response.StatusCode != 201 || Response.StatusCode != 200) {
+        if (Response.StatusCode != 201 && Response.StatusCode != 200) {
           return null, Error(Response.Error)
         }else{
-          return Response.Operation, null // Returns Info About Initialized Instance
+          return "OS Successfully Shutdown", null // Returns Info About Initialized Instance
         }
     },
     error: function(Error) {
@@ -263,10 +320,10 @@ function RebootVmOsRestController(VirtualMachineId) {
   (BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
   APIUrl.searchParams.append("VirtualMachineId", VirtualMachineId)
 
-  Response, Error= $.ajax({
+  let Response, Error = $.ajax({
     async: false,
-    url: APIUrl,
-    method: "PUT",
+    URL: APIUrl,
+    type: "PUT",
     headers: {
       "Access-Control-Allow-Origin": "*",
       "Authorization": $.cookie("jwt-token"),
@@ -274,10 +331,10 @@ function RebootVmOsRestController(VirtualMachineId) {
     },
     success: function(Response){
         // Processing Initialization Response
-        if (Response.StatusCode != 201 || Response.StatusCode != 200) {
+        if (Response.StatusCode != 201 && Response.StatusCode != 200) {
           return null, Error(Response.Error)
         }else{
-          return Response.Operation, null // Returns Info About Initialized Instance
+          return "OS Successfully Reboot", null // Returns Info About Initialized Instance
         }
     },
     error: function(Error) {
@@ -289,13 +346,15 @@ function RebootVmOsRestController(VirtualMachineId) {
 }
 
 export {
+  GetVirtualMachineRestController,
+  GetVirtualMachinesRestController,
   InitializeVirtualMachineRestController,
-        ApplyVirtualMachineConfigurationRestController,
-        DestroyVirtualMachineRestController,
-        StartVirtualMachineRestController,
-        ShutdownVirtualMachineRestController,
-        RebootVirtualMachineRestController,
-        StartVmOsRestController,
-        ShutdownVmOsRestController,
-        RebootVmOsRestController,
+  ApplyVirtualMachineConfigurationRestController,
+  DestroyVirtualMachineRestController,
+  StartVirtualMachineRestController,
+  ShutdownVirtualMachineRestController,
+  RebootVirtualMachineRestController,
+  StartVmOsRestController,
+  ShutdownVmOsRestController,
+  RebootVmOsRestController,
 }
