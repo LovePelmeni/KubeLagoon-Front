@@ -1,7 +1,7 @@
 <script>
 
-import * as customers from "../../customers/customers.js"
-import mapMutations from "vuex"
+import * as customers from "../../customers/customers.js";
+import { mapMutations } from "vuex";
 
 
 export default {
@@ -52,7 +52,6 @@ export default {
         street => !!street || 'Street is required',
         street => `^[a-z][A-Z][0-9]{1,100}$`.test(street) || 'Invalid Street Format, Example: "Smith Street, 6"'
     ],
-
   }),
 
   template: `  <v-app>
@@ -141,11 +140,9 @@ export default {
       <v-snackbar top color="green" v-model="snackbar">
         Registration success
       </v-snackbar>
-    </v-app>
-  `,
+  </v-app>`,
 
   methods: {
-
     ...mapMutations(["TOGGLE_ERROR"]),
 
     submitRegisterForm(){

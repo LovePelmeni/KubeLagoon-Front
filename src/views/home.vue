@@ -77,6 +77,7 @@ export default {
     },
 
     saveDraft() {
+      // Saves the Draft of the Configuration
       this.TOGGLE_INITIALIZATION_MODAL()
     },
 

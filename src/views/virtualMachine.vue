@@ -183,7 +183,7 @@ export default {
       // Running the Virtual Machine Server
       document.getElementById("runButton").innerText = "Running..."
       let RunError = this.RUN_VIRTUAL_MACHINE(VirtualMachineId)
-      if (RunError != null ) {this.TOGGLE_ERROR(
+      if (RunError != null) {this.TOGGLE_ERROR(
       "Failed to Run Virtual Machine, " + RunError.error)}
     },
 
@@ -193,10 +193,11 @@ export default {
       this.$route.push({name: "DeleteVirtualMachine",
       params: {"VirtualMachineId": VirtualMachineId}})
     },
+
   },
   computed: {
   ...mapState(["currentVirtualMachineArray", "updateVirtualMachine"]),
-},
+  },
   watch: {
     updateVirtualMachine() {
       if (!this.updateVirtualMachine) {

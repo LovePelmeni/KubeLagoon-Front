@@ -15,6 +15,7 @@ export default new Vuex.Store({
     activeNotification: false,
     notifications: [],
     error: null,
+    errors: [],
   },
 
   mutations: {
@@ -56,6 +57,7 @@ export default new Vuex.Store({
       // Toggling Error to show up
 
       // Showing up the error
+
       state.error = newError
       state.activeError = !state.activeError
       state.errors.push({'error': newError})

@@ -1,7 +1,7 @@
 <script>
 
-import * as customers from "../../customers/customers.js"
-import mapMutations from "vuex"
+import * as customers from "../../customers/customers.js";
+import {  mapMutations } from "vuex";
 
 export default {
 
@@ -9,9 +9,7 @@ export default {
   data: () => ({
 
     loading:false,
-
     snackbar:false,
-
     passwordShow:false,
 
     Username: '',
@@ -28,8 +26,7 @@ export default {
     ],
   }),
 
-  template: `
-  <v-app>
+  template: `<v-app>
     <div class="background"></div>
     <v-main class="d-flex justify-center align-center">
       <v-col cols="10" lg="4" class="mx-auto">
@@ -76,8 +73,8 @@ export default {
     <v-snackbar top color="green" v-model="snackbar">
       Login success
     </v-snackbar>
-  </v-app>
-  `,
+  </v-app>`,
+
   methods: {
     ...mapMutations(["TOGGLE_ERROR"]),
     submitLoginForm(){
@@ -93,7 +90,7 @@ export default {
       let newCustomerManager = new customers.CustomerManager()
       let loggedIn, LogError = newCustomerManager.LoginCustomer(this.email, this.password)
       if (LogError != null && loggedIn != true){this.TOGGLE_ERROR(LogError)}
-    }
+    },
   }
 };
 

@@ -64,7 +64,7 @@ import { mapMutations } from "vuex";
 
 
 export default {
-  
+
   name: "virtualMachineInfo",
   data() {
     return {
@@ -177,7 +177,6 @@ export default {
 }
 
 </script>
-
 
 <style lang="scss" scoped>
 
