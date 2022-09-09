@@ -531,30 +531,6 @@ export const sshConfiguration = {
 export default {
 
   name: "initializationModal",
-  mounted() {
-    // Importing Modules
-
-    // Importing Jquery
-
-    let jqueryScript = document.createElement('script')
-    jqueryScript.setAttribute('src', 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js')
-    document.head.appendChild(jqueryScript)
-
-    // Importing Jquery Cookie Module
-    let jqueryCookieScript = document.createElement('script')
-    jqueryCookieScript.setAttribute('src', 'https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js')
-    document.head.appendChild(jqueryCookieScript)
-
-    // Importing Virtual Machine API
-    let virtualMachineApi = document.createElement('script')
-    virtualMachineApi.setAttribute('src', '@/../vm/vm.js')
-    document.head.appendChild(virtualMachineApi)
-
-    // Importing Suggestions API Module
-    let suggestionsApi = document.createElement('script')
-    suggestionsApi.setAttribute('src', '@/../suggestions/suggestions.js')
-    document.head.appendChild(suggestionsApi)
-  },
   data() {
     return {
 
@@ -604,9 +580,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(["TOGGLE_VIRTUAL_MACHINE", "TOGGLE_UPDATE_VIRTUAL_MACHINE", "SHOW_ERROR"]),
-    ...mapActions(["UPDATE_VIRTUAL_MACHINE", "GET_VIRTUAL_MACHINES", "GET_VIRTUAL_MACHINE"]),
-
+    ...mapMutations(["TOGGLE_VIRTUAL_MACHINE", "TOGGLE_UPDATE_VIRTUAL_MACHINE", "SHOW_ERROR", "GET_VIRTUAL_MACHINE", "GET_VIRTUAL_MACHINES"]),
     checkClick(e) {
       if (e.target === this.$refs.virtualMachineWrap) {
         this.TOGGLE_MODAL();

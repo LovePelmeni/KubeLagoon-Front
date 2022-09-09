@@ -2,41 +2,48 @@
   <router-link class="virtualMachine flex" @onclick="RedirectHome()" :to="{name: 'main_page'}">
   <router-link :to="{ name: 'main_page'}">Go Back</router-link>
 
-    <div class="left flex">
+    <div class="left flex" v-if="virtualMachineLoaded">
       <span class="tracking-number"># General Info</span>
       <span class="person">{{ VirtualMachineId }}</span>
       <span class="due-date">{{ VirtualMachineName }}</span>
       <span class="person">{{ IPAddress }}</span>
     </div>
 
-    <div class="left flex">
+    <div class="left flex" v-if="virtualMachineLoaded">
       <span class="tracking-number"># SSH Info</span>
-      <span class="tracking-number" v-if="RootUserName">Root User: {{ VirtualMachine.RootUserName }}</span>
-      <span class="tracking-number" v-if="RootUserPassword">Root Password: {{ VirtualMachine.RootUserPassword }}</span>
+      <span class="tracking-number" v-if="RootUserName">Root User: {{ virtualMachine.RootUserName }}</span>
+      <span class="tracking-number" v-if="RootUserPassword">Root Password: {{ virtualMachine.RootUserPassword }}</span>
       <span class="tracking-number" v-if="SslEnabled">SSL Enabled</span>
-      <span class="tracking-number" v-if="RootCertificate">Certificate: {{ VirtualMachine.SslCertificate }}</span>
+      <span class="tracking-number" v-if="RootCertificate">Certificate: {{ virtualMachine.SslCertificate }}</span>
     </div>
 
-    <div class="left flex">
+    <div class="left flex" v-if="virtualMachineLoaded">
       <span class="tracking-number"># Cost</span>
-      <span class="tracking-number" v-if="TotalCostThisMonth">Total Cost This Month: {{ VirtualMachine.MaxCpuUsage}}</span>
-      <span class="tracking-number" v-if="PricePerDay">Price Per Day: {{ VirtualMachine.MaxCpuUsage}}</span>
+      <span class="tracking-number" v-if="TotalCostThisMonth">Total Cost This Month: {{ virtualMachine.MaxCpuUsage}}</span>
+      <span class="tracking-number" v-if="PricePerDay">Price Per Day: {{ virtualMachine.MaxCpuUsage}}</span>
     </div>
 
-    <div class="left flex">
+    <div class="left flex" v-if="virtualMachineLoaded">
       <span class="tracking-number"># Resources</span>
-      <span class="tracking-number" v-if="MaxCpuUsage">MaxCpuUsage: {{ VirtualMachine.MaxCpuUsage}}</span>
-      <span class="tracking-number" v-if="MaxMemoryUsage">MaxMemoryUsage: {{ VirtualMachine.MaxMemoryUsage }}</span>
+      <span class="tracking-number" v-if="MaxCpuUsage">MaxCpuUsage: {{ virtualMachine.MaxCpuUsage}}</span>
+      <span class="tracking-number" v-if="MaxMemoryUsage">MaxMemoryUsage: {{ virtualMachine.MaxMemoryUsage }}</span>
     </div>
 
 
-    <div class="left flex">
+    <div class="left flex" v-if="virtualMachineLoaded">
       <span class="tracking-number"># Health </span>
       <span class="tracking-number" v-if="CpuUsage">CPU Usage: {{ virtualMachine.CpuUsage }}</span>
       <span class="tracking-number" v-if="MemoryUsage">Memory Usage: {{ virtualMachine.MemoryUsage }}</span>
     </div>
 
-    <div class="right flex">
+
+    <div class="left flex" v-if="virtualMachineLoaded">
+      <span class="tracking-number">#  </span>
+      <span class="tracking-number" v-if="CpuUsage">CPU Usage: {{ virtualMachine.CpuUsage }}</span>
+      <span class="tracking-number" v-if="MemoryUsage">Memory Usage: {{ virtualMachine.MemoryUsage }}</span>
+    </div>
+
+    <div class="right flex" v-if="virtualMachineLoaded">
       <div class="status-button flex">
         <span class="green" v-if="Status=='Running'">Running</span>
         <span class="red" v-if="Status=='Failure'">Failure</span>
@@ -50,18 +57,19 @@
 
 <script>
 
-import * as healthcheck from "../healthcheck/healthcheck.js"
-import * as vm from "../../vm/vm.js"
-import {newRouter} from "../../router/router.js"
+import * as healthcheck from "../healthcheck/healthcheck.js";
+import * as vm from "../../vm/vm.js";
+import {newRouter} from "../../router/router.js";
+import { mapMutations } from "vuex";
 
-function GetCustomerName() {
-  // Returns Customer Name
-}
 
 export default {
+  
   name: "virtualMachineInfo",
   data() {
     return {
+
+      virtualMachineLoaded: false,
       // Owner Name
       CustomerName: GetCustomerName(),
 
@@ -95,10 +103,12 @@ export default {
     }
   },
   created() {
-    this.ShowtCustomerMachineInfo()
-    this.ShowVirtualMachineHealthMetrics()
+    this.GetCustomerVirtualMachine()
+    this.GetVirtualMachineHealthMetrics()
   },
   methods: {
+
+    ...mapMutations(["TOGGLE_ERROR"])
 
     RedirectHome() {
       // Redirect Back to the Main Page
@@ -108,21 +118,20 @@ export default {
 
     ShowError(ErrorMessage) {
       // Showing up and Error
-      console.log(ErrorMessage)
+      this.TOGGLE_ERROR(ErrorMessage)
     },
 
-    ShowCustomerVirtualMachineInfo() {
+    GetCustomerVirtualMachine() {
       // Returns Virtual Machine Info, (is not being changed dynamically)
 
       let VirtualMachineId = this.$route.params.VirtualMachineId
+      VirtualMachine, VirtualMachineError = this.GET_VIRTUAL_MACHINE(VirtualMachineId)
 
-      let VirtualMachineManager = new vm.VirtualMachineManager()
-      let VirtualMachineInfo, ErrorValue = VirtualMachineManager.GetVirtualMachine(VirtualMachineId)
-
-      if (ErrorValue != null) {
-        this.ShowError(ErrorValue.error)
+      if (VirtualMachineError != null) {
+          this.ShowError(VirtualMachineError.Error)
       }else{
 
+          this.virtualMachineLoaded = true
           this.CustomerName = this.GetCustomerName()
 
           this.VirtualMachineId = VirtualMachineInfo["Metadata"]["VirtualMachineId"]
@@ -141,7 +150,7 @@ export default {
           this.MaxCpuUsage = VirtualMachineInfo["ResourcesLimits"]["MaxCpuUsage"]
           this.MaxCpuUsage = VirtualMachineInfo["ResourceLimits"]["MaxMemoryUsage"]
           this.StorageCapacity = VirtualMachineInfo["ResourceLimits"]["StorageCapacity"]
-    }
+        }
     },
 
     ShowVirtualMachineHealthMetrics() {

@@ -24,8 +24,12 @@
 
          <div class="right flex">
 
-          <button @click="toggleUpdateVirtualMachine" class="dark-purple">Edit</button>
+          <button @click="runVirtualMachine(currentVirtualMachine.VirtualMachineId)" class="greeen">Run</button>
+          <button @click="updateVirtualMachine(currentVirtualMachine.VirtualMachineId)" class="yellow">Edit</button>
           <button @click="deleteVirtualMachine(currentVirtualMachine.VirtualMachineId)" class="red">Delete</button>
+          <button @click="shutdownVirtualMachine(currentVirtualMachine.VirtualMachineId)" class="red">Shutdown</button>
+          <button @click="rebootVirtualMachine(currentVirtualMachine.VirtualMachineId)" class="yellow">Reboot</button>
+
           <button id="shutdownButton" @click="updateVirtualMachine(currentVirtualMachine.VirtualMachineId)" v-if="currentInvoice.Deploying" class="orange">
            Shutdown
           </button>
@@ -111,7 +115,7 @@
 /* eslint-disable no-unused-vars */
 
 import { mapActions, mapMutations, mapState } from "vuex";
-import {router} from "../router/index.js"
+import router from "../router/index.js"
 
 export default {
   name: "virtualMachine",
@@ -128,9 +132,15 @@ export default {
   },
   methods: {
 
-   ...mapMutations(["SET_CURRENT_VIRTUAL_MACHINE", "TOGGLE_UPDATE_VIRTUAL_MACHINE", "TOGGLE_VIRTUAL_MACHINE", "RUN_VIRTUAL_MACHINE", "SHUTDOWN_VIRTUAL_MACHINE", "SHOW_ERROR"]),
-   ...mapActions(["DELETE_VIRTUAL_MACHINE", "UPDATE_STATUS_TO_RUNNING", "UPDATE_STATUS_TO_SHUTDOWN", "UPDATE_STATUS_TO_DEPLOYING"]),
-
+   ...mapMutations([
+      "SET_CURRENT_VIRTUAL_MACHINE",
+      "RUN_VIRTUAL_MACHINE",
+      "REBOOT_VIRTUAL_MACHINE",
+      "SHUTDOWN_VIRTUAL_MACHINE",
+      "TOGGLE_ERROR",
+      "CREATE_VIRTUAL_MACHINE",
+      "GET_VIRTUAL_MACHINE"
+    ]),
 
     RedirectHome() {
       // redirects to the Main Page
@@ -149,38 +159,32 @@ export default {
       this.SET_CURRENT_VIRTUAL_MACHINE(VirtualMachineId)
     },
 
+    CreateVirtualMachine() {
+      // Redirects to the Main Page and activates Initialization Modal Window
+      router.$refs.push({name: 'main_page'})
+    },
+
     ShutdownVirtualMachine(VirtualMachineId) {
       // Shutting down the Virtual Machine Server
-      document.getElementById("shutdownButton").innerText = "Shutting Down..."
-      let ShutdownError = this.SHUTDOWN_VIRTUAL_MACHINE()
-      if (ShutdownError != null) {this.SHOW_ERROR(
-      "Failed to Shutdown Virtual Machine, " + ShutdownError.error)} else{
-      this.toggleShutdownVirtualMachine(VirtualMachineId)}
+      document.getElementById("shutdownButton").innerText = "Shutting Down"
+      let ShutdownError = this.SHUTDOWN_VIRTUAL_MACHINE(VirtualMachineId)
+      if (ShutdownError != null) {this.TOGGLE_ERROR(
+      "Failed to Shutdown Virtual Machine, " + ShutdownError.error)}
+    },
+
+    RebootVirtualMachine(VirtualMachineId) {
+      document.getElementById("rebootButton").innerText = "Rebooting"
+      let Rebooted, RebootError = this.REBOOT_VIRTUAL_MACHINE(VirtualMachineId)
+      if (Rebooted != true || RebootError != null) {
+      this.TOGGLE_ERROR(RebootError)}
     },
 
     RunVirtualMachine(VirtualMachineId) {
       // Running the Virtual Machine Server
       document.getElementById("runButton").innerText = "Running..."
       let RunError = this.RUN_VIRTUAL_MACHINE(VirtualMachineId)
-      if (RunError != null ) {this.SHOW_ERROR(
-      "Failed to Run Virtual Machine, " + RunError.error); return; }else{
-      this.toggleRunVirtualMachine(VirtualMachineId)}
-    },
-
-    toggleRunVirtualMachine(VirtualMachineId) {
-      // Mark Virtual Machine as Running
-      this.UPDATE_STATUS_TO_RUNNING(VirtualMachineId)
-    },
-
-    toggleShutdownVirtualMachine(VirtualMachineId) {
-      // Mark Virtual Machine as Shutdowned one
-      this.UPDATE_STATUS_TO_SHUTDOWN(VirtualMachineId)
-    },
-
-    toggleUpdateVirtualMachine() {
-      // Toggles Virtual Machine Status
-      this.TOGGLE_UPDATE_VIRTUAL_MACHINE();
-      this.TOGGLE_VIRTUAL_MACHINE();
+      if (RunError != null ) {this.TOGGLE_ERROR(
+      "Failed to Run Virtual Machine, " + RunError.error)}
     },
 
     DeleteVirtualMachine(VirtualMachineId) {
@@ -365,6 +369,9 @@ export default {
 
 .red {
   background-color: #ec5757;
+}
+.yellow {
+  background-color: #ec5754;
 }
 .green {
   background-color: #33d69f;

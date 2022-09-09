@@ -1,8 +1,8 @@
 var BACKEND_APPLICATION_HOST = process.env.BACKEND_APPLICATION_HOST
 var BACKEND_APPLICATION_PORT = process.env.BACKEND_APPLICATION_PORT
 
-var $ = global.jQuery;
-window.$ = $;
+var jquery = global.jQuery;
+window.jquery = jquery
 
 var Url = require('url-parse');
 
@@ -11,7 +11,7 @@ var Url = require('url-parse');
     var APIUrl = new Url("http://%s:%s/suggestions/load/balancer/" % (
     BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
 
-    let LoadBalancers, ResponseError = $.ajax({
+    let LoadBalancers, ResponseError = jquery.ajax({
       URL: APIUrl,
       headers: {
         "Access-Control-Allow-Origin": "*",
@@ -38,14 +38,14 @@ var Url = require('url-parse');
     //  Returns Array of the Available Datacenters, so Customer can pick up, which one to choose
     var APIUrl = new Url("http://%s:%s/suggestion/datacenter/" % (
     BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
-    let Datacenters, Error = $.ajax({
+    let Datacenters, Error = jquery.ajax({
       async: false,
       URL: APIUrl,
       type: "GET",
       headers: {
         "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Credentials": "true",
-        "Authentication": $.cookie("jwt-token"),
+        "Authentication": jquery.cookie("jwt-token"),
       },
       success: function(Response) {
         // Processing Datacenters Queryset
@@ -65,14 +65,14 @@ var Url = require('url-parse');
     // Returns Array of the Available Os Systems + Distributions to them
     var APIUrl = new Url("http://%s:%s/suggestion/os/system/" % (
     BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
-    let Datacenters, Error = $.ajax({
+    let Datacenters, Error = jquery.ajax({
       async: false,
       URL: APIUrl,
       type: "GET",
       headers: {
         "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Credentials": "true",
-        "Authentication": $.cookie("jwt-token"),
+        "Authentication": jquery.cookie("jwt-token"),
       },
       success: function(Response) {
         // Processing Datacenters Queryset
@@ -92,14 +92,14 @@ var Url = require('url-parse');
     // Rest Controller, that returns array of the Tools, that can be pre-installed on the Virtual Machine
     var APIUrl = new Url("http://%s:%s/suggestion/preinstall/tools" % (
     BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
-    let Datacenters, DatacentersError = $.ajax({
+    let Datacenters, DatacentersError = jquery.ajax({
       async: false,
       URL, APIUrl,
       type: "GET",
       headers: {
         "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Credentials": "true",
-        "Authentication": $.cookie("jwt-token"),
+        "Authentication": jquery.cookie("jwt-token"),
       },
       success: function(Response) {
         // Processing Datacenters Queryset

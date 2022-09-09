@@ -36,7 +36,7 @@
 
     <!-- Virtual Machines -->
 
-    <div v-if="virtualMachineData.length > 0">
+    <div v-if="virtualMachineData.length > 0 && virtualMachinesLoaded == true">
       <div class="left flex flex-column">
         <h1>Virtual Servers</h1>
         <span>You have {{ virtualMachineData.length }} Virtual Servers</span>
@@ -69,10 +69,7 @@ export default {
     };
   },
   methods: {
-
-     ...mapMutations(["TOGGLE_INITIALIZATION_MODAL", "TOGGLE_MODAL"]),
-     ...mapState(["initializationModal"]),
-
+    ...mapMutations(["TOGGLE_INITIALIZATION_MODAL", "TOGGLE_MODAL"]),
 
     newVirtualMachine() {
       // Initializes Empty Form for the Virtual Machine Configuration
@@ -102,7 +99,9 @@ export default {
   },
 
   computed: {
-    ...mapState(["virtualMachineData"]),
+
+    ...mapState(["virtualMachineData", "initializationModal", "virtualMachinesLoaded"]),
+
     filteredData() {
       return this.virtualMachineData.filter((virtualMachine) => {
 

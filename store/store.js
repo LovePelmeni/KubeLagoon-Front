@@ -71,7 +71,6 @@ export default new Vuex.Store({
       })
     },
 
-
     // Virtual Machine Methods
 
     GET_VIRTUAL_MACHINE(VirtualMachineId) {
@@ -81,12 +80,12 @@ export default new Vuex.Store({
       return virtualMachine
     },
 
-
     GET_VIRTUAL_MACHINES(state) {
       // Returns List of the Virtual Machine Servers, belongs To Customer
 
       let VirtualMachineManager = new vm.VirtualMachineManager()
-      let results = VirtualMachineManager.GetVirtualMachines()
+      let results, ResultError = VirtualMachineManager.GetVirtualMachines()
+      if (ResultError != null) {this.TOGGLE_ERROR(ResultError)}
 
       for (let virtualMachine in results){
         if (!state.VirtualMachineData.some((virtualMachine) => virtualMachine.VirtualMachineId === virtualMachine.VirtualMachineId)) {
@@ -130,7 +129,7 @@ export default new Vuex.Store({
           this.INSERT_NEW_VIRTUAL_MACHINE(state.virtualMachineData, newVirtualMachine);
         }
       }
-      this.VIRTUAL_MACHINE_LOADED();
+      this.VIRTUAL_MACHINES_LOADED(state);
     },
 
     CREATE_VIRTUAL_MACHINE(state, customizedConfiguration, hardwareConfiguration) {
@@ -162,11 +161,11 @@ export default new Vuex.Store({
             this.INSERT_NEW_VIRTUAL_MACHINE(state.VirtualMachineData, virtualMachine)
             return appliedInfo, applyError
           }else{
-            this.SHOW_ERROR("Failed to Apply Configuration")
+            this.TOGGLE_ERROR("Failed to Apply Configuration")
             return;
           }
         }else{
-          this.SHOW_ERROR("Failed to Initialize Virtual Machine")
+          this.TOGGLE_ERROR("Failed to Initialize Virtual Machine")
           return;
         }
     },
@@ -179,7 +178,7 @@ export default new Vuex.Store({
         state.VirtualMachineData = state.VirtualMachineData.filter(
         (virtualMachine) => virtualMachine !== payload);
       }else {
-        this.SHOW_ERROR("Failed to Delete Virtual Machine")
+        this.TOGGLE_ERROR("Failed to Delete Virtual Machine")
       }
     },
 
@@ -198,7 +197,7 @@ export default new Vuex.Store({
         this.INSERT_NEW_VIRTUAL_MACHINE(state.virtualMachineData, virtualMachine)
 
       }else{
-        this.SHOW_ERROR("Failed To Update Virtual Machine")
+        this.TOGGLE_ERROR("Failed To Update Virtual Machine")
       }
     },
 
@@ -230,9 +229,9 @@ export default new Vuex.Store({
     // Store's State Management Methods
 
 
-    SET_CURRENT_VIRTUAL_MACHINE(state, payload) {
+    SET_CURRENT_VIRTUAL_MACHINE(state, virtualMachineId) {
       state.currentVirtualMachineArray = state.virtualMachineData.filter((virtualMachine) => {
-        return virtualMachine.VirtualMachineId === payload;
+        return virtualMachine.VirtualMachineId === virtualMachineId;
       });
     },
 
@@ -325,35 +324,35 @@ export default new Vuex.Store({
 
     UPDATE_STATUS_TO_RUNNING(state, payload) {
       // Updates Visualized Status to Running
-      state.virtualMachineData.forEach((virtualMachine) => {
-        if (virtualMachine.VirtualMachineId === payload) {
-          virtualMachine.Running = true;
-          virtualMachine.Shutdown = false;
-          virtualMachine.Deploying = false;
-        }
-      });
+      for (let virtualMachine in state.VirtualMachineData){
+          if (virtualMachine.VirtualMachineId === payload) {
+            virtualMachine.Running = true;
+            virtualMachine.Shutdown = false;
+            virtualMachine.Deploying = false;
+          }
+      }
     },
 
     UPDATE_STATUS_TO_SHUTDOWN(state, payload) {
       // Updates Visualized Status to Shutdown
-      state.virtualMachineData.forEach((virtualMachine) => {
-        if (virtualMachine.VirtualMachineId === payload) {
-          virtualMachine.Deploying = false;
-          virtualMachine.Running = false;
-          virtualMachine.Shutdown = true;
-        }
-      });
+      for (let virtualMachine in state.virtualMachineData){
+          if (virtualMachine.VirtualMachineId === payload) {
+            virtualMachine.Deploying = false;
+            virtualMachine.Running = false;
+            virtualMachine.Shutdown = true;
+          }
+      }
     },
 
     UPDATE_STATUS_TO_DEPLOYING(state, payload) {
       // Updates Visualized Status to Deploying
-      state.virtualMachineData.forEach((virtualMachine) => {
+      for (let virtualMachine in state.virtualMachineData){
         if (virtualMachine.VirtualMachineId === payload) {
           virtualMachine.Running = false;
           virtualMachine.Deploying = true;
           virtualMachine.Shutdown = false;
         }
-      });
+      }
     },
 
     VIRTUAL_MACHINES_LOADED(state) {

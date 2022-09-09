@@ -1,16 +1,14 @@
 <script>
-/* eslint-disable no-unused-vars */
 
-import { mapState, mapActions } from "vuex";
-import navigationPage from "./components/NavigationPage.vue";
-import modalPage from "./components/ModalWindow.vue";
+import { mapState } from "vuex"
+import navigationPage from "./components/NavigationPage.vue"
+import modalPage from "./components/ModalWindow.vue"
 
-import notificationBanner from "./components/notification.vue";
-import errorBanner from "./components/error.vue";
+import notificationBanner from "./components/notification.vue"
+import errorBanner from "./components/error.vue"
 
 
 export default {
-
   name: "App",
   data() {
     return {
@@ -19,7 +17,7 @@ export default {
   },
 
   template: `
-  <div v-if="virtualMachinesLoaded">
+  <div>
       <div v-if="!mobile" class="app flex flex-column">
         <navigationPage />
         <div class="app-content flex flex-column">
@@ -44,14 +42,11 @@ export default {
   },
 
   created() {
-    this.GET_VIRTUAL_MACHINES();
     this.checkScreen();
     window.addEventListener("resize", this.checkScreen);
   },
 
   methods: {
-    ...mapState(["virtualMachinesLoaded"]),
-    ...mapActions(["GET_VIRTUAL_MACHINES"]),
     checkScreen() {
       const windowWidth = window.innerWidth;
       if (windowWidth <= 750) {
@@ -63,11 +58,14 @@ export default {
   },
 
   computed: {
-    ...mapState(["modalActive", "VirtualMachinesLoaded", "notification", "error", "activeError", "activeNotification"]),
+    ...mapState(["modalActive", "virtualMachinesLoaded",
+    "notification", "error", "activeError", "activeNotification"]),
   },
 };
 
 </script>
+
+
 
 <style lang="scss">
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap");

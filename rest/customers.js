@@ -3,7 +3,7 @@ var BACKEND_APPLICATION_PORT = process.env.BACKEND_APPLICATION_PORT
 /* eslint-disable no-unused-vars */
 
 var $ = global.jQuery;
-window.$ = $;
+window.jquery = $;
 
 var Url = require('url-parse')
 import "../configuration_preparer/preparer.js"
@@ -128,9 +128,13 @@ function LoginCustomerRestController(Username, Password) {
   })
   return Response, ResponseError
 }
+
 function LogoutCustomerRestController() {
   // Deletes the Jwt auth token
 }
+
+
+
 export {CreateCustomerRestController,
 DeleteCustomerRestController,
 LoginCustomerRestController,

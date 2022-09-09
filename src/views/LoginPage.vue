@@ -1,14 +1,10 @@
-<template>
-  <!-- Login Page !-->
-  <LoginPage />
-</template>
-
 <script>
 
 import * as customers from "../../customers/customers.js"
-import { mapMutations } from "vuex";
+import mapMutations from "vuex"
 
 export default {
+
   name: 'LoginPage',
   data: () => ({
 
@@ -83,8 +79,7 @@ export default {
   </v-app>
   `,
   methods: {
-
-    ...mapMutations(["SHOW_ERROR"]),
+    ...mapMutations(["TOGGLE_ERROR"]),
     submitLoginForm(){
       if (this.$refs.form.validate()){
           this.loading = true
@@ -97,7 +92,7 @@ export default {
     loginCustomer() {
       let newCustomerManager = new customers.CustomerManager()
       let loggedIn, LogError = newCustomerManager.LoginCustomer(this.email, this.password)
-      if (LogError != null && loggedIn != true){this.SHOW_ERROR(LogError)}
+      if (LogError != null && loggedIn != true){this.TOGGLE_ERROR(LogError)}
     }
   }
 };
@@ -107,12 +102,6 @@ export default {
 <style lang="scss">
 
   .background{
-    // height: 300px;
-    // width: 100%;
-    // display: block;
-    // position: absolute;
-    // top: 0;
-    // background-size: cover;
 
     position: relative;
     padding: 56px;

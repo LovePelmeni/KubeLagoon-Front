@@ -1,13 +1,11 @@
-<template>
-  <!-- Registration Page !-->
-  <RegistrationPage />
-</template>
-
 <script>
+
 import * as customers from "../../customers/customers.js"
-import {mapMutations} from "vuex";
+import mapMutations from "vuex"
+
 
 export default {
+
   name: 'RegistrationPage',
   data: () => ({
 
@@ -141,14 +139,14 @@ export default {
         </v-col>
       </v-main>
       <v-snackbar top color="green" v-model="snackbar">
-        Login success
+        Registration success
       </v-snackbar>
-    </v-app>`,
+    </v-app>
+  `,
 
   methods: {
 
-    ...mapMutations(["SHOW_ERROR"]),
-
+    ...mapMutations(["TOGGLE_ERROR"]),
 
     submitRegisterForm(){
       if (this.$refs.form.validate()){
@@ -163,8 +161,8 @@ export default {
       let newCustomerManager = new customers.CustomerManager()
       let RegisterError = newCustomerManager.CreateCustomer(
       this.Username, this.Email, this.Password, this.Country, this.ZipCode, this.Street)
-      if (RegisterError != null){this.SHOW_ERROR(RegisterError)}
-    }
+      if (RegisterError != null){this.TOGGLE_ERROR(RegisterError)}
+    },
   }
 };
 
@@ -172,23 +170,13 @@ export default {
 
 <style lang="scss">
 
-
 .app-content {
   padding: 0 20px;
   flex: 1;
   position: relative;
 }
 
-
   .background{
-    // background-image: url(./assets/Order-Banner.jpg) !important;
-    // height: 300px;
-    // width: 100%;
-    // display: block;
-    // position: absolute;
-    // top: 0;
-    // background-size: cover;
-    // position: relative;
 
    background-color: #141625;
    min-height: 100vh;
