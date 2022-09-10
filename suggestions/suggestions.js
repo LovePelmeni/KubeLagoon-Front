@@ -15,7 +15,7 @@ class SuggestionsManager {
     return suggestions.GetDatacenterSuggestionsRestController()
   }
 
-  GetSuggestedOsSystems = function(){
+  GetSuggestedOperationalSystems = function(){
     // Returns List of the OS Systems + Distributions, that can be used as a Main OS on the VM
     return suggestions.GetOsSystemsSuggestionsRestController()
   }

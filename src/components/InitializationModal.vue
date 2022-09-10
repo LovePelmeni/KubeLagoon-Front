@@ -114,34 +114,44 @@ export const hardwareConfiguration = {
       Tool: {},
       LoadBalancer: {},
     },
+  }, 
+  mounted() {
+    this.LoadBalancers = this.GetSuggestedLoadBalancers()
+    this.Datacenters = this.GetSuggestedDatacenters()
+    this.OperationalSystems = this.GetSuggestedOperationalSystems()
+    this.PreInstalledTools = this.GetSuggestedPreInstalledTools()
+
+    this.AddedLoadBalancer = null
+    this.AddedDatacenter = null
+    this.AddedOperationalSystem = null
+    this.AddedPreInstalledTools = []
+    
   },
   data() {
     return {
-      LoadBalancers: [],
-      Datacenters: [],
-      OperationalSystems: [],
-      PreInstalledTools: [],
+      // hardware Configuration Validation Rules 
+
+      LoadBalancers : [],
+      Datacenters : [],
+      OperationalSystems : [],
+      PreInstalledTools : [],
 
       AddedLoadBalancer: null,
       AddedDatacenter: null,
       AddedOperationalSystem: null,
-      AddedPreInstalledTools: [],
+      AddedPreInstalledTools: [],     
 
 
       DatacenterRules: [
-        username => !!username || 'Username is required',
-        username => `^[a-z][A-Z][0-9]{1,100}$`.test(username) || 'Invalid Username',
-        username => (username && username.length >= 10) || 'Username should be 10 characters or more!',
+       !!this.AddedDatacenter || 'Datacenter is required',
       ],
 
       OperationalSystemRules: [
-        username => !!username || 'Username is required',
-        username => `^[a-z][A-Z][0-9]{1,100}$`.test(username) || 'Invalid Username',
-        username => (username && username.length >= 10) || 'Username should be 10 characters or more!',
+        !!this.AddedOperationalSystem || 'Operational System is required',
       ],
 
       LoadBalancerRules: [
-        lb => !!lb || 'Username should be 10 characters or more!',
+        !!this.AddedLoadBalancer || 'Load Balancer is required', 
       ],
     }
   },
@@ -154,7 +164,7 @@ export const hardwareConfiguration = {
           <label for="LoadBalancer">Load Balancer</label>
         </div>
 
-        <table v-if="LoadBalancers.length > 0" class="item-list">
+        <table v-if="LoadBalancers?.length" class="item-list">
 
             <tr class="table-heading flex">
               <th class="item-name"></th>
@@ -163,10 +173,11 @@ export const hardwareConfiguration = {
             <tr class="table-items flex" v-for="(LoadBalancer, index) in LoadBalancers" :key="index">
               <td class="item-name"><input type="text" v-model="LoadBalancer.Name" /></td>
 
-              <img @click="selectLoadBalancer(LoadBalancer.Name)" v-if="LoadBalancer != AddedLoadBalancer" :src="LoadBalancer.Avatar" alt="" />
-              <img @click="unSelectLoadBalancer(LoadBalancer.Name)" v-else :src="require('@/assets/icon-delete.svg')" alt="icon-delete" />
+              <img @click="selectLoadBalancer(LoadBalancer.Name)" v-if="LoadBalancer != AddedLoadBalancer && AddedLoadBalancer == null" :src="require(LoadBalancer.LocalImageUrl)" alt="Select" />
+              <img v-if="AddedLoadBalancer != null && LoadBalancer != AddedLoadBalancer" alt="Disabled" />
+              <img @click="unSelectLoadBalancer(LoadBalancer.Name)" v-if="LoadBalancer == AddedLoadBalancer" :src="require('@/assets/icon-delete.svg')" alt="unSelect" />
 
-              <span v-if="errors['LoadBalancer'][LoadBalancer.Name]">{{ errors['LoadBalancer'][LoadBalancer.Name] }}</span>
+              <span v-if="errors?.LoadBalancer[LoadBalancer.Name]">{{ errors?.LoadBalancer[LoadBalancer.Name] }}</span>
             </tr>
           </table>
 
@@ -174,7 +185,7 @@ export const hardwareConfiguration = {
           <label for="Datacenter">Datacenter</label>
         </div>
 
-        <table v-if="Datacenters.length > 0" class="item-list">
+        <table v-if="Datacenters?.length > 0" class="item-list">
 
             <tr class="table-heading flex">
               <th class="item-name"></th>
@@ -183,10 +194,11 @@ export const hardwareConfiguration = {
             <tr class="table-items flex" v-for="(Datacenter, index) in Datacenters" :key="index">
               <td class="item-name"><input type="text" v-model="Datacenter.DatacenterName" /></td>
 
-              <img @click="selectDatacenter(Datacenter.DatacenterName)" v-if="Datacenter != AddedDatacenter" :src="Datacenter.Avatar" alt="" />
-              <img @click="unSelectDatacenter(Datacenter.DatacenterName)" v-else :src="require('@/assets/icon-delete.svg')" alt="icon-delete"/>
+              <img @click="selectDatacenter(Datacenter.DatacenterName)" v-if="Datacenter != AddedDatacenter && AddedDatacenter == null" :src="require(Datacenter.LocalImageUrl)" alt="Select" />
+              <img v-if="AddedDatacenter != null && Datacenter != AddedDatacenter" alt="Disabled" />
+              <img @click="unSelectDatacenter(Datacenter.DatacenterName)" v-if="Datacenter == AddedDatacenter" :src="require('@/assets/icon-delete.svg')" alt="unSelect" />
 
-              <span v-if="errors['Datacenter'][Datacenter.DatacenterName]">{{ errors['Datacenter'][Datacenter.DatacenterName] }}</span>
+              <span v-if="errors?.Datacenter[Datacenter.DatacenterName]">{{ errors?.Datacenter[Datacenter.DatacenterName] }}</span>
 
             </tr>
           </table>
@@ -195,7 +207,7 @@ export const hardwareConfiguration = {
           <label for="OperationalSystem">Operational System</label>
           </div>
 
-        <table v-if="OperationalSystems.length > 0" class="item-list">
+        <table v-if="OperationalSystems?.length > 0" class="item-list">
 
               <tr class="table-heading flex">
               <th class="item-name">Name</th>
@@ -207,10 +219,11 @@ export const hardwareConfiguration = {
                 <td class="item-name"><input type="text" v-model="OperationalSystem.Version" /></td>
 
 
-                <img @click="selectOperationalSystem(OperationalSystem.Name)" v-if="OperationalSystem.SystemName" :src="OperationalSystem.Avatar" alt="" />
-                <img @click="unSelectOperationalSystem(OperationalSystem.Name)" v-else :src="require('@/assets/icon-delete.svg')" alt="icon-delete" />
+                <img @click="selectOperationalSystem(OperationalSystem.SystemName, OperationalSystem.Version, OperationalSystem.Bit)" v-if="OperationalSystem != AddedOperationalSystem && OperationalSystem == null" :src="require(OperationalSystem.LocalImageUrl)" alt="Select" />
+                <img v-if="AddedOperationalSystem != null && OperationalSystem != AddedOperationalSystem" alt="Disabled" />
+                <img @click="unSelectOperationalSystem(OperationalSystem.SystemName)" v-if="OperationalSystem == AddedOperationalSystem" :src="require('@/assets/icon-delete.svg')" alt="unSelect" />
 
-                <span v-if="errors['OS'][OperationalSystem.SystemName]">{{ errors['OS'][OperationalSystem.SystemName] }}</span>
+                <span v-if="errors?.OS[OperationalSystem.SystemName]">{{ errors?.OS[OperationalSystem.SystemName] }}</span>
 
               </tr>
           </table>
@@ -220,7 +233,7 @@ export const hardwareConfiguration = {
           <input required type="text" id="Datacenter" v-model="PreInstalledTool" />
         </div>
 
-        <table v-if="PreInstalledTools.length > 0" class="item-list">
+        <table v-if="PreInstalledTools?.length > 0" class="item-list">
 
                 <tr class="table-heading flex">
                     <th class="item-name">Tool</th>
@@ -230,14 +243,16 @@ export const hardwareConfiguration = {
                     <td class="item-name"><input type="text" v-model="Tool.Name"/></td>
                     <td class="item-name"><input type="text" v-model="Tool.Version" /></td>
 
-                    <img @click="addPreInstalledTools(Tool.Name)" v-if="!(Tool in AddedPreInstalledTools)" :src="Tool.Avatar" alt="" />
-                    <img @click="unSelectPreInstalledTool(Tool.Name)" v-else :src="require('@/assets/icon-delete.svg')" alt="icon-delete" />
+                    <img @click="selectPreInstallTool(Tool.Name)" v-if="!Tool in AddedPreInstalledTools" :src="require(Datacenter.LocalImageUrl)" alt="Select" />
+                    <img v-if="Tool in AddedPreInstalledTools" alt="Disabled" />
+                    <img @click="unSelectPreInstallTool(Tool.Name)" v-if="Tool in AddedPreInstalledTools" :src="require('@/assets/icon-delete.svg')" alt="unSelect" />
 
-                    <span v-if="errors['Tool'][Tool.Name]">{{ errors['Tool'][Tool.Name] }}</span>
+                    <span v-if="errors?.Tool[Tool.Name]">{{ errors?.Tool[Tool.Name] }}</span>
                 </tr>
           </table>
       </div>
   `,
+
   created() {
     this.GetSuggestedLoadBalancers()
     this.GetSuggestedDatacenters()
@@ -246,7 +261,8 @@ export const hardwareConfiguration = {
   },
 
   methods: {
-    // Validation Methods for the Form
+
+    // Validation Methods for t he Form
     ValidateDatacenter(Datacenter) {
       // Validates Selected Datacenter by the Customer
       if (Datacenter.DatacenterName.length == 0) {
@@ -280,7 +296,6 @@ export const hardwareConfiguration = {
       let newManager = this.GetSuggestionsManager()
       let LoadBalancers, _ = newManager.GetSuggestedLoadBalancers()
       if (LoadBalancers != null) {this.LoadBalancers = LoadBalancers}
-      this.LoadBalancers = LoadBalancers
     },
 
     GetSuggestedDatacenters() {
@@ -296,13 +311,14 @@ export const hardwareConfiguration = {
       let newManager = this.GetSuggestionsManager()
       let OperationalSystems = newManager.GetSuggestedOperationalSystems()
       if (OperationalSystems != null) {
-      this.OperationalSystems = OperationalSystems}
+        this.OperationalSystems = OperationalSystems
+      }
     },
 
     GetSuggestedPreInstalledTools() {
       // Returns Array of the Available Preinstalled Tools, that you can pre install, on your OS
       let newManager = this.GetSuggestionsManager()
-      let PreInstalledTools = newManager.GetSuggestedPreInstalledTools()
+      let PreInstalledTools = newManager.GetSuggestedPreInstallTools()
       if (PreInstalledTools != null){
       this.PreInstalledTools = PreInstalledTools}
     },
@@ -352,6 +368,27 @@ export const hardwareConfiguration = {
       })
       this.AddedPreInstalledTools = NewSelectedItemTools
     },
+
+    GetLoadBalancer(LoadBalancerName) {
+      // Returns Load Balancers Object 
+      return this.LoadBalancers.filter((lb) => {
+        return lb.LoadBalancerName === LoadBalancerName
+      })[0]
+    },
+
+    GetDatacenter(DatacenterName) {
+      // Returns Load Balancers Object 
+      return this.Datacenters.filter((dc) => {
+        return dc.DatacenterName === DatacenterName
+      })[0]
+    },
+
+    GetOperationalSystem(OperationalSystemName, Version, Bit) {
+      // Returns Load Balancers Object 
+      return this.LoadBalancers.filter((os) => {
+        return os.Name === OperationalSystemName && os.Version === Version && os.Bit === Bit
+      })[0]
+    },
   }
 };
 
@@ -366,6 +403,7 @@ export const resourceConfiguration = {
   },
   data() {
     return {
+
       // CPU Resources
       CpuNum: null,
       MaxCpu: null,
@@ -415,7 +453,7 @@ export const resourceConfiguration = {
               <input
               :rules="CpuRules"
               required type="text" id="CpuNum" v-model="CpuNum" />
-              <span v-if="errors['Resources']['CpuNum']">{{ errors['Resources']['CpuNum'] }}</span>
+              <span v-if="errors?.Resources['CpuNum']">{{ errors?.Resources['CpuNum'] }}</span>
             </div>
 
             <div class="input flex flex-column">
@@ -423,7 +461,7 @@ export const resourceConfiguration = {
               <input
               :rules="MaxCpuRules"
               required type="text" id="MaxCpu" v-model="MaxCpu" />
-              <span v-if="errors['Resources']['MaxCpu']">{{ errors['Resources']['MaxCpu'] }}</span>
+              <span v-if="errors?.Resources['MaxCpu']">{{ errors?.Resources['MaxCpu'] }}</span>
             </div>
 
             <div class="input flex flex-column">
@@ -431,7 +469,7 @@ export const resourceConfiguration = {
               <input
               :rules="MemoryInMegabytesRules"
               required type="text" id="MemoryInMegabytes" v-model="MemoryInMegabytes" />
-              <span v-if="errors['Resources']['MemoryInMegabytes']">{{ errors['Resources']['MemoryInMegabytes'] }}</span>
+              <span v-if="errors?.Resources['MemoryInMegabytes']">{{ errors?.Resources['MemoryInMegabytes'] }}</span>
             </div>
 
             <div class="resources-details flex">
@@ -440,7 +478,7 @@ export const resourceConfiguration = {
                 <input
                 :rules="MaxMemoryRules"
                 required type="text" id="maxMemory" v-model="maxMemory" />
-                <span v-if="errors['Resources']['MaxMemory']">{{ errors['Resources']['MaxMemory'] }}</span>
+                <span v-if="errors?.Resources['MaxMemory']">{{ errors?.Resources['MaxMemory'] }}</span>
               </div>
 
               <div class="input flex flex-column">
@@ -448,15 +486,12 @@ export const resourceConfiguration = {
                 <input
                 :rules="StorageRules"
                 required type="text" id="storageCapacity" v-model="storageCapacity" />
-                <span v-if="errors['Resources']['StorageInKB']">{{ errors['Resources']['StorageINKB'] }}</span>
+                <span v-if="errors?.Resources['StorageInKB']">{{ errors?.Resources['StorageINKB'] }}</span>
               </div>
 
             </div>
           </div>
   `,
-  created() {
-    this.GetVirtualMachineInfo()
-  },
   methods: {
 
     ValidateCpuResources(MaxCpu, CpuUsage) {
@@ -515,7 +550,7 @@ export const sshConfiguration = {
         <div class="input flex flex-column">
           <label for="secure">Secure</label>
           <input required type="text" id="Secure" v-model="Secure" />
-          <span v-if="errors['SSH']['Secure']">{{ errors['SSH']['Secure'] }}</span>
+          <span v-if="errors?.SSH['Secure']">{{ errors?.SSH['Secure'] }}</span>
         </div>
   </div>
   `,
@@ -570,6 +605,7 @@ export default {
   created() {
     // get current date for invoice date field
 
+    this.CheckIsDraft() // Checking if this is Saved Draft or Customer Want to Initialize New Configuration
     this.GetCustomerVirtualMachines()
     this.getVirtualMachineCostTotal()
 
@@ -592,6 +628,10 @@ export default {
       if (e.target === this.$refs.virtualMachineWrap) {
         this.TOGGLE_MODAL();
       }
+    },
+
+    CheckIsDraft() {
+      //Checks if the Configuration is a Saved Draft
     },
 
     ValidateInput() {

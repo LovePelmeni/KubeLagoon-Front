@@ -19,6 +19,8 @@ globalCookiesConfig({
 });
 
 const app = createApp(App).use(router)
+
+app.use(require("vue3-cookies"))
 app.use(VueCookies)
 app.use(store)
 app.use(Vuex)

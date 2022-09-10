@@ -56,18 +56,10 @@
 import { mapMutations, mapState } from "vuex";
 import VirtualMachineBannerInfo from "../components/VirtualMachineBannerInfo.vue";
 import initializationModal from "../components/InitializationModal.vue";
-import { useCookies } from "vue3-cookies";
 
 export default {
 
   name: "HomePage",
-  setup() {
-    const { cookie } = useCookies();
-    return { cookie };
-  },
-  mounted() {
-    this.JwtToken = this.cookie.get("jwt-token")
-  },
   data() {
     return {
       // Filter Params
