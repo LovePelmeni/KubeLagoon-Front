@@ -6,6 +6,7 @@ import modalPage from "./components/ModalWindow.vue"
 
 import notificationBanner from "./components/notification.vue"
 import errorBanner from "./components/error.vue"
+import loadingPage from "./components/LoadingPage.vue"
 
 
 export default {
@@ -21,6 +22,7 @@ export default {
       <div v-if="!mobile" class="app flex flex-column">
         <navigationPage />
         <div class="app-content flex flex-column">
+          <loadingPage v-if="loading" />
           <modalPage v-if="modalActive" />
           <errorBanner v-for="(Error, index) in [error]" v-if="activeError" :errorMessage="Error" :key="index" />
           <notificationBanner v-for="(Notification, index) in [notification]" v-if="activeNotification" :notificationMessage="Notification" :key="index" />
@@ -35,6 +37,7 @@ export default {
   `,
 
   components: {
+    loadingPage,
     navigationPage,
     modalPage,
     errorBanner,
@@ -58,7 +61,7 @@ export default {
   },
 
   computed: {
-    ...mapState(["modalActive", "virtualMachinesLoaded",
+    ...mapState(["loading", "modalActive", "virtualMachinesLoaded",
     "notification", "error", "activeError", "activeNotification"]),
   },
 };

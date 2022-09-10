@@ -114,7 +114,7 @@ export const hardwareConfiguration = {
       Tool: {},
       LoadBalancer: {},
     },
-  }, 
+  },
   mounted() {
     this.LoadBalancers = this.GetSuggestedLoadBalancers()
     this.Datacenters = this.GetSuggestedDatacenters()
@@ -125,11 +125,11 @@ export const hardwareConfiguration = {
     this.AddedDatacenter = null
     this.AddedOperationalSystem = null
     this.AddedPreInstalledTools = []
-    
+
   },
   data() {
     return {
-      // hardware Configuration Validation Rules 
+      // hardware Configuration Validation Rules
 
       LoadBalancers : [],
       Datacenters : [],
@@ -139,7 +139,7 @@ export const hardwareConfiguration = {
       AddedLoadBalancer: null,
       AddedDatacenter: null,
       AddedOperationalSystem: null,
-      AddedPreInstalledTools: [],     
+      AddedPreInstalledTools: [],
 
 
       DatacenterRules: [
@@ -151,7 +151,7 @@ export const hardwareConfiguration = {
       ],
 
       LoadBalancerRules: [
-        !!this.AddedLoadBalancer || 'Load Balancer is required', 
+        !!this.AddedLoadBalancer || 'Load Balancer is required',
       ],
     }
   },
@@ -218,7 +218,6 @@ export const hardwareConfiguration = {
                 <td class="item-name"><input type="text" v-model="OperationalSystem.Name" /></td>
                 <td class="item-name"><input type="text" v-model="OperationalSystem.Version" /></td>
 
-
                 <img @click="selectOperationalSystem(OperationalSystem.SystemName, OperationalSystem.Version, OperationalSystem.Bit)" v-if="OperationalSystem != AddedOperationalSystem && OperationalSystem == null" :src="require(OperationalSystem.LocalImageUrl)" alt="Select" />
                 <img v-if="AddedOperationalSystem != null && OperationalSystem != AddedOperationalSystem" alt="Disabled" />
                 <img @click="unSelectOperationalSystem(OperationalSystem.SystemName)" v-if="OperationalSystem == AddedOperationalSystem" :src="require('@/assets/icon-delete.svg')" alt="unSelect" />
@@ -229,8 +228,7 @@ export const hardwareConfiguration = {
           </table>
 
         <div class="input flex flex-column">
-          <label for="Datacenter">Pre Installed Tools</label>
-          <input required type="text" id="Datacenter" v-model="PreInstalledTool" />
+          <label for="PreInstalledTools">Pre Installed Tools</label>
         </div>
 
         <table v-if="PreInstalledTools?.length > 0" class="item-list">
@@ -243,7 +241,7 @@ export const hardwareConfiguration = {
                     <td class="item-name"><input type="text" v-model="Tool.Name"/></td>
                     <td class="item-name"><input type="text" v-model="Tool.Version" /></td>
 
-                    <img @click="selectPreInstallTool(Tool.Name)" v-if="!Tool in AddedPreInstalledTools" :src="require(Datacenter.LocalImageUrl)" alt="Select" />
+                    <img @click="selectPreInstallTool(Tool.Name)" v-if="!Tool in AddedPreInstalledTools" :src="require(Tool.LocalImageUrl)" alt="Select" />
                     <img v-if="Tool in AddedPreInstalledTools" alt="Disabled" />
                     <img @click="unSelectPreInstallTool(Tool.Name)" v-if="Tool in AddedPreInstalledTools" :src="require('@/assets/icon-delete.svg')" alt="unSelect" />
 
@@ -370,21 +368,21 @@ export const hardwareConfiguration = {
     },
 
     GetLoadBalancer(LoadBalancerName) {
-      // Returns Load Balancers Object 
+      // Returns Load Balancers Object
       return this.LoadBalancers.filter((lb) => {
         return lb.LoadBalancerName === LoadBalancerName
       })[0]
     },
 
     GetDatacenter(DatacenterName) {
-      // Returns Load Balancers Object 
+      // Returns Load Balancers Object
       return this.Datacenters.filter((dc) => {
         return dc.DatacenterName === DatacenterName
       })[0]
     },
 
     GetOperationalSystem(OperationalSystemName, Version, Bit) {
-      // Returns Load Balancers Object 
+      // Returns Load Balancers Object
       return this.LoadBalancers.filter((os) => {
         return os.Name === OperationalSystemName && os.Version === Version && os.Bit === Bit
       })[0]
@@ -403,14 +401,17 @@ export const resourceConfiguration = {
   },
   data() {
     return {
-
       // CPU Resources
-      CpuNum: null,
-      MaxCpu: null,
+      CpuNum: null, // CPU Number
+      MaxCpu: null, // Max Full Cpu Power Usage (for example: 5 full CPU's usage) means 500 % where each has 100 %
 
       // Memory Resources
-      MaxMemory: null,
-      Memory: null,
+      MaxMemory: null, // In Megabytes  !
+      Memory: null, // In Megabytes !
+
+      // Disk Resources
+      storageCapacity: null, // In Kilabytes !
+      maxStorageCapacity: null, // In Kilabytes as well !
 
       // Validation Rules
 
@@ -423,26 +424,37 @@ export const resourceConfiguration = {
       MaxCpuRules: [
         maxCpu => !!maxCpu || 'This field is required',
         maxCpu => String(maxCpu).length == 0 || 'This field is required',
-        maxCpu => Number(maxCpu) == null || 'Invalid Storage Capacity',
+        maxCpu => Number(maxCpu) == null || 'Invalid Max CPU Capacity',
       ],
 
       CpuRules: [
         Cpu => !!Cpu || 'This field is required',
         Cpu => String(Cpu).length == 0 || 'This field is required',
-        Cpu => Number(Cpu) == null || 'Invalid Storage Capacity',
+        Cpu => Number(Cpu) == null || 'Invalid CPU Capacity',
       ],
 
       MaxMemoryRules: [
         MaxMemory => !!MaxMemory || 'This field is required',
         MaxMemory => String(MaxMemory).length == 0 || 'This field is required',
-        MaxMemory => Number(MaxMemory) == null || 'Invalid Storage Capacity',
+        MaxMemory => Number(MaxMemory) == null || 'Invalid Max Memory Capacity',
       ],
 
       MemoryInMegabytesRules: [
         Memory => !!Memory || 'This field is required',
         Memory => String(Memory).length == 0 || 'This field is required',
-        Memory => Number(Memory) == null || 'Invalid Storage Capacity',
+        Memory => Number(Memory) == null || 'Invalid Memory Capacity',
       ],
+
+      DiskCapacityRules: [
+        DiskCapacity => !!DiskCapacity || 'This Field is required',
+        DiskCapacity => String(DiskCapacity).length == 0 || 'This field is required',
+        DiskCapacity => Number(DiskCapacity) == null || 'Invalid Disk Capacity'
+      ],
+      MaxDiskCapacityRules: [
+        MaxDiskCapacity => !!MaxDiskCapacity || 'This field is required',
+        MaxDiskCapacity => String(MaxDiskCapacity).length == 0 || 'This field is required',
+        MaxDiskCapacity => Number(MaxDiskCapacity) == null || 'Invalid Disk Capacity',
+      ]
     }
   },
   template: `
@@ -468,16 +480,16 @@ export const resourceConfiguration = {
               <label for="MemoryInMegabytes">Memory</label>
               <input
               :rules="MemoryInMegabytesRules"
-              required type="text" id="MemoryInMegabytes" v-model="MemoryInMegabytes" />
+              required type="text" id="MemoryInMegabytes" v-model="Memory" />
               <span v-if="errors?.Resources['MemoryInMegabytes']">{{ errors?.Resources['MemoryInMegabytes'] }}</span>
             </div>
 
             <div class="resources-details flex">
               <div class="input flex flex-column">
-                <label for="MaxMemory">Max Memory</label>
+                <label for="MaxMemory">Max Memory Capacity</label>
                 <input
                 :rules="MaxMemoryRules"
-                required type="text" id="maxMemory" v-model="maxMemory" />
+                required type="text" id="maxMemory" v-model="MaxMemory" />
                 <span v-if="errors?.Resources['MaxMemory']">{{ errors?.Resources['MaxMemory'] }}</span>
               </div>
 
@@ -487,6 +499,14 @@ export const resourceConfiguration = {
                 :rules="StorageRules"
                 required type="text" id="storageCapacity" v-model="storageCapacity" />
                 <span v-if="errors?.Resources['StorageInKB']">{{ errors?.Resources['StorageINKB'] }}</span>
+              </div>
+
+              <div class="input flex flex-column">
+                <label for="Storage">Max Storage Capacity</label>
+                <input
+                :rules="StorageRules"
+                required type="text" id="maxStorageCapacity" v-model="maxStorageCapacity" />
+                <span v-if="errors?.Resources['MaxStorageInKB']">{{ errors?.Resources['MaxStorageINKB'] }}</span>
               </div>
 
             </div>
@@ -623,15 +643,17 @@ export default {
     }
   },
   methods: {
-    
+
     ...mapMutations([
       "TOGGLE_INITIALIZATION_MODAL",
       "TOGGLE_UPDATE_VIRTUAL_MACHINE",
       "TOGGLE_ERROR",
     ]),
     ...mapActions([
-      "GET_VIRTUAL_MACHINE", 
+      "GET_VIRTUAL_MACHINE",
       "GET_VIRTUAL_MACHINES",
+      "CREATE_VIRTUAL_MACHINE",
+      "DELETE_VIRTUAL_MACHINE",
     ]),
 
     checkClick(e) {
@@ -689,7 +711,7 @@ export default {
       // Initializing New Resources
 
       let VirtualMachineInfo, CreationError = this.CREATE_VIRTUAL_MACHINE(
-      hardwareConfigurationData, customizedConfigurationData)
+      this.JwtToken, hardwareConfigurationData, customizedConfigurationData)
 
       // If the Virtual Machine Has been Successfully Initialized and Created
       // Adding it to the Customer's Virtual Machine Item List
@@ -704,7 +726,7 @@ export default {
 
     DeleteVirtualMachine(VirtualMachineId) {
       // Deletes Selected Virtual Machine, Activates Warning before doing that Operation
-      this.DELETE_VIRTUAL_MACHINE(VirtualMachineId)
+      this.DELETE_VIRTUAL_MACHINE(this.JwtToken, VirtualMachineId)
       this.VirtualMachineItemList = this.VirtualMachineItemList.filter((item) => item.id !== VirtualMachineId);
     },
 

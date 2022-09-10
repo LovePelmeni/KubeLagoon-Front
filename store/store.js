@@ -4,7 +4,8 @@ import Vuex from "vuex";
 
 export default new Vuex.Store({
 
-  state: { 
+  state: {
+    loading: false,
     virtualMachineData: [],
     initializationModal: null,
     modalActive: false,
@@ -300,7 +301,7 @@ export default new Vuex.Store({
             return;
           }
         }else{
-          commit('TOGGLE_ERROR', "Failed to Initialize Virtual Machine")     
+          commit('TOGGLE_ERROR', "Failed to Initialize Virtual Machine")
           return;
         }
     },

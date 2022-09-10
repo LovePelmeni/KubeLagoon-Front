@@ -90,5 +90,4 @@ class CustomerManager {
     }
 }
 
-
 export {CustomerManager, CustomerInputValidator, CustomerRegistrationForm, CustomerLoginForm};
