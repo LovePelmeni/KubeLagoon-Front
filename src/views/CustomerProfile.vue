@@ -1,57 +1,58 @@
-<template>
-
-  <div class="card">
-    <label>Username</label>
-    <a> {{ Username }}</a>
-
-    <label>Email</label>
-    <a> {{ Email }}</a>
-
-    <label>Created At</label>
-    <a> {{ CreatedAt }}</a>
-  </div>
-
-</template>
-
 <script>
 
-/* eslint-disable no-unused-vars */
+import * as customers from "../../customers/customers.js";
+import $ from "jquery";
+import { useCookies } from "vue3-cookies";
 
-import * as customers from "../../customers/customers.js"
-import $ from "jquery"
-
-
-var BACKEND_APPLICATION_HOST = process.env.BACKEND_APPLICATION_HOST
-var BACKEND_APPLICATION_PORT = process.env.BACKEND_APPLICATION_PORT
-
-var Url = require("url-parse")
 
 export default {
       name: "CustomerProfile",
+      setup() {
+        const { cookies } = useCookies(); 
+        return { cookies }
+      },
+      mounted() {
+        this.JwtToken = this.cookie.get("jwt-token")
+      },
       data() {
         return {
+          // Customer Credentials
           Username: null,
           Email: null,
           CreatedAt: null,
+
+          // Billing Address Info 
+          BillingAddress: null, 
+          Country: null, 
+          ZipCode: null,
         }
       },
+      template: `
+      
+      `,
         methods: {
 
           ShowCustomerProfile() {
             // Function Parses Customer Data and Shows Out Customer's Profile Component
-            let CustomerId = $.getCookie("jwt-token")["UserId"]
+          
             let newCustomerManager = new customers.CustomerManager()
-            let CustomerProfile = newCustomerManager.GetCustomerProfile(CustomerId)
+            let CustomerProfile = newCustomerManager.GetCustomerProfile(this.JwtToken)
+
+            // Customer Info 
+            this.Username = CustomerProfile["Username"]
+            this.Email =  CustomerProfile["Email"]
+            this.Password = "*" * CustomerProfile["Password"].length
+
+            // Billing Address Info 
+            this.BillingAddress = CustomerProfile["BillingAddress"]
+            this.Country = CustomerProfile["Country"]
+            this.ZipCode = CustomerProfile["ZipCode"]
           },
 
           Logout() {
             // Logging out the Customer from the Profile
-
-            var LoginRedirectUrl = new Url("http://%s:%s/customer/login"
-             % (BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
-
             if ($.cookie("jwt-token").length != 0) {
-              let Cookie = $.expireCookie("jwt-token")
+              this.cookies.delete("jwt-token");
               return this.$router.push({name: "login_page"})
             }
           },
@@ -62,9 +63,7 @@ export default {
         },
       }
 
-
 </script>
-
 
 <style>
 </style>

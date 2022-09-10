@@ -2,12 +2,24 @@ global.jQuery = require('jquery');
 
 import App from './App.vue';
 import store from "../store/store.js";
+import VueCookies from "vue3-cookies";
 
 import Vuex from 'vuex'
 import { createApp } from 'vue/dist/vue.esm-bundler';
 import { router } from './router/index'
 
+import { globalCookiesConfig } from "vue3-cookies";
+
+globalCookiesConfig({
+  expireTimes: "30d",
+  path: "/",
+  domain: "",
+  secure: true,
+  sameSite: "None",
+});
+
 const app = createApp(App).use(router)
+app.use(VueCookies)
 app.use(store)
 app.use(Vuex)
 

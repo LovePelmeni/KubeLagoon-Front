@@ -112,13 +112,19 @@
 
 <script>
 
-/* eslint-disable no-unused-vars */
-
-import { mapActions, mapMutations, mapState } from "vuex";
-import router from "../router/index.js"
+import { mapMutations, mapState } from "vuex";
+import router from "../router/index.js";
+import { useCookies } from "vue3-cookies";
 
 export default {
   name: "virtualMachine",
+  setup() {
+    const { cookie } = useCookies();
+    return { cookie };
+  },
+  mounted() {
+    this.JwtToken = this.cookie.get("jwt-token")
+  },
   data() {
     return {
       // General Virtual Machine Info
@@ -167,14 +173,14 @@ export default {
     ShutdownVirtualMachine(VirtualMachineId) {
       // Shutting down the Virtual Machine Server
       document.getElementById("shutdownButton").innerText = "Shutting Down"
-      let ShutdownError = this.SHUTDOWN_VIRTUAL_MACHINE(VirtualMachineId)
+      let ShutdownError = this.SHUTDOWN_VIRTUAL_MACHINE(this.JwtToken, VirtualMachineId)
       if (ShutdownError != null) {this.TOGGLE_ERROR(
       "Failed to Shutdown Virtual Machine, " + ShutdownError.error)}
     },
 
     RebootVirtualMachine(VirtualMachineId) {
       document.getElementById("rebootButton").innerText = "Rebooting"
-      let Rebooted, RebootError = this.REBOOT_VIRTUAL_MACHINE(VirtualMachineId)
+      let Rebooted, RebootError = this.REBOOT_VIRTUAL_MACHINE(this.JwtToken, VirtualMachineId)
       if (Rebooted != true || RebootError != null) {
       this.TOGGLE_ERROR(RebootError)}
     },
@@ -182,14 +188,14 @@ export default {
     RunVirtualMachine(VirtualMachineId) {
       // Running the Virtual Machine Server
       document.getElementById("runButton").innerText = "Running..."
-      let RunError = this.RUN_VIRTUAL_MACHINE(VirtualMachineId)
+      let RunError = this.RUN_VIRTUAL_MACHINE(this.JwtToken, VirtualMachineId)
       if (RunError != null) {this.TOGGLE_ERROR(
       "Failed to Run Virtual Machine, " + RunError.error)}
     },
 
     DeleteVirtualMachine(VirtualMachineId) {
       // Redirects to the Delete Virtual Machine Page
-      this.DELETE_VIRTUAL_MACHINE(VirtualMachineId)
+      this.DELETE_VIRTUAL_MACHINE(this.JwtToken, VirtualMachineId)
       this.$route.push({name: "DeleteVirtualMachine",
       params: {"VirtualMachineId": VirtualMachineId}})
     },

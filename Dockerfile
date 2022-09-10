@@ -15,8 +15,13 @@ COPY . .
 # Installing Dependencies
 RUN npm install
 
+# Running Unittests 
+RUN npm test
+
 # Bulding App
 RUN npm run build
 
 # Running Http Server
 ENTRYPOINT ["npm", "run", "serve"]
+
+

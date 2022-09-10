@@ -97,10 +97,11 @@
 
 /* eslint-disable no-unused-vars */
 
-import { mapActions, mapMutations, mapState } from "vuex";
-import * as suggestions from "../../suggestions/suggestions.js"
-import loadingPage from "./LoadingPage.vue"
-import * as vm from "../../vm/vm.js"
+import { mapMutations, mapState } from "vuex";
+import * as suggestions from "../../suggestions/suggestions.js";
+import loadingPage from "./LoadingPage.vue";
+import * as vm from "../../vm/vm.js";
+import { useCookies } from "vue3-cookies";
 
 
 export const hardwareConfiguration = {
@@ -531,9 +532,15 @@ export const sshConfiguration = {
 export default {
 
   name: "initializationModal",
+  setup() {
+    const { cookie } = useCookies();
+    return { cookie };
+  },
+  mounted() {
+    this.JwtToken = this.cookie.get("jwt-token")
+  },
   data() {
     return {
-
       // General Extra Attributes
       dateOptions: { year: "numeric", month: "short", day: "numeric" },
       loading: null,
@@ -620,7 +627,7 @@ export default {
     GetCustomerVirtualMachines() {
       // Returns Queryset of the Virtual Machines, related to the Customer
       let newVirtualMachineManager = new vm.VirtualMachineManager()
-      let VirtualMachinesQueryset, GetError = newVirtualMachineManager.GetCustomerVirtualMachines()
+      let VirtualMachinesQueryset, GetError = newVirtualMachineManager.GetCustomerVirtualMachines(this.JwtToken)
       if (GetError != null) {this.SHOW_ERROR(GetError.error)}
       this.VirtualMachineItemList = VirtualMachinesQueryset
     },
@@ -639,7 +646,7 @@ export default {
 
       if (CreationError == null) {
         let VmManager = new vm.VirtualMachineManager()
-        let VirtualMachine = VmManager.GetVirtualMachine(VirtualMachineInfo["VirtualMachineId"])
+        let VirtualMachine = VmManager.GetVirtualMachine(this.JwtToken, VirtualMachineInfo["VirtualMachineId"])
         this.addVirtualMachineToList(VirtualMachine)
       }
     },

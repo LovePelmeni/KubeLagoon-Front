@@ -1,26 +1,24 @@
 import "../configuration_preparer/preparer.js"
+
 var BACKEND_APPLICATION_PORT = process.env.BACKEND_APPLICATION_PORT
 var BACKEND_APPLICATION_HOST = process.env.BACKEND_APPLICATION_HOST
-
-var jquery = global.jQuery;
-window.jquery = jquery
 
 var Url = require('url-parse');
 
 /* eslint-disable no-unused-vars */
 
-function GetVirtualMachineRestController(VirtualMachineId) {
+function GetVirtualMachineRestController(JwtToken, VirtualMachineId) {
   // Rest Controller, that returns Info about the Virtual Machine
   var APIUrl = new Url("http://%s:%s/vm/get/" % (
   BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
   APIUrl.searchParams.append("VirtualMachineId", VirtualMachineId)
-  var Response, ResponseError = jquery.ajax({
+  var Response, ResponseError = global.jQuery.ajax({
     URL: APIUrl,
     type: "GET",
     headers: {
       "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Credentials": "true",
-      "Authorization": jquery.cookie("jwt-token"),
+      "Authorization": JwtToken,
     },
     success: function() {
       // Returns Virtual Machine
@@ -38,16 +36,16 @@ function GetVirtualMachineRestController(VirtualMachineId) {
   return Response, ResponseError
 }
 
-function GetVirtualMachinesRestController() {
+function GetVirtualMachinesRestController(JwtToken) {
   // Rest Controller, that returns Queryset of the Customer's Virtual Machines
   var APIUrl = new Url("http://%s:%s/vm/get/list/" % (
   BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
-  var Response, ResponseError = jquery.ajax({
+  var Response, ResponseError = global.jQuery.ajax({
     URL: APIUrl,
     headers: {
       "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Credentials": "true",
-      "Authorization": jquery.cookie("jwt-token"),
+      "Authorization": JwtToken,
     },
     type: "GET",
     success: function(Response) {
@@ -66,18 +64,18 @@ function GetVirtualMachinesRestController() {
 
 
 
-function InitializeVirtualMachineRestController(Configuration) {
+function InitializeVirtualMachineRestController(JwtToken, Configuration) {
   // Rest Controller, that Initializes New Virtual Machine
   var APIUrl = new Url("http://%s:%s/vm/initialize/" % (
   BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
-  let Response, Error= jquery.ajax({
+  let Response, Error= global.jQuery.ajax({
     async: false,
     URL: APIUrl,
     type: "POST",
     data: JSON.stringify({"HardwareConfiguration": Configuration}),
     headers: {
       "Access-Control-Allow-Origin": "*",
-      "Authorization": jquery.cookie("jwt-token"),
+      "Authorization": JwtToken,
       "Access-Control-Allow-Credentials": "true",
     },
     success: function(Response){
@@ -96,13 +94,13 @@ function InitializeVirtualMachineRestController(Configuration) {
   return Response, Error
 }
 
-function ApplyVirtualMachineConfigurationRestController(CustomConfiguration, VirtualMachineId) {
+function ApplyVirtualMachineConfigurationRestController(JwtToken, CustomConfiguration, VirtualMachineId) {
   // Rest Controller, that Applying Custom Configuration to the Initialized Virtual Machine
   var APIUrl = new Url("http://%s:%s/vm/apply/configuration/" % (
   BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
   APIUrl.searchParams.append("VirtualMachineId", VirtualMachineId)
 
-  let Response, Error = jquery.ajax({
+  let Response, Error = global.jQuery.ajax({
     async: false,
     URL: APIUrl,
     type: "POST",
@@ -110,7 +108,7 @@ function ApplyVirtualMachineConfigurationRestController(CustomConfiguration, Vir
     dataType: "json",
     headers: {
       "Access-Control-Allow-Origin": "*",
-      "Authorization": jquery.cookie("jwt-token"),
+      "Authorization": JwtToken,
       "Access-Control-Allow-Credentials": "true",
     },
     success: function (Response) {
@@ -128,18 +126,19 @@ function ApplyVirtualMachineConfigurationRestController(CustomConfiguration, Vir
 }
 
 
-function DestroyVirtualMachineRestController(VirtualMachineId) {
+function DestroyVirtualMachineRestController(JwtToken, VirtualMachineId) {
   // Rest Controller, deletes Virtual Machine Server, that Customer is desired to
   var APIUrl = new Url("http://%s:%s/vm/destroy/" % (
   BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
-  let Response, ResponseError = jquery.ajax({
+  APIUrl.searchParams.append("VirtualMachineId", VirtualMachineId)
+  let Response, ResponseError = global.jQuery.ajax({
     URL: APIUrl,
     async: false,
     type: "DELETE",
     headers: {
       "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Credentials": "true",
-      "Authorization": jquery.cookie('jwt-token'),
+      "Authorization": JwtToken,
     },
     success: function(Response) {
       // Processing Success Response
@@ -157,19 +156,19 @@ function DestroyVirtualMachineRestController(VirtualMachineId) {
   return Response, ResponseError
 }
 
-function StartVirtualMachineRestController(VirtualMachineId) {
+function StartVirtualMachineRestController(JwtToken, VirtualMachineId) {
   // Rest Controller, that Starts Virtual Machine
   var APIUrl = new Url("http://%s:%s/os/reboot/" %
   (BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
   APIUrl.searchParams.append("VirtualMachineId", VirtualMachineId)
 
-  let Response, Error = jquery.ajax({
+  let Response, Error = global.jQuery.ajax({
     async: false,
     URL: APIUrl,
     type: "POST",
     headers: {
       "Access-Control-Allow-Origin": "*",
-      "Authorization": jquery.cookie("jwt-token"),
+      "Authorization": JwtToken,
       "Access-Control-Allow-Credentials": "true",
     },
     success: function(Response){
@@ -188,19 +187,19 @@ function StartVirtualMachineRestController(VirtualMachineId) {
   return Response, Error
 }
 
-function ShutdownVirtualMachineRestController(VirtualMachineId) {
+function ShutdownVirtualMachineRestController(JwtToken, VirtualMachineId) {
   // Rest Controller, that Shuts Down Virtual Machine
   var APIUrl = new Url("http://%s:%s/os/reboot/" %
   (BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
   APIUrl.searchParams.append("VirtualMachineId", VirtualMachineId)
 
-  let Response, Error = jquery.ajax({
+  let Response, Error = global.jQuery.ajax({
     async: false,
     URL: APIUrl,
     type: "DELETE",
     headers: {
       "Access-Control-Allow-Origin": "*",
-      "Authorization": jquery.cookie("jwt-token"),
+      "Authorization": JwtToken,
       "Access-Control-Allow-Credentials": "true",
     },
     success: function(Response){
@@ -219,19 +218,19 @@ function ShutdownVirtualMachineRestController(VirtualMachineId) {
   return Response, Error
 }
 
-function RebootVirtualMachineRestController(VirtualMachineId) {
+function RebootVirtualMachineRestController(JwtToken, VirtualMachineId) {
   // Rest Controller, that Reboots Virtual Machine
   var APIUrl = new Url("http://%s:%s/os/reboot/" %
   (BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
   APIUrl.searchParams.append("VirtualMachineId", VirtualMachineId)
 
-  let Response, Error = jquery.ajax({
+  let Response, Error = global.jQuery.ajax({
     async: false,
     URL: APIUrl,
     type: "PUT",
     headers: {
       "Access-Control-Allow-Origin": "*",
-      "Authorization": jquery.cookie("jwt-token"),
+      "Authorization": JwtToken,
       "Access-Control-Allow-Credentials": "true",
     },
     success: function(Response){
@@ -253,19 +252,19 @@ function RebootVirtualMachineRestController(VirtualMachineId) {
 
 
 
-function StartVmOsRestController(VirtualMachineId) {
+function StartVmOsRestController(JwtToken, VirtualMachineId) {
   // Rest Controller, that Starts Virtual Machine Os HostSystem
   var APIUrl = new Url("http://%s:%s/os/start/" %
   (BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
   APIUrl.searchParams.append("VirtualMachineId", VirtualMachineId)
 
-  let Response, Error = jquery.ajax({
+  let Response, Error = global.jQuery.ajax({
     async: false,
     URL: APIUrl,
     type: "POST",
     headers: {
       "Access-Control-Allow-Origin": "*",
-      "Authorization": jquery.cookie("jwt-token"),
+      "Authorization": JwtToken,
       "Access-Control-Allow-Credentials": "true",
     },
     success: function(Response){
@@ -284,19 +283,19 @@ function StartVmOsRestController(VirtualMachineId) {
   return Response, Error
 }
 
-function ShutdownVmOsRestController(VirtualMachineId) {
+function ShutdownVmOsRestController(JwtToken, VirtualMachineId) {
   // Rest Controller, that Shuts Down Virtual Machine Os HostSystem
   var APIUrl = new Url("http://%s:%s/os/shutdown/" %
   (BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
   APIUrl.searchParams.append("VirtualMachineId", VirtualMachineId)
 
-  let Response, Error = jquery.ajax({
+  let Response, Error = global.jQuery.ajax({
     async: false,
     URL: APIUrl,
     type: "DELETE",
     headers: {
       "Access-Control-Allow-Origin": "*",
-      "Authorization": jquery.cookie("jwt-token"),
+      "Authorization": JwtToken,
       "Access-Control-Allow-Credentials": "true",
     },
     success: function(Response){
@@ -315,19 +314,19 @@ function ShutdownVmOsRestController(VirtualMachineId) {
   return Response, Error
 }
 
-function RebootVmOsRestController(VirtualMachineId) {
+function RebootVmOsRestController(JwtToken, VirtualMachineId) {
   // Rest Controller, that Reboots Virtual Machine Os HostSystem
   var APIUrl = new Url("http://%s:%s/os/reboot/" %
   (BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
   APIUrl.searchParams.append("VirtualMachineId", VirtualMachineId)
 
-  let Response, Error = jquery.ajax({
+  let Response, Error = global.jQuery.ajax({
     async: false,
     URL: APIUrl,
     type: "PUT",
     headers: {
       "Access-Control-Allow-Origin": "*",
-      "Authorization": jquery.cookie("jwt-token"),
+      "Authorization": JwtToken,
       "Access-Control-Allow-Credentials": "true",
     },
     success: function(Response){

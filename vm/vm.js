@@ -1,60 +1,56 @@
 import * as vm_rest from "../rest/virtual_machine.js"
 
-/* eslint-disable no-unused-vars */
-
-var BACKEND_APPLICATION_HOST = process.env.BACKEND_APPLICATION_HOST
-var BACKEND_APPLICATION_PORT = process.env.BACKEND_APPLICATION_PORT
-
-
-import $ from "jquery";
-var Url = require("url-parse");
-
-
 class VirtualMachineManager {
   // Class That Manages Virtual Machine
 
-    InitializeVirtualMachine = function(Configuration){
+    InitializeVirtualMachine = function(JwtToken, Configuration){
       // Initializes New Empty Virtual Machine Serve
-      return vm_rest.InitializeVirtualMachineRestController(Configuration)
+      return vm_rest.InitializeVirtualMachineRestController(JwtToken, Configuration)
     }
 
-    ApplyVirtualMachineConfiguration = function(CustomizedConfiguration, VirtualMachineId) {
+    ApplyVirtualMachineConfiguration = function(JwtToken, CustomizedConfiguration, VirtualMachineId) {
       // Applying Configuration to the Virtual Machine
-      return vm_rest.ApplyVirtualMachineConfigurationRestController(CustomizedConfiguration, VirtualMachineId)
+      return vm_rest.ApplyVirtualMachineConfigurationRestController(JwtToken, CustomizedConfiguration, VirtualMachineId)
     }
 
-    RebootVirtualMachine = function(VirtualMachineId) {
+    StartVirtualMachine(JwtToken, VirtualMachineId) {
+      // Starts up the Virtual Machine Server 
+      return vm_rest.StartVirtualMachineRestController(JwtToken, VirtualMachineId)
+    }
+
+    RebootVirtualMachine = function(JwtToken, VirtualMachineId) {
     // Applying Configuration to the Virtual Machine
-      return vm_rest.RebootVirtualMachineRestController(VirtualMachineId)
+      return vm_rest.RebootVirtualMachineRestController(JwtToken, VirtualMachineId)
     }
 
-    ShutdownVirtualMachine = function(VirtualMachineId) {
+    ShutdownVirtualMachine = function(JwtToken, VirtualMachineId) {
     // Applying Configuration to the Virtual Machine
-      return vm_rest.ShutdownVirtualMachineRestController(VirtualMachineId)
+      return vm_rest.ShutdownVirtualMachineRestController(JwtToken, VirtualMachineId)
     }
 
-    StartVirtualMachineOperationalSystem = function(VirtualMachineId) {
+    StartVirtualMachineOperationalSystem = function(JwtToken, VirtualMachineId) {
     // Applying Configuration to the Virtual Machine
-      return vm_rest.StartVirtualMachineRestController(VirtualMachineId)
+      return vm_rest.StartVirtualMachineRestController(JwtToken, VirtualMachineId)
     }
 
-    RebootVirtualMachineOperationalSystem = function(VirtualMachineId) {
+    RebootVirtualMachineOperationalSystem = function(JwtToken, VirtualMachineId) {
     // Applying Configuration to the Virtual Machine
-      return vm_rest.RebootVmOsRestController(VirtualMachineId)
+      return vm_rest.RebootVmOsRestController(JwtToken, VirtualMachineId)
     }
 
-    ShutdownVirtualMachineOperationalSystem = function(VirtualMachineId) {
+    ShutdownVirtualMachineOperationalSystem = function(JwtToken, VirtualMachineId) {
     // Applying Configuration to the Virtual Machine
-      return vm_rest.ShutdownVmOsRestController(VirtualMachineId)
+      return vm_rest.ShutdownVmOsRestController(JwtToken, VirtualMachineId)
     }
 
-    GetCustomerVirtualMachineInfo = function(VirtualMachineId) {
+    GetCustomerVirtualMachineInfo = function(JwtToken, VirtualMachineId) {
       // Receives Info About Customers Virtual Machine
-      return vm_rest.GetVirtualMachineRestController(VirtualMachineId)
+      return vm_rest.GetVirtualMachineRestController(JwtToken, VirtualMachineId)
     }
-    GetCustomerVirtualMachines = function() {
+
+    GetCustomerVirtualMachines = function(JwtToken) {
       // Receives all Virtual Machine Servers, belongs to the Customer
-        return vm_rest.GetVirtualMachinesRestController()
+        return vm_rest.GetVirtualMachinesRestController(JwtToken)
     }
 }
 

@@ -4,7 +4,7 @@ import Vuex from "vuex";
 
 export default new Vuex.Store({
 
-  state: {
+  state: { 
     virtualMachineData: [],
     initializationModal: null,
     modalActive: false,
@@ -75,18 +75,18 @@ export default new Vuex.Store({
 
     // Virtual Machine Methods
 
-    GET_VIRTUAL_MACHINE(VirtualMachineId) {
+    GET_VIRTUAL_MACHINE(JwtToken, VirtualMachineId) {
       // Returns A Virtual Machine Server Object Info
       let virtualMachineManager = new vm.VirtualMachineManager()
-      let virtualMachine = virtualMachineManager.GetCustomerVirtualMachine(VirtualMachineId)
+      let virtualMachine = virtualMachineManager.GetCustomerVirtualMachine(JwtToken, VirtualMachineId)
       return virtualMachine
     },
 
-    GET_VIRTUAL_MACHINES(state) {
+    GET_VIRTUAL_MACHINES(state, JwtToken) {
       // Returns List of the Virtual Machine Servers, belongs To Customer
 
       let VirtualMachineManager = new vm.VirtualMachineManager()
-      let results, ResultError = VirtualMachineManager.GetVirtualMachines()
+      let results, ResultError = VirtualMachineManager.GetVirtualMachines(JwtToken)
       if (ResultError != null) {this.TOGGLE_ERROR(ResultError)}
 
       for (let virtualMachine in results){
@@ -134,7 +134,7 @@ export default new Vuex.Store({
       this.VIRTUAL_MACHINES_LOADED(state);
     },
 
-    CREATE_VIRTUAL_MACHINE(state, customizedConfiguration, hardwareConfiguration) {
+    CREATE_VIRTUAL_MACHINE(state, JwtToken, customizedConfiguration, hardwareConfiguration) {
 
       // Creates New Virtual Machine Server
       // Initializing New Virtual Machine Manager
@@ -148,14 +148,14 @@ export default new Vuex.Store({
       let CustomizedConfiguration = new preparer.customizedConfiguration(customizedConfiguration)
 
       // Initializing Empty Virtual Machine Server Instance
-      let initialized, initializationError = vmManager.InitializeVirtualMachine(HardwareConfiguration)
+      let initialized, initializationError = vmManager.InitializeVirtualMachine(JwtToken, HardwareConfiguration)
         if (initialized && initializationError == null) {
           // Applying Customized Configuration
 
           let appliedInfo, applyError = vmManager.ApplyConfiguration(CustomizedConfiguration)
           if (applyError != null && appliedInfo != null) {
 
-            let virtualMachine = vmManager.GetVirtualMachine(appliedInfo["VirtualMachineId"])
+            let virtualMachine = vmManager.GetVirtualMachine(JwtToken, appliedInfo["VirtualMachineId"])
             virtualMachine["Running"] = true
             virtualMachine["Shutdown"] = false
             virtualMachine["Deploying"] = false
@@ -172,10 +172,10 @@ export default new Vuex.Store({
         }
     },
 
-    DELETE_VIRTUAL_MACHINE(state, payload) {
+    DELETE_VIRTUAL_MACHINE(state, JwtToken, payload) {
       // Deletes Virtual Machine Server
       let vmManager = new vm.VirtualMachineManager()
-      let deleted, deletionError = vmManager.DeleteVirtualMachine(payload["VirtualMachineId"])
+      let deleted, deletionError = vmManager.DeleteVirtualMachine(JwtToken, payload["VirtualMachineId"])
       if (deleted && deletionError == null) {
         state.VirtualMachineData = state.VirtualMachineData.filter(
         (virtualMachine) => virtualMachine !== payload);
@@ -185,17 +185,17 @@ export default new Vuex.Store({
     },
 
 
-    UPDATE_VIRTUAL_MACHINE(state, payload, virtualMachineId) {
+    UPDATE_VIRTUAL_MACHINE(state, JwtToken, virtualMachineId) {
       // Updates Virtual Machine Server
 
       let vmManager = new vm.VirtualMachineManager()
       let hardwareConfiguration = new preparer.HardwareConfiguration()
       let customizedConfiguration = new preparer.CustomizedConfiguration()
 
-      let updatedInfo, updateError = vmManager.UpdateVirtualMachine(virtualMachineId, hardwareConfiguration, customizedConfiguration)
+      let updatedInfo, updateError = vmManager.UpdateVirtualMachine(JwtToken, virtualMachineId, hardwareConfiguration, customizedConfiguration)
       if (updateError == null) {
 
-        let virtualMachine = vmManager.GetVirtualMachine(updatedInfo["VirtualMachineId"])
+        let virtualMachine = vmManager.GetVirtualMachine(JwtToken, updatedInfo["VirtualMachineId"])
         this.INSERT_NEW_VIRTUAL_MACHINE(state.virtualMachineData, virtualMachine)
 
       }else{
@@ -203,27 +203,27 @@ export default new Vuex.Store({
       }
     },
 
-    SHUTDOWN_VIRTUAL_MACHINE(virtualMachineId) {
+    SHUTDOWN_VIRTUAL_MACHINE(JwtToken, virtualMachineId) {
       // Shuts down the Virtual Machine  Server
 
       let vmManager = new vm.VirtualMachineManager()
-      let Shutdown, ShutdownError = vmManager.ShutdownVirtualMachine(virtualMachineId)
+      let Shutdown, ShutdownError = vmManager.ShutdownVirtualMachine(JwtToken, virtualMachineId)
       if (Shutdown != true || ShutdownError != null) {this.TOGGLE_ERROR(ShutdownError)}
     },
 
-    START_VIRTUAL_MACHINE(virtualMachineId) {
+    START_VIRTUAL_MACHINE(JwtToken, virtualMachineId) {
       // Starting up the Virtual Machine
 
       let vmManager = new vm.VirtualMachineManager()
-      let Started, StartError = vmManager.StartVirtualMachine(virtualMachineId)
+      let Started, StartError = vmManager.StartVirtualMachine(JwtToken, virtualMachineId)
       if (Started != true || StartError != null) {this.TOGGLE_ERROR(StartError)}
     },
 
-    REBOOT_VIRTUAL_MACHINE(virtualMachineId) {
+    REBOOT_VIRTUAL_MACHINE(JwtToken, virtualMachineId) {
       // Reboots Virtual Machine
 
       let vmManager = new vm.VirtualMachineManager()
-      let Rebooted, RebootError = vmManager.RebootVirtualMachine(virtualMachineId)
+      let Rebooted, RebootError = vmManager.RebootVirtualMachine(JwtToken, virtualMachineId)
       if (Rebooted != true || RebootError != null ) {this.TOGGLE_ERROR(RebootError)}
     },
 
@@ -240,7 +240,6 @@ export default new Vuex.Store({
     INSERT_NEW_VIRTUAL_MACHINE(list, virtualMachine) {
       // Inserts new Virtual Machine Objecg  Inside the List
       list.push({
-
                     // General Information about the Customer's Virtual Machine
 
                     virtualMachineId: virtualMachine.VirtualMachineid,

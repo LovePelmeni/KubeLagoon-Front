@@ -13,7 +13,7 @@ function CreateCustomerRestController(CustomerData) {
   // Rest Controller, that is responsible for creating new Customer Profile
 
     var APIUrl = new Url("http://%s:%s/customer/create/" % (BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
-    var HttpResponse, HttpErrors = $.ajax({
+    var HttpResponse, HttpErrors = global.jQuery.ajax({
       type: "POST",
       data: JSON.stringify(CustomerData),
       dataType: "json",
@@ -46,11 +46,11 @@ function CreateCustomerRestController(CustomerData) {
 }
 
 
-function ResetPasswordRestController(NewPassword){
+function ResetPasswordRestController(JwtToken, NewPassword){
   // Rest Controller, that Is Responsible for Resetting Password
 
   var APIUrl = new Url("http://%s:%s/customer/reset/password" % (BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
-  let ResponseStatus, ResponseErrors = $.ajax({
+  let ResponseStatus, ResponseErrors = global.jQuery.ajax({
     data: JSON.stringify({"NewPassword": NewPassword}),
     dataType: "json",
     URL: APIUrl,
@@ -58,7 +58,7 @@ function ResetPasswordRestController(NewPassword){
     headers: {
       "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Credentials": "true",
-      "Authorization": $.cookie("jwt-token"),
+      "Authorization": JwtToken,
     },
     success: function(Response){
       if (Response.StatusCode == 201) {
@@ -75,24 +75,24 @@ function ResetPasswordRestController(NewPassword){
   return ResponseStatus, ResponseErrors
 }
 
-function DeleteCustomerRestController() {
+function DeleteCustomerRestController(JwtToken) {
   // Rest Controller, that is used to deleting the Customer Profile
 
   var APIUrl = new Url("http://%s:%s/customer/delete" % (BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
-  var Response, Error = $.ajax({
+  var Response, Error = global.jQuery.ajax({
     URL: APIUrl,
     type: "DELETE",
     headers: {
       "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Credentials": "true",
-      "Authorization": $.cookie('jwt-token'),
+      "Authorization": JwtToken,
       "Content-Type": "application/json",
     },
     success: function(Response) {
       // Handling Success Response
       if (Response.StatusCode == 201) {
         // Removing Jwt Cookie...
-        let Expired = $.RemoveCookie("jwt-token")
+        let Expired = global.jQuery.RemoveCookie("jwt-token")
         return Expired, []
       }
     },
@@ -108,7 +108,7 @@ function LoginCustomerRestController(Username, Password) {
   // Logs in Customer into the Profile
   var APIUrl = Url("http://%s:%s/login/" % (
   BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
-  var Response, ResponseError = $.ajax({
+  var Response, ResponseError = global.jQuery.ajax({
     type: "POST",
     URL: APIUrl,
     data: JSON.stringify({"Username": Username, "Password": Password}),
@@ -129,14 +129,9 @@ function LoginCustomerRestController(Username, Password) {
   return Response, ResponseError
 }
 
-function LogoutCustomerRestController() {
-  // Deletes the Jwt auth token
-}
-
 
 
 export {CreateCustomerRestController,
 DeleteCustomerRestController,
 LoginCustomerRestController,
-LogoutCustomerRestController,
 ResetPasswordRestController}

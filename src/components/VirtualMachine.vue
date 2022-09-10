@@ -58,16 +58,25 @@
 <script>
 
 import * as healthcheck from "../healthcheck/healthcheck.js";
-import * as vm from "../../vm/vm.js";
-import {newRouter} from "../../router/router.js";
+import { newRouter } from "../../router/router.js";
 import { mapMutations } from "vuex";
+import { useCookies } from "vue3-cookies";
 
 
 export default {
 
   name: "virtualMachineInfo",
+  setup() {
+    const { cookie } = useCookies();
+    return { cookie };
+  },
+  mounted() {
+    this.JwtToken = this.cookie.get("jwt-token")
+  },
   data() {
     return {
+      // Authentication Credentials 
+      JwtToken: this.cookie.get("jwt-token"),
 
       virtualMachineLoaded: false,
       // Owner Name
@@ -108,7 +117,7 @@ export default {
   },
   methods: {
 
-    ...mapMutations(["TOGGLE_ERROR"])
+    ...mapMutations(["TOGGLE_ERROR"]),
 
     RedirectHome() {
       // Redirect Back to the Main Page
@@ -125,14 +134,14 @@ export default {
       // Returns Virtual Machine Info, (is not being changed dynamically)
 
       let VirtualMachineId = this.$route.params.VirtualMachineId
-      VirtualMachine, VirtualMachineError = this.GET_VIRTUAL_MACHINE(VirtualMachineId)
+      VirtualMachine, VirtualMachineError = this.GET_VIRTUAL_MACHINE(this.JwtToken, VirtualMachineId)
 
       if (VirtualMachineError != null) {
           this.ShowError(VirtualMachineError.Error)
       }else{
 
           this.virtualMachineLoaded = true
-          this.CustomerName = this.GetCustomerName()
+          this.CustomerName = VirtualMachineInfo["Metadata"]["OwnerName"]
 
           this.VirtualMachineId = VirtualMachineInfo["Metadata"]["VirtualMachineId"]
           this.VirtualMachineName = VirtualMachineInfo["Metadata"]["VirtualMachineName"]
