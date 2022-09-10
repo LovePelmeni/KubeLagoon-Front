@@ -112,7 +112,7 @@
 
 <script>
 
-import { mapMutations, mapState } from "vuex";
+import { mapMutations, mapActions, mapState } from "vuex";
 import router from "../router/index.js";
 import { useCookies } from "vue3-cookies";
 
@@ -123,7 +123,7 @@ export default {
     return { cookie };
   },
   mounted() {
-    this.JwtToken = this.cookie.get("jwt-token")
+    this.JwtToken = this.cookie?.get("jwt-token")
   },
   data() {
     return {
@@ -139,6 +139,9 @@ export default {
   methods: {
 
    ...mapMutations([
+      "TOGGLE_ERROR",
+    ]),
+    ...mapActions([
       "SET_CURRENT_VIRTUAL_MACHINE",
       "RUN_VIRTUAL_MACHINE",
       "REBOOT_VIRTUAL_MACHINE",

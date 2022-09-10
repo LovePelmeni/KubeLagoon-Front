@@ -97,7 +97,7 @@
 
 /* eslint-disable no-unused-vars */
 
-import { mapMutations, mapState } from "vuex";
+import { mapMutations, mapActions, mapState } from "vuex";
 import * as suggestions from "../../suggestions/suggestions.js";
 import loadingPage from "./LoadingPage.vue";
 import * as vm from "../../vm/vm.js";
@@ -572,7 +572,7 @@ export default {
     return { cookie };
   },
   mounted() {
-    this.JwtToken = this.cookie.get("jwt-token")
+    this.JwtToken = this.cookie?.get("jwt-token")
   },
   data() {
     return {
@@ -623,7 +623,17 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(["TOGGLE_VIRTUAL_MACHINE", "TOGGLE_UPDATE_VIRTUAL_MACHINE", "SHOW_ERROR", "GET_VIRTUAL_MACHINE", "GET_VIRTUAL_MACHINES"]),
+    
+    ...mapMutations([
+      "TOGGLE_INITIALIZATION_MODAL",
+      "TOGGLE_UPDATE_VIRTUAL_MACHINE",
+      "TOGGLE_ERROR",
+    ]),
+    ...mapActions([
+      "GET_VIRTUAL_MACHINE", 
+      "GET_VIRTUAL_MACHINES",
+    ]),
+
     checkClick(e) {
       if (e.target === this.$refs.virtualMachineWrap) {
         this.TOGGLE_MODAL();
@@ -658,9 +668,9 @@ export default {
     },
 
     closeVirtualMachineSettings() {
-      this.TOGGLE_VIRTUAL_MACHINE();
+      this.TOGGLE_INITIALIZATION_MODAL();
       if (this.updateVirtualMachine) {
-        this.TOGGLE_UDPDATE_VIRTUAL_MACHINE();
+        this.TOGGLE_UPDATE_VIRTUAL_MACHINE();
       }
     },
 
@@ -668,7 +678,7 @@ export default {
       // Returns Queryset of the Virtual Machines, related to the Customer
       let newVirtualMachineManager = new vm.VirtualMachineManager()
       let VirtualMachinesQueryset, GetError = newVirtualMachineManager.GetCustomerVirtualMachines(this.JwtToken)
-      if (GetError != null) {this.SHOW_ERROR(GetError.error)}
+      if (GetError != null) {this.TOGGLE_ERROR(GetError.error)}
       this.VirtualMachineItemList = VirtualMachinesQueryset
     },
 
@@ -716,7 +726,7 @@ export default {
         return;
       }
       this.loading = true;
-      this.TOGGLE_VIRTUAL_MACHINE();
+      this.TOGGLE_INITIALIZATION_MODAL();
       this.loading = false;
       this.GET_VIRTUAL_MACHINES();
     },

@@ -21,11 +21,13 @@ var Url = require('url-parse');
         // Processing an Response
         if (Response.StatusCode == 200) {
         return Response.QuerySet, null}
-        return [], Error(Response.Error)
+        let newError = new Error(Response.Error)
+        return [], newError
       },
-      error: function(ResponseError) {
+      error: function(APIError) {
         // Processing an Response Exception
-        return [], Error(ResponseError)
+        let NewError = new Error(APIError)
+        return [], NewError
       }
     })
     return LoadBalancers, ResponseError
@@ -35,7 +37,7 @@ var Url = require('url-parse');
     //  Returns Array of the Available Datacenters, so Customer can pick up, which one to choose
     var APIUrl = new Url("http://%s:%s/suggestion/datacenter/" % (
     BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
-    let Datacenters, Error = global.jQuery.ajax({
+    let Datacenters, ResponseError = global.jQuery.ajax({
       async: false,
       URL: APIUrl,
       type: "GET",
@@ -46,22 +48,23 @@ var Url = require('url-parse');
       success: function(Response) {
         // Processing Datacenters Queryset
         if (Response.StatusCode != 200 && Response.StatusCode != 201) {
-          return null, Error(Response.Error)
+          let NewError = new Error(Response.Error)
+          return null, NewError
         }else{
         return Response.QuerySet, null}
       },
-      error: function(Error) {
-        return [], Error(Error)
+      error: function(APIError) {
+        return [], new Error(APIError)
       },
     })
-    return Datacenters, Error
+    return Datacenters, ResponseError
   }
 
   function GetOsSystemsSuggestionsRestController(){
     // Returns Array of the Available Os Systems + Distributions to them
     var APIUrl = new Url("http://%s:%s/suggestion/os/system/" % (
     BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
-    let Datacenters, Error = global.jQuery.ajax({
+    let Datacenters, OsSystemsError = global.jQuery.ajax({
       async: false,
       URL: APIUrl,
       type: "GET",
@@ -72,15 +75,17 @@ var Url = require('url-parse');
       success: function(Response) {
         // Processing Datacenters Queryset
         if (Response.StatusCode != 200 && Response.StatusCode != 201) {
-          return null, Error(Response.Error)
+          let NewError = new Error(Response.Error)
+          return null, NewError
         }else{
         return Response.QuerySet, null}
       },
       error: function(ResponseError) {
-        return [], Error(ResponseError)
+        let NewError = new Error(ResponseError)
+        return [], NewError
       },
     })
-    return Datacenters, Error
+    return Datacenters, OsSystemsError
   }
 
   function GetPreInstallationToolSuggestionsRestController(){
@@ -98,12 +103,14 @@ var Url = require('url-parse');
       success: function(Response) {
         // Processing Datacenters Queryset
         if (Response.StatusCode != 200 && Response.StatusCode != 201) {
-          return [], Error(Response.Error)
+          let NewError = new Error(Response.Error)
+          return [], NewError
         }else{
         return Response.QuerySet, null}
       },
       error: function(ResponseError) {
-        return [], Error(ResponseError)
+        let NewError = new Error(ResponseError)
+        return [], NewError
       },
     })
     return Datacenters, DatacentersError

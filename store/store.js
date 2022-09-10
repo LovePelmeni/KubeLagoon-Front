@@ -37,7 +37,7 @@ export default new Vuex.Store({
       state.notifications.push({'message': notification.message, 'date': new Date().now()})
       new Promise(r => setTimeout(r, 5));
       // Hiding Notification Back
-      this.TOGGLE_HIDE_NOTIFICATION(state, notification)
+      this.commit('TOGGLE_HIDE_NOTIFICATION', state, notification)
     },
 
     TOGGLE_HIDE_NOTIFICATION(state, notification) {
@@ -53,6 +53,14 @@ export default new Vuex.Store({
       state.updateVirtualMachine = !state.updateVirtualMachine;
     },
 
+    TOGGLE_HIDE_ERROR(state, error){
+      // Toggling Error to Hide
+      state.activeError = false
+      state.errors = state.errors.filter((errorObj) => {
+        return errorObj.error !== error
+      })
+    },
+
     TOGGLE_ERROR(state, newError) {
       // Toggling Error to show up
 
@@ -62,171 +70,8 @@ export default new Vuex.Store({
       state.activeError = !state.activeError
       state.errors.push({'error': newError})
       new Promise(r => setTimeout(r, 5));
-      this.TOGGLE_HIDE_ERROR(state, newError)
+      this.commit("TOGGLE_HIDE_ERROR", state, newError)
     },
-
-    TOGGLE_HIDE_ERROR(state, error){
-      // Toggling Error to Hide
-      state.activeError = false
-      state.error = state.error.filter((errorObj) => {
-        return errorObj.error !== error
-      })
-    },
-
-    // Virtual Machine Methods
-
-    GET_VIRTUAL_MACHINE(JwtToken, VirtualMachineId) {
-      // Returns A Virtual Machine Server Object Info
-      let virtualMachineManager = new vm.VirtualMachineManager()
-      let virtualMachine = virtualMachineManager.GetCustomerVirtualMachine(JwtToken, VirtualMachineId)
-      return virtualMachine
-    },
-
-    GET_VIRTUAL_MACHINES(state, JwtToken) {
-      // Returns List of the Virtual Machine Servers, belongs To Customer
-
-      let VirtualMachineManager = new vm.VirtualMachineManager()
-      let results, ResultError = VirtualMachineManager.GetVirtualMachines(JwtToken)
-      if (ResultError != null) {this.TOGGLE_ERROR(ResultError)}
-
-      for (let virtualMachine in results){
-        if (!state.VirtualMachineData.some((virtualMachine) => virtualMachine.VirtualMachineId === virtualMachine.VirtualMachineId)) {
-          const newVirtualMachine = {
-
-            // General Information about the Customer's Virtual Machine
-
-            virtualMachineId: virtualMachine.VirtualMachineid,
-            virtualMachineName: virtualMachine.VirtualMachineName,
-            clientEmail: virtualMachine.OwnerEmail,
-
-            // SSH Credentials for the Virtual Machine
-            RootUsername: virtualMachine.Ssh.RootUsername,
-            RootPassword: virtualMachine.Ssh.RootPassword,
-            Secure: virtualMachine.Ssh.Secure,
-            RootCertificate: virtualMachine.RootCertificate,
-
-            // Creation Date Info
-            virtualMachineDateUnix: virtualMachine.CreatedAt.Unix(),
-            virtualMachineDate: virtualMachine.CreatedAt,
-
-            // Pay Terms + Setting up Current Date for the Payment
-            paymentTerms: virtualMachine.PaymentTerms,
-            paymentDueDateUnix: virtualMachine.paymentCreatedAt.Unix(),
-            paymentDueDate: virtualMachine.paymentCreatedAt,
-
-            // Information about the Customer Billing Account and where the Payments Is Going to be Addressed
-            billerStreetAddress: virtualMachine.billerStreetAddress,
-            billerStreetCity: virtualMachine.billerCity,
-            billerZipCode: virtualMachine.billerZipCode,
-            billerCountry: virtualMachine.billerCountry,
-
-            // Description
-            virtualMachineItemList: virtualMachine.VirtualMachineItemList,
-            TotalCost: virtualMachine.TotalCost,
-
-            Running: virtualMachine.Running,
-            Shutdown: virtualMachine.Shutdown,
-            Deploying: virtualMachine.Deploying,
-          };
-          this.INSERT_NEW_VIRTUAL_MACHINE(state.virtualMachineData, newVirtualMachine);
-        }
-      }
-      this.VIRTUAL_MACHINES_LOADED(state);
-    },
-
-    CREATE_VIRTUAL_MACHINE(state, JwtToken, customizedConfiguration, hardwareConfiguration) {
-
-      // Creates New Virtual Machine Server
-      // Initializing New Virtual Machine Manager
-
-      let vmManager = new vm.VirtualMachineManager()
-
-      // Initializing Hardware Configuration
-      let HardwareConfiguration = new preparer.hardwareConfiguration(hardwareConfiguration)
-
-      // Initializing Customized Configuration with the Resources, Custom OS, Preinstalled Tools etc...
-      let CustomizedConfiguration = new preparer.customizedConfiguration(customizedConfiguration)
-
-      // Initializing Empty Virtual Machine Server Instance
-      let initialized, initializationError = vmManager.InitializeVirtualMachine(JwtToken, HardwareConfiguration)
-        if (initialized && initializationError == null) {
-          // Applying Customized Configuration
-
-          let appliedInfo, applyError = vmManager.ApplyConfiguration(CustomizedConfiguration)
-          if (applyError != null && appliedInfo != null) {
-
-            let virtualMachine = vmManager.GetVirtualMachine(JwtToken, appliedInfo["VirtualMachineId"])
-            virtualMachine["Running"] = true
-            virtualMachine["Shutdown"] = false
-            virtualMachine["Deploying"] = false
-
-            this.INSERT_NEW_VIRTUAL_MACHINE(state.VirtualMachineData, virtualMachine)
-            return appliedInfo, applyError
-          }else{
-            this.TOGGLE_ERROR("Failed to Apply Configuration")
-            return;
-          }
-        }else{
-          this.TOGGLE_ERROR("Failed to Initialize Virtual Machine")
-          return;
-        }
-    },
-
-    DELETE_VIRTUAL_MACHINE(state, JwtToken, payload) {
-      // Deletes Virtual Machine Server
-      let vmManager = new vm.VirtualMachineManager()
-      let deleted, deletionError = vmManager.DeleteVirtualMachine(JwtToken, payload["VirtualMachineId"])
-      if (deleted && deletionError == null) {
-        state.VirtualMachineData = state.VirtualMachineData.filter(
-        (virtualMachine) => virtualMachine !== payload);
-      }else {
-        this.TOGGLE_ERROR("Failed to Delete Virtual Machine")
-      }
-    },
-
-
-    UPDATE_VIRTUAL_MACHINE(state, JwtToken, virtualMachineId) {
-      // Updates Virtual Machine Server
-
-      let vmManager = new vm.VirtualMachineManager()
-      let hardwareConfiguration = new preparer.HardwareConfiguration()
-      let customizedConfiguration = new preparer.CustomizedConfiguration()
-
-      let updatedInfo, updateError = vmManager.UpdateVirtualMachine(JwtToken, virtualMachineId, hardwareConfiguration, customizedConfiguration)
-      if (updateError == null) {
-
-        let virtualMachine = vmManager.GetVirtualMachine(JwtToken, updatedInfo["VirtualMachineId"])
-        this.INSERT_NEW_VIRTUAL_MACHINE(state.virtualMachineData, virtualMachine)
-
-      }else{
-        this.TOGGLE_ERROR("Failed To Update Virtual Machine")
-      }
-    },
-
-    SHUTDOWN_VIRTUAL_MACHINE(JwtToken, virtualMachineId) {
-      // Shuts down the Virtual Machine  Server
-
-      let vmManager = new vm.VirtualMachineManager()
-      let Shutdown, ShutdownError = vmManager.ShutdownVirtualMachine(JwtToken, virtualMachineId)
-      if (Shutdown != true || ShutdownError != null) {this.TOGGLE_ERROR(ShutdownError)}
-    },
-
-    START_VIRTUAL_MACHINE(JwtToken, virtualMachineId) {
-      // Starting up the Virtual Machine
-
-      let vmManager = new vm.VirtualMachineManager()
-      let Started, StartError = vmManager.StartVirtualMachine(JwtToken, virtualMachineId)
-      if (Started != true || StartError != null) {this.TOGGLE_ERROR(StartError)}
-    },
-
-    REBOOT_VIRTUAL_MACHINE(JwtToken, virtualMachineId) {
-      // Reboots Virtual Machine
-
-      let vmManager = new vm.VirtualMachineManager()
-      let Rebooted, RebootError = vmManager.RebootVirtualMachine(JwtToken, virtualMachineId)
-      if (Rebooted != true || RebootError != null ) {this.TOGGLE_ERROR(RebootError)}
-    },
-
 
     // Store's State Management Methods
 
@@ -358,6 +203,160 @@ export default new Vuex.Store({
 
     VIRTUAL_MACHINES_LOADED(state) {
       state.virtualMachineLoaded = true;
+    },
+  },
+
+  actions: {
+
+    GET_VIRTUAL_MACHINE(JwtToken, VirtualMachineId) {
+      // Returns A Virtual Machine Server Object Info
+      let virtualMachineManager = new vm.VirtualMachineManager()
+      let virtualMachine = virtualMachineManager.GetCustomerVirtualMachine(JwtToken, VirtualMachineId)
+      return virtualMachine
+    },
+
+    GET_VIRTUAL_MACHINES({commit, state}, JwtToken) {
+      // Returns List of the Virtual Machine Servers, belongs To Customer
+
+      let VirtualMachineManager = new vm.VirtualMachineManager()
+      let results, ResultError = VirtualMachineManager.GetVirtualMachines(JwtToken)
+      if (ResultError != null) {commit("TOGGLE_ERROR", state, ResultError)}
+
+      for (let virtualMachine in results){
+        if (!state.VirtualMachineData.some((virtualMachine) => virtualMachine.VirtualMachineId === virtualMachine.VirtualMachineId)) {
+          const newVirtualMachine = {
+
+            // General Information about the Customer's Virtual Machine
+
+            virtualMachineId: virtualMachine.VirtualMachineid,
+            virtualMachineName: virtualMachine.VirtualMachineName,
+            clientEmail: virtualMachine.OwnerEmail,
+
+            // SSH Credentials for the Virtual Machine
+            RootUsername: virtualMachine.Ssh.RootUsername,
+            RootPassword: virtualMachine.Ssh.RootPassword,
+            Secure: virtualMachine.Ssh.Secure,
+            RootCertificate: virtualMachine.RootCertificate,
+
+            // Creation Date Info
+            virtualMachineDateUnix: virtualMachine.CreatedAt.Unix(),
+            virtualMachineDate: virtualMachine.CreatedAt,
+
+            // Pay Terms + Setting up Current Date for the Payment
+            paymentTerms: virtualMachine.PaymentTerms,
+            paymentDueDateUnix: virtualMachine.paymentCreatedAt.Unix(),
+            paymentDueDate: virtualMachine.paymentCreatedAt,
+
+            // Information about the Customer Billing Account and where the Payments Is Going to be Addressed
+            billerStreetAddress: virtualMachine.billerStreetAddress,
+            billerStreetCity: virtualMachine.billerCity,
+            billerZipCode: virtualMachine.billerZipCode,
+            billerCountry: virtualMachine.billerCountry,
+
+            // Description
+            virtualMachineItemList: virtualMachine.VirtualMachineItemList,
+            TotalCost: virtualMachine.TotalCost,
+
+            Running: virtualMachine.Running,
+            Shutdown: virtualMachine.Shutdown,
+            Deploying: virtualMachine.Deploying,
+          };
+          commit('INSERT_NEW_VIRTUAL_MACHINE', state.virtualMachineData, newVirtualMachine);
+        }
+      }
+      commit('VIRTUAL_MACHINES_LOADED', state)
+    },
+
+    CREATE_VIRTUAL_MACHINE({commit, state}, JwtToken, customizedConfiguration, hardwareConfiguration) {
+
+      // Creates New Virtual Machine Server
+      // Initializing New Virtual Machine Manager
+
+      let vmManager = new vm.VirtualMachineManager()
+
+      // Initializing Hardware Configuration
+      let HardwareConfiguration = new preparer.hardwareConfiguration(hardwareConfiguration)
+
+      // Initializing Customized Configuration with the Resources, Custom OS, Preinstalled Tools etc...
+      let CustomizedConfiguration = new preparer.customizedConfiguration(customizedConfiguration)
+
+      // Initializing Empty Virtual Machine Server Instance
+      let initialized, initializationError = vmManager.InitializeVirtualMachine(JwtToken, HardwareConfiguration)
+        if (initialized && initializationError == null) {
+          // Applying Customized Configuration
+
+          let appliedInfo, applyError = vmManager.ApplyConfiguration(CustomizedConfiguration)
+          if (applyError != null && appliedInfo != null) {
+
+            let virtualMachine = vmManager.GetVirtualMachine(JwtToken, appliedInfo["VirtualMachineId"])
+            virtualMachine["Running"] = true
+            virtualMachine["Shutdown"] = false
+            virtualMachine["Deploying"] = false
+
+            commit('INSERT_NEW_VIRTUAL_MACHINE', state.VirtualMachineData, virtualMachine)
+            return appliedInfo, applyError
+          }else{
+            commit('TOGGLE_ERROR', "Failed to Apply Configuration")
+            return;
+          }
+        }else{
+          commit('TOGGLE_ERROR', "Failed to Initialize Virtual Machine")     
+          return;
+        }
+    },
+
+    DELETE_VIRTUAL_MACHINE({commit, state}, JwtToken, payload) {
+      // Deletes Virtual Machine Server
+      let vmManager = new vm.VirtualMachineManager()
+      let deleted, deletionError = vmManager.DeleteVirtualMachine(JwtToken, payload["VirtualMachineId"])
+      if (deleted && deletionError == null) {
+        state.VirtualMachineData = state.VirtualMachineData.filter(
+        (virtualMachine) => virtualMachine !== payload);
+      }else {
+        commit('TOGGLE_ERROR', "Failed to Delete Virtual Machine")
+      }
+    },
+
+    UPDATE_VIRTUAL_MACHINE({commit, state}, JwtToken, virtualMachineId) {
+      // Updates Virtual Machine Server
+
+      let vmManager = new vm.VirtualMachineManager()
+      let hardwareConfiguration = new preparer.HardwareConfiguration()
+      let customizedConfiguration = new preparer.CustomizedConfiguration()
+
+      let updatedInfo, updateError = vmManager.UpdateVirtualMachine(JwtToken, virtualMachineId, hardwareConfiguration, customizedConfiguration)
+      if (updateError == null) {
+
+        let virtualMachine = vmManager.GetVirtualMachine(JwtToken, updatedInfo["VirtualMachineId"])
+        commit('INSERT_NEW_VIRTUAL_MACHINE', state.virtualMachineData, virtualMachine)
+
+      }else{
+        commit('TOGGLE_ERROR', "Failed To Update Virtual Machine")
+      }
+    },
+
+    SHUTDOWN_VIRTUAL_MACHINE({ commit }, JwtToken, virtualMachineId) {
+      // Shuts down the Virtual Machine  Server
+
+      let vmManager = new vm.VirtualMachineManager()
+      let Shutdown, ShutdownError = vmManager.ShutdownVirtualMachine(JwtToken, virtualMachineId)
+      if (Shutdown != true || ShutdownError != null) {commit('TOGGLE_ERROR', ShutdownError)}
+    },
+
+    START_VIRTUAL_MACHINE({ commit }, JwtToken, virtualMachineId) {
+      // Starting up the Virtual Machine
+
+      let vmManager = new vm.VirtualMachineManager()
+      let Started, StartError = vmManager.StartVirtualMachine(JwtToken, virtualMachineId)
+      if (Started != true || StartError != null) {commit('TOGGLE_ERROR', StartError)}
+    },
+
+    REBOOT_VIRTUAL_MACHINE({ commit }, JwtToken, virtualMachineId) {
+      // Reboots Virtual Machine
+
+      let vmManager = new vm.VirtualMachineManager()
+      let Rebooted, RebootError = vmManager.RebootVirtualMachine(JwtToken, virtualMachineId)
+      if (Rebooted != true || RebootError != null ) {commit('TOGGLE_ERROR', RebootError)}
     },
   },
   modules: {},

@@ -1,7 +1,7 @@
 <template>
   <header class="flex">
     <div class="branding flex">
-      <img :src="require('@/assets/file-invoice-dollar-solid.png')" alt="dollar_solid" />
+      <router-link :to="{name: 'main_page'}"></router-link><img :src="require('@/assets/file-invoice-dollar-solid.png')" alt="dollar_solid" />
     </div>
   </header>
 </template>

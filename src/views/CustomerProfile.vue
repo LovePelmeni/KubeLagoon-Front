@@ -12,7 +12,7 @@ export default {
         return { cookies }
       },
       mounted() {
-        this.JwtToken = this.cookie.get("jwt-token")
+        this.JwtToken = this.cookie?.get("jwt-token")
       },
       data() {
         return {

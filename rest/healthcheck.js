@@ -26,12 +26,12 @@ function GetHealthCheckMetricsRestController(jwtToken, VirtualMachineId) {
           return NewMetric.Deserialize(), Response.Error
         },
         error: function(Error){
-          return null, Error(Error)
+          return null, new Error(Error)
         },
       })
       return ResponseData, ResponseErrors
   } catch (APIException) {
-    return null, Error(APIException)
+    return null, new Error(APIException)
   }
 }
 

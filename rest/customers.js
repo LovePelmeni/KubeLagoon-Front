@@ -39,7 +39,7 @@ function CreateCustomerRestController(CustomerData) {
         }
       },
       error: function(error) {
-        return false, Error(error)
+        return false, new Error(error)
       }
     })
     return HttpResponse, HttpErrors
@@ -65,11 +65,11 @@ function ResetPasswordRestController(JwtToken, NewPassword){
         return true, []
       }
       if (Response.StatusCode == 400 || Response.StatusCode == 501 || Response.StatusCode == 500) {
-        return false, ["Failed to Apply New Password, Contact Support"]
+        return false, "Failed to Apply New Password, Contact Support"
       }
     },
     error: function(APIError) {
-      return false, [APIError]
+      return false, new Error(APIError)
     }
   })
   return ResponseStatus, ResponseErrors
@@ -119,6 +119,8 @@ function LoginCustomerRestController(Username, Password) {
       // Processing Success Login Request
       if (Response.StatusCode == 200 || Response.StatusCode == 201) {
         return true, null
+      }else{
+        return false, new Error(Response.Error)
       }
     },
     error: function(ResponseError) {
@@ -128,7 +130,6 @@ function LoginCustomerRestController(Username, Password) {
   })
   return Response, ResponseError
 }
-
 
 
 export {CreateCustomerRestController,

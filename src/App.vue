@@ -22,8 +22,8 @@ export default {
         <navigationPage />
         <div class="app-content flex flex-column">
           <modalPage v-if="modalActive" />
-          <errorBanner (Error, index) v-if="activeError" :errorMessage="Error" :key="index" />
-          <notificationBanner (Notification, index) v-if="activeNotification" :notificationMessage="Notification" :key="index" />
+          <errorBanner v-for="(Error, index) in [error]" v-if="activeError" :errorMessage="Error" :key="index" />
+          <notificationBanner v-for="(Notification, index) in [notification]" v-if="activeNotification" :notificationMessage="Notification" :key="index" />
         </div>
         <router-view />
       </div>
