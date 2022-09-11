@@ -25,12 +25,14 @@ function GetVirtualMachineRestController(JwtToken, VirtualMachineId) {
       if (Response.StatusCode == 200 && Response.StatusCode == 201) {
         return Response.QuerySet, null
       }else{
-        return {}, new Error(Response.Error)
+        let newError = new Error(Response.Error)
+        return {}, newError
       }
     },
-    error: function(Error) {
+    error: function(APIError) {
       // Returns Exception
-      return {}, new Error(Error)
+      let newError = new Error(APIError)
+      return {}, newError
     },
   })
   return Response, ResponseError
@@ -52,11 +54,13 @@ function GetVirtualMachinesRestController(JwtToken) {
         if (Response.StatusCode == 201 && Response.StatusCode == 200) {
           return Response.QuerySet, null
         }else{
-          return [], new Error(Response.Error)
+          let newError = new Error(Response.Error)
+          return [], newError
         }
     },
-    error: function(Error) {
-      return [], new Error(Error)
+    error: function(APIError) {
+      let newError = new Error(APIError)
+      return [], newError
     },
   })
   return Response, ResponseError
@@ -68,7 +72,7 @@ function InitializeVirtualMachineRestController(JwtToken, Configuration) {
   // Rest Controller, that Initializes New Virtual Machine
   var APIUrl = new Url("http://%s:%s/vm/initialize/" % (
   BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
-  let Response, Error= global.jQuery.ajax({
+  let Response, ResponseError = global.jQuery.ajax({
     async: false,
     URL: APIUrl,
     type: "POST",
@@ -81,17 +85,19 @@ function InitializeVirtualMachineRestController(JwtToken, Configuration) {
     success: function(Response){
         // Processing Initialization Response
         if (Response.StatusCode != 201 && Response.StatusCode != 200) {
-          return null, new Error(Response.Error)
+          let newError = new Error(Response.Error)
+          return null, newError
         }else{
           return Response.VmInfo, null // Returns Info About Initialized Instance
         }
     },
-    error: function(Error) {
+    error: function(APIError) {
       // Processing Initialization Error
-      return null, new Error(Error)
+      let newError = new Error(APIError)
+      return null, newError
     }
   })
-  return Response, Error
+  return Response, ResponseError
 }
 
 function ApplyVirtualMachineConfigurationRestController(JwtToken, CustomConfiguration, VirtualMachineId) {
@@ -100,7 +106,7 @@ function ApplyVirtualMachineConfigurationRestController(JwtToken, CustomConfigur
   BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
   APIUrl.searchParams.append("VirtualMachineId", VirtualMachineId)
 
-  let Response, Error = global.jQuery.ajax({
+  let Response, ResponseError = global.jQuery.ajax({
     async: false,
     URL: APIUrl,
     type: "POST",
@@ -113,16 +119,18 @@ function ApplyVirtualMachineConfigurationRestController(JwtToken, CustomConfigur
     },
     success: function (Response) {
       if (Response.StatusCode != 200 && Response.StatusCode != 201) {
-        return null, new Error(Response.Error)
+        let newError = new Error(Response.Error)
+        return null, newError
       }else{
         return Response.SshInfo, null
       }
     },
-    error: function(Error) {
-      return null, new Error(Error)
+    error: function(APIError) {
+      let newError = new Error(APIError)
+      return null, newError
     }
   })
-  return Response, Error
+  return Response, ResponseError
 }
 
 
@@ -143,7 +151,8 @@ function DestroyVirtualMachineRestController(JwtToken, VirtualMachineId) {
     success: function(Response) {
       // Processing Success Response
       if (Response.StatusCode != 200 && Response.StatusCode != 201) {
-        return null, new Error(Response.Error)
+        let newError = new Error(Response.Error)
+        return null, newError
       }else{
         return "Successfully Removed", null
       }
@@ -162,7 +171,7 @@ function StartVirtualMachineRestController(JwtToken, VirtualMachineId) {
   (BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
   APIUrl.searchParams.append("VirtualMachineId", VirtualMachineId)
 
-  let Response, Error = global.jQuery.ajax({
+  let Response, ResponseError = global.jQuery.ajax({
     async: false,
     URL: APIUrl,
     type: "POST",
@@ -174,17 +183,19 @@ function StartVirtualMachineRestController(JwtToken, VirtualMachineId) {
     success: function(Response){
         // Processing Initialization Response
         if (Response.StatusCode != 201 && Response.StatusCode != 200) {
-          return null, new Error(Response.Error)
+          let newError = new Error(Response.Error)
+          return null, newError
         }else{
           return "Successfully Started", null // Returns Info About Initialized Instance
         }
     },
-    error: function(Error) {
+    error: function(APIError) {
       // Processing Initialization Error
-      return null, Error(Error)
+      let newError = new Error(APIError)
+      return null, newError
     }
   })
-  return Response, Error
+  return Response, ResponseError
 }
 
 function ShutdownVirtualMachineRestController(JwtToken, VirtualMachineId) {
@@ -193,7 +204,7 @@ function ShutdownVirtualMachineRestController(JwtToken, VirtualMachineId) {
   (BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
   APIUrl.searchParams.append("VirtualMachineId", VirtualMachineId)
 
-  let Response, Error = global.jQuery.ajax({
+  let Response, ResponseError = global.jQuery.ajax({
     async: false,
     URL: APIUrl,
     type: "DELETE",
@@ -205,17 +216,19 @@ function ShutdownVirtualMachineRestController(JwtToken, VirtualMachineId) {
     success: function(Response){
         // Processing Initialization Response
         if (Response.StatusCode != 201 && Response.StatusCode != 200) {
-          return "Successfully Shutdown", Error(Response.Error)
+            let newError = new Error(Response.Error)
+            return null, newError
         }else{
           return Response.Operation, null // Returns Info About Initialized Instance
         }
     },
-    error: function(Error) {
+    error: function(APIError) {
       // Processing Initialization Error
-      return null, new Error(Error)
+      let newError = new Error(APIError)
+      return null, newError
     }
   })
-  return Response, Error
+  return Response, ResponseError
 }
 
 function RebootVirtualMachineRestController(JwtToken, VirtualMachineId) {
@@ -224,7 +237,7 @@ function RebootVirtualMachineRestController(JwtToken, VirtualMachineId) {
   (BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
   APIUrl.searchParams.append("VirtualMachineId", VirtualMachineId)
 
-  let Response, Error = global.jQuery.ajax({
+  let Response, ResponseError = global.jQuery.ajax({
     async: false,
     URL: APIUrl,
     type: "PUT",
@@ -236,17 +249,19 @@ function RebootVirtualMachineRestController(JwtToken, VirtualMachineId) {
     success: function(Response){
         // Processing Initialization Response
         if (Response.StatusCode != 201 && Response.StatusCode != 200) {
-          return "Successfully Rebooted", Error(Response.Error)
+          let newError = new Error(Response.Error)
+          return null, newError
         }else{
           return Response.Operation, null // Returns Info About Initialized Instance
         }
     },
-    error: function(Error) {
+    error: function(APIError) {
       // Processing Initialization Error
-      return null, new Error(Error)
+      let newError = new Error(APIError)
+      return null, newError
     }
   })
-  return Response, Error
+  return Response, ResponseError
 }
 
 
@@ -258,7 +273,7 @@ function StartVmOsRestController(JwtToken, VirtualMachineId) {
   (BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
   APIUrl.searchParams.append("VirtualMachineId", VirtualMachineId)
 
-  let Response, Error = global.jQuery.ajax({
+  let Response, ResponseError = global.jQuery.ajax({
     async: false,
     URL: APIUrl,
     type: "POST",
@@ -270,17 +285,19 @@ function StartVmOsRestController(JwtToken, VirtualMachineId) {
     success: function(Response){
         // Processing Initialization Response
         if (Response.StatusCode != 201 && Response.StatusCode != 200) {
-          return null, new Error(Response.Error)
+          let newError = new Error(Response.Error)
+          return null, newError
         }else{
           return "OS Successfully Started", null // Returns Info About Initialized Instance
         }
     },
-    error: function(Error) {
+    error: function(APIError) {
       // Processing Initialization Error
-      return null, new Error(Error)
+      let newError = new Error(APIError)
+      return null, newError
     }
   })
-  return Response, Error
+  return Response, ResponseError
 }
 
 function ShutdownVmOsRestController(JwtToken, VirtualMachineId) {
@@ -289,7 +306,7 @@ function ShutdownVmOsRestController(JwtToken, VirtualMachineId) {
   (BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
   APIUrl.searchParams.append("VirtualMachineId", VirtualMachineId)
 
-  let Response, Error = global.jQuery.ajax({
+  let Response, ResponseError = global.jQuery.ajax({
     async: false,
     URL: APIUrl,
     type: "DELETE",
@@ -301,17 +318,19 @@ function ShutdownVmOsRestController(JwtToken, VirtualMachineId) {
     success: function(Response){
         // Processing Initialization Response
         if (Response.StatusCode != 201 && Response.StatusCode != 200) {
-          return null, new Error(Response.Error)
+          let newError = new Error(Response.Error)
+          return null, newError
         }else{
           return "OS Successfully Shutdown", null // Returns Info About Initialized Instance
         }
     },
-    error: function(Error) {
+    error: function(APIError) {
       // Processing Initialization Error
-      return null, new Error(Error)
+      let newError = new Error(APIError)
+      return null, newError
     }
   })
-  return Response, Error
+  return Response, ResponseError
 }
 
 function RebootVmOsRestController(JwtToken, VirtualMachineId) {
@@ -320,7 +339,7 @@ function RebootVmOsRestController(JwtToken, VirtualMachineId) {
   (BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
   APIUrl.searchParams.append("VirtualMachineId", VirtualMachineId)
 
-  let Response, Error = global.jQuery.ajax({
+  let Response, ResponseError = global.jQuery.ajax({
     async: false,
     URL: APIUrl,
     type: "PUT",
@@ -332,17 +351,19 @@ function RebootVmOsRestController(JwtToken, VirtualMachineId) {
     success: function(Response){
         // Processing Initialization Response
         if (Response.StatusCode != 201 && Response.StatusCode != 200) {
-          return null, new Error(Response.Error)
+          let newError = new Error(Response.Error)
+          return null, newError
         }else{
           return "OS Successfully Reboot", null // Returns Info About Initialized Instance
         }
     },
     error: function(APIError) {
       // Processing Initialization Error
-      return null, new Error(APIError)
+      let newError = new Error(APIError)
+      return null, newError
     }
   })
-  return Response, Error
+  return Response, ResponseError
 }
 
 export {

@@ -131,28 +131,15 @@ export const hardwareConfiguration = {
     return {
       // hardware Configuration Validation Rules
 
-      LoadBalancers : [],
-      Datacenters : [],
-      OperationalSystems : [],
-      PreInstalledTools : [],
+      LoadBalancers : [], // array of the Objects of the Type { 'LoadBalancerName' , 'IconImageUrl'}
+      Datacenters : [], // array of the Objects with attrs { 'DatacenterName', 'IconImageUrl' }
+      OperationalSystems : [], // array of the Objects with attrs { 'OperationalSystems', 'IconImageUrl' }
+      PreInstalledTools : [], // array of the Objects with attrs { 'ToolName', 'IconImageUrl' }
 
       AddedLoadBalancer: null,
       AddedDatacenter: null,
       AddedOperationalSystem: null,
       AddedPreInstalledTools: [],
-
-
-      DatacenterRules: [
-       !!this.AddedDatacenter || 'Datacenter is required',
-      ],
-
-      OperationalSystemRules: [
-        !!this.AddedOperationalSystem || 'Operational System is required',
-      ],
-
-      LoadBalancerRules: [
-        !!this.AddedLoadBalancer || 'Load Balancer is required',
-      ],
     }
   },
 
@@ -161,93 +148,87 @@ export const hardwareConfiguration = {
         <h4>Hardware Configuration</h4>
 
         <div class="input flex flex-column">
-          <label for="LoadBalancer">Load Balancer</label>
+          <label for="LoadBalancer">Load Balancers</label>
         </div>
 
         <table v-if="LoadBalancers?.length" class="item-list">
 
-            <tr class="table-heading flex">
-              <th class="item-name"></th>
-            </tr>
+            <v-select :options="LoadBalancers" @input="validateLoadBalancer" label="title">
+                <template slot="LoadBalancer" slot-scope="LoadBalancer">
+                    <img :src="require(LoadBalancer.IconImageUrl)" style="height: 20%; width: 20%"/>
+                    {{ LoadBalancer.LoadBalancerName }}
+                </template>
+            </v-select>
+        </table>
 
-            <tr class="table-items flex" v-for="(LoadBalancer, index) in LoadBalancers" :key="index">
-              <td class="item-name"><input type="text" v-model="LoadBalancer.Name" /></td>
+        <table v-else class="not_available flex flex-column">
+          <img :src="require('@/assets/not_available.svg')" style="width: 20%; height: 20%; margin" alt="illustration-empty" />
+          <h3>No Load Balancers Available</h3>
+        </table>
 
-              <img @click="selectLoadBalancer(LoadBalancer.Name)" v-if="LoadBalancer != AddedLoadBalancer && AddedLoadBalancer == null" :src="require(LoadBalancer.LocalImageUrl)" alt="Select" />
-              <img v-if="AddedLoadBalancer != null && LoadBalancer != AddedLoadBalancer" alt="Disabled" />
-              <img @click="unSelectLoadBalancer(LoadBalancer.Name)" v-if="LoadBalancer == AddedLoadBalancer" :src="require('@/assets/icon-delete.svg')" alt="unSelect" />
-
-              <span v-if="errors?.LoadBalancer[LoadBalancer.Name]">{{ errors?.LoadBalancer[LoadBalancer.Name] }}</span>
-            </tr>
-          </table>
 
         <div class="input flex flex-column">
-          <label for="Datacenter">Datacenter</label>
+          <label for="Datacenter">Datacenters</label>
         </div>
 
         <table v-if="Datacenters?.length > 0" class="item-list">
 
-            <tr class="table-heading flex">
-              <th class="item-name"></th>
-            </tr>
+            <v-select :options="Datacenters" @input="validateDatacenter" label="title">
+                <template slot="Datacenter" slot-scope="Datacenter">
+                    <img :src="require(Datacenter.IconImageUrl)" style="height: 20%; width: 20%" />
+                    {{ Datacenter.DatacenterName }}
+                </template>
+            </v-select>
 
-            <tr class="table-items flex" v-for="(Datacenter, index) in Datacenters" :key="index">
-              <td class="item-name"><input type="text" v-model="Datacenter.DatacenterName" /></td>
+          </table>
 
-              <img @click="selectDatacenter(Datacenter.DatacenterName)" v-if="Datacenter != AddedDatacenter && AddedDatacenter == null" :src="require(Datacenter.LocalImageUrl)" alt="Select" />
-              <img v-if="AddedDatacenter != null && Datacenter != AddedDatacenter" alt="Disabled" />
-              <img @click="unSelectDatacenter(Datacenter.DatacenterName)" v-if="Datacenter == AddedDatacenter" :src="require('@/assets/icon-delete.svg')" alt="unSelect" />
-
-              <span v-if="errors?.Datacenter[Datacenter.DatacenterName]">{{ errors?.Datacenter[Datacenter.DatacenterName] }}</span>
-
-            </tr>
+          <table v-else class="not_available flex flex-column">
+            <img :src="require('@/assets/not_available.svg')" style="width: 20%; height: 20%; margin" alt="illustration-empty" />
+            <h3>No Datacenters Available</h3>
           </table>
 
           <div class="input flex flex-column">
-          <label for="OperationalSystem">Operational System</label>
+          <label for="OperationalSystem">Operational Systems</label>
           </div>
 
         <table v-if="OperationalSystems?.length > 0" class="item-list">
 
-              <tr class="table-heading flex">
-              <th class="item-name">Name</th>
-              <th class="item-name">Version</th>
-              </tr>
+              <v-select :options="OperationalSystems" @input="validateOperationalSystem" label="title">
 
-              <tr class="table-items flex" v-for="(OperationalSystem, index) in OperationalSystems" :key="index">
-                <td class="item-name"><input type="text" v-model="OperationalSystem.Name" /></td>
-                <td class="item-name"><input type="text" v-model="OperationalSystem.Version" /></td>
+                  <template slot="OperationalSystem" slot-scope="OperationalSystem" style="height: 20%; width: 20%" />
+                  
+                      <img :src="require(OperationalSystem.IconImageUrl)" style="height: 20%; width: 20%" />
+                      {{ OperationalSystem.SystemName }}
 
-                <img @click="selectOperationalSystem(OperationalSystem.SystemName, OperationalSystem.Version, OperationalSystem.Bit)" v-if="OperationalSystem != AddedOperationalSystem && OperationalSystem == null" :src="require(OperationalSystem.LocalImageUrl)" alt="Select" />
-                <img v-if="AddedOperationalSystem != null && OperationalSystem != AddedOperationalSystem" alt="Disabled" />
-                <img @click="unSelectOperationalSystem(OperationalSystem.SystemName)" v-if="OperationalSystem == AddedOperationalSystem" :src="require('@/assets/icon-delete.svg')" alt="unSelect" />
+                  </template>
 
-                <span v-if="errors?.OS[OperationalSystem.SystemName]">{{ errors?.OS[OperationalSystem.SystemName] }}</span>
+              </v-select>
+          </table>
 
-              </tr>
+          <table v-else class='not_available flex flex-column'>
+            <img :src="require('@/assets/not_available.svg')" style="width: 20%; height: 20%; margin" alt="illustration-empty" />
+            <h3>No Operational Systems Available</h3>
           </table>
 
         <div class="input flex flex-column">
-          <label for="PreInstalledTools">Pre Installed Tools</label>
+          <label for="PreInstalledTools">Pre Install Tools</label>
         </div>
 
         <table v-if="PreInstalledTools?.length > 0" class="item-list">
 
-                <tr class="table-heading flex">
-                    <th class="item-name">Tool</th>
-                    <th class="item-name">Version</th>
-                </tr>
-                <tr class="table-items flex" v-for="(Tool, index) in PreInstalledTools" :key="index">
-                    <td class="item-name"><input type="text" v-model="Tool.Name"/></td>
-                    <td class="item-name"><input type="text" v-model="Tool.Version" /></td>
+                <v-select :options="Tools" @input="selectPreInstalledTool" label="title">
+                    <template slot="Tool" slot-scope="Tool">
+                        <img :src="require(Tool.IconImageUrl)" style="height: 20%; width: 20%" />
+                        {{ Tool.ToolName + " " + Tool.Version + " " + Tool.Bit + "-bit" }}
+                    </template>
+                </v-select>
 
-                    <img @click="selectPreInstallTool(Tool.Name)" v-if="!Tool in AddedPreInstalledTools" :src="require(Tool.LocalImageUrl)" alt="Select" />
-                    <img v-if="Tool in AddedPreInstalledTools" alt="Disabled" />
-                    <img @click="unSelectPreInstallTool(Tool.Name)" v-if="Tool in AddedPreInstalledTools" :src="require('@/assets/icon-delete.svg')" alt="unSelect" />
-
-                    <span v-if="errors?.Tool[Tool.Name]">{{ errors?.Tool[Tool.Name] }}</span>
-                </tr>
           </table>
+          <table v-else class="not_available flex flex-column">
+            <img :src="require('@/assets/not_available.svg')" style="width: 20%; height: 20%; margin" alt="illustration-empty" />
+            <h3>No Tools to pre-install is Available</h3>
+          </table>
+
       </div>
   `,
 
@@ -266,12 +247,15 @@ export const hardwareConfiguration = {
       if (Datacenter.DatacenterName.length == 0) {
         this.errors['Datacenter'] = "This field is required"
       }
+      this.selectDatacenter(Datacenter)
     },
-    ValidateOs(OperationalSystem) {
+
+    ValidateOperationalSystem(OperationalSystem) {
         //  Validates Operational System, picked up by the Customer
         if (OperationalSystem.SystemName.length == 0) {
           this.errors["OS"] = "This field is required"
         }
+      this.selectOperationalSystem(OperationalSystem)
     },
 
     ValidateLoadBalancer(LoadBalancer) {
@@ -282,6 +266,7 @@ export const hardwareConfiguration = {
       if (LoadBalancer.Port != 0) {
         this.errors["LoadBalancer"]["Port"] = "Please specify the default value"
       }
+      this.selectLoadBalancer(LoadBalancer)
     },
 
     GetSuggestionsManager() {
@@ -321,9 +306,8 @@ export const hardwareConfiguration = {
       this.PreInstalledTools = PreInstalledTools}
     },
 
-    selectLoadBalancer(LoadBalancerName) {
+    selectLoadBalancer(LoadBalancer) {
       // Selects Load Balancer, that Is going to be Used for the Virtual Machine Server Deployment
-      let LoadBalancer = this.GetLoadBalancer(LoadBalancerName)
       this.AddedLoadBalancer = LoadBalancer
     },
 
@@ -334,18 +318,17 @@ export const hardwareConfiguration = {
       this.AddedDatacenter = Datacenter}
     },
 
-    selectOperationalSystem(OSName, Version, Bit) {
+    selectOperationalSystem(OperationalSystem) {
       // Selects Operational System for the Virtual Machine Server
-      let OperationalSystem = this.GetOperationalSystem(OSName, Version, Bit)
-      this.selectOperationalSystem = {
+      this.AddedOperationalSystem = {
       "SystemName": OperationalSystem.OSName + OperationalSystem.Version,
       "Version": OperationalSystem.Version,
       "Bit": OperationalSystem.Bit}
     },
 
-    selectPreInstalledTools(ToolName) {
+    selectPreInstalledTool(Tool) {
       // Adds pre Installed Tools to the Array
-      this.AddedPreInstalledTools.push(ToolName)
+      this.AddedPreInstalledTools.push(Tool)
     },
 
     unSelectLoadBalancer() {
@@ -944,6 +927,26 @@ export default {
     &:focus {
       outline: none;
     }
+  }
+}
+
+.not_available {
+  margin-top: 160px;
+  align-items: center;
+  img {
+    width: 214px;
+    height: 200px;
+  }
+  h3 {
+    font-size: 20px;
+    margin-top: 40px;
+  }
+  p {
+    text-align: center;
+    max-width: 224px;
+    font-size: 12px;
+    font-weight: 300;
+    margin-top: 16px;
   }
 }
 </style>

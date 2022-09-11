@@ -4,6 +4,13 @@ var STORAGE_STOCK_PRICE = "" // per Megabyte
 var CPU_STOCK_PRICE = "" // per number
 var MEMORY_STOCK_PRICE = "" // memory in Megabytes
 
+var CronJob = require("cron");
+
+class VirtualMachineCostCalculator {
+  CalculateCurrentTotalCost() {
+  }
+}
+
 
 class BillCalculator {
   //

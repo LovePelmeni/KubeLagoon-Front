@@ -25,21 +25,25 @@ function CreateCustomerRestController(CustomerData) {
       async: false,
       success: function(Response) {
         if (Response.StatusCode == 400) {
-          return false, [Response.Error]
+          let newError = new Error(Response.Error)
+          return false, newError
         }
         if (Response.StatusCode == 201) {
           $.SetCookie("jwt-token", Response.getResponseHeader("jwt-token"))
-          return true, []
+          return true, null
         }
         if (Response.StatusCode == 500) {
-          return false, ["Failed to Perform Operation, Please Call Support"]
+          let newError = new Error(Response.Error)
+          return false, newError
         }
         if (Response.StatusCode == 501) {
-          return false, ["Failed to Perform Operation, Please Call Support"]
+          let newError = new Error(Response.Error)
+          return false, newError
         }
       },
       error: function(error) {
-        return false, new Error(error)
+        let newError = new Error(Response.Error)
+        return false, newError
       }
     })
     return HttpResponse, HttpErrors
@@ -79,7 +83,7 @@ function DeleteCustomerRestController(JwtToken) {
   // Rest Controller, that is used to deleting the Customer Profile
 
   var APIUrl = new Url("http://%s:%s/customer/delete" % (BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
-  var Response, Error = global.jQuery.ajax({
+  var Response, ResponseError = global.jQuery.ajax({
     URL: APIUrl,
     type: "DELETE",
     headers: {
@@ -98,10 +102,12 @@ function DeleteCustomerRestController(JwtToken) {
     },
     error: function(Error) {
       // Handling Exception
-      if (Error != null) {return false, [Error]}
+      if (Error != null) {
+        let newError = new Error(Response.Error)
+        return null, newError}
     }
   })
-  return Response, Error
+  return Response, ResponseError
 }
 
 function LoginCustomerRestController(Username, Password) {
@@ -120,7 +126,8 @@ function LoginCustomerRestController(Username, Password) {
       if (Response.StatusCode == 200 || Response.StatusCode == 201) {
         return true, null
       }else{
-        return false, new Error(Response.Error)
+        let newError = new Error(Response.Error)
+        return false, newError
       }
     },
     error: function(ResponseError) {

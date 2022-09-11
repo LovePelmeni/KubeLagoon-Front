@@ -21,10 +21,6 @@
           </ul>
         </div>
 
-        <transition name="virtualMachine">
-          <initializationModal v-if="initializationModal" />
-        </transition>
-
         <div @click="newVirtualMachine" class="button flex">
           <div class="inner-button flex">
             <img :src="require('@/assets/icon-plus.svg')" alt="icon_plus" />
@@ -55,7 +51,6 @@
 
 import { mapMutations, mapState } from "vuex";
 import VirtualMachineBannerInfo from "../components/VirtualMachineBannerInfo.vue";
-import initializationModal from "../components/InitializationModal.vue";
 
 export default {
 
@@ -71,13 +66,8 @@ export default {
     ...mapMutations(["TOGGLE_INITIALIZATION_MODAL", "TOGGLE_MODAL"]),
 
     newVirtualMachine() {
-      // Initializes Empty Form for the Virtual Machine Configuration
-      this.TOGGLE_INITIALIZATION_MODAL(this)
-    },
-
-    saveDraft() {
-      // Saves the Draft of the Configuration
-      this.TOGGLE_INITIALIZATION_MODAL()
+      // Pushes to the Virtual Machine Initialization Page
+      this.$router.push({name: "virtual_machine_setup"})
     },
 
     toggleFilterMenu() {
@@ -95,7 +85,6 @@ export default {
 
   components: {
     VirtualMachineBannerInfo,
-    initializationModal,
   },
 
   computed: {
