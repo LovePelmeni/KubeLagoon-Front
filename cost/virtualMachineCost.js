@@ -1,28 +1,29 @@
 /* eslint-disable no-unused-vars */
 
-var STORAGE_STOCK_PRICE = "" // per Megabyte
-var CPU_STOCK_PRICE = "" // per number
-var MEMORY_STOCK_PRICE = "" // memory in Megabytes
 
-var CronJob = require("cron");
+// THERE YOU CAN DEFINE THE STOCK PRICE FOR ANY RESOURCES OF THE VIRTUAL MACHINE SERVER 
+// CPU, MEMORY, STORAGE DISK, RUNTIME USAGE etc... 
 
-class VirtualMachineCostCalculator {
-  CalculateCurrentTotalCost() {
-  }
-}
+var STOCK_STORAGE_PRICE = process.env.STOCK_STORAGE_PRICE || 0
+var STOCK_CPU_PRICE = process.env.STOCK_CPU_PRICE || 0
+var STOCK_MEMORY_PRICE = process.env.STOCK_MEMORY_PRICE || 0
+
+var STORAGE_STOCK_PRICE = STOCK_STORAGE_PRICE // per Megabyte in dollars
+var CPU_STOCK_PRICE = STOCK_CPU_PRICE // per number in dollars
+var MEMORY_STOCK_PRICE = STOCK_MEMORY_PRICE // for memory in Megabytes in dollars
 
 
 class BillCalculator {
-  //
-  static CalculateForCpu(StockPrice, UsedCpuNums) {
+  // Default Bill Calculator Class for the Virtual Machine Server Resources 
+  CalculateForCpu(StockPrice, UsedCpuNums) {
     // Calculates CPU Cost for the Virtual Machine, Depending on the Stock Price
     return StockPrice * UsedCpuNums
   }
-  static CalculateForMemory(StockPrice, UsedMemoryInMegabytes) {
+  CalculateForMemory(StockPrice, UsedMemoryInMegabytes) {
     //  Calculating Memory Cost for the Virtual Machine, Depending on the Stock Price
     return StockPrice * UsedMemoryInMegabytes
   }
-  static CalculateForStorage(StockPrice, UsedStorageInMegabytes) {
+  CalculateForStorage(StockPrice, UsedStorageInMegabytes) {
     // Calculates Storage Cost for the Virtual Machine, Depending on the Stock Price
     // It is going to be a persistent volume and customer will only need to pay for it once,
     // and use it as many as they want
@@ -31,26 +32,26 @@ class BillCalculator {
 }
 
 
-class StorageUsageBillCalculator extends BillCalculator{
+class StorageUsageBillCalculator extends BillCalculator {
   // Calculates Cost Usage for the Storage
   constructor(TotalUsage) {
     super();
     this.TotalUsage = TotalUsage
     this.StockPrice = STORAGE_STOCK_PRICE
   }
-  static Calculate() {
-    return super.CalculateForStorage(this.TotalUsage)
+  Calculate() {
+    return super.CalculateForCpu(this.StockPrice, this.TotalUsage)
   }
 }
 
-class MemoryUsageBillCalculator extends BillCalculator{
+class MemoryUsageBillCalculator extends BillCalculator{ 
   // Calculates Cost Usage for the Memory
   constructor(TotalUsage){
     super();
     this.TotalUsage = TotalUsage
     this.StockPrice = MEMORY_STOCK_PRICE
   }
-  static Calculate() {
+  Calculate() {
     return super.CalculateForMemory(this.StockPrice, this.TotalUsage)
   }
 }
@@ -62,7 +63,7 @@ class CpuUsageBillCalculator extends BillCalculator {
     this.TotalUsage = TotalUsedNums
     this.StockPrice = CPU_STOCK_PRICE
   }
-  static Calculate() {
+  Calculate() {
     return super.CalculateForCpu(this.StockPrice, this.TotalUsage)
   }
 }
@@ -73,24 +74,30 @@ class VirtualMachineCostCalculator {
 
   constructor(CpuNumsUsage, MemoryUsageInMegabytes, StorageUsageInMegabytes) {
     // Initial Cost Parameters, to determine the Total Price
-    let CpuCalculator = new CpuUsageBillCalculator(CpuNumsUsage)
-    let MemoryCalculator = new MemoryUsageBillCalculator(MemoryUsageInMegabytes)
-    let StorageCalculator = new StorageUsageBillCalculator(StorageUsageInMegabytes)
-    this.CostCalculators = [CpuCalculator, MemoryCalculator, StorageCalculator]
+    this.CpuCalculator = new CpuUsageBillCalculator(CpuNumsUsage)
+    this.MemoryCalculator = new MemoryUsageBillCalculator(MemoryUsageInMegabytes)
+    this.StorageCalculator = new StorageUsageBillCalculator(StorageUsageInMegabytes)
   }
-
-  CalculateCost = function(VirtualMachineId) {
+  CalculateCostPerDay() {
       // Calculates full Cost for the Virtual Machine For Now
-      var TotalBillCheck = {}
-      for (let costCalculatorKey in Object.Keys(this.CostCalculators)) {
-          TotalBillCheck[costCalculatorKey] = this.CostCalculators[costCalculatorKey].Calculate()
-      }
-      return TotalBillCheck
+      var TotalPrice = 0
+      TotalPrice += this.CpuCalculator.Calculate()
+      TotalPrice += this.MemoryCalculator.Calculate()
+      TotalPrice += this.StorageCalculator.Calculate()
+      return TotalPrice
+   }
+   CalculateCostPerMonth() {
+     return this.CalculateCostPerDay() * 30
+   }
+   CalculatePerYear() {
+     return this.CalculatePerYear() * 365
    }
 }
 
 
-export {VirtualMachineCostCalculator,
+export {
+VirtualMachineCostCalculator,
 CpuUsageBillCalculator, MemoryUsageBillCalculator,
-StorageUsageBillCalculator};
+StorageUsageBillCalculator,
+};
 

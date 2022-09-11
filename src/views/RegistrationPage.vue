@@ -3,21 +3,29 @@
 import * as customers from "../../customers/customers.js";
 import { mapMutations } from "vuex";
 
-
-
 export const Countries = {
   name: "Countries",
   data() {
     return {
-      Countries: [],
+      countries: [],
+    }
+  },
+  created() {
+    this.GetCountries()
+  },
+  methods: {
+    GetCountries() {
+      // Returns the Array of the Available Countries
     }
   }
 }
 
-
 export default {
 
   name: 'RegistrationPage',
+  components: [
+    Countries,
+  ],
   data: () => ({
 
     loading:false,
@@ -113,7 +121,7 @@ export default {
                   label="Country"
                   placeholder="you country"
                   required>
-                  
+
                     <v-select :items="countries" label="Country">
                            <template v-slot:selection="{ country, index }">
                               <img :src="item.image">{{ country.name }}
@@ -165,7 +173,7 @@ export default {
       <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
       <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css" rel="stylesheet">
   </body>
-  
+
   `,
 
   methods: {
