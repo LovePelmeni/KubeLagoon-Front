@@ -6,9 +6,12 @@ import VueCookies from "vue3-cookies";
 
 import Vuex from 'vuex'
 import { createApp } from 'vue/dist/vue.esm-bundler';
-import { router } from './router/index'
+import { router } from './router/index';
 
 import { globalCookiesConfig } from "vue3-cookies";
+
+import { Vuetify } from 'vuetify';
+import 'vuetify/dist/vuetify.min.css';
 
 globalCookiesConfig({
   expireTimes: "30d",
@@ -24,5 +27,6 @@ app.use(require("vue3-cookies"))
 app.use(VueCookies)
 app.use(store)
 app.use(Vuex)
+app.use(Vuetify)
 
 app.mount('#app')

@@ -6,8 +6,7 @@ import HomePage from "../views/home.vue";
 import CustomerProfile from "../views/CustomerProfile.vue";
 import LoginPage from "../views/LoginPage.vue";
 import RegistrationPage from "../views/RegistrationPage.vue";
-
-import VirtualMachineSetup from "../views/VirtualMachineSetup.vue";
+import initializationModal from "../views/InitializationModal.vue";
 
 const routes = [
   {
@@ -33,7 +32,7 @@ const routes = [
   {
     path: "/virtual/machine/setup/",
     name: "virtual_machine_setup",
-    component: VirtualMachineSetup,
+    component: initializationModal,
   },
   {
     path: "/customer/profile/",

@@ -1,7 +1,7 @@
 <script>
 
 import * as customers from "../../customers/customers.js";
-import {  mapMutations } from "vuex";
+import {  mapMutations, mapState } from "vuex";
 
 export default {
 
@@ -35,7 +35,7 @@ export default {
             <v-avatar size="100" color="indigo lighten-4">
               <v-icon size="40" color="indigo">mdi-account</v-icon>
             </v-avatar>
-            <h2 class="indigo--text">Sign IN</h2>
+            <h2 class="indigo--text">Sign in</h2>
           </div>
           <v-form @submit.prevent="submitLoginForm" ref="form">
             <v-card-text>
@@ -73,10 +73,19 @@ export default {
     <v-snackbar top color="green" v-model="snackbar">
       Login success
     </v-snackbar>
-  </v-app>`,
+  </v-app>
+
+  <body>
+      <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+      <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css" rel="stylesheet">
+  </body>
+
+  `,
 
   methods: {
     ...mapMutations(["TOGGLE_ERROR"]),
+    ...mapState(["loading"]),
+    
     submitLoginForm(){
       if (this.$refs.form.validate()){
           this.loading = true
@@ -109,3 +118,4 @@ export default {
     box-shadow: 10px 4px 6px -1px rgba(0, 0, 0, 0.2), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
   }
 </style>
+

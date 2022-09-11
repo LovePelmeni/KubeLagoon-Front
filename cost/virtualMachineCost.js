@@ -93,3 +93,4 @@ class VirtualMachineCostCalculator {
 export {VirtualMachineCostCalculator,
 CpuUsageBillCalculator, MemoryUsageBillCalculator,
 StorageUsageBillCalculator};
+

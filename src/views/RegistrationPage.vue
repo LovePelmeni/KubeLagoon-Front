@@ -4,6 +4,17 @@ import * as customers from "../../customers/customers.js";
 import { mapMutations } from "vuex";
 
 
+
+export const Countries = {
+  name: "Countries",
+  data() {
+    return {
+      Countries: [],
+    }
+  }
+}
+
+
 export default {
 
   name: 'RegistrationPage',
@@ -63,7 +74,7 @@ export default {
               <v-avatar size="100" color="indigo lighten-4">
                 <v-icon size="40" color="indigo">mdi-account</v-icon>
               </v-avatar>
-              <h2 class="indigo--text">Sign UP</h2>
+              <h2 class="indigo--text">Sign up</h2>
             </div>
             <v-form @submit.prevent="submitRegisterForm" ref="form">
               <v-card-text>
@@ -72,7 +83,7 @@ export default {
                   :rules="UsernameRules"
                   type="username"
                   label="Username"
-                  placeholder="Username"
+                  placeholder="username"
                   prepend-inner-icon="mdi-account"
                   required
                 />
@@ -80,7 +91,7 @@ export default {
                   v-model="Email"
                   :rules="EmailRules"
                   type="email"
-                  label="Email"
+                  label="email"
                   placeholder="Email"
                   prepend-inner-icon="mdi-account"
                   required
@@ -90,29 +101,37 @@ export default {
                         :rules="PasswordRules"
                         :type="passwordShow?'text':'password'"
                         label="Password"
-                        placeholder="Password"
+                        placeholder="password"
                         prepend-inner-icon="mdi-key"
                         :append-icon="passwordShow ? 'mdi-eye':'mdi-eye-off'"
                         @click:append="passwordShow = !passwordShow"
                         required
                 />
 
-                <v-text-field
-                  v-model="country"
-                  :rules="CountryRules"
+                <v-field
                   type="country"
                   label="Country"
-                  placeholder="Country"
-                  prepend-inner-icon="mdi-account"
-                  required
-                />
+                  placeholder="you country"
+                  required>
+                  
+                    <v-select :items="countries" label="Country">
+                           <template v-slot:selection="{ country, index }">
+                              <img :src="item.image">{{ country.name }}
+                            </template>
+
+                            <template v-slot:item="{ country }">
+                              <img :src="item.image">{{ country.name }}
+                            </template>
+                      </v-select>
+
+                  </v-field>
 
                 <v-text-field
                   v-model="zipCode"
                   :rules="ZipCodeRules"
                   type="zipCode"
                   label="ZipCode"
-                  placeholder="ZipCode"
+                  placeholder="Zip code"
                   prepend-inner-icon="mdi-account"
                   required
                 />
@@ -122,7 +141,7 @@ export default {
                   :rules="streetRules"
                   type="street"
                   label="Street"
-                  placeholder="Street"
+                  placeholder="street"
                   prepend-inner-icon="mdi-account"
                   required
                 />
@@ -140,7 +159,14 @@ export default {
       <v-snackbar top color="green" v-model="snackbar">
         Registration success
       </v-snackbar>
-  </v-app>`,
+  </v-app>
+
+  <body>
+      <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+      <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css" rel="stylesheet">
+  </body>
+  
+  `,
 
   methods: {
     ...mapMutations(["TOGGLE_ERROR"]),
