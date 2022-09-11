@@ -82,10 +82,10 @@ import loadingPage from "../components/LoadingPage.vue";
 import * as vm from "../../vm/vm.js";
 import { useCookies } from "vue3-cookies";
 
-import { hardwareConfiguration } from "../components/hardwareConfiguration.vue";
-import { resourceConfiguration } from "../components/resourceConfiguration.vue";
-import { sshConfiguration } from  "../components/sshConfiguration.vue";
-import { VirtualMachineCostCalculator } from "../../cost/virtualMachineCost.js";
+import hardwareConfiguration from "../components/hardwareConfiguration.vue";
+import resourceConfiguration from "../components/resourceConfiguration.vue";
+import sshConfiguration from  "../components/sshConfiguration.vue";
+import VirtualMachineCostCalculator from "../../cost/virtualMachineCost.js";
 
 
 export default {
@@ -411,7 +411,7 @@ export default {
             font-weight: 300;
             margin-top: 16px;
           }
-      .location-details {
+      .resources-details {
         gap: 16px;
         div {
           flex: 1;
@@ -538,26 +538,6 @@ export default {
     }
   }
 
-  .resourceInputField {
-      margin-bottom: 24px;
-  }
-  label {
-    font-size: 12px;
-    margin-bottom: 6px;
-  }
-  input {
-    width: 100%;
-    background-color: #1e2139;
-    color: #fff;
-    border-radius: 4px;
-    padding: 12px 4px;
-    border: none;
-    &:focus {
-      outline: none;
-    }
-  }
-}
-
 .not_available {
   margin-top: 160px;
   align-items: center;
@@ -576,5 +556,6 @@ export default {
     font-weight: 300;
     margin-top: 16px;
   }
+}
 }
 </style>

@@ -43,7 +43,7 @@ class VirtualMachineManager {
       return vm_rest.ShutdownVmOsRestController(JwtToken, VirtualMachineId)
     }
 
-    GetCustomerVirtualMachineInfo = function(JwtToken, VirtualMachineId) {
+    GetCustomerVirtualMachine = function(JwtToken, VirtualMachineId) {
       // Receives Info About Customers Virtual Machine
       return vm_rest.GetVirtualMachineRestController(JwtToken, VirtualMachineId)
     }

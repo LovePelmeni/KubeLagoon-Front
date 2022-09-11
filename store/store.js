@@ -220,7 +220,7 @@ export default new Vuex.Store({
       // Returns List of the Virtual Machine Servers, belongs To Customer
 
       let VirtualMachineManager = new vm.VirtualMachineManager()
-      let results, ResultError = VirtualMachineManager.GetVirtualMachines(JwtToken)
+      let results, ResultError = VirtualMachineManager.GetCustomerVirtualMachines(JwtToken)
       if (ResultError != null) {commit("TOGGLE_ERROR", state, ResultError)}
 
       for (let virtualMachine in results){

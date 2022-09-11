@@ -1,6 +1,6 @@
 <template>
   <div class="hardwareConfiguration flex flex-column">
-    <h4>Hardware Configuration</h4>
+    <h3>Hardware Configuration</h3>
 
     <div class="input flex flex-column">
       <label for="LoadBalancer">Load Balancers</label>
@@ -10,7 +10,7 @@
 
         <v-select :options="LoadBalancers" @click="validateLoadBalancer" @change="validateLoadBalancer"  label="Load Balancer">
             <template>
-                <img :src="require(LoadBalancer.IconImageUrl)" style="height: 20%; width: 20%"/>
+                <img :src="require(LoadBalancer.IconImageUrl)" style="height: 10%; width: 10%"/>
                 {{ LoadBalancer.LoadBalancerName }}
             </template>
         </v-select>
@@ -271,3 +271,8 @@ export default {
 };
 
 </script>
+
+
+<style lang="scss">
+
+</style>

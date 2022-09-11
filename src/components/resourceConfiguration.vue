@@ -1,6 +1,7 @@
 <template>
   <div class="resourceConfiguration flex flex-column">
       <h4>Resource Configuration</h4>
+
       <div class="input flex flex-column">
         <label for="CpuNum">CPU</label>
         <input
@@ -9,7 +10,7 @@
         <span v-if="errors?.Resources['CpuNum']">{{ errors?.Resources['CpuNum'] }}</span>
       </div>
 
-      <div class="resourceInputField flex flex-column">
+      <div class="input flex flex-column">
         <label for="MaxCpu">Max CPU</label>
         <input
         :rules="MaxCpuRules"
@@ -17,7 +18,7 @@
         <span v-if="errors?.Resources['MaxCpu']">{{ errors?.Resources['MaxCpu'] }}</span>
       </div>
 
-      <div class="resourceInputField flex flex-column">
+      <div class="input flex flex-column">
         <label for="MemoryInMegabytes">Memory</label>
         <input
         :rules="MemoryInMegabytesRules"
@@ -27,7 +28,7 @@
 
       <div class="resources-details flex">
 
-        <div class="resourceInputField flex flex-column">
+        <div class="input flex flex-column">
           <label for="MaxMemory">Max Memory Capacity</label>
           <input
           :rules="MaxMemoryRules"
@@ -35,7 +36,7 @@
           <span v-if="errors?.Resources['MaxMemory']">{{ errors?.Resources['MaxMemory'] }}</span>
         </div>
 
-        <div class="resourceInputField flex flex-column">
+        <div class="input flex flex-column">
           <label for="Storage">Storage</label>
           <input
           :rules="StorageRules"
@@ -43,7 +44,7 @@
           <span v-if="errors?.Resources['StorageInKB']">{{ errors?.Resources['StorageInKB'] }}</span>
         </div>
 
-        <div class="resourceInputField flex flex-column">
+        <div class="input flex flex-column">
           <label for="Storage">Max Storage Capacity</label>
           <input
           :rules="StorageRules"
@@ -161,3 +162,39 @@ export default {
 };
 
 </script>
+
+
+<style lang="scss">
+
+    .resourceConfiguration {
+      margin-bottom: 48px;
+      h4 {
+              font-size: 20px;
+              margin-top: 40px;
+            }
+      p {
+            text-align: center;
+            max-width: 224px;
+            font-size: 12px;
+            font-weight: 300;
+            margin-top: 16px;
+          }
+      .resources-details {
+        gap: 16px;
+        div {
+          flex: 1;
+        }
+      }
+      .input {
+        width: 100%;
+        background-color: #1e2139;
+        color: #fff;
+        border-radius: 4px;
+        padding: 12px 4px;
+        border: none;
+        &:focus {
+          outline: none;
+        }
+      }
+    }
+</style>
