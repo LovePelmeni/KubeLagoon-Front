@@ -1,6 +1,5 @@
 <template>
-  <div class="sshConfiguration flex flex-column">
-      <h4>SSL Configuration</h4>
+      <h1>SSH Configuration</h1>
       <v-container fluid>
           <v-switch
           @click="toRootCertificate"
@@ -15,7 +14,6 @@
           ></v-switch>
 
       </v-container>
-  </div>
 </template>
 
 

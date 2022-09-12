@@ -1,104 +1,63 @@
 <template>
-  <div class="hardwareConfiguration flex flex-column">
-    <h3>Hardware Configuration</h3>
+    <h1>Hardware Configuration</h1>
 
-    <div class="input flex flex-column">
-      <label for="LoadBalancer">Load Balancers</label>
-    </div>
-
-    <table v-if="LoadBalancers?.length" class="item-list">
-
-        <v-select :options="LoadBalancers" @click="validateLoadBalancer" @change="validateLoadBalancer"  label="Load Balancer">
-            <template>
-                <img :src="require(LoadBalancer.IconImageUrl)" style="height: 10%; width: 10%"/>
-                {{ LoadBalancer.LoadBalancerName }}
-            </template>
-        </v-select>
-    </table>
-
-    <table v-else class="not_available flex flex-column">
-      <img :src="require('@/assets/not_available.svg')" style="width: 20%; height: 20%; margin" alt="illustration-empty" />
-      <h3>No Load Balancers Available</h3>
-    </table>
-
-
-    <div class="input flex flex-column">
+    <div class="modalField flex flex-column">
       <label for="Datacenter">Datacenters</label>
     </div>
 
     <table v-if="Datacenters?.length" class="item-list">
 
-        <v-select :options="Datacenters" @click="validateDatacenter" @change="validateDatacenter" label="title">
+        <v-select :options="Datacenters" @click="ValidateDatacenter" @change="ValidateDatacenter" label="Select Datacenter">
             <template>
-                <img :src="require(Datacenter.IconImageUrl)" style="height: 20%; width: 20%" />
+                <img :src="require(Datacenter.IconImageUrl)" style="height: 10%; width: 10%" />
                 {{ Datacenter.DatacenterName }}
             </template>
         </v-select>
 
       </table>
 
-      <table v-else class="not_available flex flex-column">
-        <img :src="require('@/assets/not_available.svg')" style="width: 20%; height: 20%; margin" alt="illustration-empty" />
-        <h3>No Datacenters Available</h3>
-      </table>
-
-      <div class="input flex flex-column">
+      <div class="modalField flex flex-column">
       <label for="OperationalSystem">Operational Systems</label>
       </div>
 
     <table v-if="OperationalSystems?.length" class="item-list">
 
-          <v-select :options="OperationalSystems" @click="validateOperationalSystem" @change="validateOperationalSystem"  label="title">
+          <v-select :options="OperationalSystems" @click="ValidateOperationalSystem" @change="ValidateOperationalSystem"  label="Select Operating System">
               <template style="height: 20%; width: 20%">
-                  <img :src="require(OperationalSystem.IconImageUrl)" style="height: 20%; width: 20%" />
+                  <img :src="require(OperationalSystem.IconImageUrl)" style="height: 10%; width: 10%" />
                   {{ OperationalSystem.SystemName }}
-
               </template>
           </v-select>
       </table>
 
-      <table v-else class='not_available flex flex-column'>
-        <img :src="require('@/assets/not_available.svg')" style="width: 20%; height: 20%; margin" alt="illustration-empty" />
-        <h3>No Operational Systems Available</h3>
-      </table>
-
-    <div class="input flex flex-column">
+    <div class="modalField flex flex-column">
       <label for="PreInstalledTools">Pre Install Tools</label>
     </div>
 
     <table v-if="PreInstalledTools?.length" class="item-list">
 
-            <v-select :options="Tools" @click="selectPreInstalledTool" @change="validatePreInstallTool" label="title">
+            <v-select :options="PreInstalledTools" @click="selectPreInstalledTool" @change="UnSelectPreInstallTool" label="Select Tools">
                 <template>
-                    <img :src="require(Tool.IconImageUrl)" style="height: 20%; width: 20%" />
+                    <img :src="require(Tool.IconImageUrl)" style="height: 10%; width: 10%" />
                     {{ Tool.ToolName + " " + Tool.Version + " " + Tool.Bit + "-bit" }}
                 </template>
             </v-select>
-
       </table>
-      <table v-else class="not_available flex flex-column">
-        <img :src="require('@/assets/not_available.svg')" style="width: 20%; height: 20%; margin" alt="illustration-empty" />
-        <h3>No Tools to pre-install is Available</h3>
-      </table>
-  </div>
 
 </template>
 
 
 <script>
 
-import * as suggestions from "../../suggestions/suggestions.js";
 
 export default {
 
   name: "hardwareConfiguration",
   mounted() {
-    this.LoadBalancers = this.GetSuggestedLoadBalancers()
-    this.Datacenters = this.GetSuggestedDatacenters()
-    this.OperationalSystems = this.GetSuggestedOperationalSystems()
-    this.PreInstalledTools = this.GetSuggestedPreInstalledTools()
+    this.GetSuggestedDatacenters()
+    this.GetSuggestedOperationalSystems()
+    this.GetSuggestedPreInstalledTools()
 
-    this.AddedLoadBalancer = null
     this.AddedDatacenter = null
     this.AddedOperationalSystem = null
     this.AddedPreInstalledTools = []
@@ -112,17 +71,14 @@ export default {
           Datacenter: {},
           OS: {},
           Tool: {},
-          LoadBalancer: {},
       },
 
       // hardware Configuration Validation Rules
 
-      LoadBalancers : [], // array of the Objects of the Type { 'LoadBalancerName' , 'IconImageUrl'}
       Datacenters : [], // array of the Objects with attrs { 'DatacenterName', 'IconImageUrl' }
       OperationalSystems : [], // array of the Objects with attrs { 'OperationalSystems', 'IconImageUrl' }
       PreInstalledTools : [], // array of the Objects with attrs { 'ToolName', 'IconImageUrl' }
 
-      AddedLoadBalancer: null,
       AddedDatacenter: null,
       AddedOperationalSystem: null,
       AddedPreInstalledTools: [],
@@ -130,7 +86,6 @@ export default {
   },
 
   created() {
-    this.GetSuggestedLoadBalancers()
     this.GetSuggestedDatacenters()
     this.GetSuggestedOperationalSystems()
     this.GetSuggestedPreInstalledTools()
@@ -138,69 +93,106 @@ export default {
 
   methods: {
 
-    // Validation Methods for t he Form
-    ValidateDatacenter(Datacenter) {
-      // Validates Selected Datacenter by the Customer
-      if (Datacenter.DatacenterName.length == 0) {
-        this.errors['Datacenter'] = "This field is required"
-      }
-      this.selectDatacenter(Datacenter)
-    },
-
     ValidateOperationalSystem(OperationalSystem) {
         //  Validates Operational System, picked up by the Customer
         if (OperationalSystem.SystemName.length == 0) {
           this.errors["OS"] = "This field is required"
         }
-      this.selectOperationalSystem(OperationalSystem)
+        if (this.AddedOperationalSystem != null && this.AddedOperationalSystem == OperationalSystem) {
+          this.AddedOperationalSystem = null
+        }else{
+        this.selectOperationalSystem(OperationalSystem)}
     },
 
-    ValidateLoadBalancer(LoadBalancer) {
+    ValidateDatacenter(Datacenter) {
       // Validates Load Balancer Configuration
-      if (LoadBalancer.Type.length == 0) {
+      if (Datacenter.Type.length == 0) {
         this.errors["LoadBalancer"]["Type"] = "This field is required"
       }
-      if (LoadBalancer.Port != 0) {
+      if (Datacenter.Port != 0) {
         this.errors["LoadBalancer"]["Port"] = "Please specify the default value"
       }
-      this.selectLoadBalancer(LoadBalancer)
+      if (this.AddedDatacenter != null && this.AddedDatacenter == Datacenter) {
+          this.AddedDatacenter = null
+        }else{
+        this.selectDatacenter(Datacenter)}
     },
-
-    GetSuggestionsManager() {
-      let SuggestionManager = new suggestions.SuggestionsManager()
-      return SuggestionManager
-    },
-
-    GetSuggestedLoadBalancers() {
-      // Returns Array of the Available Load Balancers
-      let newManager = this.GetSuggestionsManager()
-      let LoadBalancers = newManager.GetSuggestedLoadBalancers()
-      if (LoadBalancers != null) {this.LoadBalancers = LoadBalancers}
-    },
-
+    
     GetSuggestedDatacenters() {
       // Returns Array of the Available Datacenters
-      let newManager = this.GetSuggestionsManager()
-      let Datacenters = newManager.GetSuggestedDatacenters()
-      if (Datacenters != null) {
-      this.Datacenters = Datacenters}
+      let Datacenters = [
+        {
+          "IconImageUrl": "@/assets/datacenters/europe_moscow.png",
+          "DatacenterName": "Europe/Moscow",
+        },
+        {
+          "IconImageUrl": "@/assets/datacenters/europe_berlin.png",
+          "DatacenterName": "Europe/Moscow",
+        },
+        {
+          "IconImageUrl": "@/assets/datacenters/us_washington.png",
+          "DatacenterName": "US/washington",
+        }
+      ]
+      this.Datacenters = Datacenters
     },
 
     GetSuggestedOperationalSystems() {
       // Returns Array of the Available Distributions for the Virtual Machine  Server
-      let newManager = this.GetSuggestionsManager()
-      let OperationalSystems = newManager.GetSuggestedOperationalSystems()
-      if (OperationalSystems != null) {
-        this.OperationalSystems = OperationalSystems
-      }
+      let OperationalSystems = [
+        {
+          "SystemName": "Debian", 
+          "Version": "10", 
+          "bit": "64",
+          "IconImageUrl": "@/assets/os/debian.svg"
+        },
+        {
+          "SystemName": "Ubuntu", 
+          "Version": "10", 
+          "bit": "64",
+          "IconImageUrl": "@/assets/os/ubuntu.svg"
+        },
+        {
+          "SystemName": "CentOS", 
+          "Version": "10", 
+          "bit": "64",
+          "IconImageUrl": "@/assets/os/centos.svg"
+        },
+        {
+          "SystemName": "Windows", 
+          "Version": "10", 
+          "bit": "64",
+          "IconImageUrl": "@/assets/os/windows.svg"
+        }
+      ]
+      this.OperationalSystems = OperationalSystems
     },
 
     GetSuggestedPreInstalledTools() {
       // Returns Array of the Available Preinstalled Tools, that you can pre install, on your OS
-      let newManager = this.GetSuggestionsManager()
-      let PreInstalledTools = newManager.GetSuggestedPreInstallTools()
-      if (PreInstalledTools != null){
-      this.PreInstalledTools = PreInstalledTools}
+      let PreInstalledTools = [
+        {
+          "ToolName": "Docker", 
+          "IconImageUrl": "@/assets/tools/docker.svg",
+        },
+        {
+          "ToolName": "Docker Compose",
+          "IconImageUrl": "@/assets/tools/docker_compose.svg",
+        },
+        {
+          "ToolName": "VirtualBox",
+          "IconImageUrl": "@/assets/tools/virtual_box.svg",
+        },
+        {
+          "ToolName": "Podman",
+          "IconImageUrl": "@/assets/tools/podman.png",
+        },
+        {
+          "ToolName": "Kubernetes",
+          "IconImageUrl": "@/assets/tools/kubernetes.png",
+        }
+      ]
+      this.PreInstalledTools = PreInstalledTools
     },
 
     selectLoadBalancer(LoadBalancer) {
@@ -272,7 +264,178 @@ export default {
 
 </script>
 
-
 <style lang="scss">
+
+.virtual-machine-wrap {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  overflow: scroll;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  @media (min-width: 900px) {
+    left: 90px;
+  }
+  .virtual-machine-content {
+    position: relative;
+    padding: 56px;
+    max-width: 700px;
+    width: 100%;
+    background-color: #141625;
+    color: #fff;
+    box-shadow: 10px 4px 6px -1px rgba(0, 0, 0, 0.2), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    h1 {
+      margin-bottom: 48px;
+      color: #fff;
+    }
+    h3 {
+      margin-bottom: 16px;
+      font-size: 18px;
+      color: #777f98;
+    }
+    h4 {
+      color: #7c5dfa;
+      font-size: 12px;
+      margin-bottom: 24px;
+    }
+    }
+    .virtual-machine-work {
+      .payment {
+        gap: 24px;
+        div {
+          flex: 1;
+        }
+      }
+      .work-items {
+        .item-list {
+          width: 100%;
+          // Item Table Styling
+          .table-heading,
+          .table-items {
+            gap: 16px;
+            font-size: 12px;
+
+            .virtual-machine-id {
+              flex-basis: 50%;
+            }
+            .virtual-machine-name{
+              flex-basis: 10%;
+            }
+            .status{
+              flex-basis: 10%;
+            }
+            .price {
+              flex-basis: 20%;
+            }
+            .total {
+              flex-basis: 20%;
+              align-self: center;
+            }
+          }
+          .table-heading {
+            margin-bottom: 16px;
+            th {
+              text-align: left;
+            }
+          }
+          .table-items {
+            position: relative;
+            margin-bottom: 24px;
+            img {
+              position: absolute;
+              top: 15px;
+              right: 0;
+              width: 12px;
+              height: 16px;
+            }
+          }
+        }
+        .button {
+          color: #fff;
+          background-color: #252945;
+          align-items: center;
+          justify-content: center;
+          width: 100%;
+          img {
+            margin-right: 4px;
+          }
+        }
+      }
+    }
+    .save {
+      margin-top: 60px;
+      div {
+        flex: 1;
+      }
+      .right {
+        justify-content: flex-end;
+      }
+    }
+  }
+  .TotalCost {
+    color: #fff;
+    padding: 32px;
+    background-color: rgba(12, 14, 22, 0.7);
+    align-items: center;
+    border-radius: 0 0 20px 20px;
+    p {
+      flex: 1;
+      font-size: 12px;
+    }
+    p:nth-child(2) {
+      font-size: 28px;
+      text-align: right;
+    }
+  }
+
+  .modalField {
+    margin-bottom: 24px;
+  }
+  label {
+    font-size: 12px;
+    margin-bottom: 6px;
+  }
+  input {
+    background-color: #1e2139;
+  }
+  select {
+    width: 100%;
+    background-color: #1e2139;
+    color: #fff;
+    border-radius: 4px;
+    padding: 12px 4px;
+    border: none;
+    &:focus {
+      outline: none;
+    }
+  }
+
+.not_available {
+  margin-top: 160px;
+  align-items: center;
+  img {
+    width: 214px;
+    height: 200px;
+  }
+  h3 {
+    font-size: 20px;
+    margin-top: 40px;
+  }
+  p {
+    text-align: center;
+    max-width: 224px;
+    font-size: 12px;
+    font-weight: 300;
+    margin-top: 16px;
+  }
+}
+
+button, input, select, textarea {
+    background-color: none;
+    border-style: none;
+}
 
 </style>

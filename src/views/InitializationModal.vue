@@ -3,42 +3,41 @@
     <form @submit.prevent="ValidateInput" class="virtual-machine-content">
       <loadingPage v-show="loading" />
 
-      <!-- Hardware Configuration  -->
-
-      <div id="app">
-        <hardwareConfiguration />
-      </div>
-
-      <!-- resource Configuration -->
-
-      <div id="app">
-        <resourceConfiguration />
-      </div>
-
-      <!-- SSH Configuration -->
-
-      <div id="app">
-        <sshConfiguration />
-      </div>
-
       <!-- Virtual Machine Work Details -->
 
       <div class="virtual-machine-work flex flex-column">
+        
+
+        <div class="resourceConfigBlock">
+        <!-- Hardware Configuration  -->
+          <hardwareConfiguration />
+        </div>
+
+        <div class="resourceConfigBlock">
+          <!-- resource Configuration -->
+          <resourceConfiguration />
+        </div>
+
+        <div class="resourceConfigBlock">
+          <!-- SSH Configuration -->
+          <sshConfiguration />
+        </div>
+
         <div class="payment flex">
 
-          <div class="input flex flex-column">
+          <div class="modalField flex flex-column">
             <label for="virtualMachineCreationDate">Creation Date</label>
             <input disabled type="text" id="virtualMachineCreationDate" v-model="virtualMachineCreationDate" />
           </div>
 
-          <div class="input flex flex-column">
+          <div class="modalField flex flex-column">
             <label for="paymentDueDate">Payment Due</label>
             <input disabled type="text" id="paymentDueDate" v-model="paymentDueDate" />
           </div>
 
         </div>
 
-        <div class="input flex flex-column">
+        <div class="modalField flex flex-column">
           <label for="paymentTerms">Payment Terms</label>
           <select  @change="ProcessPaymentTermsChangeEvent" type="text" id="paymentTerms" v-model="paymentTerms">
             <option value="30">Net 30 Days</option>
@@ -50,18 +49,18 @@
           <p>In Total Per Day</p>
           <p>${{ TotalCost }}</p>
         </div>
+
       </div>
 
       <!-- Save/Exit -->
 
       <div class="save flex">
-        <div class="left">
-          <button type="button" @click="closeVirtualMachineSettings" class="red">Cancel</button>
-        </div>
-        <div class="right flex">
+
+        <div class="buttonBlock flex">
+          <button type="submit" @click="closeVirtualMachineSettings" class="red"> Cancel </button>
           <button v-if="!updateVirtualMachine" type="submit" @click="saveVirtualMachineDraft" class="dark-purple">Save Draft</button>
           <button v-if="!updateVirtualMachine" type="submit" @click="CreateNewVirtualMachine" class="purple">Create New Virtual Machine</button>
-          <button v-if="updateVirtualMachine" type="sumbit" class="purple">Update Virtual Machine</button>
+          <button v-if="updateVirtualMachine"  type="sumbit" class="purple">Update Virtual Machine</button>
         </div>
       </div>
     </form>
@@ -71,7 +70,7 @@
         <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
         <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css" rel="stylesheet">
     </body>
-
+    
 </template>
 
 <script>
@@ -85,7 +84,7 @@ import { useCookies } from "vue3-cookies";
 import hardwareConfiguration from "../components/hardwareConfiguration.vue";
 import resourceConfiguration from "../components/resourceConfiguration.vue";
 import sshConfiguration from  "../components/sshConfiguration.vue";
-import VirtualMachineCostCalculator from "../../cost/virtualMachineCost.js";
+import { VirtualMachineCostCalculator } from "../../cost/virtualMachineCost.js";
 
 
 export default {
@@ -128,11 +127,6 @@ export default {
   },
   created() {
     // get current date for invoice date field
-    
-    // Everytime form value changes, it recalculates the Total Cost Price for the Virtual Machine Server
-    document.addEventListener('input', () => {
-      this.ProcessPaymentTermsChangeEvent()
-    });
 
     this.CheckIsDraft() // Checking if this is Saved Draft or Customer Want to Initialize New Configuration
     this.GetCustomerVirtualMachines()
@@ -200,8 +194,6 @@ export default {
     ValidateInput() {
       // Validates The Whole Configuration Input
     },
-
-
 
     addVirtualMachineToList(NewVirtualMachine) {
       // Adds new Object to the Customer's Virtual Machine List
@@ -335,6 +327,10 @@ export default {
   @media (min-width: 900px) {
     left: 90px;
   }
+  .resourceConfigBlock {
+    margin-top: 30px;
+    margin-bottom: 30px;
+  }
   .virtual-machine-content {
     position: relative;
     padding: 56px;
@@ -372,17 +368,21 @@ export default {
         font-weight: 300;
         margin-top: 16px;
       }
-      .input {
-        width: 100%;
-        background-color: #1e2139;
-        color: #fff;
-        border-radius: 4px;
-        padding: 12px 4px;
-        border: none;
-        &:focus {
-          outline: none;
-        }
+      label {
+          font-size: 12px;
+          margin-bottom: 6px;
       }
+        input {
+          width: 100%;
+          background-color: #1e2139;
+          color: #fff;
+          border-radius: 4px;
+          padding: 12px 4px;
+          border: none;
+          &:focus {
+            outline: none;
+          }
+        }
     }
     .sshConfiguration {
           h4 {
@@ -416,17 +416,25 @@ export default {
           flex: 1;
         }
       }
-      .input {
-        width: 100%;
-        background-color: #1e2139;
-        color: #fff;
-        border-radius: 4px;
-        padding: 12px 4px;
-        border: none;
-        &:focus {
-          outline: none;
-        }
+      .modalField {
+        margin-bottom: 24px;
       }
+        label {
+          font-size: 12px;
+          margin-bottom: 6px;
+        }
+        select,
+        input {
+          width: 100%;
+          background-color: #1e2139;
+          color: #fff;
+          border-radius: 4px;
+          padding: 12px 4px;
+          border: none;
+          &:focus {
+            outline: none;
+          }
+       } 
     }
     .virtual-machine-work {
       .payment {
@@ -496,8 +504,8 @@ export default {
       div {
         flex: 1;
       }
-      .right {
-        justify-content: flex-end;
+      .buttonBlock{
+        justify-content: space-between;
       }
     }
   }
@@ -517,7 +525,7 @@ export default {
     }
   }
 
-  .input {
+  .modalField {
     margin-bottom: 24px;
   }
   label {
