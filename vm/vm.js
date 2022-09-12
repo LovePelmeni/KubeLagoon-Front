@@ -53,5 +53,4 @@ class VirtualMachineManager {
         return vm_rest.GetVirtualMachinesRestController(JwtToken)
     }
 }
-
 export {VirtualMachineManager};

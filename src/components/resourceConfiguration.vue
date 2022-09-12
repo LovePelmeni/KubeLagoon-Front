@@ -36,7 +36,6 @@
 
         <div class="input flex flex-column">
           <label for="MaxMemory">Max Memory Capacity (MB)</label>
-
           <input
           @change="ValidateMaxMemoryResources"
           :rules="MaxMemoryRules"
