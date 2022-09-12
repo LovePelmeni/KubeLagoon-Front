@@ -192,11 +192,10 @@ export default {
       this.getVirtualMachineCostTotal(TotalPricePerDay, Number(PricePerDay))
     },
 
-
-
     CheckIsDraft() {
       //Checks if the Configuration is a Saved Draft
     },
+    
 
     ValidateInput() {
       // Validates The Whole Configuration Input

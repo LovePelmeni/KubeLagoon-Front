@@ -22,18 +22,12 @@
       </div>
 
       <div class="input flex flex-column">
-        <label for="MemoryInMegabytes">Memory</label>
+        <label for="MemoryInMegabytes">Memory (MB)</label>
 
         <input
         @change="ValidateMemoryResources"
         :rules="MemoryInMegabytesRules"
         required type="text" id="MemoryInMegabytes" v-model="Memory" />
-
-        <select  @change="ProcessMemoryConvertation" type="text" id="paymentTerms" v-model="paymentTerms">
-          <option value="GB">GB</option>
-          <option value="MB">MB</option>
-          <option value="KB">KB</option>
-        </select>
 
         <span v-if="errors?.Resources['MemoryInMegabytes']">{{ errors?.Resources['MemoryInMegabytes'] }}</span>
       </div>
@@ -41,18 +35,12 @@
       <div class="resources-details flex">
 
         <div class="input flex flex-column">
-          <label for="MaxMemory">Max Memory Capacity</label>
+          <label for="MaxMemory">Max Memory Capacity (MB)</label>
 
           <input
           @change="ValidateMaxMemoryResources"
           :rules="MaxMemoryRules"
           required type="text" id="MaxMemory" v-model="MaxMemory" />
-
-          <select  @change="ProcessMaxMemoryConvertation" type="text" id="paymentTerms" v-model="paymentTerms">
-            <option value="GB">GB</option>
-            <option value="MB">MB</option>
-            <option value="KB">KB</option>
-          </select>
 
           <span v-if="errors?.Resources['MaxMemory']">{{ errors?.Resources['MaxMemory'] }}</span>
         </div>
@@ -65,29 +53,16 @@
           :rules="StorageRules"
           required type="text" id="StorageCapacity" v-model="storageCapacity" />
 
-          <select  @change="ProcessStorageConvertation" type="text" id="paymentTerms" v-model="paymentTerms">
-            <option value="GB">GB</option>
-            <option value="MB">MB</option>
-            <option value="KB">KB</option>
-          </select>
-
           <span v-if="errors?.Resources['StorageInKB']">{{ errors?.Resources['StorageInKB'] }}</span>
         </div>
 
         <div class="input flex flex-column">
-          <label for="Storage">Max Storage Capacity</label>
+          <label for="Storage">Max Storage Capacity (GB)</label>
 
           <input
           @change="ValidateMaxStorageResources"
           :rules="StorageRules"
           required type="text" id="maxStorageCapacity" v-model="maxStorageCapacity" />
-
-          <select  @change="ProcessMaxStorageConvertation" type="text" id="paymentTerms" v-model="paymentTerms">
-            <option value="GB">GB</option>
-            <option value="MB">MB</option>
-            <option value="KB">KB</option>
-          </select>
-
           <span v-if="errors?.Resources['MaxStorageInKB']">{{ errors?.Resources['MaxStorageInKB'] }}</span>
         </div>
 
@@ -167,18 +142,25 @@ export default {
   },
   methods: {
 
-    ProcessMaxMemoryConvertation() {
+    ProcessMaxMemoryConvertation(event) {
         // Converts Max Memory value from the specified value to the megabytes
+        // Converting Value to the Megabytes
+        this.MaxMemory = Number(event.value) * 1024
     },
-    ProcessMemoryConvertation() {
+    ProcessMemoryConvertation(event) {
         // Converts Memory value from the specified value to the megabytes
+        // Converting value to the Megabytes
+        this.Memory = Number(event.value) * 1024
     },
 
-    ProcessStorageConvertation() {
+    ProcessStorageConvertation(event) {
         // Converts Storage value from the specified value to the kilabytes
+        this.storageCapacity = Number(event.value) * 1024 * 1024
     },
-    ProcessMaxStorageConvertation() {
+
+    ProcessMaxStorageConvertation(event) {
         // Converts Max Storage value from the specified value to the kilabytes
+        this.maxStorageCapacity = Number(event.value) * 1024 * 1024
     },
 
     ValidateCpuResources(CpuUsage) {
@@ -192,7 +174,8 @@ export default {
         }
     },
     ValidateMaxCpuResources(MaxCpuUsage) {
-      // Validates Value for Max CPU Usage
+      // Validates Value for Max CPU Usage 
+      this.MaxCpu = MaxCpuUsage
     },
 
     ValidateMemoryResources(MemoryUsage) {
@@ -201,16 +184,37 @@ export default {
       if (String(MemoryUsage.value).length == 0) {
         this.errors["Resources"]["MemoryUsage"] = "This field is required"
       }
-      if (Number(MemoryUsage.value == null) {
-        this.errors["Resources"]["CpuUsage"] = "Invalid Value for Memory"
+      if (Number(MemoryUsage.value) == null) {
+        this.errors["Resources"]["MemoryUsage"] = "Invalid Value for Memory"
       }
     },
     ValidateMaxMemoryResources(MaxMemory) {
       // Validates Max Memory Usage Value, specified by Customer
+      if (String(MaxMemory.value).length == 0) {
+        this.errors["Resources"]["MaxMemory"] = "This field is required"
+      }
+      if (Number(MaxMemory.value) == null) {
+        this.errors["Resources"]["MaxMemory"] = "Invalid Value for Max Memory"
+      }
     },
     ValidateStorageResources(Storage) {
       // Validates Value for the Storage Capacity, Specified by the Client
-    }
+      if (String(Storage.value).length == 0) {
+        this.errors["Resources"]["Storage"] = "This field is required"
+      }
+      if (Number(Storage.value) == null) {
+        this.errors["Resources"]["Storage"] = "Invalid Value for Storage"
+      }
+    },
+     ValidateMaxStorageResources(Storage) {
+      // Validates Max Storage Capacity Value 
+      if (String(Storage.value).length == 0) {
+        this.errors["Resources"]["Storage"] = "This field is required"
+      }
+      if (Number(Storage.value) == null) {
+        this.errors["Resources"]["Storage"] = "Invalid Value for Storage"
+      }
+     }
   }
 };
 
