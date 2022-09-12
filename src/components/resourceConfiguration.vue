@@ -1,6 +1,6 @@
 <template>
 
-      <h1>Resource Configuration</h1>
+      <h1 style="margin-top: 20px;">Resource Configuration</h1>
 
       <div class="modalField flex flex-column">
         <label for="CpuNum">CPU</label>
@@ -45,7 +45,7 @@
         </div>
 
         <div class="modalField flex flex-column">
-          <label for="Storage">Storage</label>
+          <label for="Storage">Storage (GB)</label>
 
           <input
           @change="ValidateStorageResources"

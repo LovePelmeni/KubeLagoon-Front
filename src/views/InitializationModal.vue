@@ -6,7 +6,6 @@
       <!-- Virtual Machine Work Details -->
 
       <div class="virtual-machine-work flex flex-column">
-        
 
         <div class="resourceConfigBlock">
         <!-- Hardware Configuration  -->
@@ -34,15 +33,16 @@
             <label for="paymentDueDate">Payment Due</label>
             <input disabled type="text" id="paymentDueDate" v-model="paymentDueDate" />
           </div>
-
         </div>
 
         <div class="modalField flex flex-column">
+
           <label for="paymentTerms">Payment Terms</label>
-          <select  @change="ProcessPaymentTermsChangeEvent" type="text" id="paymentTerms" v-model="paymentTerms">
+          <select @change="ProcessPaymentTermsChangeEvent" type="text" id="paymentTerms" v-model="paymentTerms">
             <option value="30">Net 30 Days</option>
             <option value="60">Net 60 Days</option>
           </select>
+          
         </div>
 
         <div class="TotalCost flex">
@@ -57,8 +57,8 @@
       <div class="save flex">
 
         <div class="buttonBlock flex">
-          <button type="submit" @click="closeVirtualMachineSettings" class="red"> Cancel </button>
-          <button v-if="!updateVirtualMachine" type="submit" @click="saveVirtualMachineDraft" class="dark-purple">Save Draft</button>
+          <button type="submit" @click="closeVirtualMachineSettings" class="red"> Cancel Setup</button>
+          <button v-if="!updateVirtualMachine" type="submit" @click="saveVirtualMachineDraft" class="dark-purple">Save Setup</button>
           <button v-if="!updateVirtualMachine" type="submit" @click="CreateNewVirtualMachine" class="purple">Create New Virtual Machine</button>
           <button v-if="updateVirtualMachine"  type="sumbit" class="purple">Update Virtual Machine</button>
         </div>
@@ -70,7 +70,7 @@
         <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
         <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css" rel="stylesheet">
     </body>
-    
+
 </template>
 
 <script>
@@ -165,7 +165,7 @@ export default {
     },
 
     ProcessPaymentTermsChangeEvent() {
-      // Once customer decided to restore the vm server within the specific amount of days 
+      // Once customer decided to restore the vm server within the specific amount of days
       // this method gonna calculate the total price, depending on the amount of days
 
       if (this.CpuNum == null || this.CpuNum == 0) {
@@ -189,7 +189,7 @@ export default {
     CheckIsDraft() {
       //Checks if the Configuration is a Saved Draft
     },
-    
+
 
     ValidateInput() {
       // Validates The Whole Configuration Input
@@ -434,7 +434,7 @@ export default {
           &:focus {
             outline: none;
           }
-       } 
+       }
     }
     .virtual-machine-work {
       .payment {

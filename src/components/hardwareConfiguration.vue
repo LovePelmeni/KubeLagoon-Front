@@ -1,17 +1,27 @@
 <template>
-    <h1>Hardware Configuration</h1>
 
+    <h1 style="margin-top: 20px;">Hardware Configuration</h1>
     <div class="modalField flex flex-column">
       <label for="Datacenter">Datacenters</label>
     </div>
 
-    <table v-if="Datacenters?.length" class="item-list">
+    <div class="resourceSelectors">
 
-        <v-select :options="Datacenters" @click="ValidateDatacenter" @change="ValidateDatacenter" label="Select Datacenter">
-            <template>
-                <img :src="require(Datacenter.IconImageUrl)" style="height: 10%; width: 10%" />
-                {{ Datacenter.DatacenterName }}
-            </template>
+    <table v-if="Datacenters?.length" class="item-list">
+      <label v-if="this.AddedDatacenter == null" id="status1" class="form-label" style="background-color: red;">
+        Please Select the Datacenter
+      </label>
+
+        <v-select :items="Datacenters" @click="ValidateDatacenter" @change="ValidateDatacenter" @select="selectDatacenter" label="Select Datacenter" solo>
+
+           <template v-slot:selection="{ Datacenter }">
+              <img :src="require(Datacenter.IconImageUrl)">{{ Datacenter.DatacenterName }}
+          </template>
+          
+          <template v-slot:item="{ Datacenter }">
+              <img :src="require(Datacenter.IconImageUrl)">{{ Datacenter.DatacenterName }}
+          </template>
+
         </v-select>
 
       </table>
@@ -44,11 +54,14 @@
             </v-select>
       </table>
 
+    </div>
+
 </template>
 
 
 <script>
 
+/* eslint-disable */
 
 export default {
 
@@ -66,7 +79,7 @@ export default {
   data() {
     return {
 
-      // Error Context 
+      // Error Context
       errors: {
           Datacenter: {},
           OS: {},
@@ -117,7 +130,7 @@ export default {
         }else{
         this.selectDatacenter(Datacenter)}
     },
-    
+
     GetSuggestedDatacenters() {
       // Returns Array of the Available Datacenters
       let Datacenters = [
@@ -141,26 +154,26 @@ export default {
       // Returns Array of the Available Distributions for the Virtual Machine  Server
       let OperationalSystems = [
         {
-          "SystemName": "Debian", 
-          "Version": "10", 
+          "SystemName": "Debian",
+          "Version": "10",
           "bit": "64",
           "IconImageUrl": "@/assets/os/debian.svg"
         },
         {
-          "SystemName": "Ubuntu", 
-          "Version": "10", 
+          "SystemName": "Ubuntu",
+          "Version": "10",
           "bit": "64",
           "IconImageUrl": "@/assets/os/ubuntu.svg"
         },
         {
-          "SystemName": "CentOS", 
-          "Version": "10", 
+          "SystemName": "CentOS",
+          "Version": "10",
           "bit": "64",
           "IconImageUrl": "@/assets/os/centos.svg"
         },
         {
-          "SystemName": "Windows", 
-          "Version": "10", 
+          "SystemName": "Windows",
+          "Version": "10",
           "bit": "64",
           "IconImageUrl": "@/assets/os/windows.svg"
         }
@@ -172,7 +185,7 @@ export default {
       // Returns Array of the Available Preinstalled Tools, that you can pre install, on your OS
       let PreInstalledTools = [
         {
-          "ToolName": "Docker", 
+          "ToolName": "Docker",
           "IconImageUrl": "@/assets/tools/docker.svg",
         },
         {
@@ -195,24 +208,14 @@ export default {
       this.PreInstalledTools = PreInstalledTools
     },
 
-    selectLoadBalancer(LoadBalancer) {
-      // Selects Load Balancer, that Is going to be Used for the Virtual Machine Server Deployment
-      this.AddedLoadBalancer = LoadBalancer
-    },
-
-    selectDatacenter(DatacenterName) {
+    selectDatacenter(DatacenterIndex) {
       // Selects Datacenter, that Is going to be Used for the Virtual Machine Server Deployment
-      let Datacenter = this.GetDatacenter(DatacenterName)
-      if (Datacenter != null){
-      this.AddedDatacenter = Datacenter}
+      this.AddedDatacenter = this.Daatcenters[DatacenterIndex]
     },
 
-    selectOperationalSystem(OperationalSystem) {
+    selectOperationalSystem(OperationalSystemIndex) {
       // Selects Operational System for the Virtual Machine Server
-      this.AddedOperationalSystem = {
-      "SystemName": OperationalSystem.OSName + OperationalSystem.Version,
-      "Version": OperationalSystem.Version,
-      "Bit": OperationalSystem.Bit}
+      this.AddedOperationalSystem = this.OperationalSystems[OperationalSystemIndex]
     },
 
     selectPreInstalledTool(Tool) {
@@ -389,6 +392,10 @@ export default {
       font-size: 28px;
       text-align: right;
     }
+  }
+
+  .resourceSelectors {
+    justify-content: space-around;
   }
 
   .modalField {
