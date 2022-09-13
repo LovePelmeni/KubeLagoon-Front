@@ -1,10 +1,10 @@
 <template>
 
 <v-app>
-  <div class="app-content flex flex-column">
-      <v-main class="d-flex justify-center align-center">
+  <div class="registrationWrapper flex flex-column">
+
         <v-col cols="10" lg="4" class="mx-auto">
-          <v-card class="pa-4">
+          <v-card id="registrationForm" class="pa-4">
             <div class="text-center">
               <v-avatar size="100" color="indigo lighten-4">
                 <v-icon size="40" color="indigo">mdi-account</v-icon>
@@ -90,7 +90,6 @@
             </v-form>
           </v-card>
         </v-col>
-      </v-main>
 
       <div v-if="Valid" class="formValidationTitle">
       <v-snackbar top color="green" v-model="snackbar">
@@ -100,7 +99,7 @@
       <div v-else-if="Valid == false" class="formValidationTitle"> 
       </div>
   </div>
-    
+
   </v-app>
 
   <body>
@@ -212,37 +211,26 @@ export default {
 
 <style lang="scss">
 
-.app-content {
-  padding: 0 20px;
-  // flex: 1;
-  position: relative;
+.registrationWrapper {
 
+  .registrationForm {
+    background-color:  #1e2139;
+  }
+  padding: 0 20px;
+  flex: 1;
+  position: relative;
 
    background-color: #141625;
    min-height: 100vh;
-  //  @media (min-width: 900px) {
-  //   flex-direction: row !important;
-  //  }
+   @media (min-width: 900px) {
+    flex-direction: row !important;
+   }
    padding: 56px;
-  //  max-width: 700px;
+   max-width: 700px;
    width: 100%;
    background-color: #141625;
    color: #fff;
    box-shadow: 10px 4px 6px -1px rgba(0, 0, 0, 0.2), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
 
-  // .background{
-
-  //  background-color: #141625;
-  //  min-height: 100vh;
-  // //  @media (min-width: 900px) {
-  // //   flex-direction: row !important;
-  // //  }
-  //  padding: 56px;
-  // //  max-width: 700px;
-  //  width: 100%;
-  //  background-color: #141625;
-  //  color: #fff;
-  //  box-shadow: 10px 4px 6px -1px rgba(0, 0, 0, 0.2), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  // }
 </style>

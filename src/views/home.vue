@@ -1,5 +1,9 @@
 <template>
-  <div class="HomePage container">
+
+
+    <div class="app-content flex flex-column">
+
+
     <router-link :to="{ name: 'login_page'}"></router-link>
     <router-link :to="{ name: 'register_page'}"></router-link>
     <router-link :to="{ name: 'customer_profile'}"></router-link>
@@ -44,7 +48,8 @@
       <h3>There is nothing here</h3>
       <p>Let's create a new Virtual Server Now!</p>
     </div>
-  </div>
+
+    </div>
 
     <body>
       <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">

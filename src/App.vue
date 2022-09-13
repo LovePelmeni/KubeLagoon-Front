@@ -85,6 +85,9 @@ export default {
     flex-direction: row !important;
   }
   .app-content {
+    text-align: center;
+    justify-content: center;
+    align-items: center;
     padding: 0 20px;
     flex: 1;
     position: relative;
@@ -102,14 +105,15 @@ export default {
   }
 }
 // animated invoice
-.invoice-enter-active,
-.invoice-leave-active {
+.virtual-machine-setup-enter-active,
+.virtual-machine-setup-leave-active {
   transition: 0.8s ease all;
 }
-.invoice-enter-from,
-.invoice-leave-to {
+.virtual-machine-enter-from,
+.virtual-machine-leave-to {
   transform: translateX(-700px);
 }
+
 button,
 .button {
   cursor: pointer;
@@ -145,7 +149,7 @@ button,
 .container {
   width: 100%;
   padding: 40px 10px;
-  max-width: 850px;
+  // max-width: 850px;
   margin: 0 auto;
   @media (min-width: 900px) {
     padding-top: 72px;
