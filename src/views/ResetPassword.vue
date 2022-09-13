@@ -38,14 +38,14 @@ export default {
                 this.error = "Invalid Password, please type new one"
             }else{
                 let Reset, error = this.ResetPassword(event.value)
-                if (Reset != true || error != null) {this.TOGGLE_ERROR()}
+                if (Reset != true || error != null) {this.TOGGLE_ERROR(error)}
             }
         },
         ResetPassword(newPassword) {
             // Resetting new Password
             let newCustomerManager = new CustomerManager()
             let Reset, error = newCustomerManager.ResetPassword(newPassword)
-            return Reset, error
+            if (error != null || Reset != true) {this.TOGGLE_ERROR(error)}
         },
     }
 }

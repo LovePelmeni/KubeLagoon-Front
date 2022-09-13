@@ -73,58 +73,7 @@
                  </v-card-text>
       </v-col>
 
-    <!-- <table v-if="Datacenters?.length" class="item-list">
-      <label v-if="this.AddedDatacenter == null" id="status1" class="form-label" style="background-color: red;">
-        Please Select the Datacenter
-      </label>
-
-        <v-select :items="Datacenters" @click="ValidateDatacenter" @change="ValidateDatacenter" @select="selectDatacenter" label="Select Datacenter" solo>
-
-           <template v-slot:selection="{ Datacenter }">
-              <img :src="require(Datacenter.IconImageUrl)">{{ Datacenter.DatacenterName }}
-          </template>
-          
-          <template v-slot:item="{ Datacenter }">
-              <img :src="require(Datacenter.IconImageUrl)">{{ Datacenter.DatacenterName }}
-          </template>
-
-        </v-select>
-
-      </table>
-
-      <div class="modalField flex flex-column">
-      <label for="OperationalSystem">Operational Systems</label>
-      </div>
-
-    <table v-if="OperationalSystems?.length" class="item-list">
-
-          <v-select :options="OperationalSystems" @click="ValidateOperationalSystem" @change="ValidateOperationalSystem"  label="Select Operating System">
-              <template style="height: 20%; width: 20%">
-                  <img :src="require(OperationalSystem.IconImageUrl)" style="height: 10%; width: 10%" />
-                  {{ OperationalSystem.SystemName }}
-              </template>
-          </v-select>
-      </table>
-
-    <div class="modalField flex flex-column">
-      <label for="PreInstalledTools">Pre Install Tools</label>
-    </div>
-
-    <table v-if="PreInstalledTools?.length" class="item-list">
-
-            <v-select :options="PreInstalledTools" @click="selectPreInstalledTool" @change="UnSelectPreInstallTool" label="Select Tools">
-                <template>
-                    <img :src="require(Tool.IconImageUrl)" style="height: 10%; width: 10%" />
-                    {{ Tool.ToolName + " " + Tool.Version + " " + Tool.Bit + "-bit" }}
-                </template>
-            </v-select>
-      </table>
-
-    -->
-    </div> 
-
 </template>
-
 
 <script>
 
