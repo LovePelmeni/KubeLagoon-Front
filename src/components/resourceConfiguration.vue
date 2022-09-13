@@ -46,7 +46,6 @@
 
         <div class="modalField flex flex-column">
           <label for="Storage">Storage (GB)</label>
-
           <input
           @change="ValidateStorageResources"
           :rules="StorageRules"
@@ -171,9 +170,17 @@ export default {
           this.errors["Resources"]["CpuUsage"] = "Invalid Value for CPU"
         }
     },
+    
     ValidateMaxCpuResources(MaxCpuUsage) {
       // Validates Value for Max CPU Usage 
-      this.MaxCpu = MaxCpuUsage
+
+      if (Number(MaxCpuUsage.value) == null) {
+        this.errors["Resources"]["MaxCpu"] = "Invalid value for the Max CPU Usage"
+      }
+
+      if (String(MaxCpuUsage.value).length == 0) {
+        this.errors["Resources"]["MaxCpu"] = "This Field is required"
+      }
     },
 
     ValidateMemoryResources(MemoryUsage) {
