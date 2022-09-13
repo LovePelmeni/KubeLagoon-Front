@@ -1,3 +1,61 @@
+<template>
+
+  <v-app>
+    <v-main class="d-flex justify-center align-center">
+      <v-col cols="10" lg="4" class="mx-auto">
+        <v-card class="pa-4">
+          <div class="text-center">
+            <v-avatar size="100" color="indigo lighten-4">
+              <v-icon size="40" color="indigo">mdi-account</v-icon>
+            </v-avatar>
+            <h2 class="indigo--text">Sign in</h2>
+          </div>
+          <v-form @submit.prevent="submitLoginForm" ref="form">
+            <v-card-text>
+              <v-text-field
+                v-model="Username"
+                :rules="UsernameRules"
+                type="username"
+                label="Username"
+                placeholder="Username"
+                prepend-inner-icon="mdi-account"
+                required
+              />
+              <v-text-field
+                      v-model="password"
+                      :rules="PasswordRules"
+                      :type="passwordShow?'text':'password'"
+                      label="Password"
+                      placeholder="Password"
+                      prepend-inner-icon="mdi-key"
+                      :append-icon="passwordShow ? 'mdi-eye':'mdi-eye-off'"
+                      @click:append="passwordShow = !passwordShow"
+                      required
+              />
+              <v-switch label="Remember me" color="indigo"></v-switch>
+            </v-card-text>
+            <v-card-actions class="justify-center">
+              <v-btn :loading="loading" type="submit" color="indigo">
+                <span class="white--text px-8">Sign UP</span>
+              </v-btn>
+            </v-card-actions>
+          </v-form>
+        </v-card>
+      </v-col>
+    </v-main>
+    <v-snackbar top color="green" v-model="snackbar">
+      Login success
+    </v-snackbar>
+  </v-app>
+
+  <body>
+      <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+      <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css" rel="stylesheet">
+  </body>
+
+</template>
+
+
 <script>
 
 import * as customers from "../../customers/customers.js";

@@ -334,7 +334,7 @@ export default {
   .virtual-machine-content {
     position: relative;
     padding: 56px;
-    max-width: 700px;
+    // max-width: 700px;
     width: 100%;
     background-color: #141625;
     color: #fff;

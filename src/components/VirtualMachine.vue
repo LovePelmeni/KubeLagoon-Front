@@ -62,7 +62,6 @@ import { newRouter } from "../../router/router.js";
 import { mapMutations } from "vuex";
 import { useCookies } from "vue3-cookies";
 
-
 export default {
 
   name: "virtualMachineInfo",

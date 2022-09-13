@@ -5,14 +5,11 @@ export default {
   name: "errorBanner",
   props: ["errorMessage"],
   template: `
-    <div class="error-modal flex">
-      <div class="error-modal-content">
-        <p>{{ errorMessage }}</p>
-        <div class="actions flex">
-          <button @click="hideError" class="red">Close</button>
-        </div>
+      <div class="formValidationTitle">
+        <v-snackbar top color="red" v-model="snackbar">
+            {{ errorMessage }}
+        </v-snackbar>
       </div>
-    </div>
   `,
   methods: {
     ...mapMutations(["TOGGLE_ERROR", "TOGGLE_HIDE_ERROR"]),

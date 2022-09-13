@@ -1,80 +1,7 @@
-<script>
+<template>
 
-import * as customers from "../../customers/customers.js";
-import { mapMutations } from "vuex";
-
-export const Countries = {
-  name: "Countries",
-  data() {
-    return {
-      countries: [],
-    }
-  },
-  created() {
-    this.GetCountries()
-  },
-  methods: {
-    GetCountries() {
-      // Returns the Array of the Available Countries
-    }
-  }
-}
-
-export default {
-
-  name: 'RegistrationPage',
-  components: [
-    Countries,
-  ],
-  data: () => ({
-
-    loading:false,
-    snackbar:false,
-    passwordShow:false,
-
-    Username: '',
-    UsernameRules: [
-      username => !!username || 'Username is required',
-      username => `^[a-z][A-Z][0-9]{1,100}$`.test(username) || 'Invalid Username',
-      username => (username && username.length >= 10) || 'Username should be 10 characters or more!',
-    ],
-
-    Email: '',
-    EmailRules: [
-      email => !!email || 'E-mail is required',
-      email => /.+@.+\..+/.test(email) || 'E-mail must be valid',
-      email => (email && email.length >= 11) || 'E-mail must be at least 11 characters'
-    ],
-
-    Password: '',
-    PasswordRules: [
-      password => !!password || 'Password is required',
-      password => (password && password.length >= 10) || 'Password must be 10 characters or more!',
-    ],
-
-
-    Country: '',
-    CountryRules: [
-      country => !!country || 'Country is required',
-      country => `^[a-z][A-Z]{1,100}$`.test(country) || 'Invalid Country',
-    ],
-
-
-    ZipCode: '',
-    ZipCodeRules: [
-      zipcode => !!zipcode || 'Zip Code is required',
-      zipcode => `^[a-z][A-Z][0-9]{1,100}$`.test(zipcode) || 'Invalid Zip Code'
-    ],
-
-    Street: '',
-      StreetRules: [
-        street => !!street || 'Street is required',
-        street => `^[a-z][A-Z][0-9]{1,100}$`.test(street) || 'Invalid Street Format, Example: "Smith Street, 6"'
-    ],
-  }),
-
-  template: `  <v-app>
-      <div class="background"></div>
+<v-app>
+  <div class="app-content flex flex-column">
       <v-main class="d-flex justify-center align-center">
         <v-col cols="10" lg="4" class="mx-auto">
           <v-card class="pa-4">
@@ -103,7 +30,7 @@ export default {
                   placeholder="Email"
                   prepend-inner-icon="mdi-account"
                   required
-                />
+                 />
                 <v-text-field
                         v-model="password"
                         :rules="PasswordRules"
@@ -123,7 +50,7 @@ export default {
                   required>
 
                     <v-select :items="countries" label="Country">
-                           <template v-slot:selection="{ country, index }">
+                           <template v-slot:selection="{ country }">
                               <img :src="item.image">{{ country.name }}
                             </template>
 
@@ -164,17 +91,98 @@ export default {
           </v-card>
         </v-col>
       </v-main>
+
+      <div v-if="Valid" class="formValidationTitle">
       <v-snackbar top color="green" v-model="snackbar">
         Registration success
       </v-snackbar>
+      </div>
+      <div v-else-if="Valid == false" class="formValidationTitle"> 
+      </div>
+  </div>
+    
   </v-app>
 
   <body>
       <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
       <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css" rel="stylesheet">
   </body>
+  
+</template>
 
-  `,
+
+<script>
+
+import * as customers from "../../customers/customers.js";
+import { mapMutations } from "vuex";
+
+export const Countries = {
+  name: "Countries",
+  data() {
+    return {
+      countries: [],
+    }
+  },
+  created() {
+    this.GetCountries()
+  },
+  methods: {
+    GetCountries() {
+      // Returns the Array of the Available Countries
+    }
+  }
+}
+
+export default {
+
+  name: 'RegistrationPage',
+  components: [
+    Countries,
+  ],
+  data: () => ({
+
+    loading:false,
+    snackbar:false,
+    passwordShow:false,
+    Valid: false,
+
+    Username: '',
+    UsernameRules: [
+      username => !!username || 'Username is required',
+      username => `^[a-z][A-Z][0-9]{1,100}$`.test(username) || 'Invalid Username',
+      username => (username && username.length >= 10) || 'Username should be 10 characters or more!',
+    ],
+
+    Email: '',
+    EmailRules: [
+      email => !!email || 'E-mail is required',
+      email => /.+@.+\..+/.test(email) || 'E-mail must be valid',
+      email => (email && email.length >= 11) || 'E-mail must be at least 11 characters'
+    ],
+
+    Password: '',
+    PasswordRules: [
+      password => !!password || 'Password is required',
+      password => (password && password.length >= 10) || 'Password must be 10 characters or more!',
+    ],
+
+
+    Country: '',
+    CountryRules: [
+      country => !!country || 'Country is required',
+    ],
+
+
+    ZipCode: '',
+    ZipCodeRules: [
+      zipcode => !!zipcode || 'Zip Code is required',
+    ],
+
+    Street: '',
+      StreetRules: [
+        street => !!street || 'Street is required',
+    ],
+  }),
 
   methods: {
     ...mapMutations(["TOGGLE_ERROR"]),
@@ -185,7 +193,10 @@ export default {
         setTimeout(()=> {
           this.loading = false
           this.snackbar = true
-        },3000)
+        }, 3000)
+        this.Valid = true
+      }else{
+        this.Valid = false
       }
     },
     registerCustomer() {
@@ -203,23 +214,35 @@ export default {
 
 .app-content {
   padding: 0 20px;
-  flex: 1;
+  // flex: 1;
   position: relative;
-}
 
-  .background{
 
    background-color: #141625;
    min-height: 100vh;
-   @media (min-width: 900px) {
-    flex-direction: row !important;
-   }
+  //  @media (min-width: 900px) {
+  //   flex-direction: row !important;
+  //  }
    padding: 56px;
-   max-width: 700px;
+  //  max-width: 700px;
    width: 100%;
    background-color: #141625;
    color: #fff;
    box-shadow: 10px 4px 6px -1px rgba(0, 0, 0, 0.2), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
 
-  }
+  // .background{
+
+  //  background-color: #141625;
+  //  min-height: 100vh;
+  // //  @media (min-width: 900px) {
+  // //   flex-direction: row !important;
+  // //  }
+  //  padding: 56px;
+  // //  max-width: 700px;
+  //  width: 100%;
+  //  background-color: #141625;
+  //  color: #fff;
+  //  box-shadow: 10px 4px 6px -1px rgba(0, 0, 0, 0.2), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  // }
 </style>
