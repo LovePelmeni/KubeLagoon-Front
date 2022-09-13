@@ -1,6 +1,10 @@
 <template>
   <div class="virtual-machine-wrap">
-    <form @submit.prevent="ValidateInput" class="virtual-machine-content" style="justify-content: center;">
+
+    <v-col cols="10" lg="4" class="mx-auto">
+      <v-card class="pa-4">
+
+    <v-form @submit.prevent="ValidateInput" class="virtual-machine-content" style="justify-content: center;">
       <loadingPage v-show="loading" />
 
       <!-- Virtual Machine Work Details -->
@@ -54,16 +58,19 @@
 
       <!-- Save/Exit -->
 
-      <div class="save flex">
+              <div class="save flex">
 
-        <div class="buttonBlock flex">
-          <button type="submit" @click="closeVirtualMachineSettings" class="red"> Cancel Setup</button>
-          <button v-if="!updateVirtualMachine" type="submit" @click="saveVirtualMachineDraft" class="dark-purple">Save Setup</button>
-          <button v-if="!updateVirtualMachine" type="submit" @click="CreateNewVirtualMachine" class="purple">Create New Virtual Machine</button>
-          <button v-if="updateVirtualMachine"  type="sumbit" class="purple">Update Virtual Machine</button>
-        </div>
-      </div>
-    </form>
+                  <div class="buttonBlock flex">
+                    <button type="submit" @click="closeVirtualMachineSettings" class="red"> Cancel Setup</button>
+                    <button v-if="!updateVirtualMachine" type="submit" @click="saveVirtualMachineDraft" class="dark-purple">Save Setup</button>
+                    <button v-if="!updateVirtualMachine" type="submit" @click="CreateNewVirtualMachine" class="purple">Create New Virtual Machine</button>
+                    <button v-if="updateVirtualMachine"  type="sumbit" class="purple">Update Virtual Machine</button>
+                  </div>
+              </div>
+          </v-form>
+      </v-card>
+    </v-col>
+
     </div>
 
     <body>
@@ -315,28 +322,18 @@ export default {
 <style lang="scss" scoped>
 
 .virtual-machine-wrap {
-  position: fixed;
-  top: 0;
-  left: 0;
+  
+  flex: 1;
+  position: relative;
   width: 100%;
-  height: 100vh;
-  overflow: scroll;
-  &::-webkit-scrollbar {
-    display: none;
-  }
-  @media (min-width: 900px) {
-    left: 90px;
-  }
+  background-color: #141625;
+
   .resourceConfigBlock {
     margin-top: 30px;
     margin-bottom: 30px;
   }
   .virtual-machine-content {
-    position: relative;
-    padding: 56px;
-    width: 100%;
-    background-color: #141625;
-    color: #fff;
+
     h1 {
       margin-bottom: 48px;
       color: #fff;

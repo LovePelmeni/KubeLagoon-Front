@@ -4,64 +4,55 @@
 
       <div class="modalField flex flex-column">
         <label for="CpuNum">CPU</label>
-        <input
+        <v-text-field
         @change="ValidateCpuResources"
         :rules="CpuRules"
         required type="text" id="CpuNum" v-model="CpuNum" />
-        <span v-if="errors?.Resources['CpuNum']">{{ errors?.Resources['CpuNum'] }}</span>
       </div>
 
       <div class="modalField flex flex-column">
         <label for="MaxCpu">Max CPU</label>
 
-        <input
+        <v-text-field
         @change="ValidateMaxCpuResources"
         :rules="MaxCpuRules"
         required type="text" id="MaxCpu" v-model="MaxCpu" />
-        <span v-if="errors?.Resources['MaxCpu']">{{ errors?.Resources['MaxCpu'] }}</span>
       </div>
 
       <div class="modalField flex flex-column">
         <label for="MemoryInMegabytes">Memory (MB)</label>
 
-        <input
+        <v-text-field
         @change="ValidateMemoryResources"
         :rules="MemoryInMegabytesRules"
         required type="text" id="MemoryInMegabytes" v-model="Memory" />
-
-        <span v-if="errors?.Resources['MemoryInMegabytes']">{{ errors?.Resources['MemoryInMegabytes'] }}</span>
       </div>
 
       <div class="resources-details flex">
 
         <div class="modalField flex flex-column">
           <label for="MaxMemory">Max Memory Capacity (MB)</label>
-          <input
+          <v-text-field
           @change="ValidateMaxMemoryResources"
           :rules="MaxMemoryRules"
           required type="text" id="MaxMemory" v-model="MaxMemory" />
-
-          <span v-if="errors?.Resources['MaxMemory']">{{ errors?.Resources['MaxMemory'] }}</span>
         </div>
 
         <div class="modalField flex flex-column">
           <label for="Storage">Storage (GB)</label>
-          <input
+          <v-text-field
           @change="ValidateStorageResources"
           :rules="StorageRules"
           required type="text" id="StorageCapacity" v-model="storageCapacity" />
-
-          <span v-if="errors?.Resources['StorageInKB']">{{ errors?.Resources['StorageInKB'] }}</span>
         </div>
 
         <div class="modalField flex flex-column">
           <label for="Storage">Max Storage Capacity (GB)</label>
 
-          <input
+          <v-text-field
           @change="ValidateMaxStorageResources"
           :rules="StorageRules"
           required type="text" id="maxStorageCapacity" v-model="maxStorageCapacity" />
-          <span v-if="errors?.Resources['MaxStorageInKB']">{{ errors?.Resources['MaxStorageInKB'] }}</span>
         </div>
 
       </div>
@@ -96,9 +87,9 @@ export default {
       // Validation Rules
 
       StorageRules: [
-        storageCapacity => !!storageCapacity || 'This field is required',
-        storageCapacity => String(storageCapacity).length == 0 || 'This field is required',
-        storageCapacity => Number(storageCapacity) == null || 'Invalid Storage Capacity',
+        storageCapacity => !!storageCapacity.value || 'This field is required',
+        storageCapacity => String(storageCapacity.value).length == 0 || 'This field is required',
+        storageCapacity => Number(storageCapacity.value) == null || 'Invalid Storage Capacity',
       ],
 
       MaxCpuRules: [
@@ -396,6 +387,7 @@ input#maxStorageCapacity {
     font-size: 12px;
     margin-bottom: 6px;
   }
+  v-text-field,
   input,
   select {
     width: 100%;

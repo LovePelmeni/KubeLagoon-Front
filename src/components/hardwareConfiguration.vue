@@ -1,13 +1,79 @@
 <template>
 
     <h1 style="margin-top: 20px;">Hardware Configuration</h1>
-    <div class="modalField flex flex-column">
-      <label for="Datacenter">Datacenters</label>
-    </div>
-
     <div class="resourceSelectors">
 
-    <table v-if="Datacenters?.length" class="item-list">
+            <v-col cols="10" lg="4" class="mx-auto">
+                <div class="text-center">
+                  <h2 class="indigo--text" style="margin-bottom: 30px">Datacenters</h2>
+                </div>
+
+              <v-card-text>
+          
+                        <v-select
+                    type="Datacenter"
+                    label="Datacenter"
+                    placeholder="select Datacenter"
+                    prepend-inner-icon="mdi-account"
+                    required:items="Datacenters">
+                           <template v-slot:selection="{ datacenter }">
+                              <img :src="require(datacenter.IconImageUrl)">{{ datacenter.DatacenterName }}
+                            </template>
+
+                            <template v-slot:item="{ datacenter }">
+                              <img :src="require(datacenter.IconImageUrl)">{{ datacenter.DatacenterName }}
+                            </template>
+                      </v-select>
+              </v-card-text>
+
+
+                  <div class="text-center">
+                  <h2 class="indigo--text" style="margin-bottom: 30px">Operational Systems</h2>
+                  </div>
+
+                  <v-card-text>
+
+                          <v-select
+                      type="OperationalSystem"
+                      label="OperationalSystem"
+                      placeholder="select OperationalSystem"
+                      prepend-inner-icon="mdi-account"
+                      required:items="OperationalSystems">
+                            <template v-slot:selection="{ os }">
+                                <img :src="os.IconImageUrl">{{ os.SystemName }}
+                              </template>
+
+                              <template v-slot:item="{ os }">
+                                <img :src="os.IconImageUrl">{{ country.SystemName }}
+                              </template>
+                        </v-select>
+
+                  </v-card-text>
+
+
+                <div class="text-center">
+                  <h2 class="indigo--text" style="margin-bottom: 30px">Tools</h2>
+                </div>
+                  <v-card-text>
+                          <v-select
+                          type="Tools"
+                          label="Pre Install Tools"
+                          placeholder="select Tools"
+                          prepend-inner-icon="mdi-account"
+                          required:items="PreInstalledTools">
+                                <template v-slot:selection="{ tool }">
+                                    <img :src="require(tool.IconImageUrl)">{{ tool.Name }}
+                                  </template>
+
+                                  <template v-slot:item="{ tool }">
+                                    <img :src="require(tool.IconImageUrl)">{{ tool.Name }}
+                                  </template>
+                            </v-select>
+
+                 </v-card-text>
+      </v-col>
+
+    <!-- <table v-if="Datacenters?.length" class="item-list">
       <label v-if="this.AddedDatacenter == null" id="status1" class="form-label" style="background-color: red;">
         Please Select the Datacenter
       </label>
@@ -54,7 +120,8 @@
             </v-select>
       </table>
 
-    </div>
+    -->
+    </div> 
 
 </template>
 
