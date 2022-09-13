@@ -1,13 +1,10 @@
 <template>
-
   <v-app>
+    <div class="loginWrapper" style="background-color: #141625">
     <v-main class="d-flex justify-center align-center">
       <v-col cols="10" lg="4" class="mx-auto">
         <v-card class="pa-4">
           <div class="text-center">
-            <v-avatar size="100" color="indigo lighten-4">
-              <v-icon size="40" color="indigo">mdi-account</v-icon>
-            </v-avatar>
             <h2 class="indigo--text">Sign in</h2>
           </div>
           <v-form @submit.prevent="submitLoginForm" ref="form">
@@ -36,7 +33,7 @@
             </v-card-text>
             <v-card-actions class="justify-center">
               <v-btn :loading="loading" type="submit" color="indigo">
-                <span class="white--text px-8">Sign UP</span>
+                <span class="white--text px-8">Sign in</span>
               </v-btn>
             </v-card-actions>
           </v-form>
@@ -46,6 +43,7 @@
     <v-snackbar top color="green" v-model="snackbar">
       Login success
     </v-snackbar>
+    </div>
   </v-app>
 
   <body>
@@ -73,7 +71,6 @@ export default {
     Username: '',
     UsernameRules: [
       username => !!username || 'Username is required',
-      username => `^[a-z][A-Z][0-9]{1,100}$`.test(username) || 'Invalid Username',
       username => (username && username.length >= 10) || 'Username should be 10 characters or more!',
     ],
 
@@ -83,62 +80,6 @@ export default {
       password => (password && password.length >= 10) || 'Password must be 10 characters or more!',
     ],
   }),
-
-  template: `<v-app>
-    <div class="background"></div>
-    <v-main class="d-flex justify-center align-center">
-      <v-col cols="10" lg="4" class="mx-auto">
-        <v-card class="pa-4">
-          <div class="text-center">
-            <v-avatar size="100" color="indigo lighten-4">
-              <v-icon size="40" color="indigo">mdi-account</v-icon>
-            </v-avatar>
-            <h2 class="indigo--text">Sign in</h2>
-          </div>
-          <v-form @submit.prevent="submitLoginForm" ref="form">
-            <v-card-text>
-              <v-text-field
-                v-model="Username"
-                :rules="UsernameRules"
-                type="username"
-                label="Username"
-                placeholder="Username"
-                prepend-inner-icon="mdi-account"
-                required
-              />
-              <v-text-field
-                      v-model="password"
-                      :rules="PasswordRules"
-                      :type="passwordShow?'text':'password'"
-                      label="Password"
-                      placeholder="Password"
-                      prepend-inner-icon="mdi-key"
-                      :append-icon="passwordShow ? 'mdi-eye':'mdi-eye-off'"
-                      @click:append="passwordShow = !passwordShow"
-                      required
-              />
-              <v-switch label="Remember me" color="indigo"></v-switch>
-            </v-card-text>
-            <v-card-actions class="justify-center">
-              <v-btn :loading="loading" type="submit" color="indigo">
-                <span class="white--text px-8">Sign UP</span>
-              </v-btn>
-            </v-card-actions>
-          </v-form>
-        </v-card>
-      </v-col>
-    </v-main>
-    <v-snackbar top color="green" v-model="snackbar">
-      Login success
-    </v-snackbar>
-  </v-app>
-
-  <body>
-      <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
-      <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css" rel="stylesheet">
-  </body>
-
-  `,
 
   methods: {
     ...mapMutations(["TOGGLE_ERROR"]),
@@ -166,14 +107,26 @@ export default {
 <style lang="scss">
 
   .background{
-
     position: relative;
     padding: 56px;
-    max-width: 700px;
     width: 100%;
     background-color: #141625;
     color: #fff;
     box-shadow: 10px 4px 6px -1px rgba(0, 0, 0, 0.2), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
   }
+  .v-application__wrap {
+  position: relative;
+   padding: 56px;
+   width: 100%;
+   background-color: #141625;
+  }
+
+  .pa-4 {
+    justify-content: space-between;
+    margin-top: 50px; 
+    max-width: 900px; 
+    background-color: #1e2139;
+  }
+
 </style>
 

@@ -1,7 +1,14 @@
 <template>
   <header class="flex">
     <div class="branding flex">
-      <router-link :to="{name: 'main_page'}"></router-link><img :src="require('@/assets/file-invoice-dollar-solid.png')" alt="dollar_solid" />
+      <router-link :to="{name: 'customer_profile'}"></router-link><v-avatar size="50">
+        <div @click="redirectToProfile" class="button flex">
+          <div class="inner-button flex">
+            <img :src="require('@/assets/customer_avatar.png')" alt="icon_plus" />
+          </div>
+        </div>
+      </v-avatar>
+
     </div>
   </header>
 </template>
@@ -10,6 +17,12 @@
 
 export default {
   name: "navigationPage",
+  methods: {
+    redirectToProfile() {
+      // Redirects to the Customer's Profile
+      this.$router.push({name: "customer_profile"})
+    }
+  }
 };
 
 </script>
@@ -28,7 +41,7 @@ header {
   .branding {
     border-radius: 0 20px 20px 0;
     background-color: #7c5dfa;
-    justify-content: center;
+    justify-content: left;
     padding: 24px;
     @media (min-width: 900px) {
       width: 100%;

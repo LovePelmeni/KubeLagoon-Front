@@ -1,6 +1,6 @@
 <template>
   <div class="virtual-machine-wrap">
-    <form @submit.prevent="ValidateInput" class="virtual-machine-content">
+    <form @submit.prevent="ValidateInput" class="virtual-machine-content" style="justify-content: center;">
       <loadingPage v-show="loading" />
 
       <!-- Virtual Machine Work Details -->
@@ -334,11 +334,9 @@ export default {
   .virtual-machine-content {
     position: relative;
     padding: 56px;
-    // max-width: 700px;
     width: 100%;
     background-color: #141625;
     color: #fff;
-    // box-shadow: 10px 4px 6px -1px rgba(0, 0, 0, 0.2), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
     h1 {
       margin-bottom: 48px;
       color: #fff;

@@ -1,55 +1,51 @@
 <template>
+  <v-app>
+    <div class="registrationWrapper" style="background-color: #141625">
+      <v-col cols="10" lg="4" class="mx-auto">
+        <v-card class="pa-4">
+          <div class="text-center">
+            <h2 class="indigo--text" style="margin-bottom: 30px">Sign up</h2>
+          </div>
+          <v-form @submit.prevent="submitLoginForm" ref="form">
+            <v-card-text>
+              <v-text-field
+                v-model="Username"
+                :rules="UsernameRules"
+                type="username"
+                label="Username"
+                placeholder="Username"
+                prepend-inner-icon="mdi-account"
+                required
+              />
+              
+              <v-text-field
+                      v-model="password"
+                      :rules="PasswordRules"
+                      :type="passwordShow?'text':'password'"
+                      label="Password"
+                      placeholder="Password"
+                      prepend-inner-icon="mdi-key"
+                      :append-icon="passwordShow ? 'mdi-eye':'mdi-eye-off'"
+                      @click:append="passwordShow = !passwordShow"
+                      required
+              />
 
-<v-app>
-  <div class="registrationWrapper flex flex-column">
-
-        <v-col cols="10" lg="4" class="mx-auto">
-          <v-card id="registrationForm" class="pa-4">
-            <div class="text-center">
-              <v-avatar size="100" color="indigo lighten-4">
-                <v-icon size="40" color="indigo">mdi-account</v-icon>
-              </v-avatar>
-              <h2 class="indigo--text">Sign up</h2>
-            </div>
-            <v-form @submit.prevent="submitRegisterForm" ref="form">
-              <v-card-text>
-                <v-text-field
-                  v-model="Username"
-                  :rules="UsernameRules"
-                  type="username"
-                  label="Username"
-                  placeholder="username"
-                  prepend-inner-icon="mdi-account"
-                  required
-                />
-                <v-text-field
+              <v-text-field
                   v-model="Email"
                   :rules="EmailRules"
                   type="email"
-                  label="email"
+                  label="Email"
                   placeholder="Email"
                   prepend-inner-icon="mdi-account"
                   required
                  />
-                <v-text-field
-                        v-model="password"
-                        :rules="PasswordRules"
-                        :type="passwordShow?'text':'password'"
-                        label="Password"
-                        placeholder="password"
-                        prepend-inner-icon="mdi-key"
-                        :append-icon="passwordShow ? 'mdi-eye':'mdi-eye-off'"
-                        @click:append="passwordShow = !passwordShow"
-                        required
-                />
 
-                <v-field
-                  type="country"
-                  label="Country"
-                  placeholder="you country"
-                  required>
-
-                    <v-select :items="countries" label="Country">
+                    <v-select
+                    type="country"
+                    label="Country"
+                    placeholder="select Country"
+                    prepend-inner-icon="mdi-account"
+                    required:items="countries">
                            <template v-slot:selection="{ country }">
                               <img :src="item.image">{{ country.name }}
                             </template>
@@ -58,8 +54,6 @@
                               <img :src="item.image">{{ country.name }}
                             </template>
                       </v-select>
-
-                  </v-field>
 
                 <v-text-field
                   v-model="zipCode"
@@ -76,20 +70,20 @@
                   :rules="streetRules"
                   type="street"
                   label="Street"
-                  placeholder="street"
+                  placeholder="Street"
                   prepend-inner-icon="mdi-account"
                   required
                 />
-                <v-switch label="Remember me" color="indigo"></v-switch>
-              </v-card-text>
-              <v-card-actions class="justify-center">
-                <v-btn :loading="loading" type="submit" color="indigo">
-                  <span class="white--text px-8">Sign Up</span>
-                </v-btn>
-              </v-card-actions>
-            </v-form>
-          </v-card>
-        </v-col>
+              <v-switch label="Remember me" color="indigo"></v-switch>
+            </v-card-text>
+            <v-card-actions class="justify-center">
+              <v-btn :loading="loading" type="submit" color="indigo">
+                <span class="white--text px-8">Sign in</span>
+              </v-btn>
+            </v-card-actions>
+          </v-form>
+        </v-card>
+      </v-col>
 
       <div v-if="Valid" class="formValidationTitle">
       <v-snackbar top color="green" v-model="snackbar">
@@ -98,8 +92,8 @@
       </div>
       <div v-else-if="Valid == false" class="formValidationTitle"> 
       </div>
-  </div>
 
+    </div>
   </v-app>
 
   <body>
@@ -214,23 +208,17 @@ export default {
 .registrationWrapper {
 
   .registrationForm {
-    background-color:  #1e2139;
+    background-color:  #d9dcf7;
   }
-  padding: 0 20px;
   flex: 1;
   position: relative;
-
-   background-color: #141625;
-   min-height: 100vh;
-   @media (min-width: 900px) {
-    flex-direction: row !important;
-   }
-   padding: 56px;
-   max-width: 700px;
    width: 100%;
    background-color: #141625;
-   color: #fff;
-   box-shadow: 10px 4px 6px -1px rgba(0, 0, 0, 0.2), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
+
+.v-application__wrap {
+  background-color: #141625;
+}
+
 
 </style>
