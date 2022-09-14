@@ -4,7 +4,7 @@
     <v-col cols="10" lg="4" class="mx-auto">
       <v-card class="pa-4">
 
-    <v-form @submit.prevent="ValidateInput" class="virtual-machine-content">
+    <v-form @submit.prevent="ValidateInput" class="virtual-machine-content" style="width: 1500px; justify-content: center">
       <loadingPage v-show="loading" />
 
       <!-- Virtual Machine Work Details -->

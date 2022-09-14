@@ -1,5 +1,4 @@
 <template>
-
   <div class="homeWrapper">
 
     <router-link :to="{ name: 'login_page'}"></router-link>
@@ -48,7 +47,6 @@
       <button type="submit" class="red">Create Virtual Server</button>
     </div>
 
-
     </div>
 
     <body>
@@ -57,7 +55,6 @@
     </body>
 
 </template>
-
 
 <script>
 

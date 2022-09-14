@@ -4,6 +4,7 @@ import * as customers_rest from "../rest/customers.js";
 /* eslint-disable no-useless-escape */
 
 class CustomerRegistrationForm {
+  // Base Class for the Registration Form 
   // Entity, that represents Customer Registration Form Data
   constructor(Username, Email, Password) {
     this.Username = Username
@@ -13,6 +14,7 @@ class CustomerRegistrationForm {
 }
 
 class CustomerLoginForm {
+  // Base Class for the Login Form
   constructor(Username, Password) {
     this.Username = Username
     this.Password = Password
@@ -67,9 +69,13 @@ class CustomerManager {
       return LoggedOut, LoggoutError
     }
 
-    CreateCustomer = function() {
+    CreateCustomer = function(Username, Email, Password, BillingAddress, ZipCode, Street) {
+
       // Creates New Customer
-      let newRegistrationForm = new CustomerRegistrationForm()
+      new CustomerRegistrationForm = new CustomerRegistrationForm(
+      Username, Email, Password, BillingAddress, ZipCode, Street)
+      
+      // Creates New Customer and Returns A Response 
       let newCustomer, CustomerError = customers_rest.CreateCustomerRestController(CustomerRegistrationForm)
       if (CustomerError != null){return null, CustomerError}
       return newCustomer, CustomerError
