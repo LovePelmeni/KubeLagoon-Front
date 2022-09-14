@@ -18,70 +18,71 @@
       <p
         class="status-body"
         :class="[
-          invoice.status === 'Draft'
-            ? 'draft'
-            : invoice.status === 'Pending'
-            ? 'pending'
-            : 'paid',
+          VirtualMachine.Running === true
+            ? 'running'
+            : VirtualMachine.Shutdown === true
+            ? 'shutdown'
+            : 'deploying',
         ]"
       >
-        <span class="status-circle">.</span> {{ invoice.status }}
+        <span class="status-circle">.</span> {{ VirtualMachine.status }}
       </p>
       <div class="btn-container">
         <button
           class="btn btn-edit"
-          v-if="invoice.status === 'Draft' || invoice.status === 'Pending'"
-          @click="editInvoice"
+          v-if="VirtualMachine.Running === true" 
+          @click="startVirtualMachine"
         >
-          Edit
+          Run
         </button>
-        <button class="btn btn-delete" @click="deleteItem">Delete</button>
+        <button class="btn btn-delete" @click="deleteVirtualMachine">Delete</button>
         <button
           class="btn btn-mark"
-          v-if="invoice.status === 'Pending'"
-          @click="markAsPaid"
+          v-if="VirtualMachine.status === 'Running'"
+          @click="Shutdown"
         >
-          Mark as Paid
+          Shutdown
         </button>
       </div>
     </div>
+
     <div class="details">
       <div class="project-info">
-        <p class="project-id">#{{ invoice.id }}</p>
-        <p class="project-desc">{{ invoice.projectDesc }}</p>
+        <p class="project-id">#{{ VirtualMachine.VirtualMachineId }}</p>
+        <p class="project-desc">{{ VirtualMachine.VirtualMachineName }}</p>
       </div>
       <div class="adress">
-        <p class="adress-street">{{ invoice.adress }}</p>
-        <p class="adress-city">{{ invoice.city }}</p>
-        <p class="adress-postcode">{{ invoice.postCode }}</p>
-        <p class="adress-country">{{ invoice.country }}</p>
+        <p class="adress-street">{{ VirtualMachine.BillingAddress }}</p>
+        <p class="adress-city">{{ VirtualMachine.city }}</p>
+        <p class="adress-postcode">{{ VirtualMachine.postCode }}</p>
+        <p class="adress-country">{{ VirtualMachine.country }}</p>
       </div>
       <div class="date">
         <p class="date-label">Invoice Date</p>
-        <p class="date-body">{{ invoice.invoiceDate }}</p>
+        <p class="date-body">{{ VirtualMachine.paymentDueDate }}</p>
       </div>
       <div class="name">
         <p class="name-label">Bill to:</p>
-        <p class="name-body">{{ invoice.clientName }}</p>
+        <p class="name-body">{{ VirtualMachine.clientName }}</p>
       </div>
       <div class="mail">
         <p class="mail-label">Sent to:</p>
-        <p class="mail-body">{{ invoice.clientEmail }}</p>
+        <p class="mail-body">{{ VirtualMachine.clientEmail }}</p>
       </div>
       <div class="due">
         <p class="due-label">Invoice Due</p>
-        <p class="due-body">{{ invoice.invoiceDue }}</p>
+        <p class="due-body">{{ VirtualMachine.invoiceDue }}</p>
       </div>
       <div class="client-adress">
-        <p class="client-street">{{ invoice.clientAdress }}</p>
-        <p class="client-city">{{ invoice.clientCity }}</p>
-        <p class="client-postcode">{{ invoice.clientPostCode }}</p>
-        <p class="client-country">{{ invoice.clientCountry }}</p>
+        <p class="client-street">{{ Customer.Street }}</p>
+        <p class="client-city">{{ Customer.City }}</p>
+        <p class="client-postcode">{{ Customer.ZipCode }}</p>
+        <p class="client-country">{{ Customer.Country }}</p>
       </div>
       <div class="item-container">
-        <p>Item Name</p>
-        <p>QTY.</p>
-        <p>Price</p>
+        <p>ID</p>
+        <p>Name</p>
+        <p></p>
         <p>Total</p>
         <div
           class="project-item"
@@ -91,17 +92,17 @@
           <p class="prj-text">{{ item.name }}</p>
           <p class="prj-text">{{ item.quantity }}</p>
           <p class="prj-text">
-            &#8378; {{ item.price.toLocaleString("en-US") }}
+            &#8378; {{ VirtualMachine.TotalCost.toLocaleString("en-US") }}
           </p>
           <p class="prj-text">
-            &#8378; {{ item.total.toLocaleString("en-US") }}
+            &#8378; {{ VirtualMachine.TotalCost.toLocaleString("en-US") }}
           </p>
         </div>
       </div>
       <div class="amount">
         <p class="amount-text">Total Amount</p>
         <p class="amount-number">
-          &#8378; {{ invoice.totalPrice.toLocaleString("en-US") }}
+          &#8378; {{ VirtualMachine.TotalCost.toLocaleString("en-US") }}
         </p>
       </div>
     </div>
@@ -117,34 +118,31 @@ export default {
     index: Number,
   },
   computed: {
-    ...mapState(["invoices"]),
-    ...mapGetters(["filteredInvoices"]),
+    ...mapState(["virtualMachines"]),
+    ...mapGetters(["filteredData"]),
     invoice() {
       return this.filteredInvoices[this.index];
     },
   },
   methods: {
-    ...mapMutations([
-      "DELETE_INVOICE",
-      "MARK_INVOICE",
-      "SET_MENU_IS_OPEN",
-      "SET_EDIT",
+    ...mapActions([
+      "DELETE_VIRTUAL_MACHINE",
     ]),
     deleteItem() {
-      let index = this.invoices.findIndex(
+      let index = this.VirtualMachines.findIndex(
         (item) => item.id === this.invoice.id
       );
-      this.DELETE_INVOICE(index);
+      this.DELETE_VIRTUAL_MACHINE(index);
       this.$router.push({ name: "Home" });
     },
     markAsPaid() {
-      let index = this.invoices.findIndex(
+      let index = this.VirtualMachines.findIndex(
         (item) => item.id === this.invoice.id
       );
       this.MARK_INVOICE(index);
     },
     editInvoice() {
-      this.SET_EDIT({ status: true, id: this.invoice.id });
+      this.SET_EDIT({ status: true, id: this.virtualMachine.id });
       this.SET_MENU_IS_OPEN();
     },
   },
