@@ -16,6 +16,26 @@ export default new Vuex.Store({
         "paymentDueDate": "2020-20-02",
         "TotalCost": "200",
         "CustomerName": "Test User"
+      },
+      {
+        "VirtualMachineId": "Id",
+        "VirtualMachineName": "",
+        "Running": false, 
+        "Deploying": true, 
+        "Shutdown": false, 
+        "paymentDueDate": "2020-20-02",
+        "TotalCost": "200",
+        "CustomerName": "Test User"
+      },
+      {
+        "VirtualMachineId": "Id",
+        "VirtualMachineName": "",
+        "Running": false, 
+        "Deploying": false, 
+        "Shutdown": true, 
+        "paymentDueDate": "2020-20-02",
+        "TotalCost": "200",
+        "CustomerName": "Test User"
       }
     ],
     initializationModal: null,
