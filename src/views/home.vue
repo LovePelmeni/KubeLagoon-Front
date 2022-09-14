@@ -1,8 +1,6 @@
 <template>
 
-
-    <div class="app-content flex flex-column">
-
+  <div class="homeWrapper">
 
     <router-link :to="{ name: 'login_page'}"></router-link>
     <router-link :to="{ name: 'register_page'}"></router-link>
@@ -38,8 +36,8 @@
 
     <div v-if="virtualMachineData.length > 0 && virtualMachinesLoaded == true">
       <div class="left flex flex-column">
-        <h1>Virtual Servers</h1>
-        <span>You have {{ virtualMachineData.length }} Virtual Servers</span>
+        <h1 style="margin-top: 50px;">Virtual Servers</h1>
+        <span style="margin-top: 20px;">You have {{ virtualMachineData.length }} Virtual Servers</span>
       </div>
       <VirtualMachineBannerInfo v-for="(VirtualMachine, index) in filteredData" :VirtualMachine="VirtualMachine" :key="index" />
     </div>
@@ -49,6 +47,7 @@
       <p>Let's create a new Virtual Server Now!</p>
       <button type="submit" class="red">Create Virtual Server</button>
     </div>
+
 
     </div>
 
@@ -139,6 +138,14 @@ export default {
 
 <style lang="scss" scoped>
 
+  .homeWrapper {
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    padding: 0 20px;
+    flex: 1;
+    position: relative;
+  }
 .home {
   color: #fff;
   .header {
@@ -146,6 +153,7 @@ export default {
     .left,
     .right {
       flex: 1;
+      align-content: center;
     }
     .right {
       justify-content: flex-end;

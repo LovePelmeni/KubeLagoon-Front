@@ -10,6 +10,12 @@ export default new Vuex.Store({
       {
         "VirtualMachineId": "Id",
         "VirtualMachineName": "",
+        "Running": true, 
+        "Deploying": false, 
+        "Shutdown": false, 
+        "paymentDueDate": "2020-20-02",
+        "TotalCost": "200",
+        "CustomerName": "Test User"
       }
     ],
     initializationModal: null,

@@ -21,12 +21,10 @@ export default {
   <div>
       <div v-if="!mobile" class="app flex flex-column">
         <navigationPage />
-        <div class="app-content flex flex-column">
           <loadingPage v-if="loading" />
           <modalPage v-if="modalActive" />
           <errorBanner v-for="(Error, index) in [error]" v-if="activeError" :errorMessage="Error" :key="index" />
           <notificationBanner v-for="(Notification, index) in [notification]" v-if="activeNotification" :notificationMessage="Notification" :key="index" />
-        </div>
         <router-view />
       </div>
       <div v-else class="mobile-message flex flex-column">

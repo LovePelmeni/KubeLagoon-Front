@@ -2,7 +2,7 @@
   
   <router-link class="virtual_machine flex" :to="{ name: 'virtual_machine', params: { VirtualMachineId: VirtualMachine.VirtualMachineId } }">
     <div class="left flex">
-      <span class="tracking-number">#{{ VirtualMachine.VirtualMachineId }}</span>
+      <span class="tracking-number">#{{ VirtualMachine.VirtualMachineName }}</span>
       <span class="due-date">{{ VirtualMachine.paymentDueDate }}</span>
       <span class="person">{{ VirtualMachine.CustomerName }}</span>
     </div>
