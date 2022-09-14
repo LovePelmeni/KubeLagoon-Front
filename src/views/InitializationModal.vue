@@ -4,29 +4,27 @@
     <v-col cols="10" lg="4" class="mx-auto">
       <v-card class="pa-4">
 
-    <v-form @submit.prevent="ValidateInput" class="virtual-machine-content" style="justify-content: center;">
+    <v-form @submit.prevent="ValidateInput" class="virtual-machine-content">
       <loadingPage v-show="loading" />
 
       <!-- Virtual Machine Work Details -->
 
-      <div class="virtual-machine-work flex flex-column">
-
-        <div class="resourceConfigBlock">
+        <div class="resourceConfigBlock" style="width: 800px">
         <!-- Hardware Configuration  -->
           <hardwareConfiguration />
         </div>
 
-        <div class="resourceConfigBlock">
+        <div class="resourceConfigBlock" style="width: 800px">
           <!-- resource Configuration -->
           <resourceConfiguration />
         </div>
 
-        <div class="resourceConfigBlock">
+        <div class="resourceConfigBlock" style="width: 800px">
           <!-- SSH Configuration -->
           <sshConfiguration />
         </div>
 
-        <div class="payment flex">
+        <div class="payment flex" style="width: 800px">
 
           <div class="modalField flex flex-column">
             <label for="virtualMachineCreationDate">Creation Date</label>
@@ -49,18 +47,17 @@
           
         </div>
 
-        <div class="TotalCost flex">
+        <div class="TotalCost flex" style="width: 800px">
           <p>In Total Per Day</p>
           <p>${{ TotalCost }}</p>
         </div>
 
-      </div>
 
       <!-- Save/Exit -->
 
               <div class="save flex">
 
-                  <div class="buttonBlock flex">
+                  <div class="buttonBlock flex" style="width: 800px">
                     <button type="submit" @click="closeVirtualMachineSettings" class="red"> Cancel Setup</button>
                     <button v-if="!updateVirtualMachine" type="submit" @click="saveVirtualMachineDraft" class="dark-purple">Save Setup</button>
                     <button v-if="!updateVirtualMachine" type="submit" @click="CreateNewVirtualMachine" class="purple">Create New Virtual Machine</button>
@@ -431,7 +428,6 @@ export default {
           }
        }
     }
-    .virtual-machine-work {
       .payment {
         gap: 24px;
         div {
@@ -492,7 +488,6 @@ export default {
             margin-right: 4px;
           }
         }
-      }
     }
     .save {
       margin-top: 60px;
@@ -539,25 +534,5 @@ export default {
       outline: none;
     }
   }
-
-.not_available {
-  margin-top: 160px;
-  align-items: center;
-  img {
-    width: 214px;
-    height: 200px;
-  }
-  h3 {
-    font-size: 20px;
-    margin-top: 40px;
-  }
-  p {
-    text-align: center;
-    max-width: 224px;
-    font-size: 12px;
-    font-weight: 300;
-    margin-top: 16px;
-  }
-}
 }
 </style>

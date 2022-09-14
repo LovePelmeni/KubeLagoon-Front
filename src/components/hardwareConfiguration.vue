@@ -73,6 +73,8 @@
                  </v-card-text>
       </v-col>
 
+    </div>
+
 </template>
 
 <script>
