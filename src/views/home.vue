@@ -10,7 +10,7 @@
 
     <!-- Header -->
 
-    <div class="header flex">
+    <div :v-if="virtualMachineData.length > 0 && virtualMachinesLoaded == true" class="header flex">
       <div class="right flex">
         <div @click="toggleFilterMenu" class="filter flex">
           <span
@@ -25,11 +25,11 @@
           </ul>
         </div>
 
-        <div @click="newVirtualMachine" class="button flex">
+        <div  @click="newVirtualMachine" class="button flex">
           <div class="inner-button flex">
             <img :src="require('@/assets/icon-plus.svg')" alt="icon_plus" />
           </div>
-          <span>New Virtual Machine</span>
+          <span >New Virtual Machine</span>
         </div>
       </div>
     </div>
@@ -44,9 +44,10 @@
       <VirtualMachineBannerInfo v-for="(VirtualMachine, index) in filteredData" :VirtualMachine="VirtualMachine" :key="index" />
     </div>
     <div v-else class="empty flex flex-column">
-      <img :src="require('@/assets/illustration-empty.svg')" style="width: 50%; height: 50%; margin" alt="illustration-empty" />
+      <img :src="require('@/assets/illustration-empty.svg')" alt="illustration-empty" />
       <h3>There is nothing here</h3>
       <p>Let's create a new Virtual Server Now!</p>
+      <button type="submit" class="red">Create Virtual Server</button>
     </div>
 
     </div>
@@ -109,7 +110,6 @@ export default {
   },
 
   computed: {
-
     ...mapState(["virtualMachineData", "virtualMachinesLoaded"]),
 
     filteredData() {

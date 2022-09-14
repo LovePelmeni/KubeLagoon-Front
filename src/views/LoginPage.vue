@@ -3,6 +3,7 @@
     <div class="loginWrapper" style="background-color: #141625">
     <v-main class="d-flex justify-center align-center">
       <v-col cols="10" lg="4" class="mx-auto">
+
         <v-card class="pa-4">
           <div class="text-center">
             <h2 class="indigo--text">Sign in</h2>
@@ -40,6 +41,7 @@
         </v-card>
       </v-col>
     </v-main>
+    
     <v-snackbar top color="green" v-model="snackbar">
       Login success
     </v-snackbar>

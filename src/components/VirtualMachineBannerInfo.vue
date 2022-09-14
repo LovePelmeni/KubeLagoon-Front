@@ -1,9 +1,5 @@
-<script>
-
-export default {
-  name: "VirtualMachineBannerInfo",
-  props: ["VirtualMachine"],
-  template: `
+<template>
+  
   <router-link class="virtual_machine flex" :to="{ name: 'virtual_machine', params: { VirtualMachineId: VirtualMachine.VirtualMachineId } }">
     <div class="left flex">
       <span class="tracking-number">#{{ VirtualMachine.VirtualMachineId }}</span>
@@ -24,7 +20,16 @@ export default {
         <img :src="require('@/assets/icon-arrow-right.svg')" alt="arrow-right" />
       </div>
     </div>
-  </router-link>`,
+  </router-link>
+
+</template>
+
+
+<script>
+
+export default {
+  name: "VirtualMachineBannerInfo",
+  props: ["VirtualMachine"],
 };
 </script>
 

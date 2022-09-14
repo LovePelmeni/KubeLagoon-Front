@@ -6,10 +6,15 @@ export default new Vuex.Store({
 
   state: {
     loading: false,
-    virtualMachineData: [],
+    virtualMachineData: [
+      {
+        "VirtualMachineId": "Id",
+        "VirtualMachineName": "",
+      }
+    ],
     initializationModal: null,
     modalActive: false,
-    virtualMachinesLoaded: false,
+    virtualMachinesLoaded: true,
     currentVirtualMachineArray: null,
     updateVirtualMachine: null,
     activeError: false,

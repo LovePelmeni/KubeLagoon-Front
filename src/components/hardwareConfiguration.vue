@@ -2,7 +2,7 @@
 
     <h1 style="margin-top: 20px;">Hardware Configuration</h1>
     <div class="resourceSelectors">
-
+      
             <v-col cols="10" lg="4" class="mx-auto">
                 <div class="text-center">
                   <h2 class="indigo--text" style="margin-bottom: 30px">Datacenters</h2>
@@ -24,6 +24,7 @@
                               <img :src="require(datacenter.IconImageUrl)">{{ datacenter.DatacenterName }}
                             </template>
                       </v-select>
+
               </v-card-text>
 
 
@@ -103,6 +104,12 @@ export default {
           OS: {},
           Tool: {},
       },
+
+      items: [
+      { name: 'Foo', image: 'https://www.gravatar.com/avatar/b17065ea1655f1e3283aac8d8fc16019?s=48&d=identicon&r=PG'},
+      { name: 'Bar', image: 'https://www.gravatar.com/avatar/b17065ea1655f1e3283aac8d8fc16019?s=48&d=identicon&r=PG'},
+      { name: 'Hoo', image: 'https://www.gravatar.com/avatar/b17065ea1655f1e3283aac8d8fc16019?s=48&d=identicon&r=PG'},
+      { name: 'Coo', image: 'https://www.gravatar.com/avatar/b17065ea1655f1e3283aac8d8fc16019?s=48&d=identicon&r=PG'}],
 
       // hardware Configuration Validation Rules
 

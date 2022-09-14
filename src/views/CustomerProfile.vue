@@ -9,7 +9,6 @@
 <script>
 
 import * as customers from "../../customers/customers.js";
-import $ from "jquery";
 import { useCookies } from "vue3-cookies";
 
 
@@ -59,7 +58,7 @@ export default {
 
           Logout() {
             // Logging out the Customer from the Profile
-            if ($.cookie("jwt-token").length != 0) {
+            if (this.cookies.get("jwt-token").length != 0) {
               this.cookies.delete("jwt-token");
               return this.$router.push({name: "login_page"})
             }
