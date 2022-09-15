@@ -42,7 +42,7 @@ function CreateCustomerRestController(CustomerData) {
         }
       },
       error: function(error) {
-        let newError = new Error(Response.Error)
+        let newError = new Error(error)
         return false, newError
       }
     })

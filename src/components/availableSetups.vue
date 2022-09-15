@@ -1,3 +1,6 @@
+<template>
+  
+</template>
 
 <script>
 
@@ -10,7 +13,7 @@ export default {
   },
   methods: {
     GetAvailableSetupSuggestions() {
-      // Returns Available Setup Suggestions
+      // Returns Available Setup Suggestions blobs
     },
   }
 }

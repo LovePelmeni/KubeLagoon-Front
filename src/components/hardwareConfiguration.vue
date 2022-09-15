@@ -11,11 +11,12 @@
               <v-card-text>
           
                     <v-select
+                    @change="selectDatacenter"
                     type="Datacenter"
                     label="Datacenter"
                     placeholder="select Datacenter"
                     prepend-inner-icon="mdi-account"
-                    required:items="Datacenters">
+                    :items="Datacenters">
                            <template v-slot:selection="{ datacenter }">
                               <img :src="require(datacenter.IconImageUrl)">{{ datacenter.DatacenterName }}
                             </template>
@@ -34,18 +35,19 @@
 
                   <v-card-text>
 
-                          <v-select
+                      <v-select
+                      @change="selectOperationalSystem"
                       type="OperationalSystem"
                       label="OperationalSystem"
                       placeholder="select OperationalSystem"
                       prepend-inner-icon="mdi-account"
-                      required:items="OperationalSystems">
+                      :items="OperationalSystems">
                             <template v-slot:selection="{ os }">
-                                <img :src="os.IconImageUrl">{{ os.SystemName }}
+                                <img :src="require(os.IconImageUrl)">{{ os.SystemName }}
                               </template>
 
                               <template v-slot:item="{ os }">
-                                <img :src="os.IconImageUrl">{{ country.SystemName }}
+                                <img :src="require(os.IconImageUrl)">{{ country.SystemName }}
                               </template>
                         </v-select>
 
@@ -57,11 +59,12 @@
                 </div>
                   <v-card-text>
                           <v-select
+                          @change="selectPreInstalledTool"
                           type="Tools"
                           label="Pre Install Tools"
                           placeholder="select Tools"
                           prepend-inner-icon="mdi-account"
-                          required:items="PreInstalledTools">
+                          :items="PreInstalledTools">
                                 <template v-slot:selection="{ tool }">
                                     <img :src="require(tool.IconImageUrl)">{{ tool.Name }}
                                   </template>
@@ -104,18 +107,72 @@ export default {
           OS: {},
           Tool: {},
       },
-
-      items: [
-      { name: 'Foo', image: 'https://www.gravatar.com/avatar/b17065ea1655f1e3283aac8d8fc16019?s=48&d=identicon&r=PG'},
-      { name: 'Bar', image: 'https://www.gravatar.com/avatar/b17065ea1655f1e3283aac8d8fc16019?s=48&d=identicon&r=PG'},
-      { name: 'Hoo', image: 'https://www.gravatar.com/avatar/b17065ea1655f1e3283aac8d8fc16019?s=48&d=identicon&r=PG'},
-      { name: 'Coo', image: 'https://www.gravatar.com/avatar/b17065ea1655f1e3283aac8d8fc16019?s=48&d=identicon&r=PG'}],
-
       // hardware Configuration Validation Rules
 
-      Datacenters : [], // array of the Objects with attrs { 'DatacenterName', 'IconImageUrl' }
-      OperationalSystems : [], // array of the Objects with attrs { 'OperationalSystems', 'IconImageUrl' }
-      PreInstalledTools : [], // array of the Objects with attrs { 'ToolName', 'IconImageUrl' }
+      Datacenters : [
+        {
+          "IconImageUrl": "@/assets/datacenters/europe_moscow.png",
+          "DatacenterName": "Europe/Moscow",
+        },
+        {
+          "IconImageUrl": "@/assets/datacenters/europe_berlin.png",
+          "DatacenterName": "Europe/Moscow",
+        },
+        {
+          "IconImageUrl": "@/assets/datacenters/us_washington.png",
+          "DatacenterName": "US/washington",
+        }
+      ], // array of the Objects with attrs { 'DatacenterName', 'IconImageUrl' }
+
+      OperationalSystems : [
+        {
+          "SystemName": "Debian",
+          "Version": "10",
+          "bit": "64",
+          "IconImageUrl": "@/assets/os/debian.svg"
+        },
+        {
+          "SystemName": "Ubuntu",
+          "Version": "10",
+          "bit": "64",
+          "IconImageUrl": "@/assets/os/ubuntu.svg"
+        },
+        {
+          "SystemName": "CentOS",
+          "Version": "10",
+          "bit": "64",
+          "IconImageUrl": "@/assets/os/centos.svg"
+        },
+        {
+          "SystemName": "Windows",
+          "Version": "10",
+          "bit": "64",
+          "IconImageUrl": "@/assets/os/windows.svg"
+        }
+      ], // array of the Objects with attrs { 'OperationalSystems', 'IconImageUrl' }
+
+      PreInstalledTools : [
+        {
+          "ToolName": "Docker",
+          "IconImageUrl": "@/assets/tools/docker.svg",
+        },
+        {
+          "ToolName": "Docker Compose",
+          "IconImageUrl": "@/assets/tools/docker_compose.svg",
+        },
+        {
+          "ToolName": "VirtualBox",
+          "IconImageUrl": "@/assets/tools/virtual_box.svg",
+        },
+        {
+          "ToolName": "Podman",
+          "IconImageUrl": "@/assets/tools/podman.png",
+        },
+        {
+          "ToolName": "Kubernetes",
+          "IconImageUrl": "@/assets/tools/kubernetes.png",
+        }
+      ], // array of the Objects with attrs { 'ToolName', 'IconImageUrl' }
 
       AddedDatacenter: null,
       AddedOperationalSystem: null,
@@ -248,10 +305,6 @@ export default {
       this.AddedPreInstalledTools.push(Tool)
     },
 
-    unSelectLoadBalancer() {
-      this.AddedLoadBalancer = null
-    },
-
     unSelectDatacenter() {
       this.AddedDatacenter = null
     },
@@ -265,13 +318,6 @@ export default {
         return Tool.Name !== ToolName
       })
       this.AddedPreInstalledTools = NewSelectedItemTools
-    },
-
-    GetLoadBalancer(LoadBalancerName) {
-      // Returns Load Balancers Object
-      return this.LoadBalancers.filter((lb) => {
-        return lb.LoadBalancerName === LoadBalancerName
-      })[0]
     },
 
     GetDatacenter(DatacenterName) {
