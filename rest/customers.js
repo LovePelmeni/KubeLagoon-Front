@@ -139,7 +139,39 @@ function LoginCustomerRestController(Username, Password) {
 }
 
 
+function GetCustomerProfileRestController(JwtToken) {
+  // Returns the Customer Profile Info 
+
+  let APIUrl = new Url("http://%s:%s/customer/get/profile/",
+  BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT) 
+  let Response, ResponseError = global.jQuery.ajax({
+    url: APIUrl, 
+    type: "GET",
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Authorization": JwtToken
+    },
+    success: function(Response) { 
+      // Returning the Customer's Profile
+      if (Response.StatusCode == 200 || Response.StatusCode == 201){
+        return Response["Customer"], null
+      }else{
+        let NewError = new Error(Response["Error"])
+        return null, NewError
+      }
+    },
+    error: function(ResponseError){
+      // Returning Response Exception
+      let NewError = new Error(ResponseError)
+      return NewError
+    }
+  })
+  return Response, ResponseError
+}
+
+
 export {CreateCustomerRestController,
 DeleteCustomerRestController,
 LoginCustomerRestController,
-ResetPasswordRestController}
+ResetPasswordRestController,
+GetCustomerProfileRestController}

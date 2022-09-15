@@ -213,7 +213,6 @@ export default {
      }
   }
 };
-
 </script>
 
 
@@ -382,6 +381,7 @@ input#maxStorageCapacity {
 
   .modalField {
     margin-bottom: 24px;
+    margin-right: 50px;
   }
   label {
     font-size: 12px;

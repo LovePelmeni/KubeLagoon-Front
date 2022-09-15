@@ -58,20 +58,20 @@
         <p class="adress-country">{{ VirtualMachine.country }}</p>
       </div>
       <div class="date">
-        <p class="date-label">Invoice Date</p>
+        <p class="date-label">Virtual Machine Date</p>
         <p class="date-body">{{ VirtualMachine.paymentDueDate }}</p>
       </div>
       <div class="name">
         <p class="name-label">Bill to:</p>
-        <p class="name-body">{{ VirtualMachine.clientName }}</p>
+        <p class="name-body">{{ VirtualMachine.CustomerName }}</p>
       </div>
       <div class="mail">
         <p class="mail-label">Sent to:</p>
-        <p class="mail-body">{{ VirtualMachine.clientEmail }}</p>
+        <p class="mail-body">{{ VirtualMachine.CustomerEmail }}</p>
       </div>
       <div class="due">
-        <p class="due-label">Invoice Due</p>
-        <p class="due-body">{{ VirtualMachine.invoiceDue }}</p>
+        <p class="due-label">Virtual Machine Bill Due</p>
+        <p class="due-body">{{ VirtualMachine.PaymentDue }}</p>
       </div>
       <div class="client-adress">
         <p class="client-street">{{ Customer.Street }}</p>
@@ -110,19 +110,15 @@
 </template>
 
 <script>
-import { mapGetters, mapMutations, mapState } from "vuex";
+
+import { mapMutations } from "vuex";
+import { mapActions } from "vuex";
+
 export default {
   name: "InvoiceDetail",
   props: {
-    id: String,
-    index: Number,
-  },
-  computed: {
-    ...mapState(["virtualMachines"]),
-    ...mapGetters(["filteredData"]),
-    invoice() {
-      return this.filteredInvoices[this.index];
-    },
+    VirtualMachine: null,
+    Customer: null
   },
   methods: {
     ...mapActions([
@@ -135,15 +131,10 @@ export default {
       this.DELETE_VIRTUAL_MACHINE(index);
       this.$router.push({ name: "Home" });
     },
-    markAsPaid() {
-      let index = this.VirtualMachines.findIndex(
-        (item) => item.id === this.invoice.id
-      );
-      this.MARK_INVOICE(index);
-    },
-    editInvoice() {
-      this.SET_EDIT({ status: true, id: this.virtualMachine.id });
-      this.SET_MENU_IS_OPEN();
+    deleteVirtualMachine() {
+      // Deletes the Virtual Machine Server 
+      let VirtualMachineId = this.VirtualMachine.VirtualMachineId 
+      this.DELETE_VIRTUAL_MACHINE(VirtualMachineId)
     },
   },
 };
@@ -198,15 +189,15 @@ export default {
   left: 15px;
   top: -14px;
 }
-.draft {
+.shutdown {
   background-color: #292c45;
   color: rgb(224, 228, 251);
 }
-.pending {
+.deploying {
   background-color: rgba(255, 145, 0, 0.06);
   color: rgb(255, 145, 0);
 }
-.paid {
+.running {
   background-color: rgba(51, 215, 160, 0.06);
   color: rgb(51, 215, 160);
 }

@@ -40,14 +40,14 @@
         <div class="modalField flex flex-column">
 
           <label for="paymentTerms">Payment Terms</label>
-          <select @change="ProcessPaymentTermsChangeEvent" type="text" id="paymentTerms" v-model="paymentTerms">
+          <select @change="ProcessPaymentTermsChangeEvent" style="width: 750px" type="text" id="paymentTerms" v-model="paymentTerms">
             <option value="30">Net 30 Days</option>
             <option value="60">Net 60 Days</option>
           </select>
           
         </div>
 
-        <div class="TotalCost flex" style="width: 800px">
+        <div class="TotalCost flex" style="width: 750px; justify-content: center;">
           <p>In Total Per Day</p>
           <p>${{ TotalCost }}</p>
         </div>
@@ -331,6 +331,8 @@ export default {
   }
   .virtual-machine-content {
 
+    max-width: 865px;
+
     h1 {
       margin-bottom: 48px;
       color: #fff;
@@ -501,7 +503,7 @@ export default {
   }
   .TotalCost {
     color: #fff;
-    padding: 32px;
+    
     background-color: rgba(12, 14, 22, 0.7);
     align-items: center;
     border-radius: 0 0 20px 20px;

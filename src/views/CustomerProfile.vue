@@ -1,5 +1,47 @@
 <template>
 
+    <div class="customerProfileBlock">
+
+
+      <div @click="redirectToProfile" class="button flex">
+          <div class="inner-button flex">
+            <img :src="require('@/assets/customer_avatar.png')" alt="icon_plus" />
+          </div>
+      </div>
+
+
+      <h1 style="margin-top: 20px;">Hello, {{ Customer.Username }}</h1>
+
+      <div class="modalField flex flex-column">
+        <label for="MaxCpu">Email</label>
+
+        <v-card-text required type="text" id="Email">{{ Customer.Email }}</v-card-text>
+      </div>
+
+      <div class="modalField flex flex-column">
+        <label for="City">City</label>
+
+        <v-card-text
+        @change="ValidateMemoryResources"
+        required type="text" id="City" >{{ Customer.City }}</v-card-text>
+      </div>
+
+      <div class="resources-details flex">
+
+        <div class="modalField flex flex-column">
+          <label for="ZipCode">ZipCode</label>
+          <v-card-text required type="text" id="ZipCode">{{ Customer.ZipCode }}</v-card-text>
+        </div>
+
+        <div class="modalField flex flex-column">
+          <label for="Street">Street</label>
+          <v-card-text required type="text" id="Street">{{ Customer.Street }}</v-card-text>
+        </div>
+
+      </div>
+
+    </div>
+
     <body>
       <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
       <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css" rel="stylesheet">
@@ -21,17 +63,13 @@ export default {
       mounted() {
         this.JwtToken = this.cookie?.get("jwt-token")
       },
+      created() {
+        this.ShowCustomerProfile()
+      },
       data() {
         return {
           // Customer Credentials
-          Username: null,
-          Email: null,
-          CreatedAt: null,
-
-          // Billing Address Info 
-          BillingAddress: null, 
-          Country: null, 
-          ZipCode: null,
+          Customer: {}, 
         }
       },
       template: `
@@ -46,14 +84,14 @@ export default {
             let CustomerProfile = newCustomerManager.GetCustomerProfile(this.JwtToken)
 
             // Customer Info 
-            this.Username = CustomerProfile["Username"]
-            this.Email =  CustomerProfile["Email"]
-            this.Password = "*" * CustomerProfile["Password"].length
+            this.Customer["Username"] = CustomerProfile["Username"]
+            this.Customer["Email"] =  CustomerProfile["Email"]
+            this.Customer["Password"] = "**********"
 
             // Billing Address Info 
-            this.BillingAddress = CustomerProfile["BillingAddress"]
-            this.Country = CustomerProfile["Country"]
-            this.ZipCode = CustomerProfile["ZipCode"]
+            this.Customer["BillingAddress"] = CustomerProfile["BillingAddress"]
+            this.Customer["Country"] = CustomerProfile["Country"]
+            this.Customer["ZipCode"] = CustomerProfile["ZipCode"]
           },
 
           Logout() {
@@ -73,4 +111,8 @@ export default {
 </script>
 
 <style>
+
+.customerProfileBlock {
+  justify-content: center;
+}
 </style>

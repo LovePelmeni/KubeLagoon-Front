@@ -1,7 +1,5 @@
 import * as customers_rest from "../rest/customers.js";
 
-/* eslint-disable no-unused-vars */
-/* eslint-disable no-useless-escape */
 
 class CustomerRegistrationForm {
   // Base Class for the Registration Form 
@@ -42,7 +40,7 @@ class CustomerInputValidator {
     var InvalidFields = []
     var RegexsPatterns = {
       "Username": new RegExp("^[0-9a-zA-Z]{1,100}$"),
-      "Email": new RegExp("^[a-z0-9](\.?[a-z0-9]){5,}@g(oogle)?mail\.com$"),
+      "Email": new RegExp("^[a-z0-9](.?[a-z0-9]){5,}@g(oogle)?mail.com$"),
       "Password": new RegExp("^[0-9a-zA-Z]{1,100}$")}
     for (let PropertyKey in Object(this.DataInput).Keys()){
         let Matches = RegexsPatterns[PropertyKey].match(this.DataInput[PropertyKey])
@@ -72,7 +70,7 @@ class CustomerManager {
     CreateCustomer = function(Username, Email, Password, BillingAddress, ZipCode, Street) {
 
       // Creates New Customer
-      new CustomerRegistrationForm = new CustomerRegistrationForm(
+      let CustomerRegistrationForm = new CustomerRegistrationForm(
       Username, Email, Password, BillingAddress, ZipCode, Street)
       
       // Creates New Customer and Returns A Response 
@@ -93,6 +91,11 @@ class CustomerManager {
       let Reset, ResetError = customers_rest.ResetPasswordRestController(newPassword)
       if (ResetError != null){return null, ResetError}
       return Reset, ResetError
+    }
+    GetCustomerProfile(JwtToken) {
+      // Returns Customer's Profile of the User
+      let Customer, CustomerError = customers_rest.GetCustomerProfileRestController(JwtToken)
+      return Customer, CustomerError
     }
 }
 

@@ -34,11 +34,11 @@
     <!-- Virtual Machines -->
 
     <div v-if="virtualMachineData.length > 0 && virtualMachinesLoaded == true">
-      <div class="left flex flex-column" style="margin-bottom: 70px;">
+      <div class="left flex flex-column" style="margin-bottom: 70px; justify-content: center;">
         <h1 style="margin-top: 50px;">Virtual Servers</h1>
         <span style="margin-top: 20px;">You have {{ virtualMachineData.length }} Virtual Servers</span>
       </div>
-      <VirtualMachineBannerInfo style="max-width: 800px; align: center; margin-bottom: 30px; align-items: center;" v-for="(VirtualMachine, index) in filteredData" :VirtualMachine="VirtualMachine" :key="index" />
+      <VirtualMachineBannerInfo style="justify-content: center; margin-bottom: 30px; margin-left: 200px; margin-right: 200px;" v-for="(VirtualMachine, index) in filteredData" :VirtualMachine="VirtualMachine" :key="index" />
     </div>
     <div v-else class="empty flex flex-column">
       <img :src="require('@/assets/illustration-empty.svg')" alt="illustration-empty" />
