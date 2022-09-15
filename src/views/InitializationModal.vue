@@ -537,4 +537,9 @@ export default {
     }
   }
 }
+
+.v-card {
+  overflow: initial;
+  max-width: 10000px;
+}
 </style>

@@ -1,0 +1,17 @@
+version: "3.9"
+services:
+  front_application:
+    container_name: front_application_server 
+    image: crazycoderrr/cloud-infrastructure-front-app 
+    ports:
+      - "3000:3000"
+    networks:
+      - cloud-infrastructure-network 
+    healthcheck:
+      test: ["curl", "-f", "http://localhost:3000/ping"]
+      period: 10 
+  
+networks:
+  cloud-infrastructure-network:
+      external: true 
+      name: "cloud-infrastructure-network"

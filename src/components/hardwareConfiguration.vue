@@ -10,7 +10,7 @@
 
               <v-card-text>
           
-                        <v-select
+                    <v-select
                     type="Datacenter"
                     label="Datacenter"
                     placeholder="select Datacenter"
