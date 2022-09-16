@@ -19,7 +19,7 @@
               />
               
               <v-text-field
-                      v-model="password"
+                      v-model="Password"
                       :rules="PasswordRules"
                       :type="passwordShow?'text':'password'"
                       label="Password"
@@ -31,6 +31,7 @@
               />
 
               <v-text-field
+
                   v-model="Email"
                   :rules="EmailRules"
                   type="email"
@@ -41,22 +42,26 @@
                  />
 
                     <v-select
+                    v-model="Country"
                     type="country"
                     label="Country"
                     placeholder="select Country"
                     prepend-inner-icon="mdi-account"
                     required:items="countries">
-                           <template v-slot:selection="{ country }">
-                              <img :src="item.image">{{ country.name }}
+
+                           <template v-slot:selection="{ item, index}">
+                              <input type="hidden" :value="index">
+                              <img :src="item.IconImageUrl">{{ item.CountryName }}
                             </template>
 
-                            <template v-slot:item="{ country }">
-                              <img :src="item.image">{{ country.name }}
+                            <template v-slot:item="{ item, index }">
+                              <input type="hidden" :value="index">
+                              <img :src="item.IconImageUrl">{{ item.CountryName }}
                             </template>
                       </v-select>
 
                 <v-text-field
-                  v-model="zipCode"
+                  v-model="ZipCode"
                   :rules="ZipCodeRules"
                   type="zipCode"
                   label="ZipCode"
@@ -66,7 +71,7 @@
                 />
 
                 <v-text-field
-                  v-model="street"
+                  v-model="Street"
                   :rules="streetRules"
                   type="street"
                   label="Street"
@@ -78,16 +83,20 @@
             </v-card-text>
             <v-card-actions class="justify-center">
               <v-btn :loading="loading" type="submit" color="indigo">
-                <span class="white--text px-8">Sign in</span>
+                <span class="white--text px-8">Sign up</span>
               </v-btn>
             </v-card-actions>
           </v-form>
         </v-card>
       </v-col>
 
-      <div v-if="Valid" class="formValidationTitle">
+      <div v-if="Registered" class="formValidationTitle">
       <v-snackbar top color="green" v-model="snackbar">
         Registration success
+      </v-snackbar>
+
+      <v-snackbar :v-if="RegisterFailed" top color="red" v-model="snackbar">
+        Registration Failed, {{ RegisterError }}
       </v-snackbar>
       </div>
       <div v-else-if="Valid == false" class="formValidationTitle"> 
@@ -113,7 +122,19 @@ export const Countries = {
   name: "Countries",
   data() {
     return {
-      countries: [],
+      Registered: false,
+      RegisterFailed: false, 
+      RegisterError: null, 
+      countries: [
+        {
+          "IconImageUrl": "@/assets/europe_moscow.png",
+          "CountryName": "Russia", 
+        },
+        {
+          "CountryName": "Germany",
+          "IconImageUrl": "@/assets/europe_berlin.png",
+        }
+      ],
     }
   },
   created() {
@@ -196,7 +217,9 @@ export default {
       let newCustomerManager = new customers.CustomerManager()
       let RegisterError = newCustomerManager.CreateCustomer(
       this.Username, this.Email, this.Password, this.Country, this.ZipCode, this.Street)
-      if (RegisterError != null){this.TOGGLE_ERROR(RegisterError)}
+      if (RegisterError != null){this.RegisterError = RegisterError; this.RegisterFailed = true}else{
+        this.Registered = true
+      }
     },
   }
 };
@@ -212,12 +235,14 @@ export default {
   }
   flex: 1;
   position: relative;
-   width: 100%;
-   background-color: #141625;
+  width: 100%;
+  background-color: #141625;
+  color: #1e2139
 }
 
 .v-application__wrap {
   background-color: #141625;
+  color: #1e2139
 }
 
 

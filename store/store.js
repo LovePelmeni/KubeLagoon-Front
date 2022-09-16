@@ -92,12 +92,9 @@ export default new Vuex.Store({
       state.updateVirtualMachine = !state.updateVirtualMachine;
     },
 
-    TOGGLE_HIDE_ERROR(state, error){
+    TOGGLE_HIDE_ERROR(state){
       // Toggling Error to Hide
       state.activeError = false
-      state.errors = state.errors.filter((errorObj) => {
-        return errorObj.error !== error
-      })
     },
 
     TOGGLE_ERROR(state, newError) {
@@ -107,7 +104,6 @@ export default new Vuex.Store({
 
       state.error = newError
       state.activeError = !state.activeError
-      state.errors.push({'error': newError})
       new Promise(r => setTimeout(r, 5));
       this.commit("TOGGLE_HIDE_ERROR", state, newError)
     },

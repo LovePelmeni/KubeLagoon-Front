@@ -54,7 +54,6 @@
                                     <input hidden :value="index">
                                     <img :src="item.IconImageUrl">{{ item.ToolName }}
                           </template>
-
                     </v-select>
           </v-col>
     </div>
@@ -62,6 +61,7 @@
 </template>
 
 <script>
+
 
 /* eslint-disable */
 

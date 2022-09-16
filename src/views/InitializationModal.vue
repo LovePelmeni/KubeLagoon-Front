@@ -67,6 +67,16 @@
       </v-card>
     </v-col>
 
+
+    <div v-if="Operated" class="formValidationTitle">
+      <v-snackbar top color="green" v-model="snackbar">
+        Virtual Server Has Been Created
+      </v-snackbar>
+
+      <v-snackbar :v-if="OperationFailed" top color="red" v-model="snackbar">
+        Operation Failed, {{ VirtualServerInitializationError }}
+      </v-snackbar>
+      </div>
     </div>
 
     <body>
@@ -79,7 +89,6 @@
 <script>
 
 import { mapMutations, mapActions, mapState } from "vuex";
-import loadingPage from "../components/LoadingPage.vue";
 import * as vm from "../../vm/vm.js";
 import { useCookies } from "vue3-cookies";
 
@@ -101,6 +110,12 @@ export default {
   },
   data() {
     return {
+
+      // Operation Types specification 
+      Operated: false,
+      OperationFailed: false,
+      VirtualServerInitializationError: null,
+
       // General Extra Attributes
       dateOptions: { year: "numeric", month: "short", day: "numeric" },
       loading: null,
@@ -122,7 +137,6 @@ export default {
     };
   },
   components: {
-    loadingPage,
     hardwareConfiguration,
     resourceConfiguration,
     sshConfiguration,
@@ -158,6 +172,9 @@ export default {
       "GET_VIRTUAL_MACHINES",
       "CREATE_VIRTUAL_MACHINE",
       "DELETE_VIRTUAL_MACHINE",
+    ]),
+    ...mapState([
+      "loading",
     ]),
 
     checkClick(e) {
@@ -237,6 +254,7 @@ export default {
       // Initializes New Virtual Machine
       // Initializing New Resources
 
+      this.loading = true
       let VirtualMachineInfo, CreationError = this.CREATE_VIRTUAL_MACHINE(
       this.JwtToken, hardwareConfigurationData, customizedConfigurationData)
 
@@ -248,6 +266,7 @@ export default {
         let VirtualMachine = VmManager.GetVirtualMachine(this.JwtToken, VirtualMachineInfo["VirtualMachineId"])
         this.addVirtualMachineToList(VirtualMachine)
       }
+      this.loading = false
     },
 
 

@@ -10,15 +10,15 @@
       </v-avatar>
       
         <div class="main_page">
-        <router-link :to="{name: 'main_page'}"></router-link><h1>home</h1>
+          <router-link :to="{name: 'main_page'}"></router-link><button type="button"> <h1>Home</h1> </button>
         </div>
 
         <div class="login_page">
-        <router-link v-if="this.registered != true && this.loggedIn == false" :to="{name: 'login'}"></router-link><h1 style="align-text: center;">Sign In</h1>
+          <router-link v-if="this.registered != true && this.loggedIn == false" :to="{name: 'login_page'}"></router-link><button type="button"><h1>Sign In</h1></button>
         </div>
 
         <div class="register_page">
-        <router-link v-if="this.registered != true && this.loggedIn == false" :to="{name: 'register'}"></router-link><h1 style="align-text: center;">Sign up</h1>
+          <router-link v-if="this.registered != true && this.loggedIn == false" :to="{name: 'register_page'}"></router-link><button type="button"><h1>Sign Up</h1></button>
         </div>
 
     </div>

@@ -42,8 +42,12 @@
       </v-col>
     </v-main>
     
-    <v-snackbar top color="green" v-model="snackbar">
+    <v-snackbar :v-if="this.logged == true" top color="green" v-model="snackbar">
       Login success
+    </v-snackbar>
+
+    <v-snackbar :v-if="this.loggedFailed == true" top color="red" v-model="snackbar">
+      Login Failed, Invalid Credentials
     </v-snackbar>
     </div>
   </v-app>
@@ -65,6 +69,11 @@ export default {
 
   name: 'LoginPage',
   data: () => ({
+    
+    // Login Statuses
+    LoginError: null,
+    loggedFailed: false,
+    logged: false,
 
     loading:false,
     snackbar:false,
@@ -99,7 +108,11 @@ export default {
     loginCustomer() {
       let newCustomerManager = new customers.CustomerManager()
       let loggedIn, LogError = newCustomerManager.LoginCustomer(this.email, this.password)
-      if (LogError != null && loggedIn != true){this.TOGGLE_ERROR(LogError)}
+      if (LogError != null && loggedIn != true){this.LoginError = LogError; this.loggedFailed = true}else{
+        this.loggedIn = true 
+        this.logged = true
+        this.$router.push({name: "main_page"})
+      }
     },
   }
 };
