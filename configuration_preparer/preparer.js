@@ -1,6 +1,5 @@
 /* eslint-disable no-unused-vars */
 
-
 class BaseResource {
   // Represents Resource (part of the CustomizedConfiguration)
   // * Explanation ---
@@ -31,14 +30,14 @@ class BaseConfiguration {
 }
 
 
-class HardwareConfigurationValidator {
+class HardwareConfigurationValidator extends BaseConfigurationValidator {
   // Validator for the hardware Configuration
   ValidateInput = function(Configuration) {
     // Validates Hardware Configuration, Customized by the Client
   }
 }
 
-class CustomizedConfigurationValidator {
+class CustomizedConfigurationValidator extends BaseConfigurationValidator {
   ValidateInput = function(Configuration) {
     // Validates Customized Configuration by the Client
   }
@@ -92,7 +91,7 @@ class SSlResources extends BaseResource {
     this.Type = Type
   }
   GetObject = function() {
-    // Returfunctionns Serialized Object of the Ssh Parameters for the Virtual Machine Server
+    // Returns Serialized Object of the Ssh Parameters for the Virtual Machine Server
     return {"Ssh": {"Type": this.Type}}
   }
 }
@@ -104,50 +103,38 @@ class DiskResources extends BaseResource {
       this.MemoryInKB = MemoryInKB
   }
   GetObject = function(){
+    // Returns JSON Blob of the Configuration 
     return {"functionDisk": {"MemoryInKB": this.MemoryInKB}}
   }
 }
 
 class HostSystemResources extends BaseResource {
   // Represents Host System Configuration for the Virtual Machine Server
-  constructor(SystemName, Bit) {
+  constructor(SystemName, Version, Bit) {
     super();
     this.SystemName = SystemName  // System Name should include OS Name + Distribution
+    this.Version = Version // Optional Argument is the Version of the OS, (if it has one)
     this.Bit = Bit // bit version of the OS, like 64 or 32
   }
+
+  GetHostSystemName() {
+    // Returns prepared OS System name, that is going to be properly recongnized at the backend
+    return "%s_%s_%s" % this.SystemName, this.Version, this.Bit
+  }
   GetObject = function() {
+    // Returns JSON Blob of the Configuration 
     return {"HostSystem": {"SystemName": this.SystemName, "Bit": this.Bit}}
   }
 }
 
-class NetworkResources extends BaseResource {
-  // Represents Network Configuration for the Virtual Machine Server
-  constructor(
-  NetworkIP=null,
-  Hostname=null,
-  Gateway=null,
-  Netmask=null,
-  Enablev6=true,
-  ) {
+class DatacenterResources extends BaseResource {
+  constructor(DatacenterName) {
     super();
-    this.NetworkIP = NetworkIP
-    this.Gateway = Gateway
-    this.Netmask = Netmask
-    this.Hostname = Hostname
-    this.Enablev4 = true
-    this.Enablev6 = Enablev6
+    this.DatacenterName = DatacenterName
   }
-
-  GetObject = function() {
-    return {"Network":
-        {
-          "IP": this.NetworkIP,
-          "Netmask": this.Netmask,
-          "Gateway": this.Gateway,
-          "Hostname": this.Hostname,
-          "Enablev4": this.Enablev4,
-          "Enablev6": this.Enablev6,
-    }}
+  GetObject() {
+    // return json blob of the Configuration 
+    return {"Datacenter": {"DatacenterName": this.DatacenterName}}
   }
 }
 
@@ -158,38 +145,73 @@ class PreInstalledToolsResources extends BaseResource {
     this.Tools = Tools
   }
   GetObject = function(){
+    // Returns JSON blob of the Configuration 
     return {"Tools": {"ExtraTools": this.Tools}}
   }
 }
 
+
+class HardwareConfiguration extends BaseConfiguration {
+  // Class Represents Hardware Configuration for the Virtual Machine Server 
+  constructor(Datacenter, OperationalSystem, Tools) {
+    super();
+    this.Datacenter = Datacenter
+    this.OperationalSystem = OperationalSystem 
+    this.Tools = Tools
+  }
+  SetupConfiguration() {
+    // Merging the Whole Parts into one single Configuration 
+    let Datacenter = new DatacenterResources(this.Datacenter).GetObject()
+    let OperationalSystem = new HostSystemResources(this.OperationalSystem.SystemName, 
+    this.OperationalSystem.Version, this.OperationalSystem.Bit).GetObject()
+    let Tools = new PreInstalledToolsResources(this.Tools).GetObject()
+    return {
+     "Datacenter": Datacenter,
+     "OperationalSystem": OperationalSystem,
+     "Tools": Tools
+    }
+  }
+}
+
 class CustomConfiguration extends BaseConfiguration {
+
   // Class Represents Customized Configuration for the Virtual Machine Server
   // where the Customer can pick up, how much memory and cpu's they want,
   // What OS and Network to pick up etc...
-  constructor() {
+
+  constructor(MetadataConfig, ResourceConfig, HostSystemConfig, SslConfig, Tools) {
     super();
+
+    // Setting up the Configurations 
+    this.MetadataConfig = MetadataConfig 
+    this.ResourceConfig = ResourceConfig 
+    this.HostSystemConfig = HostSystemConfig 
+    this.SslConfig = SslConfig
+    this.Tools = Tools
   }
 
-  SetupConfiguration = function(MetadataConfig, ResourceConfig, NetworkConfig, HostSystemConfig, SslConfig, PreInstalledToolsConfig) {
+  SetupConfiguration = function() {
+
     // Setting up the Configuration parts and putting them inside the array
 
-    let Metadata = new Metadata(MetadataConfig["VirtualMachineId"], Metadata["VirtualMachineOwnerId"])
-    let Resources = new Resources(ResourceConfig["MaxCpuUsage"], ResourceConfig["CpuUsage"],
-    ResourceConfig["MaxMemoryUsage"], ResourceConfig["MemoryUsage"])
+    let Metadata = new Metadata(this.MetadataConfig["VirtualMachineId"], this.MetadataConfig["VirtualMachineOwnerId"]).GetObject()
+    let Resources = new Resources(this.ResourceConfig["MaxCpuUsage"], this.ResourceConfig["CpuUsage"],
+    this.ResourceConfig["MaxMemoryUsage"], this.ResourceConfig["MemoryUsage"]).GetObject()
 
-    let Network = new NetworkResources(NetworkConfig["NetworkIP"], NetworkConfig["Hostname"], NetworkConfig["Gateway"],
-    NetworkConfig["Netmask"], NetworkConfig["Enablev6"])
+    let Tools = new PreInstalledToolsResources(this.Tools).GetObject()
 
-    let HostSystem = new HostSystemResources(HostSystemConfig["SystemName"], HostSystemConfig["Bit"])
-    let Ssl = new SslConfig(SslConfig["Type"])
-    let PreInstalledTools = new PreInstalledToolsResources(PreInstalledToolsConfig["Tools"])
+    // Setting up Configurations for the Other Hardware Parts 
+    let HostSystem = new HostSystemResources(this.HostSystemConfig["SystemName"], this.HostSystemConfig["Bit"]).GetObject()
+    let Ssl = new SSlResources(this.SslConfig["Type"]).GetObject()
+    let PreInstalledTools = new PreInstalledToolsResources(this.PreInstalledToolsConfig["Tools"]).GetObject()
 
-    let Configurations = [Metadata, Resources, Ssl, PreInstalledTools, Network, HostSystem]
+    let Configurations = [Metadata, Resources, Ssl, PreInstalledTools, HostSystem, Tools]
     return Configurations
   }
 
   GetConfiguration = function(ConfigurationParts){
-    //function Returns Serialized Custom Configuration for the Virtual Machine Server
+
+    // function Returns Serialized Custom Configuration for the Virtual Machine Server
 
     var FullCustomConfiguration = {}
     for (let Configuration in ConfigurationParts) {
@@ -199,20 +221,17 @@ class CustomConfiguration extends BaseConfiguration {
   }
 }
 
+export {
 
-class ConfigurationPreparer {
-  // Class Returns Serialized Version of the Configurations
-  constructor(Configuration) {
-    this.Configuration = Configuration
-  }
-  PrepareCustomConfiguration = function(){
-      // Returns Serialized Customized Configuration
-      let SerializedConfiguration = JSON.stringify(this.Configuration)
-      return SerializedConfiguration
-  }
-  PrepareHardwareConfiguration = function(){
-      // Returns Serialized Hardware Configuration
-      let SerializedConfiguration = JSON.stringify(this.Configuration)
-      return SerializedConfiguration
-  }
+  CustomConfiguration, 
+  HardwareConfiguration, 
+  
+  DatacenterResources,
+  DiskResources,
+  SSlResources, 
+  HostSystemResources, 
+  Resources, // CPU, Memory etc...
+  PreInstalledToolsResources, 
+  Metadata,
+
 }

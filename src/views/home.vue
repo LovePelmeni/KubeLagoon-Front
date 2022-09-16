@@ -57,6 +57,7 @@
 </template>
 
 <script>
+
 import { mapMutations, mapActions, mapState } from "vuex";
 import VirtualMachineBannerInfo from "../components/VirtualMachineBannerInfo.vue";
 export default {

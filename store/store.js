@@ -310,17 +310,24 @@ export default new Vuex.Store({
       let vmManager = new vm.VirtualMachineManager()
 
       // Initializing Hardware Configuration
-      let HardwareConfiguration = new preparer.hardwareConfiguration(hardwareConfiguration)
+      let HardwareConfiguration = new preparer.HardwareConfiguration(
+        hardwareConfiguration["Datacenter"],
+        hardwareConfiguration["OperationalSystem"],
+        hardwareConfiguration["Tools"],
+      )
 
       // Initializing Customized Configuration with the Resources, Custom OS, Preinstalled Tools etc...
-      let CustomizedConfiguration = new preparer.customizedConfiguration(customizedConfiguration)
+      let CustomizedConfiguration = new preparer.CustomConfiguration(
+          customizedConfiguration["Metadata"], customizedConfiguration["Resource"],
+          customizedConfiguration["HostSystem"], customizedConfiguration["Ssl"], customizedConfiguration["Tools"]
+      )
 
       // Initializing Empty Virtual Machine Server Instance
       let initialized, initializationError = vmManager.InitializeVirtualMachine(JwtToken, HardwareConfiguration)
         if (initialized && initializationError == null) {
           // Applying Customized Configuration
 
-          let appliedInfo, applyError = vmManager.ApplyConfiguration(CustomizedConfiguration)
+          let appliedInfo, applyError = vmManager.ApplyVirtualMachineConfiguration(JwtToken, CustomizedConfiguration, initialized["VirtualMachineId"])
           if (applyError != null && appliedInfo != null) {
 
             let virtualMachine = vmManager.GetVirtualMachine(JwtToken, appliedInfo["VirtualMachineId"])
@@ -352,14 +359,14 @@ export default new Vuex.Store({
       }
     },
 
-    UPDATE_VIRTUAL_MACHINE({commit, state}, JwtToken, virtualMachineId) {
+    UPDATE_VIRTUAL_MACHINE({commit, state}, JwtToken, VirtualMachineId) {
       // Updates Virtual Machine Server
 
       let vmManager = new vm.VirtualMachineManager()
       let hardwareConfiguration = new preparer.HardwareConfiguration()
       let customizedConfiguration = new preparer.CustomizedConfiguration()
 
-      let updatedInfo, updateError = vmManager.UpdateVirtualMachine(JwtToken, virtualMachineId, hardwareConfiguration, customizedConfiguration)
+      let updatedInfo, updateError = vmManager.UpdateVirtualMachine(JwtToken, VirtualMachineId, hardwareConfiguration, customizedConfiguration)
       if (updateError == null) {
 
         let virtualMachine = vmManager.GetVirtualMachine(JwtToken, updatedInfo["VirtualMachineId"])
@@ -378,19 +385,19 @@ export default new Vuex.Store({
       if (Shutdown != true || ShutdownError != null) {commit('TOGGLE_ERROR', ShutdownError)}
     },
 
-    START_VIRTUAL_MACHINE({ commit }, JwtToken, virtualMachineId) {
+    START_VIRTUAL_MACHINE({ commit }, JwtToken, VirtualMachineId) {
       // Starting up the Virtual Machine
 
       let vmManager = new vm.VirtualMachineManager()
-      let Started, StartError = vmManager.StartVirtualMachine(JwtToken, virtualMachineId)
+      let Started, StartError = vmManager.StartVirtualMachine(JwtToken, VirtualMachineId)
       if (Started != true || StartError != null) {commit('TOGGLE_ERROR', StartError)}
     },
 
-    REBOOT_VIRTUAL_MACHINE({ commit }, JwtToken, virtualMachineId) {
+    REBOOT_VIRTUAL_MACHINE({ commit }, JwtToken, VirtualMachineId) {
       // Reboots Virtual Machine
 
       let vmManager = new vm.VirtualMachineManager()
-      let Rebooted, RebootError = vmManager.RebootVirtualMachine(JwtToken, virtualMachineId)
+      let Rebooted, RebootError = vmManager.RebootVirtualMachine(JwtToken, VirtualMachineId)
       if (Rebooted != true || RebootError != null ) {commit('TOGGLE_ERROR', RebootError)}
     },
   },
