@@ -1,11 +1,10 @@
 <template>
 
-    <div class="customerProfileBlock">
-
+    <div class="customerProfileBlock" style="justify-content: center; align-text: center;">
 
       <div @click="redirectToProfile" class="button flex">
           <div class="inner-button flex">
-            <img :src="require('@/assets/customer_avatar.png')" alt="icon_plus" />
+            <img :src="require('@/assets/customer_avatar.png')" style="justify-content: center; max-width: 400px; max-hight: 400px" alt="icon_plus" />
           </div>
       </div>
 

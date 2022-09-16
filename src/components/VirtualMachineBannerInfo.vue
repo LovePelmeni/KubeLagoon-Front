@@ -1,6 +1,6 @@
 <template>
-  
   <router-link class="virtual_machine flex" :to="{ name: 'virtual_machine', params: { VirtualMachineId: VirtualMachine.VirtualMachineId } }">
+    
     <div class="left flex">
       <span class="tracking-number">#{{ VirtualMachine.VirtualMachineName }}</span>
       <span class="due-date">{{ VirtualMachine.paymentDueDate }}</span>
@@ -20,8 +20,8 @@
         <img :src="require('@/assets/icon-arrow-right.svg')" alt="arrow-right" />
       </div>
     </div>
-  </router-link>
 
+  </router-link>
 </template>
 
 

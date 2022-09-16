@@ -17,12 +17,12 @@
                     placeholder="select Datacenter"
                     prepend-inner-icon="mdi-account"
                     :items="Datacenters">
-                           <template v-slot:selection="{ datacenter }">
-                              <img :src="require(datacenter.IconImageUrl)">{{ datacenter.DatacenterName }}
+                           <template v-slot:selection="{ item }">
+                              <img :src="require(item.IconImageUrl)">{{ item.DatacenterName }}
                             </template>
 
-                            <template v-slot:item="{ datacenter }">
-                              <img :src="require(datacenter.IconImageUrl)">{{ datacenter.DatacenterName }}
+                            <template v-slot:item="{ item }">
+                              <img :src="require(item.IconImageUrl)">{{ item.DatacenterName }}
                             </template>
                       </v-select>
 
@@ -42,12 +42,12 @@
                       placeholder="select OperationalSystem"
                       prepend-inner-icon="mdi-account"
                       :items="OperationalSystems">
-                            <template v-slot:selection="{ os }">
-                                <img :src="require(os.IconImageUrl)">{{ os.SystemName }}
+                            <template v-slot:selection="{ item }">
+                                <img :src="require(item.IconImageUrl)">{{ item.SystemName }}
                               </template>
 
-                              <template v-slot:item="{ os }">
-                                <img :src="require(os.IconImageUrl)">{{ country.SystemName }}
+                              <template v-slot:item="{ item }">
+                                <img :src="require(item.IconImageUrl)">{{ item.SystemName }}
                               </template>
                         </v-select>
 
@@ -65,12 +65,12 @@
                           placeholder="select Tools"
                           prepend-inner-icon="mdi-account"
                           :items="PreInstalledTools">
-                                <template v-slot:selection="{ tool }">
-                                    <img :src="require(tool.IconImageUrl)">{{ tool.Name }}
+                                <template v-slot:selection="{ item }">
+                                    <img :src="require(item.IconImageUrl)">{{ item.ToolName }}
                                   </template>
 
-                                  <template v-slot:item="{ tool }">
-                                    <img :src="require(tool.IconImageUrl)">{{ tool.Name }}
+                                  <template v-slot:item="{ item }">
+                                    <img :src="require(item.IconImageUrl)">{{ item.ToolName }}
                                   </template>
                             </v-select>
 

@@ -9,15 +9,27 @@
         </div>
       </v-avatar>
 
+      <div class="navigationLinks" style="justify-content: space-between;">
+        <router-link :to="{name: 'main_page'}"></router-link><h1>home</h1>
+        <router-link v-if="this.registered != true && this.loggedIn == false" :to="{name: 'login'}"></router-link><h1>Sign In</h1>
+        <router-link v-if="this.registered != true && this.loggedIn == false" :to="{name: 'register'}"></router-link><h1>Sign up</h1>
+      </div>
+
     </div>
   </header>
 </template>
 
 <script>
 
+import { mapState } from "vuex";
+
 export default {
   name: "navigationPage",
   methods: {
+    ...mapState([
+      "loggedIn",
+      "registered",
+    ]),
     redirectToProfile() {
       // Redirects to the Customer's Profile
       this.$router.push({name: "customer_profile"})

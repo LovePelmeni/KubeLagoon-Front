@@ -6,6 +6,8 @@ export default new Vuex.Store({
 
   state: {
     loading: false,
+    registered: false, 
+    loggedIn: false,
     virtualMachineData: [
       {
         "VirtualMachineId": "Id",
@@ -51,6 +53,16 @@ export default new Vuex.Store({
   },
 
   mutations: {
+
+    // Handles Customer's Statuses
+
+    GET_REGISTERED_STATUS() {
+      // Returns the Registered Status for the Customer
+    }, 
+
+    GET_LOGIN_STATUS() {
+      // Returns the Logged In Status for the Customer 
+    },
 
     // Toggle Methods
     TOGGLE_INITIALIZATION_MODAL(state) {
