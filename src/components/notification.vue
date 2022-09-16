@@ -35,12 +35,14 @@
 
 <style lang="scss" scoped>
 .modal {
+  
   z-index: 100;
   position: fixed;
   justify-content: center;
   align-items: center;
   height: 100vh;
   width: 100%;
+
   .modal-content {
     border-radius: 20px;
     padding: 48px 32px;

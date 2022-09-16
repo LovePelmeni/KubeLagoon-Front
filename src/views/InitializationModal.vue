@@ -79,7 +79,6 @@
 
 <script>
 
-
 import { mapMutations, mapActions, mapState } from "vuex";
 import loadingPage from "../components/LoadingPage.vue";
 import * as vm from "../../vm/vm.js";

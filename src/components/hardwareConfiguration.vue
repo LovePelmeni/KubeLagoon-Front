@@ -2,33 +2,33 @@
 
     <h1 style="margin-top: 20px;">Hardware Configuration</h1>
     <div class="resourceSelectors">
-      
+    
             <v-col cols="10" lg="4" class="mx-auto">
                 <div class="text-center">
                   <h2 class="indigo--text" style="margin-bottom: 30px">Datacenters</h2>
                 </div>
 
               <v-card-text>
-          
                     <v-select
                     @change="selectDatacenter"
-                    type="Datacenter"
                     label="Datacenter"
                     placeholder="select Datacenter"
                     prepend-inner-icon="mdi-account"
                     :items="Datacenters">
-                           <template v-slot:selection="{ item }">
-                              <img :src="require(item.IconImageUrl)">{{ item.DatacenterName }}
+
+                           <template v-slot:selection="{ item, index }">
+                              <input hidden :value="index">
+                              <img :src="item.IconImageUrl">{{ item.DatacenterName }}
                             </template>
 
-                            <template v-slot:item="{ item }">
-                              <img :src="require(item.IconImageUrl)">{{ item.DatacenterName }}
+                            <template v-slot:item="{ item, index }">
+                              <input hidden :value="index">
+                              <img :src="item.IconImageUrl">{{ item.DatacenterName }}
                             </template>
+
                       </v-select>
 
               </v-card-text>
-
-
                   <div class="text-center">
                   <h2 class="indigo--text" style="margin-bottom: 30px">Operational Systems</h2>
                   </div>
@@ -37,20 +37,20 @@
 
                       <v-select
                       @change="selectOperationalSystem"
-                      type="OperationalSystem"
                       label="OperationalSystem"
                       placeholder="select OperationalSystem"
                       prepend-inner-icon="mdi-account"
                       :items="OperationalSystems">
-                            <template v-slot:selection="{ item }">
-                                <img :src="require(item.IconImageUrl)">{{ item.SystemName }}
+
+                              <template v-slot:selection="{ item }">
+                                  <img :src="item.IconImageUrl">{{ item.SystemName }}
                               </template>
 
                               <template v-slot:item="{ item }">
-                                <img :src="require(item.IconImageUrl)">{{ item.SystemName }}
+                                <img :src="item.IconImageUrl">{{ item.SystemName }}
                               </template>
-                        </v-select>
 
+                        </v-select>
                   </v-card-text>
 
 
@@ -60,23 +60,24 @@
                   <v-card-text>
                           <v-select
                           @change="selectPreInstalledTool"
-                          type="Tools"
                           label="Pre Install Tools"
                           placeholder="select Tools"
                           prepend-inner-icon="mdi-account"
                           :items="PreInstalledTools">
-                                <template v-slot:selection="{ item }">
-                                    <img :src="require(item.IconImageUrl)">{{ item.ToolName }}
+
+                                <template v-slot:selection="{ item, index }">
+                                    <input hidden :value="index">
+                                    <img :src="item.IconImageUrl">{{ item.ToolName }}
                                   </template>
 
                                   <template v-slot:item="{ item }">
-                                    <img :src="require(item.IconImageUrl)">{{ item.ToolName }}
+                                    <input hidden :value="index">
+                                    <img :src="item.IconImageUrl">{{ item.ToolName }}
                                   </template>
+
                             </v-select>
-
                  </v-card-text>
-      </v-col>
-
+          </v-col>
     </div>
 
 </template>
@@ -84,6 +85,7 @@
 <script>
 
 /* eslint-disable */
+
 
 export default {
 
@@ -100,13 +102,6 @@ export default {
   },
   data() {
     return {
-
-      // Error Context
-      errors: {
-          Datacenter: {},
-          OS: {},
-          Tool: {},
-      },
       // hardware Configuration Validation Rules
 
       Datacenters : [
@@ -116,11 +111,11 @@ export default {
         },
         {
           "IconImageUrl": "@/assets/datacenters/europe_berlin.png",
-          "DatacenterName": "Europe/Moscow",
+          "DatacenterName": "Europe/Berlin",
         },
         {
           "IconImageUrl": "@/assets/datacenters/us_washington.png",
-          "DatacenterName": "US/washington",
+          "DatacenterName": "US/Washington",
         }
       ], // array of the Objects with attrs { 'DatacenterName', 'IconImageUrl' }
 
@@ -330,11 +325,12 @@ export default {
     GetOperationalSystem(OperationalSystemName, Version, Bit) {
       // Returns Load Balancers Object
       return this.LoadBalancers.filter((os) => {
-        return os.Name === OperationalSystemName && os.Version === Version && os.Bit === Bit
+        return os.SystemName === OperationalSystemName && os.Version === Version && os.Bit === Bit
       })[0]
     },
   }
 };
+
 
 </script>
 

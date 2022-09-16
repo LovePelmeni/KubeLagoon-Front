@@ -56,13 +56,9 @@ export default new Vuex.Store({
 
     // Handles Customer's Statuses
 
-    GET_REGISTERED_STATUS() {
+    GET_AUTHENTICATION_STATUS() {
       // Returns the Registered Status for the Customer
     }, 
-
-    GET_LOGIN_STATUS() {
-      // Returns the Logged In Status for the Customer 
-    },
 
     // Toggle Methods
     TOGGLE_INITIALIZATION_MODAL(state) {
