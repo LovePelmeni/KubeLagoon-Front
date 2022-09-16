@@ -13,7 +13,7 @@
           <span
             >Filter by status <span v-if="filteredVirtualMachine">: {{ filteredVirtualMachines }}</span></span
           >
-          <img :src="require('@/assets/icon-arrow-down.svg')" alt="icon-arrow-down" style="width:10%;height:10%"/>
+          <img :src="require('@/assets/icon-arrow-down.svg')" alt="icon-arrow-down" style="width:10%; height:10%"/>
           <ul v-show="filterMenu" class="filter-menu">
             <li @click="filteredVirtualMachine">Running</li>
             <li @click="filteredVirtualMachine">Shutdown</li>
@@ -57,12 +57,9 @@
 </template>
 
 <script>
-
 import { mapMutations, mapActions, mapState } from "vuex";
 import VirtualMachineBannerInfo from "../components/VirtualMachineBannerInfo.vue";
-
 export default {
-
   name: "HomePage",
   data() {
     return {
@@ -77,21 +74,17 @@ export default {
   methods: {
     ...mapMutations(["TOGGLE_INITIALIZATION_MODAL", "TOGGLE_MODAL"]),
     ...mapActions(["GET_VIRTUAL_MACHINES"]),
-
     getVirtualMachines() {
       // Receives the query of the Virtual Machines
       this.GET_VIRTUAL_MACHINES()
     },
-
     newVirtualMachine() {
       // Pushes to the Virtual Machine Initialization Page
       this.$router.push({name: "virtual_machine_setup"})
     },
-
     toggleFilterMenu() {
       this.filterMenu = !this.filterMenu;
     },
-
     filterVirtualMachine(e) {
       if (e.target.innerText === "Clear") {
         this.filteredVirtualMachine = null;
@@ -100,17 +93,13 @@ export default {
       this.filteredVirtualMachine = e.target.innerText;
     },
   },
-
   components: {
     VirtualMachineBannerInfo,
   },
-
   computed: {
     ...mapState(["virtualMachineData", "virtualMachinesLoaded"]),
-
     filteredData() {
       return this.virtualMachineData.filter((virtualMachine) => {
-
         if (this.filteredVirtualMachine === "Clear") {
           this.filteredVirtualMachine = null
           return true
@@ -129,12 +118,10 @@ export default {
   },
 },
 }
-
 </script>
 
 
 <style lang="scss" scoped>
-
   .homeWrapper {
     text-align: center;
     justify-content: center;
@@ -228,8 +215,6 @@ export default {
     }
   }
 }
-
-
 .dark-purple {
   background-color: #252945;
 }
@@ -280,7 +265,6 @@ export default {
   padding: 8px 30px;
   border-radius: 10px;
 }
-
 .running {
   &::before {
     background-color: #33d69f;
@@ -302,5 +286,4 @@ export default {
   color: #dfe3fa;
   background-color: rgba(223, 227, 250, 0.1);
 }
-
 </style>

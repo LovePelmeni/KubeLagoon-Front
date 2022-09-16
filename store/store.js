@@ -49,7 +49,6 @@ export default new Vuex.Store({
     activeNotification: false,
     notifications: [],
     error: null,
-    errors: [],
   },
 
   mutations: {

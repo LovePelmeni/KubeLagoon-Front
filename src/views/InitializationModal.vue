@@ -5,7 +5,6 @@
       <v-card class="pa-4">
 
     <v-form @submit.prevent="ValidateInput" class="virtual-machine-content" style="width: 1500px; justify-content: center">
-      <loadingPage v-show="loading" />
 
       <!-- Virtual Machine Work Details -->
 

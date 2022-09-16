@@ -87,9 +87,9 @@ export default {
       // Validation Rules
 
       StorageRules: [
-        storageCapacity => !!storageCapacity.value || 'This field is required',
-        storageCapacity => String(storageCapacity.value).length == 0 || 'This field is required',
-        storageCapacity => Number(storageCapacity.value) == null || 'Invalid Storage Capacity',
+        storageCapacity => !!storageCapacity || 'This field is required',
+        storageCapacity => String(storageCapacity).length == 0 || 'This field is required',
+        storageCapacity => Number(storageCapacity) == null || 'Invalid Storage Capacity',
       ],
 
       MaxCpuRules: [
@@ -213,6 +213,7 @@ export default {
      }
   }
 };
+
 </script>
 
 

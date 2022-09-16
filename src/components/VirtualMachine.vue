@@ -82,7 +82,7 @@
       <div class="item-container">
         <p>ID</p>
         <p>Name</p>
-        <p></p>
+        <p>Status</p>
         <p>Total</p>
         <div
           class="project-item"
@@ -115,7 +115,7 @@ import { mapMutations } from "vuex";
 import { mapActions } from "vuex";
 
 export default {
-  name: "InvoiceDetail",
+  name: "VirtualMachineInfo",
   props: {
     VirtualMachine: null,
     Customer: null

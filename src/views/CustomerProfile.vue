@@ -8,12 +8,10 @@
           </div>
       </div>
 
-
       <h1 style="margin-top: 20px;">Hello, {{ Customer.Username }}</h1>
 
       <div class="modalField flex flex-column">
         <label for="MaxCpu">Email</label>
-
         <v-card-text required type="text" id="Email">{{ Customer.Email }}</v-card-text>
       </div>
 
@@ -40,6 +38,7 @@
       </div>
 
     </div>
+
 
     <body>
       <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
@@ -71,9 +70,6 @@ export default {
           Customer: {}, 
         }
       },
-      template: `
-      
-      `,
         methods: {
 
           ShowCustomerProfile() {
@@ -113,5 +109,65 @@ export default {
 
 .customerProfileBlock {
   justify-content: center;
+  
+  flex: 1;
+  position: relative;
+  width: 100%;
+  background-color: #141625;
+  max-width: 865px;
+}
+  h1 {
+        margin-bottom: 48px;
+        color: #fff;
+  }
+
+  h3 {
+      margin-bottom: 16px;
+      font-size: 18px;
+      color: #777f98;
+  }
+  h4 {
+      color: #7c5dfa;
+      font-size: 12px;
+      margin-bottom: 24px;
+  }
+
+    .modalField {
+        margin-bottom: 24px;
+    }
+    label {
+      font-size: 12px;
+      margin-bottom: 6px;
+    }
+    select,
+    input {
+      width: 100%;
+      background-color: #1e2139;
+      color: #fff;
+      border-radius: 4px;
+      padding: 12px 4px;
+      border: none;
+    } 
+
+  .modalField {
+    margin-bottom: 24px;
+  }
+  label {
+    font-size: 12px;
+    margin-bottom: 6px;
+  }
+  input,
+  select {
+    width: 100%;
+    background-color: #1e2139;
+    color: #fff;
+    border-radius: 4px;
+    padding: 12px 4px;
+    border: none;
+  }
+
+.v-card {
+  overflow: initial;
+  max-width: 10000px;
 }
 </style>

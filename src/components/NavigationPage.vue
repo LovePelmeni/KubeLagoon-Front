@@ -1,21 +1,28 @@
 <template>
   <header class="flex">
-    <div class="branding flex">
-      <router-link :to="{name: 'customer_profile'}"></router-link><v-avatar size="50">
+    <div class="branding flex" style="max-height: 100px; justify-content: space-between;">
+      <router-link :v-if="this.registered && this.loggedIn" :to="{name: 'customer_profile'}"></router-link><v-avatar :v-if="this.registered && this.loggedIn" size="50">
         <div @click="redirectToProfile" class="button flex">
           <div class="inner-button flex">
             <img :src="require('@/assets/customer_avatar.png')" alt="icon_plus" />
           </div>
         </div>
       </v-avatar>
-
-      <div class="navigationLinks" style="justify-content: space-between;">
+      
+        <div class="main_page">
         <router-link :to="{name: 'main_page'}"></router-link><h1>home</h1>
-        <router-link v-if="this.registered != true && this.loggedIn == false" :to="{name: 'login'}"></router-link><h1>Sign In</h1>
-        <router-link v-if="this.registered != true && this.loggedIn == false" :to="{name: 'register'}"></router-link><h1>Sign up</h1>
-      </div>
+        </div>
+
+        <div class="login_page">
+        <router-link v-if="this.registered != true && this.loggedIn == false" :to="{name: 'login'}"></router-link><h1 style="align-text: center;">Sign In</h1>
+        </div>
+
+        <div class="register_page">
+        <router-link v-if="this.registered != true && this.loggedIn == false" :to="{name: 'register'}"></router-link><h1 style="align-text: center;">Sign up</h1>
+        </div>
 
     </div>
+
   </header>
 </template>
 
@@ -63,5 +70,8 @@ header {
       height: 30px;
     }
   }
+}
+.flex {
+  display: flex;
 }
 </style>

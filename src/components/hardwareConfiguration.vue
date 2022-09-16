@@ -8,13 +8,7 @@
                   <h2 class="indigo--text" style="margin-bottom: 30px">Datacenters</h2>
                 </div>
 
-              <v-card-text>
-                    <v-select
-                    @change="selectDatacenter"
-                    label="Datacenter"
-                    placeholder="select Datacenter"
-                    prepend-inner-icon="mdi-account"
-                    :items="Datacenters">
+                    <v-select v-model="AddedDatacenter" label="Datacenter" :items="Datacenters">
 
                            <template v-slot:selection="{ item, index }">
                               <input hidden :value="index">
@@ -28,55 +22,40 @@
 
                       </v-select>
 
-              </v-card-text>
                   <div class="text-center">
                   <h2 class="indigo--text" style="margin-bottom: 30px">Operational Systems</h2>
                   </div>
 
-                  <v-card-text>
+                  <v-select v-model="AddedOperationalSystem" label="Operational System" :items="OperationalSystems">
 
-                      <v-select
-                      @change="selectOperationalSystem"
-                      label="OperationalSystem"
-                      placeholder="select OperationalSystem"
-                      prepend-inner-icon="mdi-account"
-                      :items="OperationalSystems">
-
-                              <template v-slot:selection="{ item }">
+                              <template v-slot:selection="{ item, index}">
+                                  <input type="hidden" :value="index">
                                   <img :src="item.IconImageUrl">{{ item.SystemName }}
                               </template>
 
-                              <template v-slot:item="{ item }">
-                                <img :src="item.IconImageUrl">{{ item.SystemName }}
+                              <template v-slot:item="{ item, index }">
+                                  <input type="hidden" :value="index">
+                                  <img :src="item.IconImageUrl">{{ item.SystemName }}
                               </template>
 
-                        </v-select>
-                  </v-card-text>
-
+                      </v-select>
 
                 <div class="text-center">
                   <h2 class="indigo--text" style="margin-bottom: 30px">Tools</h2>
                 </div>
-                  <v-card-text>
-                          <v-select
-                          @change="selectPreInstalledTool"
-                          label="Pre Install Tools"
-                          placeholder="select Tools"
-                          prepend-inner-icon="mdi-account"
-                          :items="PreInstalledTools">
+                    <v-select v-model="AddedPreInstalledTools" label="Pre Install Tools" :items="PreInstalledTools">
 
-                                <template v-slot:selection="{ item, index }">
-                                    <input hidden :value="index">
+                          <template v-slot:selection="{ item, index }">
+                                    <input type="hidden" :value="index">
                                     <img :src="item.IconImageUrl">{{ item.ToolName }}
                                   </template>
 
                                   <template v-slot:item="{ item }">
                                     <input hidden :value="index">
                                     <img :src="item.IconImageUrl">{{ item.ToolName }}
-                                  </template>
+                          </template>
 
-                            </v-select>
-                 </v-card-text>
+                    </v-select>
           </v-col>
     </div>
 
@@ -85,7 +64,6 @@
 <script>
 
 /* eslint-disable */
-
 
 export default {
 
@@ -284,37 +262,7 @@ export default {
       ]
       this.PreInstalledTools = PreInstalledTools
     },
-
-    selectDatacenter(DatacenterIndex) {
-      // Selects Datacenter, that Is going to be Used for the Virtual Machine Server Deployment
-      this.AddedDatacenter = this.Daatcenters[DatacenterIndex]
-    },
-
-    selectOperationalSystem(OperationalSystemIndex) {
-      // Selects Operational System for the Virtual Machine Server
-      this.AddedOperationalSystem = this.OperationalSystems[OperationalSystemIndex]
-    },
-
-    selectPreInstalledTool(Tool) {
-      // Adds pre Installed Tools to the Array
-      this.AddedPreInstalledTools.push(Tool)
-    },
-
-    unSelectDatacenter() {
-      this.AddedDatacenter = null
-    },
-
-    unSelectOperationalSystem() {
-      this.AddedOperationalSystem = null
-    },
-
-    unSelectPreInstalledTool(ToolName) {
-      let NewSelectedItemTools = this.AddedPreInstalledTools.filter((Tool) => {
-        return Tool.Name !== ToolName
-      })
-      this.AddedPreInstalledTools = NewSelectedItemTools
-    },
-
+    
     GetDatacenter(DatacenterName) {
       // Returns Load Balancers Object
       return this.Datacenters.filter((dc) => {
@@ -330,6 +278,7 @@ export default {
     },
   }
 };
+
 
 
 </script>
