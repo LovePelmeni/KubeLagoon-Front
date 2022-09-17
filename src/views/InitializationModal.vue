@@ -107,6 +107,7 @@ export default {
   },
   mounted() {
     this.JwtToken = this.cookie?.get("jwt-token")
+    this.CheckIsDraft()
   },
   data() {
     return {
@@ -166,6 +167,7 @@ export default {
       "TOGGLE_INITIALIZATION_MODAL",
       "TOGGLE_UPDATE_VIRTUAL_MACHINE",
       "TOGGLE_ERROR",
+      "SAVE_VIRTUAL_MACHINE_CONFIGURATION_DRAFT"
     ]),
     ...mapActions([
       "GET_VIRTUAL_MACHINE",
@@ -175,6 +177,7 @@ export default {
     ]),
     ...mapState([
       "loading",
+      "virtualMachineSavedDraft"
     ]),
 
     checkClick(e) {
@@ -206,7 +209,12 @@ export default {
     },
 
     CheckIsDraft() {
-      //Checks if the Configuration is a Saved Draft
+      // Checks if the Configuration is a Saved Draft
+      if (this.virtualMachineSavedDraft != null) {
+        for (let PropertyKey in Object.keys(this.virtualMachineSavedDraft)) {
+          this[PropertyKey] = this.virtualMachineSavedDraft[PropertyKey]
+        }
+      }
     },
 
     addVirtualMachineToList(NewVirtualMachine) {
@@ -270,21 +278,21 @@ export default {
       this.loading = false
     },
 
-
-    DeleteVirtualMachine(VirtualMachineId) {
-      // Deletes Selected Virtual Machine, Activates Warning before doing that Operation
-      this.DELETE_VIRTUAL_MACHINE(this.JwtToken, VirtualMachineId)
-      this.VirtualMachineItemList = this.VirtualMachineItemList.filter((item) => item.id !== VirtualMachineId);
-    },
-
-
     getVirtualMachineCostTotal(PricePerDay, SelectedDays) {
       // Returns Total Amount of the Money, that Customer will need to pay for All Virtual Machines Maintainance Monthly
       this.TotalCost = PricePerDay * SelectedDays
     },
 
-    saveDraft() {
-      this.VirtualMachineDraft = true;
+    saveVirtualMachineDraft() {
+      // Marks the Virtual Machine Configuration the Virtual Machine
+
+      // Receiving the Values from the Filled Form and Putting in the Single Object of the Configuration 
+      let customizedConfigurationData = this.GetResourceConfigurationSubmittedFormData() 
+      let hardwareConfigurationData = this.GetHardwareSubmittedFormData()
+
+      // Then saves it to the Store 
+      this.SAVE_VIRTUAL_MACHINE_CONFIGURATION_DRAFT(
+      customizedConfigurationData, hardwareConfigurationData)
     },
 
     UploadVirtualMachine() {

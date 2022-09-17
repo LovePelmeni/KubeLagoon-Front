@@ -5,6 +5,25 @@ import Vuex from "vuex";
 export default new Vuex.Store({
 
   state: {
+    virtualMachineSavedDraft: {
+      // Hardware Configuration goes there...
+
+      "AddedDatacenter": "",
+      "AddedOperationalSystem": "", 
+      "AddedPreInstalledTools": "", 
+
+      // Resource Configuration goes there...
+      "CpuNum": 100,
+      "MaxCpu": 100,
+      "Memory": 100,
+
+      "MaxMemory": 1000,
+      "StorageCapacity": 1000,
+      "MaxStorageCapacity": 1000,
+
+      "useRootCredentials": true,
+      "useRootCertificate": false,
+    },
     loading: false,
     registered: false, 
     loggedIn: false,
@@ -57,7 +76,7 @@ export default new Vuex.Store({
 
     GET_AUTHENTICATION_STATUS() {
       // Returns the Registered Status for the Customer
-    }, 
+    },
 
     // Toggle Methods
     TOGGLE_INITIALIZATION_MODAL(state) {
@@ -201,11 +220,35 @@ export default new Vuex.Store({
     }},
 
 
+    SAVE_VIRTUAL_MACHINE_CONFIGURATION_DRAFT(state, customizedConfiguration, hardwareConfiguration) {
+      // Saves the Configuration Object 
+      state.virtualMachineSavedDraft = {
+        // Hardware Configuration goes there...
+
+        "AddedDatacenter": hardwareConfiguration["Datacenter"],
+        "AddedOperationalSystem": hardwareConfiguration["OperationalSystem"], 
+        "AddedPreInstalledTools": hardwareConfiguration["PreInstalledTools"], 
+
+        // Resource Configuration goes there...
+        "CpuNum": customizedConfiguration["CpuNum"],
+        "MaxCpu": customizedConfiguration["MaxCpu"],
+        "Memory": customizedConfiguration["Memory"],
+
+        "MaxMemory": customizedConfiguration["MaxMemory"],
+        "StorageCapacity": customizedConfiguration["StorageCapacity"],
+        "MaxStorageCapacity": customizedConfiguration["MaxStorageCapacity"],
+
+        "useRootCredentials": customizedConfiguration["useRootCredentials"],
+        "useRootCertificate": customizedConfiguration["useRootCertificate"],
+      }
+    },
+
+
     // Virtual Machine Status Methods
 
     UPDATE_STATUS_TO_RUNNING(state, payload) {
       // Updates Visualized Status to Running
-      for (let virtualMachine in state.VirtualMachineData){
+      for (let virtualMachine in state.virtualMachineData){
           if (virtualMachine.VirtualMachineId === payload) {
             virtualMachine.Running = true;
             virtualMachine.Shutdown = false;

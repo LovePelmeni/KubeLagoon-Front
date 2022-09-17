@@ -162,8 +162,7 @@ export default {
 
     Username: '',
     UsernameRules: [
-      username => !!username || 'Username is required',
-      username => `^[a-z][A-Z][0-9]{1,100}$`.test(username) || 'Invalid Username',
+      username => !!username || 'This Field is Required',
       username => (username && username.length >= 10) || 'Username should be 10 characters or more!',
     ],
 

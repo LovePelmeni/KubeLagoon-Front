@@ -62,6 +62,8 @@
 
 <script>
 
+import { mapState } from "vuex";
+
 
 /* eslint-disable */
 
@@ -76,6 +78,7 @@ export default {
     this.AddedDatacenter = null
     this.AddedOperationalSystem = null
     this.AddedPreInstalledTools = []
+    this.CheckIsDraft()
   },
   data() {
     return {
@@ -159,6 +162,19 @@ export default {
   },
 
   methods: {
+
+    ...mapState([
+      "virtualMachineSavedDraft",
+    ]),
+
+    CheckIsDraft() {
+      // Checks if there is some saved drafts before initializing a new one 
+      if (this.virtualMachineSavedDraft != null) {
+        for (let PropertyKey in Object.keys(this.virtualMachineSavedDraft)) {
+          this[PropertyKey] = this.virtualMachineSavedDraft[PropertyKey]
+        }
+      }
+    },
 
     GetHardwareSubmittedFormData() {
       // Returns the Value, Converted to the Blob Object of the Hardware Configuration Form 

@@ -4,69 +4,128 @@
 
       <div class="modalField flex flex-column">
         <label for="CpuNum">CPU</label>
+
         <v-text-field
+
+        v-if="!CpuNum"
         @change="ValidateCpuResources"
         :rules="CpuRules"
         required
-        type="text"
-        id="CpuNum"
-        v-model="CpuNum"
+        type="text" id="CpuNum" v-model="CpuNum"
         />
+
+        <v-text-field
+
+        v-else
+        @change="ValidateCpuResources"
+        :rules="CpuRules"
+        required
+        type="text" id="CpuNum" v-model="CpuNum" :model-value="CpuNum" />
       </div>
 
       <div class="modalField flex flex-column">
         <label for="MaxCpu">Max CPU</label>
 
         <v-text-field
+
+        v-if="!MaxCpu"
         :rules="MaxCpuRules"
         required 
         type="text" 
         id="MaxCpu" 
         v-model="MaxCpu" />
+
+        <v-text-field
+        v-else
+        :rules="MaxCpuRules"
+        required 
+        type="text" 
+        id="MaxCpu" 
+        v-model="MaxCpu" :model-value="MaxCpu" />
       </div>
 
       <div class="modalField flex flex-column">
         <label for="MemoryInMegabytes">Memory (MB)</label>
 
         <v-text-field
+
+        v-if="!Memory"
         :rules="MemoryInMegabytesRules"
         required 
         type="text" 
         id="MemoryInMegabytes"
         v-model="Memory" />
+
+        <v-text-field
+        v-else
+        :rules="MemoryInMegabytesRules"
+        required 
+        type="text" 
+        id="MemoryInMegabytes"
+        v-model="Memory" :model-value="Memory" />
+
       </div>
 
       <div class="resources-details flex">
 
         <div class="modalField flex flex-column">
           <label for="MaxMemory">Max Memory Capacity (MB)</label>
+
           <v-text-field
+          v-if="!MaxMemory"
           :rules="MaxMemoryRules"
           required 
           type="text" 
           id="MaxMemory" 
           v-model="MaxMemory" />
+
+          <v-text-field
+          v-else
+          :rules="MaxMemoryRules"
+          required 
+          type="text" 
+          id="MaxMemory" 
+          v-model="MaxMemory" :model-value="MaxMemory" />
         </div>
 
         <div class="modalField flex flex-column">
           <label for="Storage">Storage (GB)</label>
+
           <v-text-field
+          v-if="!storageCapacity"
           :rules="StorageRules"
           required 
           type="text" 
           id="StorageCapacity"
           v-model="storageCapacity" />
+
+          <v-text-field
+          v-else
+          :rules="StorageRules"
+          required 
+          type="text" 
+          id="StorageCapacity"
+          v-model="StorageCapacity" :model-value="StorageCapacity" />
         </div>
 
         <div class="modalField flex flex-column">
           <label for="Storage">Max Storage Capacity (GB)</label>
 
           <v-text-field
+          v-if="!MaxStorageCapacity"
           :rules="StorageRules"
           required 
           type="text" 
           id="maxStorageCapacity" 
-          v-model="maxStorageCapacity" />
+          v-model="MaxStorageCapacity" />
+
+          <v-text-field
+          v-else
+          :rules="StorageRules"
+          required 
+          type="text" 
+          id="maxStorageCapacity" 
+          v-model="MaxStorageCapacity" :model-value="MaxStorageCapacity" />
         </div>
       </div>
 
@@ -74,9 +133,14 @@
 
 <script>
 
+import { mapState } from "vuex";
+
 export default {
 
   name: "resourceConfiguration",
+  mounted() {
+    this.CheckIsDraft()
+  },
   data() {
     return {
 
@@ -94,8 +158,8 @@ export default {
       Memory: null, // In Megabytes !
 
       // Disk Resources
-      storageCapacity: null, // In Kilabytes !
-      maxStorageCapacity: null, // In Kilabytes as well !
+      StorageCapacity: null, // In Kilabytes !
+      MaxStorageCapacity: null, // In Kilabytes as well !
 
       // Validation Rules
 
@@ -143,6 +207,10 @@ export default {
   },
   methods: {
 
+    ...mapState([
+      "virtualMachineSavedDraft",
+    ]),
+
     GetResourceConfigurationSubmittedFormData() {
       // Returns the Form Data of the Resource Configuration serialized into the Object 
       let Data = {
@@ -154,6 +222,15 @@ export default {
         "MaxStorageCapacity": this.MaxStorageCapacity,
       }
       return Data
+    },
+
+    CheckIsDraft() {
+      // Checks if there is some saved drafts before initializing a new one 
+      if (this.virtualMachineSavedDraft != null) {
+        for (let PropertyKey in Object.keys(this.virtualMachineSavedDraft)) {
+          this[PropertyKey] = this.virtualMachineSavedDraft[PropertyKey]
+        }
+      }
     },
 
     ProcessMaxMemoryConvertation(event) {
@@ -169,74 +246,13 @@ export default {
 
     ProcessStorageConvertation(event) {
         // Converts Storage value from the specified value to the kilabytes
-        this.storageCapacity = Number(event.value) * 1024 * 1024
+        this.StorageCapacity = Number(event.value) * 1024 * 1024
     },
 
     ProcessMaxStorageConvertation(event) {
         // Converts Max Storage value from the specified value to the kilabytes
-        this.maxStorageCapacity = Number(event.value) * 1024 * 1024
+        this.MaxStorageCapacity = Number(event.value) * 1024 * 1024
     },
-
-    ValidateCpuResources(CpuUsage) {
-        // Validates Resources, Selected by the Customer
-
-        if (String(CpuUsage).length == 0) {
-          this.errors["Resources"]["CpuUsage"] = "This field is required"
-        }
-        if (!CpuUsage.TypeOf() == Number) {
-          this.errors["Resources"]["CpuUsage"] = "Invalid Value for CPU"
-        }
-    },
-    
-    ValidateMaxCpuResources(MaxCpuUsage) {
-      // Validates Value for Max CPU Usage 
-
-      if (Number(MaxCpuUsage.value) == null) {
-        this.errors["Resources"]["MaxCpu"] = "Invalid value for the Max CPU Usage"
-      }
-
-      if (String(MaxCpuUsage.value).length == 0) {
-        this.errors["Resources"]["MaxCpu"] = "This Field is required"
-      }
-    },
-
-    ValidateMemoryResources(MemoryUsage) {
-      // Validates Operational Memory Configuration Resources
-
-      if (String(MemoryUsage.value).length == 0) {
-        this.errors["Resources"]["MemoryUsage"] = "This field is required"
-      }
-      if (Number(MemoryUsage.value) == null) {
-        this.errors["Resources"]["MemoryUsage"] = "Invalid Value for Memory"
-      }
-    },
-    ValidateMaxMemoryResources(MaxMemory) {
-      // Validates Max Memory Usage Value, specified by Customer
-      if (String(MaxMemory.value).length == 0) {
-        this.errors["Resources"]["MaxMemory"] = "This field is required"
-      }
-      if (Number(MaxMemory.value) == null) {
-        this.errors["Resources"]["MaxMemory"] = "Invalid Value for Max Memory"
-      }
-    },
-    ValidateStorageResources(Storage) {
-      // Validates Value for the Storage Capacity, Specified by the Client
-      if (String(Storage.value).length == 0) {
-        this.errors["Resources"]["Storage"] = "This field is required"
-      }
-      if (Number(Storage.value) == null) {
-        this.errors["Resources"]["Storage"] = "Invalid Value for Storage"
-      }
-    },
-     ValidateMaxStorageResources(Storage) {
-      // Validates Max Storage Capacity Value 
-      if (String(Storage.value).length == 0) {
-        this.errors["Resources"]["Storage"] = "This field is required"
-      }
-      if (Number(Storage.value) == null) {
-        this.errors["Resources"]["Storage"] = "Invalid Value for Storage"
-      }
-     }
   }
 };
 
