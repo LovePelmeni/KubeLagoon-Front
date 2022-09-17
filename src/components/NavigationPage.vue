@@ -1,7 +1,7 @@
 <template>
   <header class="flex">
     <div class="branding flex" style="max-height: 100px; justify-content: space-between;">
-      <router-link :v-if="this.registered && this.loggedIn" :to="{name: 'customer_profile'}"></router-link><v-avatar :v-if="this.registered && this.loggedIn" size="50">
+      <v-avatar :v-if="authenticated" size="50">
         <div @click="redirectToProfile" class="button flex">
           <div class="inner-button flex">
             <img :src="require('@/assets/customer_avatar.png')" alt="icon_plus" />
@@ -9,16 +9,20 @@
         </div>
       </v-avatar>
       
-        <div class="main_page">
-          <router-link :to="{name: 'main_page'}"></router-link><button type="submit"> <h1>Home</h1> </button>
+        <div @click="redirectToHome" class="button flex" style="margin-bottom: 5px;">
+          <h2>Home</h2>
         </div>
 
-        <div class="login_page">
-          <router-link v-if="this.registered != true && this.loggedIn == false" :to="{name: 'login_page'}"></router-link><button style="margin-bottom: 10px;" type="submit"><h1>Sign In</h1></button>
+        <div @click="redirectToLoginPage" class="button flex">
+          <h2 v-if="!authenticated">Sign In</h2>
         </div>
 
-        <div class="register_page">
-          <router-link v-if="this.registered != true && this.loggedIn == false" :to="{name: 'register_page'}"></router-link><button style="margin-bottom: 10px;" type="submit"><h1>Sign Up</h1></button>
+        <div @click="redirectToRegisterPage" class="button flex">
+          <h2 v-if="!authenticated">Sign Up</h2>
+        </div>
+
+        <div @click="triggerLogoutModal" class="button flex">
+          <h2 v-if="authenticated">Logout</h2>
         </div>
 
     </div>
@@ -28,18 +32,38 @@
 
 <script>
 
-import { mapState } from "vuex";
+
+import { mapState, mapMutations } from "vuex";
+
 
 export default {
   name: "navigationPage",
   methods: {
-    ...mapState([
-      "loggedIn",
-      "registered",
+    ...mapMutations([
+      "TOGGLE_LOGOUT_MODAL",
     ]),
+    ...mapState([
+      "authenticated",
+    ]),
+    triggerLogoutModal() {
+      // Triggers Logout Modal Window 
+      this.TOGGLE_LOGOUT_MODAL()
+    },
     redirectToProfile() {
       // Redirects to the Customer's Profile
       this.$router.push({name: "customer_profile"})
+    },
+    redirectToLoginPage() {
+      // Redirects to the Login Page Form 
+      this.$router.push({name: "login_page"})
+    },
+    redirectToRegisterPage() {
+      // Redirects to the Register Page Form 
+      this.$router.push({name: "register_page"})
+    },
+    redirectToHome() {
+      // Redirects to the Home Page 
+      this.$router.push({name: "main_page"})
     }
   }
 };

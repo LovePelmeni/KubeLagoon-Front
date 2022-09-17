@@ -7,6 +7,7 @@ import modalPage from "./components/ModalWindow.vue"
 import notificationBanner from "./components/notification.vue"
 import errorBanner from "./components/error.vue"
 import loadingPage from "./components/LoadingPage.vue"
+import logoutPage from "./components/LogoutPage.vue"
 
 
 export default {
@@ -20,12 +21,14 @@ export default {
   template: `
   <div>
       <div v-if="!mobile" class="app flex flex-column">
-        <navigationPage />
+          <navigationPage />
+          <logoutPage v-if="logout" />
           <loadingPage v-if="loading" />
           <modalPage v-if="modalActive" />
           <errorBanner v-for="(Error, index) in [error]" v-if="activeError" :errorMessage="Error" :key="index" />
           <notificationBanner v-for="(Notification, index) in [notification]" v-if="activeNotification" :notificationMessage="Notification" :key="index" />
         <router-view />
+
       </div>
       <div v-else class="mobile-message flex flex-column">
         <h2>Sorry, this app is not supported on Mobile Devices</h2>
@@ -40,6 +43,7 @@ export default {
     modalPage,
     errorBanner,
     notificationBanner,
+    logoutPage,
   },
 
   created() {
@@ -60,7 +64,7 @@ export default {
 
   computed: {
     ...mapState(["loading", "modalActive", "virtualMachinesLoaded",
-    "notification", "error", "activeError", "activeNotification"]),
+    "notification", "error", "activeError", "activeNotification", "logout"]),
   },
 };
 

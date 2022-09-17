@@ -24,9 +24,9 @@ export default new Vuex.Store({
       "useRootCredentials": true,
       "useRootCertificate": false,
     },
+    logout: false,
     loading: false,
-    registered: false, 
-    loggedIn: false,
+    authenticated: false,
     virtualMachineData: [
       {
         "VirtualMachineId": "Id",
@@ -78,10 +78,20 @@ export default new Vuex.Store({
       // Returns the Registered Status for the Customer
     },
 
+    TOGGLE_NOT_AUTHENTICATED(state) {
+      // Changes status of the Customer to not Authenticated 
+      state.authenticated = !state.authenticated
+    },
+
     // Toggle Methods
     TOGGLE_INITIALIZATION_MODAL(state) {
       // Toggling Initialization Modal Window
       state.initializationModal = !state.initializationModal;
+    },
+
+    TOGGLE_LOGOUT_MODAL(state) {
+      // Changing state to the logged out, in order to trigger approval logout window
+      state.logout = !state.logout;
     },
 
     TOGGLE_MODAL(state) {
