@@ -1,5 +1,6 @@
 <template>
   <header class="flex">
+
     <div class="branding flex" style="max-height: 100px; justify-content: space-between;">
       <v-avatar :v-if="authenticated" size="50">
         <div @click="redirectToProfile" class="button flex">
@@ -13,16 +14,28 @@
           <h2>Home</h2>
         </div>
 
-        <div @click="redirectToLoginPage" class="button flex">
-          <h2 v-if="!authenticated">Sign In</h2>
+        <div v-if="!authenticated" @click="redirectToLoginPage" class="button flex">
+          <h2>Sign In</h2>
         </div>
 
-        <div @click="redirectToRegisterPage" class="button flex">
-          <h2 v-if="!authenticated">Sign Up</h2>
+        <div v-else @click="redirectToLoginPage" class="button flex" style="pointer-events: none;">
+          <h2 style="color: gray;">Sign In</h2>
         </div>
 
-        <div @click="triggerLogoutModal" class="button flex">
-          <h2 v-if="authenticated">Logout</h2>
+        <div v-if="!authenticated" @click="redirectToRegisterPage" class="button flex">
+          <h2>Sign Up</h2>
+        </div>
+
+        <div v-else @click="redirectToLoginPage" class="button flex" style="pointer-events: none;">
+          <h2 style="color: gray;">Sign Up</h2>
+        </div>
+
+        <div v-if="authenticated" @click="triggerLogoutModal" class="button flex">
+          <h2>Logout</h2>
+        </div>
+
+        <div v-else @click="redirectToLoginPage" class="button flex" style="pointer-events: none;">
+          <h2 style="color: gray;">Logout</h2>
         </div>
 
     </div>
@@ -92,6 +105,10 @@ header {
     img {
       width: auto;
       height: 30px;
+    }
+    button:disabled,
+    button[disabled]{
+      color: #666666;
     }
   }
 }

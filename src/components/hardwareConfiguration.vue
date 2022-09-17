@@ -23,7 +23,7 @@
                       </v-select>
 
                   <div class="text-center">
-                  <h2 class="indigo--text" style="margin-bottom: 30px">Operational Systems</h2>
+                    <h2 class="indigo--text" style="margin-bottom: 30px">Operational Systems</h2>
                   </div>
 
                   <v-select ref="OperationalSystem" v-model="AddedOperationalSystem" label="Operational System" :items="OperationalSystems" >
@@ -302,7 +302,6 @@ export default {
     },
   }
 };
-
 
 
 </script>
