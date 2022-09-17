@@ -4,7 +4,7 @@
     <v-col cols="10" lg="4" class="mx-auto">
       <v-card class="pa-4">
 
-    <v-form class="virtual-machine-content" style="width: 1500px; justify-content: center">
+    <v-form class="virtual-machine-content" style="width: 1500px; justify-content: center;">
 
       <!-- Virtual Machine Work Details -->
 
@@ -143,6 +143,7 @@ export default {
     sshConfiguration,
   },
   created() {
+
     // get current date for invoice date field
 
     this.CheckIsDraft() // Checking if this is Saved Draft or Customer Want to Initialize New Configuration
@@ -198,12 +199,12 @@ export default {
         this.Memory = 0
       }
 
-      if (this.storageCapacity == null || this.storageCapacity == 0) {
-        this.storageCapacity = 0
+      if (this.StorageCapacity == null || this.StorageCapacity == 0) {
+        this.StorageCapacity = 0
       }
 
       let PricePerDay = document.getElementById("paymentTerms").value;
-      let BillManager = new VirtualMachineCostCalculator(this.CpuNum, this.Memory, this.storageCapacity)
+      let BillManager = new VirtualMachineCostCalculator(this.CpuNum, this.Memory, this.StorageCapacity)
       let TotalPricePerDay = BillManager.CalculateCostPerDay()
       this.getVirtualMachineCostTotal(TotalPricePerDay, Number(PricePerDay))
     },
@@ -317,7 +318,6 @@ export default {
       };
       this.UPDATE_VIRTUAL_MACHINE(data);
     },
-
     submitForm() {
       if (this.updateVirtualMachine) {
         this.UpdateVirtualMachine();
@@ -325,7 +325,6 @@ export default {
       }
       this.UploadVirtualMachine();
     },
-
   },
   computed: {
     ...mapState(["updateVirtualMachine", "currentVirtualMachineArray"]),

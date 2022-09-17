@@ -1,12 +1,15 @@
 <template>
   <v-app>
+
     <div class="registrationWrapper" style="background-color: #141625">
       <v-col cols="10" lg="4" class="mx-auto">
+
         <v-card class="pa-4">
           <div class="text-center">
             <h2 class="indigo--text" style="margin-bottom: 30px">Sign up</h2>
           </div>
-          <v-form @submit.prevent="submitLoginForm" ref="form">
+
+          <v-form @submit.prevent="submitRegisterForm" ref="form">
             <v-card-text>
               <v-text-field
                 v-model="Username"
@@ -72,20 +75,23 @@
 
                 <v-text-field
                   v-model="Street"
-                  :rules="streetRules"
+                  :rules="StreetRules"
                   type="street"
                   label="Street"
                   placeholder="Street"
                   prepend-inner-icon="mdi-account"
                   required
                 />
-              <v-switch label="Remember me" color="indigo"></v-switch>
+
+            <v-switch label="Remember me" color="indigo"></v-switch>
             </v-card-text>
+
             <v-card-actions class="justify-center">
               <v-btn :loading="loading" type="submit" color="indigo">
                 <span class="white--text px-8">Sign up</span>
               </v-btn>
             </v-card-actions>
+
           </v-form>
         </v-card>
       </v-col>
@@ -101,7 +107,6 @@
       </div>
       <div v-else-if="Valid == false" class="formValidationTitle"> 
       </div>
-
     </div>
   </v-app>
 
@@ -112,19 +117,21 @@
   
 </template>
 
-
 <script>
 
 import * as customers from "../../customers/customers.js";
-import { mapMutations } from "vuex";
 
-export const Countries = {
-  name: "Countries",
-  data() {
-    return {
+export default {
+
+  name: 'RegistrationPage',
+  data: () => ({
+
+      // Response Attributes 
       Registered: false,
       RegisterFailed: false, 
       RegisterError: null, 
+
+
       countries: [
         {
           "IconImageUrl": "@/assets/europe_moscow.png",
@@ -135,25 +142,6 @@ export const Countries = {
           "IconImageUrl": "@/assets/europe_berlin.png",
         }
       ],
-    }
-  },
-  created() {
-    this.GetCountries()
-  },
-  methods: {
-    GetCountries() {
-      // Returns the Array of the Available Countries
-    }
-  }
-}
-
-export default {
-
-  name: 'RegistrationPage',
-  components: [
-    Countries,
-  ],
-  data: () => ({
 
     loading:false,
     snackbar:false,
@@ -182,23 +170,22 @@ export default {
 
     Country: '',
     CountryRules: [
-      country => !!country || 'Country is required',
+      country => !country || 'Country is required',
     ],
 
 
     ZipCode: '',
     ZipCodeRules: [
-      zipcode => !!zipcode || 'Zip Code is required',
+      zipcode => !zipcode.length || 'Zip Code is required',
     ],
 
     Street: '',
       StreetRules: [
-        street => !!street || 'Street is required',
+        street => !street.length || 'Street is required',
     ],
   }),
 
   methods: {
-    ...mapMutations(["TOGGLE_ERROR"]),
 
     submitRegisterForm(){
       if (this.$refs.form.validate()){
@@ -207,21 +194,20 @@ export default {
           this.loading = false
           this.snackbar = true
         }, 3000)
-        this.Valid = true
-      }else{
-        this.Valid = false
+        this.registerCustomer()
       }
     },
     registerCustomer() {
+      // Submits the Registration Form 
       let newCustomerManager = new customers.CustomerManager()
-      let RegisterError = newCustomerManager.CreateCustomer(
-      this.Username, this.Email, this.Password, this.Country, this.ZipCode, this.Street)
-      if (RegisterError != null){this.RegisterError = RegisterError; this.RegisterFailed = true}else{
-        this.Registered = true
-      }
+      let Registered, RegisterError = newCustomerManager.CreateCustomer(this.Username, this.Email, this.Password,
+      this.BillingAddress, this.ZipCode, this.Street)
+      this.Registered = Registered 
+      this.RegisterError = RegisterError
     },
   }
 };
+
 
 </script>
 
@@ -241,8 +227,7 @@ export default {
 
 .v-application__wrap {
   background-color: #141625;
-  color: #1e2139
+  color: #141625;
 }
-
 
 </style>

@@ -6,21 +6,18 @@
         <label for="CpuNum">CPU</label>
 
         <v-text-field
-
         v-if="!CpuNum"
-        @change="ValidateCpuResources"
         :rules="CpuRules"
         required
-        type="text" id="CpuNum" v-model="CpuNum"
+        id="CpuNum" v-model="CpuNum"
         />
 
         <v-text-field
 
         v-else
-        @change="ValidateCpuResources"
         :rules="CpuRules"
         required
-        type="text" id="CpuNum" v-model="CpuNum" :model-value="CpuNum" />
+        id="CpuNum" v-model="CpuNum" :model-value="CpuNum" />
       </div>
 
       <div class="modalField flex flex-column">
@@ -31,7 +28,7 @@
         v-if="!MaxCpu"
         :rules="MaxCpuRules"
         required 
-        type="text" 
+        
         id="MaxCpu" 
         v-model="MaxCpu" />
 
@@ -39,7 +36,7 @@
         v-else
         :rules="MaxCpuRules"
         required 
-        type="text" 
+        
         id="MaxCpu" 
         v-model="MaxCpu" :model-value="MaxCpu" />
       </div>
@@ -52,7 +49,7 @@
         v-if="!Memory"
         :rules="MemoryInMegabytesRules"
         required 
-        type="text" 
+        
         id="MemoryInMegabytes"
         v-model="Memory" />
 
@@ -60,7 +57,7 @@
         v-else
         :rules="MemoryInMegabytesRules"
         required 
-        type="text" 
+        
         id="MemoryInMegabytes"
         v-model="Memory" :model-value="Memory" />
 
@@ -75,7 +72,7 @@
           v-if="!MaxMemory"
           :rules="MaxMemoryRules"
           required 
-          type="text" 
+          
           id="MaxMemory" 
           v-model="MaxMemory" />
 
@@ -83,7 +80,7 @@
           v-else
           :rules="MaxMemoryRules"
           required 
-          type="text" 
+          
           id="MaxMemory" 
           v-model="MaxMemory" :model-value="MaxMemory" />
         </div>
@@ -92,39 +89,39 @@
           <label for="Storage">Storage (GB)</label>
 
           <v-text-field
-          v-if="!storageCapacity"
+          v-if="!StorageCapacity"
           :rules="StorageRules"
           required 
-          type="text" 
+          
           id="StorageCapacity"
-          v-model="storageCapacity" />
+          v-model="StorageCapacity" />
 
           <v-text-field
           v-else
           :rules="StorageRules"
           required 
-          type="text" 
+          
           id="StorageCapacity"
           v-model="StorageCapacity" :model-value="StorageCapacity" />
         </div>
 
         <div class="modalField flex flex-column">
-          <label for="Storage">Max Storage Capacity (GB)</label>
+          <label for="MaxStorage">Max Storage Capacity (GB)</label>
 
           <v-text-field
           v-if="!MaxStorageCapacity"
           :rules="StorageRules"
           required 
-          type="text" 
-          id="maxStorageCapacity" 
+          
+          id="MaxStorageCapacity"
           v-model="MaxStorageCapacity" />
 
           <v-text-field
           v-else
           :rules="StorageRules"
           required 
-          type="text" 
-          id="maxStorageCapacity" 
+          
+          id="MaxStorageCapacity"
           v-model="MaxStorageCapacity" :model-value="MaxStorageCapacity" />
         </div>
       </div>
@@ -164,42 +161,42 @@ export default {
       // Validation Rules
 
       StorageRules: [
-        storageCapacity => !!storageCapacity || 'This field is required',
+        storageCapacity => !storageCapacity || 'This field is required',
         storageCapacity => String(storageCapacity).length == 0 || 'This field is required',
         storageCapacity => Number(storageCapacity) == null || 'Invalid Storage Capacity',
       ],
 
       MaxCpuRules: [
-        maxCpu => !!maxCpu || 'This field is required',
+        maxCpu => !maxCpu || 'This field is required',
         maxCpu => String(maxCpu).length == 0 || 'This field is required',
         maxCpu => Number(maxCpu) == null || 'Invalid Max CPU Capacity',
       ],
 
       CpuRules: [
-        Cpu => !!Cpu || 'This field is required',
+        Cpu => !Cpu || 'This field is required',
         Cpu => String(Cpu).length == 0 || 'This field is required',
         Cpu => Number(Cpu) == null || 'Invalid CPU Capacity',
       ],
 
       MaxMemoryRules: [
-        MaxMemory => !!MaxMemory || 'This field is required',
+        MaxMemory => !MaxMemory || 'This field is required',
         MaxMemory => String(MaxMemory).length == 0 || 'This field is required',
         MaxMemory => Number(MaxMemory) == null || 'Invalid Max Memory Capacity',
       ],
 
       MemoryInMegabytesRules: [
-        Memory => !!Memory || 'This field is required',
+        Memory => !Memory || 'This field is required',
         Memory => String(Memory).length == 0 || 'This field is required',
         Memory => Number(Memory) == null || 'Invalid Memory Capacity',
       ],
 
       DiskCapacityRules: [
-        DiskCapacity => !!DiskCapacity || 'This Field is required',
+        DiskCapacity => !DiskCapacity || 'This Field is required',
         DiskCapacity => String(DiskCapacity).length == 0 || 'This field is required',
         DiskCapacity => Number(DiskCapacity) == null || 'Invalid Disk Capacity'
       ],
       MaxDiskCapacityRules: [
-        MaxDiskCapacity => !!MaxDiskCapacity || 'This field is required',
+        MaxDiskCapacity => !MaxDiskCapacity || 'This field is required',
         MaxDiskCapacity => String(MaxDiskCapacity).length == 0 || 'This field is required',
         MaxDiskCapacity => Number(MaxDiskCapacity) == null || 'Invalid Disk Capacity',
       ]
@@ -285,7 +282,7 @@ input#StorageCapacity {
   background-color: #1e2139;
   color: #fff;
 }
-input#maxStorageCapacity {
+input#MaxStorageCapacity {
   background-color: #1e2139;
   color: #fff;
 }

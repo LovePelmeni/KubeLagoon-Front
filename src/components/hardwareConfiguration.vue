@@ -8,7 +8,7 @@
                   <h2 class="indigo--text" style="margin-bottom: 30px">Datacenters</h2>
                 </div>
 
-                    <v-select item-text="text" ref="Datacenter" v-model="AddedDatacenter" label="Datacenter" :items="Datacenters" return-object>
+                    <v-select ref="Datacenter" v-model="AddedDatacenter" label="Datacenter" :items="Datacenters" >
 
                            <template v-slot:selection="{ item, index }">
                               <input :required="AddedDatacenter" hidden :value="index">
@@ -26,7 +26,7 @@
                   <h2 class="indigo--text" style="margin-bottom: 30px">Operational Systems</h2>
                   </div>
 
-                  <v-select ref="OperationalSystem" v-model="AddedOperationalSystem" label="Operational System" :items="OperationalSystems" return-object>
+                  <v-select ref="OperationalSystem" v-model="AddedOperationalSystem" label="Operational System" :items="OperationalSystems" >
 
                               <template v-slot:selection="{ item, index}">
                                   <input type="hidden" :value="index">
@@ -63,7 +63,6 @@
 <script>
 
 import { mapState } from "vuex";
-
 
 /* eslint-disable */
 

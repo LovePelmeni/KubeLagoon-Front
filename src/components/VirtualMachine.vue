@@ -43,6 +43,7 @@
         >
           Shutdown
         </button>
+        <a :href="VirtualMachine.SshKeyFilePath" download><h1>Download SSH Keys</h1></a>
       </div>
     </div>
 
@@ -118,7 +119,7 @@ export default {
   name: "VirtualMachineInfo",
   props: {
     VirtualMachine: null,
-    Customer: null
+    Customer: null,
   },
   methods: {
     ...mapActions([

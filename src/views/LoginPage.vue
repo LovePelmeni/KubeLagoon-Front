@@ -62,6 +62,7 @@
 
 <script>
 
+
 import * as customers from "../../customers/customers.js";
 import {  mapMutations, mapState } from "vuex";
 
@@ -107,7 +108,7 @@ export default {
     },
     loginCustomer() {
       let newCustomerManager = new customers.CustomerManager()
-      let loggedIn, LogError = newCustomerManager.LoginCustomer(this.email, this.password)
+      let loggedIn, LogError = newCustomerManager.LoginCustomer(this.Username, this.password)
       if (LogError != null && loggedIn != true){this.LoginError = LogError; this.loggedFailed = true}else{
         this.loggedIn = true 
         this.logged = true

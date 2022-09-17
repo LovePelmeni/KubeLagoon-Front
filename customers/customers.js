@@ -47,11 +47,11 @@ class CustomerManager {
     CreateCustomer = function(Username, Email, Password, BillingAddress, ZipCode, Street) {
 
       // Creates New Customer
-      let CustomerRegistrationForm = new CustomerRegistrationForm(
+      let registrationForm = new CustomerRegistrationForm(
       Username, Email, Password, BillingAddress, ZipCode, Street)
       
       // Creates New Customer and Returns A Response 
-      let newCustomer, CustomerError = customers_rest.CreateCustomerRestController(CustomerRegistrationForm.ToBlob())
+      let newCustomer, CustomerError = customers_rest.CreateCustomerRestController(registrationForm.ToBlob())
       if (CustomerError != null){return null, CustomerError}
       return newCustomer, CustomerError
     }
@@ -76,4 +76,4 @@ class CustomerManager {
     }
 }
 
-export {CustomerManager, CustomerRegistrationForm, CustomerLoginForm};
+export {CustomerRegistrationForm, CustomerLoginForm, CustomerManager};

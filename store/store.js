@@ -105,7 +105,7 @@ export default new Vuex.Store({
         return notificationObj.message !== notification
       })
     },
-
+    
     TOGGLE_UPDATE_VIRTUAL_MACHINE(state) {
       // Toggling Update Virtual Machine Window
       state.updateVirtualMachine = !state.updateVirtualMachine;

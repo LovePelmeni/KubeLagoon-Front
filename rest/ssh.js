@@ -5,18 +5,27 @@ var BACKEND_APPLICATION_PORT = process.env.BACKEND_APPLICATION_PORT
 
 var Url = require('url-parse');
 
-
-function RemoveSshKeyRestController(SshKeyPath, VirtualMachineId) {
-  // Rest Controller, that Removes SSH Key pair from the Virtual Machine Server
-}
-
-function UpdateSshKeyRestController(SshKeyPath, VirtualMachineId) {
-  // Updates SSH Keys for the Customer's Virtual Machine Server
-}
-
-
-function DownloadSshKeyRestController(SshKeyPath, VirtualMachineId) {
+function DownloadSshKeyRestController(JwtToken, SshKeyPath, VirtualMachineId) {
   // Downloads SSH Public Key File to the Customer's Desktop, if the Virtual Machine has One
+  var APIUrl = new Url("http://%s:%s/download/ssh/key" % BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT)
+  let Response, ResponseError = global.jQuery.ajax({
+    url: APIUrl, 
+    type: "GET", 
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Authorization": JwtToken,
+    },
+    success: function(Response) {
+      if (Response.StatusCode == 200 || Response.StatusCode == 201) {
+        return Response, null
+      }
+    },
+    error: function(ResponseError){
+      let newError = new Error(ResponseError)
+      return null, newError
+    }
+  })
+  return Response, ResponseError
 }
 
 export {RemoveSshKeyRestController,

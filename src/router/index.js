@@ -7,6 +7,7 @@ import CustomerProfile from "../views/CustomerProfile.vue";
 import LoginPage from "../views/LoginPage.vue";
 import RegistrationPage from "../views/RegistrationPage.vue";
 import initializationModal from "../views/InitializationModal.vue";
+import deployErrorDescription from "../components/deployError.vue";
 
 const routes = [
   {
@@ -33,6 +34,11 @@ const routes = [
     path: "/virtual/machine/setup/",
     name: "virtual_machine_setup",
     component: initializationModal,
+  },
+  {
+    path: "/virtual/machine/error/",
+    name: "virtual_machine_errors",
+    component: deployErrorDescription,
   },
   {
     path: "/customer/profile/",
