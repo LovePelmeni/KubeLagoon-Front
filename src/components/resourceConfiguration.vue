@@ -7,7 +7,11 @@
         <v-text-field
         @change="ValidateCpuResources"
         :rules="CpuRules"
-        required type="text" id="CpuNum" v-model="CpuNum" />
+        required
+        type="text"
+        id="CpuNum"
+        v-model="CpuNum"
+        />
       </div>
 
       <div class="modalField flex flex-column">
@@ -15,7 +19,10 @@
 
         <v-text-field
         :rules="MaxCpuRules"
-        required type="text" id="MaxCpu" v-model="MaxCpu" />
+        required 
+        type="text" 
+        id="MaxCpu" 
+        v-model="MaxCpu" />
       </div>
 
       <div class="modalField flex flex-column">
@@ -23,7 +30,10 @@
 
         <v-text-field
         :rules="MemoryInMegabytesRules"
-        required type="text" id="MemoryInMegabytes" v-model="Memory" />
+        required 
+        type="text" 
+        id="MemoryInMegabytes"
+        v-model="Memory" />
       </div>
 
       <div class="resources-details flex">
@@ -32,14 +42,20 @@
           <label for="MaxMemory">Max Memory Capacity (MB)</label>
           <v-text-field
           :rules="MaxMemoryRules"
-          required type="text" id="MaxMemory" v-model="MaxMemory" />
+          required 
+          type="text" 
+          id="MaxMemory" 
+          v-model="MaxMemory" />
         </div>
 
         <div class="modalField flex flex-column">
           <label for="Storage">Storage (GB)</label>
           <v-text-field
           :rules="StorageRules"
-          required type="text" id="StorageCapacity" v-model="storageCapacity" />
+          required 
+          type="text" 
+          id="StorageCapacity"
+          v-model="storageCapacity" />
         </div>
 
         <div class="modalField flex flex-column">
@@ -47,9 +63,11 @@
 
           <v-text-field
           :rules="StorageRules"
-          required type="text" id="maxStorageCapacity" v-model="maxStorageCapacity" />
+          required 
+          type="text" 
+          id="maxStorageCapacity" 
+          v-model="maxStorageCapacity" />
         </div>
-
       </div>
 
 </template>
@@ -124,6 +142,19 @@ export default {
     }
   },
   methods: {
+
+    GetResourceConfigurationSubmittedFormData() {
+      // Returns the Form Data of the Resource Configuration serialized into the Object 
+      let Data = {
+        "CpuNum": this.CpuNum, 
+        "MaxCpu": this.MaxCpu, 
+        "Memory": this.Memory, 
+        "MaxMemory": this.MaxMemory, 
+        "StorageCapacity": this.storageCapacity, 
+        "MaxStorageCapacity": this.MaxStorageCapacity,
+      }
+      return Data
+    },
 
     ProcessMaxMemoryConvertation(event) {
         // Converts Max Memory value from the specified value to the megabytes

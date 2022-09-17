@@ -8,10 +8,10 @@
                   <h2 class="indigo--text" style="margin-bottom: 30px">Datacenters</h2>
                 </div>
 
-                    <v-select v-model="AddedDatacenter" label="Datacenter" :items="Datacenters">
+                    <v-select item-text="text" ref="Datacenter" v-model="AddedDatacenter" label="Datacenter" :items="Datacenters" return-object>
 
                            <template v-slot:selection="{ item, index }">
-                              <input hidden :value="index">
+                              <input :required="AddedDatacenter" hidden :value="index">
                               <img :src="item.IconImageUrl">{{ item.DatacenterName }}
                             </template>
 
@@ -26,7 +26,7 @@
                   <h2 class="indigo--text" style="margin-bottom: 30px">Operational Systems</h2>
                   </div>
 
-                  <v-select v-model="AddedOperationalSystem" label="Operational System" :items="OperationalSystems">
+                  <v-select ref="OperationalSystem" v-model="AddedOperationalSystem" label="Operational System" :items="OperationalSystems" return-object>
 
                               <template v-slot:selection="{ item, index}">
                                   <input type="hidden" :value="index">
@@ -43,7 +43,7 @@
                 <div class="text-center">
                   <h2 class="indigo--text" style="margin-bottom: 30px">Tools</h2>
                 </div>
-                    <v-select v-model="AddedPreInstalledTools" label="Pre Install Tools" :items="PreInstalledTools">
+                    <v-select ref="Tools" v-model="AddedPreInstalledTools" label="Pre Install Tools" :items="PreInstalledTools" >
 
                           <template v-slot:selection="{ item, index }">
                                     <input type="hidden" :value="index">
@@ -76,7 +76,6 @@ export default {
     this.AddedDatacenter = null
     this.AddedOperationalSystem = null
     this.AddedPreInstalledTools = []
-
   },
   data() {
     return {
@@ -160,6 +159,16 @@ export default {
   },
 
   methods: {
+
+    GetHardwareSubmittedFormData() {
+      // Returns the Value, Converted to the Blob Object of the Hardware Configuration Form 
+      let SubmittedFormData = {
+        "Datacenter": this.AddedDatacenter, 
+        "OperationalSystem": this.AddedOperationalSystem, 
+        "Tools": this.Tools,
+      }
+      return SubmittedFormData
+    },
 
     ValidateOperationalSystem(OperationalSystem) {
         //  Validates Operational System, picked up by the Customer

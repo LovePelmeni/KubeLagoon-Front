@@ -4,7 +4,7 @@
     <v-col cols="10" lg="4" class="mx-auto">
       <v-card class="pa-4">
 
-    <v-form @submit.prevent="ValidateInput" class="virtual-machine-content" style="width: 1500px; justify-content: center">
+    <v-form class="virtual-machine-content" style="width: 1500px; justify-content: center">
 
       <!-- Virtual Machine Work Details -->
 
@@ -58,9 +58,9 @@
 
                   <div class="buttonBlock flex" style="width: 800px">
                     <button type="submit" @click="closeVirtualMachineSettings" class="red"> Cancel Setup</button>
-                    <button v-if="!updateVirtualMachine" type="submit" @click="saveVirtualMachineDraft" class="dark-purple">Save Setup</button>
-                    <button v-if="!updateVirtualMachine" type="submit" @click="CreateNewVirtualMachine" class="purple">Create New Virtual Machine</button>
-                    <button v-if="updateVirtualMachine"  type="sumbit" class="purple">Update Virtual Machine</button>
+                    <button v-if="!updateVirtualMachine" type="submit" @submit="saveVirtualMachineDraft" class="dark-purple">Save Setup</button>
+                    <button v-if="!updateVirtualMachine" type="submit" @submit="CreateNewVirtualMachine" class="purple">Create New Virtual Machine</button>
+                    <button v-if="updateVirtualMachine"  type="submit" @submit="UpdateVirtualMachine" class="purple" >Update Virtual Machine</button>
                   </div>
               </div>
           </v-form>
@@ -209,11 +209,6 @@ export default {
       //Checks if the Configuration is a Saved Draft
     },
 
-
-    ValidateInput() {
-      // Validates The Whole Configuration Input
-    },
-
     addVirtualMachineToList(NewVirtualMachine) {
       // Adds new Object to the Customer's Virtual Machine List
       this.VirtualMachineItemList.push({
@@ -249,14 +244,17 @@ export default {
     },
 
     // Virtual Machine Functions Goes There
-    CreateNewVirtualMachine(hardwareConfigurationData, customizedConfigurationData) {
+    CreateNewVirtualMachine() {
 
       // Initializes New Virtual Machine
       // Initializing New Resources
 
+      let hardwareConfigurationData = this.GetHardwareSubmittedFormData()
+      let customizedConfigurationData = this.GetResourceConfigurationSubmittedFormData()
+
       this.loading = true
       let VirtualMachineInfo, CreationError = this.CREATE_VIRTUAL_MACHINE(
-      this.JwtToken, hardwareConfigurationData, customizedConfigurationData)
+      this.JwtToken, customizedConfigurationData, hardwareConfigurationData)
 
       // If the Virtual Machine Has been Successfully Initialized and Created
       // Adding it to the Customer's Virtual Machine Item List
@@ -265,6 +263,9 @@ export default {
         let VmManager = new vm.VirtualMachineManager()
         let VirtualMachine = VmManager.GetVirtualMachine(this.JwtToken, VirtualMachineInfo["VirtualMachineId"])
         this.addVirtualMachineToList(VirtualMachine)
+      }else{
+        this.VirtualServerInitializationError = CreationError 
+        this.OperationFailed = true
       }
       this.loading = false
     },

@@ -1,13 +1,20 @@
 import * as customers_rest from "../rest/customers.js";
 
-
 class CustomerRegistrationForm {
   // Base Class for the Registration Form 
   // Entity, that represents Customer Registration Form Data
-  constructor(Username, Email, Password) {
+  constructor(Username, Email, Password, BillingAddress, ZipCode, Street) {
     this.Username = Username
     this.Email = Email
     this.Password = Password
+    this.BillingAddress = BillingAddress 
+    this.ZipCode = ZipCode 
+    this.Street = Street 
+  }
+  ToBlob() {
+    // Returns Blob of JSON of the Customer Registration Form
+    return {"Username": this.Username, 
+    "Password": this.Password, "Email": this.Email}
   }
 }
 
@@ -17,40 +24,9 @@ class CustomerLoginForm {
     this.Username = Username
     this.Password = Password
   }
-}
-
-class CustomerInputValidator {
-  // User Info Validation Form
-  constructor(Username, Email, Password) {
-    this.Username = Username
-    this.Email = Email
-    this.Password = Password
-    this.DataInput = {"Username": this.Username,
-    "Email": this.Email, "Password": this.Password}
-  }
-  ValidateLoginInput = function() {
-    // Validates Login Input
-  }
-  ValidateRegistrationInput = function() {
-    // Validates Registration Input
-  }
-
-  ValidateInput = function() {
-    // Validates Initial Property Input
-    var InvalidFields = []
-    var RegexsPatterns = {
-      "Username": new RegExp("^[0-9a-zA-Z]{1,100}$"),
-      "Email": new RegExp("^[a-z0-9](.?[a-z0-9]){5,}@g(oogle)?mail.com$"),
-      "Password": new RegExp("^[0-9a-zA-Z]{1,100}$")}
-    for (let PropertyKey in Object(this.DataInput).Keys()){
-        let Matches = RegexsPatterns[PropertyKey].match(this.DataInput[PropertyKey])
-        if (Matches != true){
-          InvalidFields = InvalidFields.append(
-          "Invalid Value for Field `%s`", PropertyKey)
-        }
-        continue
-    }
-    return InvalidFields
+  ToBlob() {
+    // Returns the Blob of the JSON of the Customer login Form 
+    return {"Username": this.Username, "Password": this.Password}
   }
 }
 
@@ -58,13 +34,14 @@ class CustomerManager {
   // Class, represents Management tool for handling Customer's Operations
 
     LoginCustomer = function(Username, Password) {
-      let LoggedIn, LoggedInError = customers_rest.LoginCustomerRestController(Username, Password)
+      let LoginForm = new CustomerLoginForm(Username, Password)
+      let LoggedIn, LoggedInError = customers_rest.LoginCustomerRestController(LoginForm.ToBlob())
       return LoggedIn, LoggedInError
     }
 
-    LogoutCustomer = function() {
-      let LoggedOut, LoggoutError = customers_rest.LogoutCustomerRestController()
-      return LoggedOut, LoggoutError
+    LogoutCustomer = function(JwtToken) {
+      let LoggedOut, LogoutError = customers_rest.LogoutCustomerRestController(JwtToken)
+      return LoggedOut, LogoutError
     }
 
     CreateCustomer = function(Username, Email, Password, BillingAddress, ZipCode, Street) {
@@ -74,21 +51,21 @@ class CustomerManager {
       Username, Email, Password, BillingAddress, ZipCode, Street)
       
       // Creates New Customer and Returns A Response 
-      let newCustomer, CustomerError = customers_rest.CreateCustomerRestController(CustomerRegistrationForm)
+      let newCustomer, CustomerError = customers_rest.CreateCustomerRestController(CustomerRegistrationForm.ToBlob())
       if (CustomerError != null){return null, CustomerError}
       return newCustomer, CustomerError
     }
 
-    DeleteCustomer = function() {
+    DeleteCustomer = function(JwtToken) {
       // Deletes Existing Customer's Profile
-      let Deleted, DeleteError = customers_rest.DeleteCustomerRestController()
+      let Deleted, DeleteError = customers_rest.DeleteCustomerRestController(JwtToken)
       if (DeleteError != null) {return null, DeleteError}
       return Deleted, DeleteError
     }
 
-    ResetPassword = function(newPassword) {
+    ResetPassword = function(JwtToken, newPassword) {
       // Resets password for the Customer's Profile
-      let Reset, ResetError = customers_rest.ResetPasswordRestController(newPassword)
+      let Reset, ResetError = customers_rest.ResetPasswordRestController(JwtToken, newPassword)
       if (ResetError != null){return null, ResetError}
       return Reset, ResetError
     }
@@ -99,4 +76,4 @@ class CustomerManager {
     }
 }
 
-export {CustomerManager, CustomerInputValidator, CustomerRegistrationForm, CustomerLoginForm};
+export {CustomerManager, CustomerRegistrationForm, CustomerLoginForm};

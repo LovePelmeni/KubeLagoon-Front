@@ -1,6 +1,5 @@
 var BACKEND_APPLICATION_HOST = process.env.BACKEND_APPLICATION_HOST
 var BACKEND_APPLICATION_PORT = process.env.BACKEND_APPLICATION_PORT
-/* eslint-disable no-unused-vars */
 
 var $ = global.jQuery;
 window.jquery = $;
@@ -110,14 +109,14 @@ function DeleteCustomerRestController(JwtToken) {
   return Response, ResponseError
 }
 
-function LoginCustomerRestController(Username, Password) {
+function LoginCustomerRestController(LoginForm) {
   // Logs in Customer into the Profile
   var APIUrl = Url("http://%s:%s/login/" % (
   BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
   var Response, ResponseError = global.jQuery.ajax({
     type: "POST",
     URL: APIUrl,
-    data: JSON.stringify({"Username": Username, "Password": Password}),
+    data: JSON.stringify(LoginForm),
     headers: {
       "Access-Control-Allow-Origin": "*",
     },
