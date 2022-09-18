@@ -28,3 +28,4 @@ app.use(Vuex)
 app.use(Vuetify)
 
 app.mount('#app')
+

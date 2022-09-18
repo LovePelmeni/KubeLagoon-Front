@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
-import virtualMachine from "../views/virtualMachine.vue";
+import virtualMachine from "../components/VirtualMachine.vue";
 import HomePage from "../views/home.vue";
 
 import CustomerProfile from "../views/CustomerProfile.vue";

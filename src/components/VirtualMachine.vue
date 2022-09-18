@@ -11,7 +11,7 @@
           d="M730.6 18.4l-505.4 505.2 505.4 505.4 144.8-144.8-360.6-360.6 360.6-360.4z"
         ></path>
       </svg>
-      <span class="back-text">Go Back</span>
+      <span class="back-text" @click="redirectToPreviousPage()">Go Back</span>
     </router-link>
     <div class="status-container">
       <p class="status-title">Status</p>
@@ -43,7 +43,7 @@
         >
           Shutdown
         </button>
-        <a :href="VirtualMachine.SshKeyFilePath" download><h1>Download SSH Keys</h1></a>
+        <a class="download-ssh-key-button flex" :href="VirtualMachine.SshKeyFilePath" download><h1>Download SSH Keys</h1></a>
       </div>
     </div>
 
@@ -81,29 +81,30 @@
         <p class="client-country">{{ Customer.Country }}</p>
       </div>
       <div class="item-container">
-        <p>ID</p>
-        <p>Name</p>
-        <p>Status</p>
+        <p>Resource</p> 
+        <p>Usage</p>
         <p>Total</p>
         <div
           class="project-item"
-          v-for="(item, index) in invoice.projects"
+          v-for="(PropertyName, index) in Object.keys(
+            {'Cpu': VirtualMachine.Cpu, 'Memory': VirtualMachine.Memory, 
+            'Storage': VirtualMachine.StorageCapacity,
+          })"
           :key="index"
         >
-          <p class="prj-text">{{ item.name }}</p>
-          <p class="prj-text">{{ item.quantity }}</p>
+          <p class="prj-text">{{ PropertyName }}</p>
+          <p class="prj-text">{{ VirtualMachine[PropertyName] }}</p>
+
+          <!-- Receiving the Cost of the Specific Property  (Cpu, Memory, etc....)-->
           <p class="prj-text">
-            &#8378; {{ VirtualMachine.TotalCost.toLocaleString("en-US") }}
-          </p>
-          <p class="prj-text">
-            &#8378; {{ VirtualMachine.TotalCost.toLocaleString("en-US") }}
+            &#8378; {{ GetPropertyCost(PropertyName, VirtualMachine[PropertyName]) }} 
           </p>
         </div>
       </div>
       <div class="amount">
         <p class="amount-text">Total Amount</p>
         <p class="amount-number">
-          &#8378; {{ VirtualMachine.TotalCost.toLocaleString("en-US") }}
+          &#8378; {{ VirtualMachine.TotalCost }}
         </p>
       </div>
     </div>
@@ -114,23 +115,84 @@
 
 import { mapMutations } from "vuex";
 import { mapActions } from "vuex";
+import { useCookies } from "vue3-cookies";
+import * as cost from "../../cost/virtualMachineCost";
 
 export default {
   name: "VirtualMachineInfo",
-  props: {
-    VirtualMachine: null,
-    Customer: null,
+  setup() {
+    const { cookie } = useCookies();
+    return { cookie };
   },
-  methods: {
+  mounted() {
+    this.JwtToken = this.cookie?.get("jwt-token")
+    this.getVirtualMachineServerInfo()
+    this.getVirtualMachineServerOwnerInfo()
+  },
+  data() {
+    return {
+      Customer: {}, // Object
+      VirtualMachine: {}, // Object
+    }
+  },
+  methods: { 
     ...mapActions([
       "DELETE_VIRTUAL_MACHINE",
+      "RUN_VIRTUAL_MACHINE",
+      "SHUTDOWN_VIRTUAL_MACHINE",
+      "REBOOT_VIRTUAL_MACHINE",
+      "GET_VIRTUAL_MACHINE",
     ]),
-    deleteItem() {
-      let index = this.VirtualMachines.findIndex(
-        (item) => item.id === this.invoice.id
-      );
-      this.DELETE_VIRTUAL_MACHINE(index);
-      this.$router.push({ name: "Home" });
+    ...mapMutations([
+      "TOGGLE_ERROR",
+    ]),
+
+
+    RedirectToPreviousPage() {
+      // redirects customer to the Previous Page 
+      window.location.replace(document.referrer)
+    },
+
+    GetPropertyCost(PropertyName, PropertyValue) {
+      // Returns the Cost of the Specific Property 
+
+      if (PropertyName.toLowerCase() == "cpu") {
+        // Calculating Price for the Cpu Property
+        let calculator = new cost.CpuUsageBillCalculator(Number(PropertyValue))
+        return calculator.Calculate()
+      }
+  
+      if (PropertyName.toLowerCase() == "memory") {   
+        // Calculating Price for the Memory Property 
+                let calculator = new cost.MemoryUsageBillCalculator(Number(PropertyValue))
+        return calculator.Calculate()
+      }
+
+      if (PropertyName.toLowerCase() == "storagecapacity") {
+        // Calculating Price for the Storage Capacity Property
+        let calculator = new cost.StorageUsageBillCalculator(Number(PropertyValue))
+        return calculator.Calculate()
+      }
+    },
+
+    getVirtualMachineServerInfo() {
+      // Returns the Virtual Machine Object Info based on the ID passed at query params 
+      let VirtualMachineId = this.$route.query.VirtualMachineId
+      let VirtualMachine, VirtualMachineError = this.GET_VIRTUAL_MACHINE(this.JwtToken, VirtualMachineId)
+      if (VirtualMachineError != null) {let ErrorMessage = "Server Not Found";
+
+      this.TOGGLE_ERROR(ErrorMessage); 
+      this.$router.push({name: 'main_page'})}
+      this.VirtualMachine = VirtualMachine
+    },
+    getVirtualMachineServerCustomer() {
+      // Returns the Info about the Owner Of the Virtual Machine  
+      let VirtualMachineId = this.$route.query.VirtualMachineId
+      let Customer, CustomerError = this.GET_VIRTUAL_MACHINE_OWNER(VirtualMachineId)
+      if (CustomerError != null) {
+      let ErrorMessage = "Server Owner not found"; 
+      this.TOGGLE_ERROR(ErrorMessage); this.$router.push({name: "main_page"})}
+      this.Customer = Customer
     },
     deleteVirtualMachine() {
       // Deletes the Virtual Machine Server 
@@ -142,7 +204,15 @@ export default {
 
 </script>
 
-<style scoped>
+<style lang="scss">
+
+
+.download-ssh-key-button {
+  // Button for downloading ssh key of the Virtual Machine Server
+  background-color: green; 
+  border-radius: 10px;
+}
+
 .detail {
   width: 100%;
   height: 100%;
@@ -360,174 +430,6 @@ export default {
     padding: 100px 20px 20px 20px;
   }
 }
+
+
 </style>
-
-
-<script>
-
-import * as healthcheck from "../healthcheck/healthcheck.js";
-import { newRouter } from "../../router/router.js";
-import { mapMutations } from "vuex";
-import { useCookies } from "vue3-cookies";
-
-export default {
-
-  name: "virtualMachineInfo",
-  setup() {
-    const { cookie } = useCookies();
-    return { cookie };
-  },
-  mounted() {
-    this.JwtToken = this.cookie.get("jwt-token")
-  },
-  data() {
-    return {
-      // Authentication Credentials 
-      JwtToken: this.cookie.get("jwt-token"),
-
-      virtualMachineLoaded: false,
-      // Owner Name
-      CustomerName: GetCustomerName(),
-
-      // General Virtual Machine Info
-      VirtualMachineId: null,
-      VirtualMachineName: null,
-      IPAddress: null,
-
-      // Ssh Info
-      RootUserName: null,
-      RootUserPassword: null,
-      SslEnabled: null,
-
-      // Cost Info
-      TotalCostThisMonth: null,
-      PricePerDay: null,
-
-      // Virtual Machine General Configuration
-      DatacenterName: null,
-      MaxCpuUsage: null,
-      MaxMemoryUsage: null,
-      StorageCapacity: null,
-
-      // Health Metrics Attributes
-      CpuUsage: null,
-      MemoryUsage: null,
-      Status: null,
-
-      // Health Check API Class
-      HealthAPICheckerJobName: null,
-    }
-  },
-  created() {
-    this.GetCustomerVirtualMachine()
-    this.GetVirtualMachineHealthMetrics()
-  },
-  methods: {
-
-    ...mapMutations(["TOGGLE_ERROR"]),
-
-    RedirectHome() {
-      // Redirect Back to the Main Page
-      this.HideVirtualMachineHealthMetrics(this.HealthAPICheckerJobName)
-      newRouter.push({name: "main_page"})
-    },
-
-    ShowError(ErrorMessage) {
-      // Showing up and Error
-      this.TOGGLE_ERROR(ErrorMessage)
-    },
-
-    GetCustomerVirtualMachine() {
-      // Returns Virtual Machine Info, (is not being changed dynamically)
-
-      let VirtualMachineId = this.$route.params.VirtualMachineId
-      VirtualMachine, VirtualMachineError = this.GET_VIRTUAL_MACHINE(this.JwtToken, VirtualMachineId)
-
-      if (VirtualMachineError != null) {
-          this.ShowError(VirtualMachineError.Error)
-      }else{
-
-          this.virtualMachineLoaded = true
-          this.CustomerName = VirtualMachineInfo["Metadata"]["OwnerName"]
-
-          this.VirtualMachineId = VirtualMachineInfo["Metadata"]["VirtualMachineId"]
-          this.VirtualMachineName = VirtualMachineInfo["Metadata"]["VirtualMachineName"]
-          this.IPAddress        = VirtualMachineInfo["Metadata"]["IPAddress"]
-
-          this.RootUserName     = VirtualMachineInfo["SshCredentials"]["RootUserName"]
-          this.RootUserPassword = VirtualMachineInfo["SshCredentials"]["RootUserPassword"]
-          this.RootCertificate = VirtualMachineInfo["SshCredentials"]["RootCertificate"]
-          this.SslEnabled       = VirtualMachineInfo["SshCredentials"]["SslEnabled"]
-
-          this.TotalCostThisMonth = VirtualMachineInfo["Cost"]["TotalCostThisMonth"] // Total Cost this Month, based on the VM Usage
-          this.PricePerDay      = VirtualMachineInfo["Cost"]["PricePerDay"] // Price Per Day, based on the VM Setup
-
-          this.DatacenterName = VirtualMachineInfo["Datacenter"]["DatacenterName"]
-          this.MaxCpuUsage = VirtualMachineInfo["ResourcesLimits"]["MaxCpuUsage"]
-          this.MaxCpuUsage = VirtualMachineInfo["ResourceLimits"]["MaxMemoryUsage"]
-          this.StorageCapacity = VirtualMachineInfo["ResourceLimits"]["StorageCapacity"]
-        }
-    },
-
-    ShowVirtualMachineHealthMetrics() {
-      // Returns Health Metrics of the Virtual Machine
-
-      let VirtualMachineId = this.$route.params.VirtualMachineId
-      let HealthMetricsManager = new healthcheck.VirtualMachineHealthStateChecker()
-      let JobUniqueName, StartError = HealthMetricsManager.StartHealthChecker(VirtualMachineId)
-
-      if (StartError != null) {
-        for (let Item in [this.CpuUsage, this.MemoryUsage, this.Status])  {
-          Item.innerText = "Failed to Parse Item"
-        }
-      }else{
-        this.HealthAPICheckerJobName = JobUniqueName
-      }
-    },
-    HideVirtualMachineHealthMetrics(JobUniqueName){
-      // Shuts down the Health Metrics API Crontab Job by stopping it using Job Unique Name
-      let HealthMetricsManager = new healthcheck.VirtualMachineHealthStateChecker()
-      HealthMetricsManager.RemoveHealthChecker(JobUniqueName)
-    },
-  },
-}
-
-</script>
-
-<style lang="scss" scoped>
-
-.virtualMachine {
-  text-decoration: none;
-  cursor: pointer;
-  gap: 16px;
-  margin-bottom: 16px;
-  color: #fff;
-  border-radius: 20px;
-  padding: 28px 32px;
-  background-color: #1e2139;
-  align-items: center;
-  span {
-    font-size: 13px;
-  }
-  .left {
-    align-items: center;
-    flex-basis: 60%;
-    gap: 16px;
-    span {
-      flex: 1;
-    }
-    .tracking-number {
-      text-transform: uppercase;
-    }
-  }
-  .right {
-    gap: 16px;
-    flex-basis: 40%;
-    align-items: center;
-    .price {
-      flex: 1;
-      font-size: 16px;
-      font-weight: 600px;
-    }
-  }
-}

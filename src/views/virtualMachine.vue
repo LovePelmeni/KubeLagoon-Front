@@ -1,5 +1,5 @@
 <template>
-  <div v-if="currentVirtualMachine" class="virtual-machine container">
+  <div v-if="VirtualMachine" class="virtual-machine container">
     <router-link class="nav-link flex" :to="{ name: 'main_page' }">
       <img :src="icon_arrow_left" @click="RedirectHome()" alt="" /> Go Back
     </router-link>
@@ -12,30 +12,30 @@
          <div
            class="status-button flex"
            :class="{
-             running: currentVirtualMachine.Running,
-             shutdown: currentVirtualMachine.Shutdown,
-             deploying: currentVirtualMachine.Deploying,
+             running: VirtualMachine.Running,
+             shutdown: VirtualMachine.Shutdown,
+             deploying: VirtualMachine.Deploying,
            }"
          >
-           <span v-if="currentVirtualMachine.Running">Running</span>
-           <span v-if="currentVirtualMachine.Shutdown">Shutdown</span>
-           <span v-if="currentVirtualMachine.Deploying">Deploying</span>
+           <span v-if="VirtualMachine.Running">Running</span>
+           <span v-if="VirtualMachine.Shutdown">Shutdown</span>
+           <span v-if="VirtualMachine.Deploying">Deploying</span>
          </div>
 
          <div class="right flex">
 
-          <button @click="runVirtualMachine(currentVirtualMachine.VirtualMachineId)" class="greeen">Run</button>
-          <button @click="updateVirtualMachine(currentVirtualMachine.VirtualMachineId)" class="yellow">Edit</button>
-          <button @click="deleteVirtualMachine(currentVirtualMachine.VirtualMachineId)" class="red">Delete</button>
-          <button @click="shutdownVirtualMachine(currentVirtualMachine.VirtualMachineId)" class="red">Shutdown</button>
-          <button @click="rebootVirtualMachine(currentVirtualMachine.VirtualMachineId)" class="yellow">Reboot</button>
+          <button @click="RunVirtualMachine(VirtualMachine.VirtualMachineId)" class="greeen">Run</button>
+          <button @click="UpdateVirtualMachine(VirtualMachine.VirtualMachineId)" class="yellow">Edit</button>
+          <button @click="DeleteVirtualMachine(VirtualMachine.VirtualMachineId)" class="red">Delete</button>
+          <button @click="ShutdownVirtualMachine(VirtualMachine.VirtualMachineId)" class="red">Shutdown</button>
+          <button @click="RebootVirtualMachine(VirtualMachine.VirtualMachineId)" class="yellow">Reboot</button>
 
-          <button id="shutdownButton" @click="updateVirtualMachine(currentVirtualMachine.VirtualMachineId)" v-if="currentInvoice.Deploying" class="orange">
+          <button id="shutdownButton" @click="updateVirtualMachine(currentVirtualMachine.VirtualMachineId)" v-if="VirtualMachine.Running" class="orange">
            Shutdown
           </button>
           <button id="runButton"
-            v-if="currentVirtualMachine.virtualMachineDraft || currentVirtualMachine.Shutdown"
-            @click="u(currentVirtualMachine.VirtualMachineId)"
+            v-if="VirtualMachine.virtualMachineDraft || VirtualMachine.Shutdown"
+            @click="RunVirtualMachine(VirtualMachine.VirtualMachineId)"
             class="green"
           >
             Run
@@ -43,46 +43,46 @@
       </div>
     </div>
 
-    <!-- Invoice Details -->
+    <!-- Virtual Machine Details -->
     <div class="virtual-machine-details flex flex-column">
       <div class="top flex">
         <div class="left flex flex-column">
-          <p><span>#</span>{{ currentVirtualMachine.VirtualMachineName }}</p>
+          <p><span>#</span>{{ VirtualMachine.VirtualMachineName }}</p>
           <p>Virtual Machine Server</p>
         </div>
         <div class="right flex flex-column">
           <p>All the Bills will be address to</p>
-          <p>{{ currentVirtualMachine.billerStreetAddress }}</p>
-          <p>{{ currentVirtualMachine.billerCity }}</p>
-          <p>{{ currentVirtualMachine.billerZipCode }}</p>
-          <p>{{ currentVirtualMachine.billerCountry }}</p>
+          <p>{{ Customer.BillingAddress }}</p>
+          <p>{{ Customer.City }}</p>
+          <p>{{ Customer.Country }}</p>
+          <p>{{ Customer.Street }}</p>
         </div>
       </div>
       <div class="middle flex">
         <div class="payment flex flex-column">
           <h4>Creation Date</h4>
           <p>
-            {{ currentVirtualMachine.CreatedAt }}
+            {{ VirtualMachine.CreatedAt }}
           </p>
           <h4>Payment Date</h4>
           <p>
-            {{ currentVirtualMachine.paymentDueDate }}
+            {{ VirtualMachine.paymentDueDate }}
           </p>
         </div>
         <div class="bill flex flex-column">
           <h4>Bill To</h4>
-          <p>{{ currentVirtualMachine.clientName }}</p>
-          <p>{{ currentVirtualMachine.clientStreetAddress }}</p>
-          <p>{{ currentVirtualMachine.clientCity }}</p>
-          <p>{{ currentVirtualMachine.clientZipCode }}</p>
-          <p>{{ currentVirtualMachine.clientCountry }}</p>
+          <p>{{ Customer }}</p>
+          <p>{{ VirtualMachine.clientStreetAddress }}</p>
+          <p>{{ VirtualMachine.clientCity }}</p>
+          <p>{{ VirtualMachine.clientZipCode }}</p>
+          <p>{{ VirtualMachine.clientCountry }}</p>
         </div>
         <div class="send-to flex flex-column">
           <h4>Sent To</h4>
-          <p>{{ currentVirtualMachine.OwnerEmail }}</p>
+          <p>{{ VirtualMachine.OwnerEmail }}</p>
         </div>
       </div>
-      <div class="bottom flex flex-column">
+      <!-- <div class="bottom flex flex-column">
         <div class="billing-items">
           <div class="heading flex">
             <p>ID</p>
@@ -98,16 +98,15 @@
             <p>{{ virtualMachine.PricePerDay }}</p>
             <p>{{ virtualMachine.TotalCost }}</p>
           </div>
-        </div>
+        </div> -->
         <div class="TotalCost flex">
           <p>In Total This Month</p>
-          <p>{{ currentVirtualMachine.TotalCost }}</p>
+          <p>{{ VirtualMachine.TotalCost }}</p>
         </div>
       </div>
     </div>
   </div>
 
-  </div>
 </template>
 
 <script>
@@ -118,6 +117,10 @@ import { useCookies } from "vue3-cookies";
 
 export default {
   name: "virtualMachine",
+  props: [
+    "VirtualMachine",
+    "Customer",
+  ],
   setup() {
     const { cookie } = useCookies();
     return { cookie };
@@ -166,11 +169,6 @@ export default {
     setCurrentVirtualMachine(VirtualMachineId) {
       // Setting up Current Virtual Machine within an Array
       this.SET_CURRENT_VIRTUAL_MACHINE(VirtualMachineId)
-    },
-
-    CreateVirtualMachine() {
-      // Redirects to the Main Page and activates Initialization Modal Window
-      router.$refs.push({name: 'main_page'})
     },
 
     ShutdownVirtualMachine(VirtualMachineId) {
