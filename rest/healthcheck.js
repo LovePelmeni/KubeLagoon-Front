@@ -1,15 +1,14 @@
 import "../healthcheck/healthcheck.js"
 /* eslint-disable no-unused-vars */
+require("url");
 
 var BACKEND_APPLICATION_HOST = process.env.BACKEND_APPLICATION_HOST
 var BACKEND_APPLICATION_PORT = process.env.BACKEND_APPLICATION_PORT
 
 
-var Url = require('url-parse');
-
 function GetHealthCheckMetricsRestController(jwtToken, VirtualMachineId) {
   // Rest Controller, that returns Metrics about the Health of the Virtual Machine Server
-  var APIUrl = new Url("http://%s:%s/health/metrics/",
+  var APIUrl = new url.URL("http://%s:%s/health/metrics/",
   BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT)
   APIUrl.searchParams.append("VirtualMachineId", VirtualMachineId)
   try {

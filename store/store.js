@@ -400,13 +400,13 @@ export default new Vuex.Store({
         }
     },
 
-    DELETE_VIRTUAL_MACHINE({commit, state}, JwtToken, payload) {
+    DELETE_VIRTUAL_MACHINE({commit, state}, JwtToken, VirtualMachineId) {
       // Deletes Virtual Machine Server
       let vmManager = new vm.VirtualMachineManager()
-      let deleted, deletionError = vmManager.DeleteVirtualMachine(JwtToken, payload["VirtualMachineId"])
+      let deleted, deletionError = vmManager.DeleteVirtualMachine(JwtToken, VirtualMachineId)
       if (deleted && deletionError == null) {
         state.VirtualMachineData = state.VirtualMachineData.filter(
-        (virtualMachine) => virtualMachine !== payload);
+        (virtualMachine) => virtualMachine.VirtualMachineId !== VirtualMachineId);
       }else {
         commit('TOGGLE_ERROR', "Failed to Delete Virtual Machine")
       }

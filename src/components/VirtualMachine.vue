@@ -14,36 +14,71 @@
       <span class="back-text" @click="redirectToPreviousPage()">Go Back</span>
     </router-link>
     <div class="status-container">
-      <p class="status-title">Status</p>
-      <p
+      <p class="status-title" style="margin-top: 6px; margin-right: 3px;">Status</p>
+      <p style="margin-top: 6px"
         class="status-body"
         :class="[
           VirtualMachine.Running === true
             ? 'running'
             : VirtualMachine.Shutdown === true
             ? 'shutdown'
-            : 'deploying',
+            ? VirtualMachine.Deploying === true
+            : 'deploying'
+            : 'unknown',
         ]"
       >
-        <span class="status-circle">.</span> {{ VirtualMachine.status }}
+        <span class="status-circle" style="margin-right: 5px" v-if="VirtualMachine.Running" />
+        <span class="status-circle" style="margin-right: 5px" v-if="VirtualMachine.Deploying" />
+        <span class="status-circle" style="margin-right: 5px" v-if="VirtualMachine.Shutdown" />
+        <span class="status-circle" style="margin-right: 5px" v-if="!VirtualMachine.Running && !VirtualMachine.Deploying && !VirtualMachine.Shutdown" />
       </p>
       <div class="btn-container">
         <button
           class="btn btn-edit"
-          v-if="VirtualMachine.Running === true" 
-          @click="startVirtualMachine"
+          v-if="VirtualMachine.Running === false" 
+          @click="StartVirtualMachine"
         >
           Run
         </button>
+        <button
+          class="btn btn-edit"
+          disabled
+          v-else
+        >
+          Run
+        </button>
+
         <button class="btn btn-delete" @click="deleteVirtualMachine">Delete</button>
         <button
           class="btn btn-mark"
-          v-if="VirtualMachine.status === 'Running'"
-          @click="Shutdown"
+          v-if="VirtualMachine.Shutdown === false"
+          @click="ShutdownVirtualMachine"
         >
           Shutdown
         </button>
-        <a class="download-ssh-key-button flex" :href="VirtualMachine.SshKeyFilePath" download><h1>Download SSH Keys</h1></a>
+        <button
+          class="btn btn-mark"
+          v-else
+          disabled
+        >
+          Shutdown
+        </button>
+
+        <button
+          class="btn btn-reboot"
+          v-if="VirtualMachine.Running == true || VirtualMachine.Shutdown == true"
+          @click="RebootVirtualMachine"
+        >
+          Reboot
+        </button>
+
+        <button
+          v-else
+          class="btn btn-reboot"
+          disabled
+          >
+          Reboot
+        </button>
       </div>
     </div>
 
@@ -52,33 +87,28 @@
         <p class="project-id">#{{ VirtualMachine.VirtualMachineId }}</p>
         <p class="project-desc">{{ VirtualMachine.VirtualMachineName }}</p>
       </div>
-      <div class="adress">
-        <p class="adress-street">{{ VirtualMachine.BillingAddress }}</p>
-        <p class="adress-city">{{ VirtualMachine.city }}</p>
-        <p class="adress-postcode">{{ VirtualMachine.postCode }}</p>
-        <p class="adress-country">{{ VirtualMachine.country }}</p>
-      </div>
+
       <div class="date">
-        <p class="date-label">Virtual Machine Date</p>
-        <p class="date-body">{{ VirtualMachine.paymentDueDate }}</p>
+        <p class="project-id" style="margin-bottom: 10px">Bill Due Date</p>
+        <p class="date-body">{{ VirtualMachine.paymentDueDate || new Date() }}</p>
+
+        <p class="project-id" style="margin-top: 30px">Bill Due Terms</p>
+        <p class="due-body">{{ VirtualMachine.PaymentDue || 0 }} days</p>
       </div>
       <div class="name">
-        <p class="name-label">Bill to:</p>
-        <p class="name-body">{{ VirtualMachine.CustomerName }}</p>
+        <p class="project-id" style="margin-bottom: 10px">Bill to</p>
+        <p class="name-body">{{ Customer.Username }}</p>
+        <p class="name-body">{{ Customer.Email }}</p>
+        <p class="name-body">{{ Customer.City }}, {{ Customer.Country }}</p>
+        <p class="name-body">{{ Customer.ZipCode }}</p>
       </div>
-      <div class="mail">
-        <p class="mail-label">Sent to:</p>
-        <p class="mail-body">{{ VirtualMachine.CustomerEmail }}</p>
-      </div>
-      <div class="due">
-        <p class="due-label">Virtual Machine Bill Due</p>
-        <p class="due-body">{{ VirtualMachine.PaymentDue }}</p>
-      </div>
-      <div class="client-adress">
-        <p class="client-street">{{ Customer.Street }}</p>
-        <p class="client-city">{{ Customer.City }}</p>
-        <p class="client-postcode">{{ Customer.ZipCode }}</p>
-        <p class="client-country">{{ Customer.Country }}</p>
+
+      <div class="adress">
+        <p class="project-id">Bill From</p>
+        <p class="adress-street" style="margin-top: 10px">KubeLagoon, Inc</p>
+        <p class="adress-city" style="margin-top: 10px">Vancoover, Canada</p>
+        <p class="adress-postcode" style="margin-top: 10px">125167</p>
+        <p class="adress-country" style="margin-top: 10px">Smith Street, 4</p>
       </div>
       <div class="item-container">
         <p>Resource</p> 
@@ -88,26 +118,31 @@
           class="project-item"
           v-for="(PropertyName, index) in Object.keys(
             {'Cpu': VirtualMachine.Cpu, 'Memory': VirtualMachine.Memory, 
-            'Storage': VirtualMachine.StorageCapacity,
+            'StorageCapacity': VirtualMachine.StorageCapacity,
           })"
           :key="index"
         >
           <p class="prj-text">{{ PropertyName }}</p>
-          <p class="prj-text">{{ VirtualMachine[PropertyName] }}</p>
+          <p class="prj-text" v-if="PropertyName.toLowerCase() == 'cpu'">{{ VirtualMachine[PropertyName]|| 0 }}</p>
+          <p class="prj-text" v-if="PropertyName.toLowerCase() == 'memory'">{{ VirtualMachine[PropertyName] || 0 }}MB</p>
+          <p class="prj-text" v-if="PropertyName.toLowerCase() == 'storagecapacity'">{{ VirtualMachine[PropertyName] || 0 }}GB</p>
 
           <!-- Receiving the Cost of the Specific Property  (Cpu, Memory, etc....)-->
           <p class="prj-text">
-            &#8378; {{ GetPropertyCost(PropertyName, VirtualMachine[PropertyName]) }} 
+            &#36; {{ GetPropertyCost(PropertyName, VirtualMachine[PropertyName]) }} 
           </p>
         </div>
       </div>
       <div class="amount">
         <p class="amount-text">Total Amount</p>
         <p class="amount-number">
-          &#8378; {{ VirtualMachine.TotalCost }}
+          &#36; {{ GetTotalAmount(VirtualMachine["Cpu"], VirtualMachine["Memory"], VirtualMachine["StorageCapacity"]) }}
         </p>
       </div>
     </div>
+    <v-snackbar :v-if="VirtualMachineError" top color="red">
+        Registration Failed, {{ RegisterError }}
+      </v-snackbar>
   </main>
 </template>
 
@@ -131,8 +166,25 @@ export default {
   },
   data() {
     return {
-      Customer: {}, // Object
-      VirtualMachine: {}, // Object
+      VirtualMachineError: null,
+      Customer: {
+        "Username": "some_username",
+        "Email": "some_email@gmail.com",
+        "BillingAddress": "some-address",
+        "City": "Vancoover",
+        "Country": "Canada",
+        "ZipCode": "some-zip-code",
+        "Street": "Smith Street, 4",
+      }, // Object
+      VirtualMachine: {
+        "VirtualMachineName": "virtual-server",
+        "VirtualMachineId": "125",
+        "paymentDueDate": "2020-02-02",
+        "paymentDueTerms": "30",
+        "Running": true, 
+        "Deploying": false, 
+        "Shutdown": false,
+      }, // Object
     }
   },
   methods: { 
@@ -150,7 +202,7 @@ export default {
 
     RedirectToPreviousPage() {
       // redirects customer to the Previous Page 
-      window.location.replace(document.referrer)
+      this.$router.push({name: "main_page"})
     },
 
     GetPropertyCost(PropertyName, PropertyValue) {
@@ -158,21 +210,29 @@ export default {
 
       if (PropertyName.toLowerCase() == "cpu") {
         // Calculating Price for the Cpu Property
-        let calculator = new cost.CpuUsageBillCalculator(Number(PropertyValue))
+        let calculator = new cost.CpuUsageBillCalculator(Number(PropertyValue) || 0)
         return calculator.Calculate()
       }
   
       if (PropertyName.toLowerCase() == "memory") {   
         // Calculating Price for the Memory Property 
-                let calculator = new cost.MemoryUsageBillCalculator(Number(PropertyValue))
+        let calculator = new cost.MemoryUsageBillCalculator(Number(PropertyValue) || 0)
         return calculator.Calculate()
       }
 
       if (PropertyName.toLowerCase() == "storagecapacity") {
         // Calculating Price for the Storage Capacity Property
-        let calculator = new cost.StorageUsageBillCalculator(Number(PropertyValue))
+        let calculator = new cost.StorageUsageBillCalculator(Number(PropertyValue) || 0)
         return calculator.Calculate()
       }
+    },
+
+
+    GetTotalAmount(CpuNum, MemoryUsage, StorageUsage) {
+      // Returns the Full Total Amount for the Whole Virtual Machine Server 
+      let calculator = new cost.VirtualMachineCostCalculator(
+      Number(CpuNum) || 0, Number(MemoryUsage) || 0, Number(StorageUsage) || 0)
+      return calculator.CalculateCostPerMonth()
     },
 
     getVirtualMachineServerInfo() {
@@ -182,8 +242,8 @@ export default {
       if (VirtualMachineError != null) {let ErrorMessage = "Server Not Found";
 
       this.TOGGLE_ERROR(ErrorMessage); 
-      this.$router.push({name: 'main_page'})}
-      this.VirtualMachine = VirtualMachine
+      this.$router.push({name: 'main_page'})}else{
+      this.VirtualMachine = VirtualMachine}
     },
     getVirtualMachineServerCustomer() {
       // Returns the Info about the Owner Of the Virtual Machine  
@@ -191,13 +251,27 @@ export default {
       let Customer, CustomerError = this.GET_VIRTUAL_MACHINE_OWNER(VirtualMachineId)
       if (CustomerError != null) {
       let ErrorMessage = "Server Owner not found"; 
-      this.TOGGLE_ERROR(ErrorMessage); this.$router.push({name: "main_page"})}
-      this.Customer = Customer
+      this.TOGGLE_ERROR(ErrorMessage); this.$router.push({name: "main_page"})}else{
+      this.Customer = Customer}
     },
-    deleteVirtualMachine() {
+
+    DeleteVirtualMachine() {
       // Deletes the Virtual Machine Server 
-      let VirtualMachineId = this.VirtualMachine.VirtualMachineId 
+      let VirtualMachineId = this.$route.query.VirtualMachineId 
       this.DELETE_VIRTUAL_MACHINE(VirtualMachineId)
+    },
+
+    StartVirtualMachine() {
+      let VirtualMachineId = this.$route.query.VirtualMachineId 
+      this.RUN_VIRTUAL_MACHINE(this.JwtToken, VirtualMachineId)
+    },
+    ShutdownVirtualMachine() {
+      let VirtualMachineId = this.$route.query.VirtualMachineId 
+      this.SHUTDOWN_VIRTUAL_MACHINE(this.JwtToken, VirtualMachineId)
+    },
+    RebootVirtualMachine() {
+      let VirtualMachineId = this.$route.query.VirtualMachineId 
+      this.REBOOT_VIRTUAL_MACHINE(this.JwtToken, VirtualMachineId)
     },
   },
 };
@@ -264,14 +338,22 @@ export default {
 .shutdown {
   background-color: #292c45;
   color: rgb(224, 228, 251);
+  margin-left: 6px;
 }
 .deploying {
   background-color: rgba(255, 145, 0, 0.06);
   color: rgb(255, 145, 0);
+  margin-left: 6px;
 }
 .running {
   background-color: rgba(51, 215, 160, 0.06);
   color: rgb(51, 215, 160);
+  margin-left: 6px;
+}
+.unknown {
+  background-color: rgba(51, 215, 160, 0.06);
+  color: white;
+  margin-left: 6px;
 }
 .btn-container {
   margin-left: auto;
@@ -285,16 +367,36 @@ export default {
   cursor: pointer;
 }
 .btn-edit {
-  background-color: #252946;
+  background-color: green;
   margin-left: auto;
 }
 .btn-edit:hover {
-  background-color: #1b1d32;
+  background-color: green;
 }
+
+.btn-edit:disabled {
+  background-color: darkgreen;
+}
+
 .btn-delete {
   background-color: #ec5555;
   margin-left: 10px;
 }
+
+.btn-delete:disabled {
+  background-color: darkred;
+  margin-left: 10px;
+}
+
+.btn-reboot {
+  background-color: orange;
+  margin-left: 10px;
+}
+.btn-reboot:disabled {
+  background-color: darkorange;
+  margin-left: 10px;
+}
+
 .btn-delete:hover {
   background-color: #fb999a;
 }
@@ -304,6 +406,10 @@ export default {
 }
 .btn-mark:hover {
   background-color: #9175ff;
+}
+.btn-download-ssh-keys {
+  background-color: green;
+  margin-top: 10px;
 }
 .details {
   padding: 20px 30px;
@@ -338,7 +444,7 @@ export default {
   align-items: flex-end;
   justify-content: flex-end;
   grid-column-start: 3;
-  grid-column-end: 4;
+  grid-column-end: 3;
 }
 .date {
   display: flex;

@@ -48,13 +48,6 @@ export default {
         this[PropertyKey] = this.virtualMachineSavedDraft[PropertyKey]
       }
     },
-
-    ValidateSsh(SshConfiguration) {
-        // Validates SSH Option, selected by the Customer
-        if (SshConfiguration.Type.length == 0) {
-          this.errors["SSL"]["Type"] = "This field is required"
-        }
-    },
     toRootCertificate() {
       this.useRootCertificate = true
       this.useRootCredentials = false

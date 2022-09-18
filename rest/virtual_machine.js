@@ -1,16 +1,15 @@
 import "../configuration_preparer/preparer.js"
 
-var BACKEND_APPLICATION_PORT = process.env.BACKEND_APPLICATION_PORT
-var BACKEND_APPLICATION_HOST = process.env.BACKEND_APPLICATION_HOST
+var BACKEND_APPLICATION_PORT = process.env.BACKEND_APPLICATION_PORT || "localhost"
+var BACKEND_APPLICATION_HOST = process.env.BACKEND_APPLICATION_HOST || "8000"
 
-var Url = require('url-parse');
+var url = require("url");
 
 /* eslint-disable no-unused-vars */
 
 function GetVirtualMachineRestController(JwtToken, VirtualMachineId) {
   // Rest Controller, that returns Info about the Virtual Machine
-  var APIUrl = new Url("http://%s:%s/vm/get/" % (
-  BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
+  var APIUrl = new url.URL(String(`http://${BACKEND_APPLICATION_HOST}:${BACKEND_APPLICATION_PORT}/vm/get/`));
   APIUrl.searchParams.append("VirtualMachineId", VirtualMachineId)
   var Response, ResponseError = global.jQuery.ajax({
     URL: APIUrl,
@@ -40,8 +39,7 @@ function GetVirtualMachineRestController(JwtToken, VirtualMachineId) {
 
 function GetVirtualMachinesRestController(JwtToken) {
   // Rest Controller, that returns Queryset of the Customer's Virtual Machines
-  var APIUrl = new Url("http://%s:%s/vm/get/list/" % (
-  BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
+  var APIUrl = new url.URL(String(`http://${BACKEND_APPLICATION_HOST}:${BACKEND_APPLICATION_PORT}/vm/get/list/`));
   var Response, ResponseError = global.jQuery.ajax({
     URL: APIUrl,
     headers: {
@@ -70,8 +68,7 @@ function GetVirtualMachinesRestController(JwtToken) {
 
 function InitializeVirtualMachineRestController(JwtToken, Configuration) {
   // Rest Controller, that Initializes New Virtual Machine
-  var APIUrl = new Url("http://%s:%s/vm/initialize/" % (
-  BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
+  var APIUrl = new url.URL(`http://${BACKEND_APPLICATION_HOST}:${BACKEND_APPLICATION_PORT}/vm/initialize/`);
   let Response, ResponseError = global.jQuery.ajax({
     async: false,
     URL: APIUrl,
@@ -102,8 +99,7 @@ function InitializeVirtualMachineRestController(JwtToken, Configuration) {
 
 function ApplyVirtualMachineConfigurationRestController(JwtToken, CustomConfiguration, VirtualMachineId) {
   // Rest Controller, that Applying Custom Configuration to the Initialized Virtual Machine
-  var APIUrl = new Url("http://%s:%s/vm/apply/configuration/" % (
-  BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
+  var APIUrl = new url.URL(`http://${BACKEND_APPLICATION_HOST}:${BACKEND_APPLICATION_PORT}/vm/apply/configuration/`);
   APIUrl.searchParams.append("VirtualMachineId", VirtualMachineId)
 
   let Response, ResponseError = global.jQuery.ajax({
@@ -136,8 +132,7 @@ function ApplyVirtualMachineConfigurationRestController(JwtToken, CustomConfigur
 
 function DestroyVirtualMachineRestController(JwtToken, VirtualMachineId) {
   // Rest Controller, deletes Virtual Machine Server, that Customer is desired to
-  var APIUrl = new Url("http://%s:%s/vm/destroy/" % (
-  BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
+  var APIUrl = new url.URL(`http://${BACKEND_APPLICATION_HOST}:${BACKEND_APPLICATION_PORT}/vm/destroy/`);
   APIUrl.searchParams.append("VirtualMachineId", VirtualMachineId)
   let Response, ResponseError = global.jQuery.ajax({
     URL: APIUrl,
@@ -167,8 +162,7 @@ function DestroyVirtualMachineRestController(JwtToken, VirtualMachineId) {
 
 function StartVirtualMachineRestController(JwtToken, VirtualMachineId) {
   // Rest Controller, that Starts Virtual Machine
-  var APIUrl = new Url("http://%s:%s/os/reboot/" %
-  (BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
+  var APIUrl = new url.URL(`http://${BACKEND_APPLICATION_HOST}:${BACKEND_APPLICATION_PORT}/os/reboot/`);
   APIUrl.searchParams.append("VirtualMachineId", VirtualMachineId)
 
   let Response, ResponseError = global.jQuery.ajax({
@@ -200,8 +194,7 @@ function StartVirtualMachineRestController(JwtToken, VirtualMachineId) {
 
 function ShutdownVirtualMachineRestController(JwtToken, VirtualMachineId) {
   // Rest Controller, that Shuts Down Virtual Machine
-  var APIUrl = new Url("http://%s:%s/os/reboot/" %
-  (BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
+  var APIUrl = new url.URL(`http://${BACKEND_APPLICATION_HOST}:${BACKEND_APPLICATION_PORT}/os/reboot/`);
   APIUrl.searchParams.append("VirtualMachineId", VirtualMachineId)
 
   let Response, ResponseError = global.jQuery.ajax({
@@ -233,8 +226,7 @@ function ShutdownVirtualMachineRestController(JwtToken, VirtualMachineId) {
 
 function RebootVirtualMachineRestController(JwtToken, VirtualMachineId) {
   // Rest Controller, that Reboots Virtual Machine
-  var APIUrl = new Url("http://%s:%s/os/reboot/" %
-  (BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
+  var APIUrl = new url.URL(`http://${BACKEND_APPLICATION_HOST}:${BACKEND_APPLICATION_PORT}/os/reboot/`);
   APIUrl.searchParams.append("VirtualMachineId", VirtualMachineId)
 
   let Response, ResponseError = global.jQuery.ajax({
@@ -269,8 +261,7 @@ function RebootVirtualMachineRestController(JwtToken, VirtualMachineId) {
 
 function StartVmOsRestController(JwtToken, VirtualMachineId) {
   // Rest Controller, that Starts Virtual Machine Os HostSystem
-  var APIUrl = new Url("http://%s:%s/os/start/" %
-  (BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
+  var APIUrl = new url.URL(`http://${BACKEND_APPLICATION_HOST}:${BACKEND_APPLICATION_PORT}/os/start/`);
   APIUrl.searchParams.append("VirtualMachineId", VirtualMachineId)
 
   let Response, ResponseError = global.jQuery.ajax({
@@ -302,8 +293,7 @@ function StartVmOsRestController(JwtToken, VirtualMachineId) {
 
 function ShutdownVmOsRestController(JwtToken, VirtualMachineId) {
   // Rest Controller, that Shuts Down Virtual Machine Os HostSystem
-  var APIUrl = new Url("http://%s:%s/os/shutdown/" %
-  (BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
+  var APIUrl = new url.URL(`http://${BACKEND_APPLICATION_HOST}:${BACKEND_APPLICATION_PORT}/os/shutdown/`);
   APIUrl.searchParams.append("VirtualMachineId", VirtualMachineId)
 
   let Response, ResponseError = global.jQuery.ajax({
@@ -335,8 +325,7 @@ function ShutdownVmOsRestController(JwtToken, VirtualMachineId) {
 
 function RebootVmOsRestController(JwtToken, VirtualMachineId) {
   // Rest Controller, that Reboots Virtual Machine Os HostSystem
-  var APIUrl = new Url("http://%s:%s/os/reboot/" %
-  (BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
+  var APIUrl = new url.URL(`http://${BACKEND_APPLICATION_HOST}:${BACKEND_APPLICATION_PORT}/os/reboot/`);
   APIUrl.searchParams.append("VirtualMachineId", VirtualMachineId)
 
   let Response, ResponseError = global.jQuery.ajax({
