@@ -34,9 +34,19 @@ export default new Vuex.Store({
         "Running": true, 
         "Deploying": false, 
         "Shutdown": false, 
-        "paymentDueDate": "2020-20-02",
-        "TotalCost": "200",
-        "CustomerName": "Test User"
+        "paymentDueDate": "2020-20-02",                
+        "Owner": {
+          "Username": "some-user",
+          "Email": "email@gmail.com",
+          "BillingAddress": "Vancoover,Canada",
+          "Street": "Smith's Street, 4",
+          "ZipCode": "125167",
+        },
+        "Resources": {
+          "CpuNum": 10,
+          "Memory": 100,
+          "StorageCapacity": 1000,
+        },
       },
       {
         "VirtualMachineId": "Id",
@@ -45,8 +55,21 @@ export default new Vuex.Store({
         "Deploying": true, 
         "Shutdown": false, 
         "paymentDueDate": "2020-20-02",
-        "TotalCost": "200",
-        "CustomerName": "Test User"
+        
+        "Owner": {
+          "Username": "some-user",
+          "Email": "email@gmail.com",
+          "BillingAddress": "Vancoover,Canada",
+          "Street": "Smith's Street, 4",
+          "ZipCode": "125167",
+        },
+
+        "Resources": {
+          "CpuNum": 5,
+          "Memory": 100,
+          "StorageCapacity": 1000,
+        },
+
       },
       {
         "VirtualMachineId": "Id",
@@ -55,8 +78,22 @@ export default new Vuex.Store({
         "Deploying": false, 
         "Shutdown": true, 
         "paymentDueDate": "2020-20-02",
-        "TotalCost": "200",
-        "CustomerName": "Test User"
+
+                
+        "Owner": {
+          "Username": "some-user",
+          "Email": "email@gmail.com",
+          "BillingAddress": "Vancoover,Canada",
+          "Street": "Smith's Street, 4",
+          "ZipCode": "125167",
+        },
+
+
+        "Resources": {
+          "CpuNum": 5,
+          "Memory": 10,
+          "StorageCapacity": 1000,
+        },
       }
     ],
     initializationModal: null,

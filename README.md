@@ -19,6 +19,28 @@ The Service is being developed since 17 August of 2022, and is focused on Design
 
 --- 
 
+# UI Application Overview 
+
+## Platform Provides the Virtual Server Info Page so you can Get Specific Information about your Server and Bill Details, what are you paying for and how much
+
+<p align="center">
+  <a><img src="./extra_photos/virtual_server_main_page.png" style="width: 100%; height: 100%" alt="Infrastructure"></a>
+</p>
+
+
+## Platform Provides the Virtual Server Info Page so you can Get Specific Information about your Server and Bill Details, what are you paying for and how much
+
+<p align="center">
+  <a><img src="./extra_photos/virtual_server_page.png" style="width: 100%; height: 100%" alt="Infrastructure"></a>
+</p>
+
+
+## Provides the Configuration Form, where you can setup hardware / customized resources and get realtime cost of your setup
+
+
+## Also provides some basic Login / Registration / Reset Password Pages as well
+
+
 # Requirements  
 
 *To Deploy this Application onto Your Machine requires Following setup*

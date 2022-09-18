@@ -17,9 +17,4 @@ module.exports = {
 			// https://github.com/vuetifyjs/vuetify-loader/tree/next/packages/vuetify-loader
 		}
   },
-  resolve: {
-    fallback: {
-      "url": require.resolve("url/")
-    }
-  }
 }

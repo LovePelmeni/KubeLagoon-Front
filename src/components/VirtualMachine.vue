@@ -1,6 +1,6 @@
 <template>
   <main class="detail">
-    <router-link :to="{ name: 'main_page' }" class="link">
+    <router-link :to="{ name: 'main_page' }" style="margin-right: 40px;" class="link">
       <svg
         class="back-icon"
         color="hsl(252, 94%, 67%)"
@@ -15,8 +15,8 @@
     </router-link>
     <div class="status-container">
       <p class="status-title" style="margin-top: 6px; margin-right: 3px;">Status</p>
-      <p style="margin-top: 6px"
-        class="status-body"
+      <div style="margin-top: 6px; margin-left: 60px;"
+         class="status-body"
         :class="[
           VirtualMachine.Running === true
             ? 'running'
@@ -25,13 +25,17 @@
             ? VirtualMachine.Deploying === true
             : 'deploying'
             : 'unknown',
-        ]"
-      >
+        ]"> <a style="margin-right: 10px;" v-if="VirtualMachine.Running === true">Running</a>
+            <a style="margin-right: 10px;" v-if="VirtualMachine.Deploying === true">Running</a>
+            <a style="margin-right: 10px;" v-if="VirtualMachine.Shutdown">Shutdown</a>
+            <a style="margin-right: 10px;" v-if="VirtualMachine.Running === false && VirtualMachine.Deploying === false && VirtualMachine.Shutdown === false">Unknown</a>
+            
         <span class="status-circle" style="margin-right: 5px" v-if="VirtualMachine.Running" />
         <span class="status-circle" style="margin-right: 5px" v-if="VirtualMachine.Deploying" />
         <span class="status-circle" style="margin-right: 5px" v-if="VirtualMachine.Shutdown" />
         <span class="status-circle" style="margin-right: 5px" v-if="!VirtualMachine.Running && !VirtualMachine.Deploying && !VirtualMachine.Shutdown" />
-      </p>
+
+      </div>
       <div class="btn-container">
         <button
           class="btn btn-edit"
@@ -97,10 +101,10 @@
       </div>
       <div class="name">
         <p class="project-id" style="margin-bottom: 10px">Bill to</p>
-        <p class="name-body">{{ Customer.Username }}</p>
-        <p class="name-body">{{ Customer.Email }}</p>
-        <p class="name-body">{{ Customer.City }}, {{ Customer.Country }}</p>
-        <p class="name-body">{{ Customer.ZipCode }}</p>
+        <p class="name-body">{{ VirtualMachine.Owner.Username }}</p>
+        <p class="name-body">{{ VirtualMachine.Owner.Email }}</p>
+        <p class="name-body">{{ VirtualMachine.Owner.City }}, {{ VirtualMachine.Owner.Country }}</p>
+        <p class="name-body">{{ VirtualMachine.Owner.ZipCode }}</p>
       </div>
 
       <div class="adress">
@@ -113,30 +117,30 @@
       <div class="item-container">
         <p>Resource</p> 
         <p>Usage</p>
-        <p>Total</p>
+        <p>Total Per Day</p>
         <div
           class="project-item"
           v-for="(PropertyName, index) in Object.keys(
-            {'Cpu': VirtualMachine.Cpu, 'Memory': VirtualMachine.Memory, 
+            {'CpuNum': VirtualMachine.Cpu, 'Memory': VirtualMachine.Memory, 
             'StorageCapacity': VirtualMachine.StorageCapacity,
           })"
           :key="index"
         >
           <p class="prj-text">{{ PropertyName }}</p>
-          <p class="prj-text" v-if="PropertyName.toLowerCase() == 'cpu'">{{ VirtualMachine[PropertyName]|| 0 }}</p>
+          <p class="prj-text" v-if="PropertyName.toLowerCase() == 'cpunum'">{{ VirtualMachine[PropertyName]|| 0 }}</p>
           <p class="prj-text" v-if="PropertyName.toLowerCase() == 'memory'">{{ VirtualMachine[PropertyName] || 0 }}MB</p>
           <p class="prj-text" v-if="PropertyName.toLowerCase() == 'storagecapacity'">{{ VirtualMachine[PropertyName] || 0 }}GB</p>
 
           <!-- Receiving the Cost of the Specific Property  (Cpu, Memory, etc....)-->
           <p class="prj-text">
-            &#36; {{ GetPropertyCost(PropertyName, VirtualMachine[PropertyName]) }} 
+            &#36;{{ GetPropertyCost(PropertyName, VirtualMachine[PropertyName]) }} 
           </p>
         </div>
       </div>
       <div class="amount">
-        <p class="amount-text">Total Amount</p>
+        <p class="amount-text">Total Amount Per Month</p>
         <p class="amount-number">
-          &#36; {{ GetTotalAmount(VirtualMachine["Cpu"], VirtualMachine["Memory"], VirtualMachine["StorageCapacity"]) }}
+          &#36;{{ GetTotalAmount(VirtualMachine["CpuNum"], VirtualMachine["Memory"], VirtualMachine["StorageCapacity"]) }}
         </p>
       </div>
     </div>
@@ -167,7 +171,18 @@ export default {
   data() {
     return {
       VirtualMachineError: null,
-      Customer: {
+      VirtualMachine: {
+        "VirtualMachineName": "virtual-server",
+        "VirtualMachineId": "125",
+        "CpuNum": 1,
+        "Memory": 10,
+        "StorageCapacity": 10,
+        "paymentDueDate": "2020-02-02",
+        "paymentDueTerms": "30",
+        "Running": true, 
+        "Deploying": false, 
+        "Shutdown": false,
+        Owner: {
         "Username": "some_username",
         "Email": "some_email@gmail.com",
         "BillingAddress": "some-address",
@@ -175,15 +190,7 @@ export default {
         "Country": "Canada",
         "ZipCode": "some-zip-code",
         "Street": "Smith Street, 4",
-      }, // Object
-      VirtualMachine: {
-        "VirtualMachineName": "virtual-server",
-        "VirtualMachineId": "125",
-        "paymentDueDate": "2020-02-02",
-        "paymentDueTerms": "30",
-        "Running": true, 
-        "Deploying": false, 
-        "Shutdown": false,
+      }
       }, // Object
     }
   },
@@ -206,30 +213,30 @@ export default {
     },
 
     GetPropertyCost(PropertyName, PropertyValue) {
-      // Returns the Cost of the Specific Property 
+      // Returns the Cost of the Specific Property for Per Day
 
-      if (PropertyName.toLowerCase() == "cpu") {
+      if (PropertyName.toLowerCase() == "cpunum") {
         // Calculating Price for the Cpu Property
         let calculator = new cost.CpuUsageBillCalculator(Number(PropertyValue) || 0)
-        return calculator.Calculate()
+        return Math.round(calculator.Calculate() / 30)
       }
   
       if (PropertyName.toLowerCase() == "memory") {   
         // Calculating Price for the Memory Property 
         let calculator = new cost.MemoryUsageBillCalculator(Number(PropertyValue) || 0)
-        return calculator.Calculate()
+        return Math.round(calculator.Calculate() / 30)
       }
 
       if (PropertyName.toLowerCase() == "storagecapacity") {
         // Calculating Price for the Storage Capacity Property
         let calculator = new cost.StorageUsageBillCalculator(Number(PropertyValue) || 0)
-        return calculator.Calculate()
+        return Math.round(calculator.Calculate() / 30)
       }
     },
 
 
     GetTotalAmount(CpuNum, MemoryUsage, StorageUsage) {
-      // Returns the Full Total Amount for the Whole Virtual Machine Server 
+      // Returns the Full Total Amount for the Whole Virtual Machine Server Per Month
       let calculator = new cost.VirtualMachineCostCalculator(
       Number(CpuNum) || 0, Number(MemoryUsage) || 0, Number(StorageUsage) || 0)
       return calculator.CalculateCostPerMonth()
@@ -244,15 +251,6 @@ export default {
       this.TOGGLE_ERROR(ErrorMessage); 
       this.$router.push({name: 'main_page'})}else{
       this.VirtualMachine = VirtualMachine}
-    },
-    getVirtualMachineServerCustomer() {
-      // Returns the Info about the Owner Of the Virtual Machine  
-      let VirtualMachineId = this.$route.query.VirtualMachineId
-      let Customer, CustomerError = this.GET_VIRTUAL_MACHINE_OWNER(VirtualMachineId)
-      if (CustomerError != null) {
-      let ErrorMessage = "Server Owner not found"; 
-      this.TOGGLE_ERROR(ErrorMessage); this.$router.push({name: "main_page"})}else{
-      this.Customer = Customer}
     },
 
     DeleteVirtualMachine() {
@@ -322,7 +320,7 @@ export default {
 }
 .status-body {
   width: 105px;
-  padding: 13px 0 13px 40px;
+  padding: 13px 0 13px 13px;
   border-radius: 6px;
   font-weight: 700;
   display: flex;
@@ -338,22 +336,18 @@ export default {
 .shutdown {
   background-color: #292c45;
   color: rgb(224, 228, 251);
-  margin-left: 6px;
 }
 .deploying {
   background-color: rgba(255, 145, 0, 0.06);
   color: rgb(255, 145, 0);
-  margin-left: 6px;
 }
 .running {
   background-color: rgba(51, 215, 160, 0.06);
   color: rgb(51, 215, 160);
-  margin-left: 6px;
 }
 .unknown {
   background-color: rgba(51, 215, 160, 0.06);
   color: white;
-  margin-left: 6px;
 }
 .btn-container {
   margin-left: auto;
@@ -439,6 +433,7 @@ export default {
   font-weight: 700;
 }
 .adress {
+  margin-top: 20px;
   display: flex;
   flex-direction: column;
   align-items: flex-end;
@@ -447,6 +442,7 @@ export default {
   grid-column-end: 3;
 }
 .date {
+  margin-top: 20px;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -455,6 +451,7 @@ export default {
   gap: 10px;
 }
 .name {
+  margin-top: 20px;
   display: flex;
   flex-direction: column;
   align-items: flex-start;

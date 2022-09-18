@@ -4,10 +4,10 @@
     <div class="left flex">
       <span class="tracking-number">#{{ VirtualMachine.VirtualMachineName }}</span>
       <span class="due-date">{{ VirtualMachine.paymentDueDate }}</span>
-      <span class="person">{{ VirtualMachine.CustomerName }}</span>
+      <span class="person">{{ VirtualMachine.Owner.Username }}</span>
     </div>
     <div class="right flex">
-      <span class="price">{{ VirtualMachine.TotalCost }}$</span>
+      <span class="price">{{ GetVirtualMachineTotalCost() }}$</span>
       <div
         class="status-button flex"
         :class="{ running: VirtualMachine.Running, shutdown: VirtualMachine.Shutdown, deploying: VirtualMachine.Deploying }"
@@ -27,9 +27,22 @@
 
 <script>
 
+import * as cost from "../../cost/virtualMachineCost"
+
 export default {
   name: "VirtualMachineBannerInfo",
   props: ["VirtualMachine"],
+  methods: {
+    GetVirtualMachineTotalCost() {
+      // Returns the Total Cost Per Month for the Virtual Machine Server 
+      let BillCalculator = new cost.VirtualMachineCostCalculator(
+        Number(this.VirtualMachine?.Resources.CpuNum), 
+        Number(this.VirtualMachine?.Resources.Memory), 
+        Number(this.VirtualMachine?.Resources.StorageCapacity),
+      )
+      return BillCalculator.CalculateCostPerMonth()
+    }
+  }
 };
 </script>
 
