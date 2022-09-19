@@ -106,8 +106,7 @@ header {
       width: auto;
       height: 30px;
     }
-    button:disabled,
-    button[disabled]{
+    button:disabled{
       color: #666666;
     }
   }

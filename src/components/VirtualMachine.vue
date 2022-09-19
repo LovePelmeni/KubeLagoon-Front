@@ -126,7 +126,8 @@
           })"
           :key="index"
         >
-          <p class="prj-text">{{ PropertyName }}</p>
+          <p class="prj-text" v-if="PropertyName.toLowerCase() !== 'storagecapacity'">{{ PropertyName }}</p>
+          <p class="prj-text" v-else>Storage Capacity</p>
           <p class="prj-text" v-if="PropertyName.toLowerCase() == 'cpunum'">{{ VirtualMachine[PropertyName]|| 0 }}</p>
           <p class="prj-text" v-if="PropertyName.toLowerCase() == 'memory'">{{ VirtualMachine[PropertyName] || 0 }}MB</p>
           <p class="prj-text" v-if="PropertyName.toLowerCase() == 'storagecapacity'">{{ VirtualMachine[PropertyName] || 0 }}GB</p>
@@ -166,7 +167,6 @@ export default {
   mounted() {
     this.JwtToken = this.cookie?.get("jwt-token")
     this.getVirtualMachineServerInfo()
-    this.getVirtualMachineServerOwnerInfo()
   },
   data() {
     return {

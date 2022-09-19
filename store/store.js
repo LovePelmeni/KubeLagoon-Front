@@ -1,6 +1,8 @@
 import * as vm from "../vm/vm.js"
 import * as preparer from "../configuration_preparer/preparer.js"
 import Vuex from "vuex";
+import { useCookies } from "vue3-cookies";
+
 
 export default new Vuex.Store({
 
@@ -112,7 +114,12 @@ export default new Vuex.Store({
     // Handles Customer's Statuses
 
     GET_AUTHENTICATION_STATUS() {
-      // Returns the Registered Status for the Customer
+      // Returns the Registered Status for the Customer 
+      let CookiesModule = useCookies() 
+      let Token = CookiesModule.cookies.get("jwt-token") 
+      if (Token == null || String(Token).length == 0) {
+        return false
+      }else{return true}
     },
 
     TOGGLE_NOT_AUTHENTICATED(state) {

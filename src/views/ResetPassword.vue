@@ -7,25 +7,35 @@
 
         <div class="resetPassword flex">
 
-          <div class="input flex flex-column">
-            <label for="paymentDueDate">New Password</label>
+          <div class="modalField flex flex-column">
+            <label for="NewPassword">New Password</label>
             <input !change="ValidateNewPassword" :rules="PasswordRules" required type="text" id="paymentDueDate" v-model="paymentDueDate" />
             <span id="errors" v-if="error" class="red">{{ error }}</span>
           </div>
 
         </div>
     </form>
+
+      <v-snackbar top color="green" :v-if="!ResetFailed" >
+        Password has been Reset
+      </v-snackbar>
+
+      <v-snackbar :v-if="ResetFailed" top color="red" >
+        Reset Failed, {{ ResetError }}
+      </v-snackbar>
     
 </template>
 
 <script lang="javascript">
+
 import { CustomerManager } from "../../customers/customers.js"
+import { mapMutations } from "vuex";
 
 export default {
     name: "ResetPassword",
     data() {
         return {
-            error: null,
+            ResetError: null,
             PasswordRules: (password) => password.length > 0 || 'This field is required',
             NewPassword: null, 
         }
@@ -72,5 +82,26 @@ export default {
     font-weight: 300;
     margin-top: 16px;
   }
+
+    .modalField {
+    margin-bottom: 24px;
+  }
+  label {
+    font-size: 12px;
+    margin-bottom: 6px;
+  }
+  input,
+  select {
+    width: 100%;
+    background-color: #1e2139;
+    color: #fff;
+    border-radius: 4px;
+    padding: 12px 4px;
+    border: none;
+    &:focus {
+      outline: none;
+    }
+  }
+
 }
 </style>

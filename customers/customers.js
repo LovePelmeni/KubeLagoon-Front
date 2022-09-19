@@ -13,8 +13,14 @@ class CustomerRegistrationForm {
   }
   ToBlob() {
     // Returns Blob of JSON of the Customer Registration Form
-    return {"Username": this.Username, 
-    "Password": this.Password, "Email": this.Email}
+    return {
+      "Username": this.Username, 
+      "Password": this.Password, 
+      "Email": this.Email, 
+      "BillingAddress": this.BillingAddress, 
+      "ZipCode": this.ZipCode, 
+      "Street": this.Street
+    }
   }
 }
 
@@ -77,3 +83,4 @@ class CustomerManager {
 }
 
 export {CustomerRegistrationForm, CustomerLoginForm, CustomerManager};
+

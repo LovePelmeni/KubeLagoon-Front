@@ -1,4 +1,3 @@
-
 var BACKEND_APPLICATION_PORT = process.env.BACKEND_APPLICATION_PORT || `8000`
 var BACKEND_APPLICATION_HOST = process.env.BACKEND_APPLICATION_HOST || `localhost`
 
@@ -9,7 +8,7 @@ function GetVirtualMachineRestController(JwtToken, VirtualMachineId) {
   var APIUrl = new URL(String(`http://${BACKEND_APPLICATION_HOST}:${BACKEND_APPLICATION_PORT}/vm/get/`));
   APIUrl.searchParams.append("VirtualMachineId", VirtualMachineId)
   var Response, ResponseError = global.jQuery.ajax({
-    URL: APIUrl.toString(),
+    url: APIUrl.toString(),
     type: "GET",
     headers: {
       "Access-Control-Allow-Origin": "*",
@@ -38,13 +37,13 @@ function GetVirtualMachinesRestController(JwtToken) {
   // Rest Controller, that returns Queryset of the Customer's Virtual Machines
   var APIUrl = new URL(`http://${BACKEND_APPLICATION_HOST}:${BACKEND_APPLICATION_PORT}/vm/get/list/`);
   var Response, ResponseError = global.jQuery.ajax({
-    URL: APIUrl.toString(),
+    url: APIUrl.toString(),
     headers: {
       "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Credentials": "true",
       "Authorization": JwtToken,
     },
-    type: "GET",
+    type: "get",
     success: function(Response) {
         if (Response.StatusCode == 201 && Response.StatusCode == 200) {
           return Response.QuerySet, null
@@ -68,7 +67,7 @@ function InitializeVirtualMachineRestController(JwtToken, Configuration) {
   var APIUrl = new URL(`http://${BACKEND_APPLICATION_HOST}:${BACKEND_APPLICATION_PORT}/vm/initialize/`);
   let Response, ResponseError = global.jQuery.ajax({
     async: false,
-    URL: APIUrl.toString(),
+    url: APIUrl.toString(),
     type: "POST",
     data: JSON.stringify({"HardwareConfiguration": Configuration}),
     headers: {
@@ -101,7 +100,7 @@ function ApplyVirtualMachineConfigurationRestController(JwtToken, CustomConfigur
 
   let Response, ResponseError = global.jQuery.ajax({
     async: false,
-    URL: APIUrl.toString(),
+    url: APIUrl.toString(),
     type: "POST",
     data: JSON.stringify({"CustomizedConfiguration": CustomConfiguration}),
     dataType: "json",
@@ -132,7 +131,7 @@ function DestroyVirtualMachineRestController(JwtToken, VirtualMachineId) {
   var APIUrl = new URL(`http://${BACKEND_APPLICATION_HOST}:${BACKEND_APPLICATION_PORT}/vm/destroy/`);
   APIUrl.searchParams.append("VirtualMachineId", VirtualMachineId)
   let Response, ResponseError = global.jQuery.ajax({
-    URL: APIUrl.toString(),
+    url: APIUrl.toString(),
     async: false,
     type: "DELETE",
     headers: {
@@ -164,7 +163,7 @@ function StartVirtualMachineRestController(JwtToken, VirtualMachineId) {
 
   let Response, ResponseError = global.jQuery.ajax({
     async: false,
-    URL: APIUrl.toString(),
+    url: APIUrl.toString(),
     type: "POST",
     headers: {
       "Access-Control-Allow-Origin": "*",
@@ -196,7 +195,7 @@ function ShutdownVirtualMachineRestController(JwtToken, VirtualMachineId) {
 
   let Response, ResponseError = global.jQuery.ajax({
     async: false,
-    URL: APIUrl.toString(),
+    url: APIUrl.toString(),
     type: "DELETE",
     headers: {
       "Access-Control-Allow-Origin": "*",
@@ -228,7 +227,7 @@ function RebootVirtualMachineRestController(JwtToken, VirtualMachineId) {
 
   let Response, ResponseError = global.jQuery.ajax({
     async: false,
-    URL: APIUrl.toString(),
+    url: APIUrl.toString(),
     type: "PUT",
     headers: {
       "Access-Control-Allow-Origin": "*",
@@ -263,7 +262,7 @@ function StartVmOsRestController(JwtToken, VirtualMachineId) {
 
   let Response, ResponseError = global.jQuery.ajax({
     async: false,
-    URL: APIUrl.toString(),
+    url: APIUrl.toString(),
     type: "POST",
     headers: {
       "Access-Control-Allow-Origin": "*",
@@ -295,7 +294,7 @@ function ShutdownVmOsRestController(JwtToken, VirtualMachineId) {
 
   let Response, ResponseError = global.jQuery.ajax({
     async: false,
-    URL: APIUrl.toString(),
+    url: APIUrl.toString(),
     type: "DELETE",
     headers: {
       "Access-Control-Allow-Origin": "*",
@@ -327,7 +326,7 @@ function RebootVmOsRestController(JwtToken, VirtualMachineId) {
 
   let Response, ResponseError = global.jQuery.ajax({
     async: false,
-    URL: APIUrl.toString(),
+    url: APIUrl.toString(),
     type: "PUT",
     headers: {
       "Access-Control-Allow-Origin": "*",

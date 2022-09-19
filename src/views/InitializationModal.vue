@@ -2,9 +2,9 @@
   <div class="virtual-machine-wrap">
 
     <v-col cols="10" lg="4" class="mx-auto">
-      <v-card class="pa-4">
+      <v-card style="max-width: 5000px;" class="pa-4">
 
-    <v-form class="virtual-machine-content" style="width: 1500px; justify-content: center;">
+    <v-form class="virtual-machine-content" id="form" ref="form" style="max-width: 10000px; gap: 1">
 
       <!-- Virtual Machine Work Details -->
 
@@ -57,26 +57,22 @@
               <div class="save flex">
 
                   <div class="buttonBlock flex" style="width: 800px">
-                    <button type="submit" @click="closeVirtualMachineSettings" class="red"> Cancel Setup</button>
-                    <button v-if="!updateVirtualMachine" type="submit" @submit="saveVirtualMachineDraft" class="dark-purple">Save Setup</button>
-                    <button v-if="!updateVirtualMachine" type="submit" @submit="CreateNewVirtualMachine" class="purple">Create New Virtual Machine</button>
-                    <button v-if="updateVirtualMachine"  type="submit" @submit="UpdateVirtualMachine" class="purple" >Update Virtual Machine</button>
+                    <v-btn type="submit" @submit="closeVirtualMachineSettings" id="" style="background-color: #ec5757" :loading="CancelLoading"> Cancel Setup</v-btn>
+                    <v-btn v-if="!updateVirtualMachine" style="background-color: #252945;" :loading="Saveloading" type="submit" @submit="saveVirtualMachineDraft">Save Setup</v-btn>
+                    <v-btn v-if="!updateVirtualMachine" style="background-color: #7c5dfa;" :loading="Createloading" type="submit" @submit="CreateNewVirtualMachine">Create Server</v-btn>
                   </div>
               </div>
           </v-form>
       </v-card>
     </v-col>
 
-
-    <div v-if="Operated" class="formValidationTitle">
-      <v-snackbar top color="green" v-model="snackbar">
+      <v-snackbar v-if="!OperationFailed" top color="green">
         Virtual Server Has Been Created
       </v-snackbar>
 
-      <v-snackbar :v-if="OperationFailed" top color="red" v-model="snackbar">
+      <v-snackbar v-if="OperationFailed" top color="red">
         Operation Failed, {{ VirtualServerInitializationError }}
       </v-snackbar>
-      </div>
     </div>
 
     <body>
@@ -111,6 +107,10 @@ export default {
   },
   data() {
     return {
+      // Loading Statuses
+      Createloading: null, 
+      Saveloading: null, 
+      CancelLoading: null,
 
       // Operation Types specification 
       Operated: false,
@@ -145,8 +145,6 @@ export default {
   created() {
 
     // get current date for invoice date field
-
-    this.CheckIsDraft() // Checking if this is Saved Draft or Customer Want to Initialize New Configuration
     this.GetCustomerVirtualMachines()
 
     if (!this.updateVirtualMachine) {
@@ -212,9 +210,8 @@ export default {
     CheckIsDraft() {
       // Checks if the Configuration is a Saved Draft
       if (this.virtualMachineSavedDraft != null) {
-        for (let PropertyKey in Object.keys(this.virtualMachineSavedDraft)) {
-          this[PropertyKey] = this.virtualMachineSavedDraft[PropertyKey]
-        }
+        this.paymentDueDate = this.virtualMachineSavedDraft["paymentDueDate"]
+        this.paymentTerms = this.virtualMachineSavedDraft["paymentTerms"]
       }
     },
 
@@ -238,6 +235,9 @@ export default {
     },
 
     closeVirtualMachineSettings() {
+      // Closing the initialization Modal Window and redirects to the Main Page
+      this.CancelLoading = true 
+      setTimeout(()=> function(){}, 3)
       if (this.updateVirtualMachine) {
         this.TOGGLE_UPDATE_VIRTUAL_MACHINE();
       }
@@ -258,6 +258,8 @@ export default {
       // Initializes New Virtual Machine
       // Initializing New Resources
 
+      this.Createloading = true
+
       let hardwareConfigurationData = this.GetHardwareSubmittedFormData()
       let customizedConfigurationData = this.GetResourceConfigurationSubmittedFormData()
 
@@ -276,7 +278,7 @@ export default {
         this.VirtualServerInitializationError = CreationError 
         this.OperationFailed = true
       }
-      this.loading = false
+      this.Createloading = false
     },
 
     getVirtualMachineCostTotal(PricePerDay, SelectedDays) {
@@ -286,6 +288,7 @@ export default {
 
     saveVirtualMachineDraft() {
       // Marks the Virtual Machine Configuration the Virtual Machine
+      this.Saveloading = true
 
       // Receiving the Values from the Filled Form and Putting in the Single Object of the Configuration 
       let customizedConfigurationData = this.GetResourceConfigurationSubmittedFormData() 
@@ -294,36 +297,7 @@ export default {
       // Then saves it to the Store 
       this.SAVE_VIRTUAL_MACHINE_CONFIGURATION_DRAFT(
       customizedConfigurationData, hardwareConfigurationData)
-    },
-
-    UploadVirtualMachine() {
-      if (this.VirtualMachineItemList.length <= 0) {
-        alert("Please ensure you filled out work items!");
-        return;
-      }
-      this.loading = true;
-      this.TOGGLE_INITIALIZATION_MODAL();
-      this.loading = false;
-      this.GET_VIRTUAL_MACHINES();
-    },
-
-    UpdateVirtualMachine(NewConfiguration) {
-      if (this.VirtualMachineItemList.length <= 0) {
-        alert("Please ensure you filled out work items!");
-        return;
-      }
-      const data = {
-        VirtualMachineId: this.$route.params.VirtualMachineId,
-        UpdatedConfiguration: NewConfiguration,
-      };
-      this.UPDATE_VIRTUAL_MACHINE(data);
-    },
-    submitForm() {
-      if (this.updateVirtualMachine) {
-        this.UpdateVirtualMachine();
-        return;
-      }
-      this.UploadVirtualMachine();
+      this.Saveloading = false
     },
   },
   computed: {
@@ -566,5 +540,21 @@ export default {
 .v-card {
   overflow: initial;
   max-width: 10000px;
+}
+
+.dark-purple {
+  background-color: #252945;
+}
+.red {
+  background-color: #ec5757;
+}
+.purple {
+  background-color: #7c5dfa;
+}
+.green {
+  background-color: #33d69f;
+}
+.orange {
+  background-color: #ff8f00;
 }
 </style>

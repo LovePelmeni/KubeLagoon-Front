@@ -20,7 +20,7 @@
                 required
               />
               <v-text-field
-                      v-model="password"
+                      v-model="Password"
                       :rules="PasswordRules"
                       :type="passwordShow?'text':'password'"
                       label="Password"

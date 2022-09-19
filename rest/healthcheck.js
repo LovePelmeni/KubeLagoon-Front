@@ -1,6 +1,4 @@
-import "../healthcheck/healthcheck.js"
 /* eslint-disable no-unused-vars */
-require("url");
 
 var BACKEND_APPLICATION_HOST = process.env.BACKEND_APPLICATION_HOST
 var BACKEND_APPLICATION_PORT = process.env.BACKEND_APPLICATION_PORT
@@ -8,8 +6,7 @@ var BACKEND_APPLICATION_PORT = process.env.BACKEND_APPLICATION_PORT
 
 function GetHealthCheckMetricsRestController(jwtToken, VirtualMachineId) {
   // Rest Controller, that returns Metrics about the Health of the Virtual Machine Server
-  var APIUrl = new url.URL("http://%s:%s/health/metrics/",
-  BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT)
+  var APIUrl = new url.URL(`http://${BACKEND_APPLICATION_HOST}:${BACKEND_APPLICATION_PORT}/health/metrics/`)
   APIUrl.searchParams.append("VirtualMachineId", VirtualMachineId)
   try {
       ResponseData, ResponseErrors = global.jQuery.ajax({

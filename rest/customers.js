@@ -4,13 +4,12 @@ var BACKEND_APPLICATION_PORT = process.env.BACKEND_APPLICATION_PORT
 var $ = global.jQuery;
 window.jquery = $;
 
-var urllib = require("url");
 
 
 function CreateCustomerRestController(CustomerData) {
   // Rest Controller, that is responsible for creating new Customer Profile
 
-    var APIUrl = new urllib.URL("http://%s:%s/customer/create/" % (BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
+    var APIUrl = new URL("http://%s:%s/customer/create/" % (BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
     var HttpResponse, HttpErrors = global.jQuery.ajax({
       type: "POST",
       data: JSON.stringify(CustomerData),
@@ -51,7 +50,7 @@ function CreateCustomerRestController(CustomerData) {
 function ResetPasswordRestController(JwtToken, NewPassword){
   // Rest Controller, that Is Responsible for Resetting Password
 
-  var APIUrl = new urllib.URL("http://%s:%s/customer/reset/password" % (BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
+  var APIUrl = new URL("http://%s:%s/customer/reset/password" % (BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
   let ResponseStatus, ResponseErrors = global.jQuery.ajax({
     data: JSON.stringify({"NewPassword": NewPassword}),
     dataType: "json",
@@ -80,7 +79,7 @@ function ResetPasswordRestController(JwtToken, NewPassword){
 function DeleteCustomerRestController(JwtToken) {
   // Rest Controller, that is used to deleting the Customer Profile
 
-  var APIUrl = new urllib.URL("http://%s:%s/customer/delete" % (BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
+  var APIUrl = new URL("http://%s:%s/customer/delete" % (BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
   var Response, ResponseError = global.jQuery.ajax({
     URL: APIUrl,
     type: "DELETE",

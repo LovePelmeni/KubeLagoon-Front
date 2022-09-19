@@ -96,7 +96,6 @@
         </v-card>
       </v-col>
 
-      <div v-if="Registered" class="formValidationTitle">
       <v-snackbar top color="green" v-model="snackbar">
         Registration success
       </v-snackbar>
@@ -105,9 +104,6 @@
         Registration Failed, {{ RegisterError }}
       </v-snackbar>
       </div>
-      <div v-else-if="Valid == false" class="formValidationTitle"> 
-      </div>
-    </div>
   </v-app>
 
   <body>

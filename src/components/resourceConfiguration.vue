@@ -8,15 +8,14 @@
         <v-text-field
         v-if="!CpuNum"
         :rules="CpuRules"
-        required
         id="CpuNum" v-model="CpuNum"
+        required
         />
 
         <v-text-field
-
+        required
         v-else
         :rules="CpuRules"
-        required
         id="CpuNum" v-model="CpuNum" :model-value="CpuNum" />
       </div>
 
@@ -24,42 +23,42 @@
         <label for="MaxCpu">Max CPU</label>
 
         <v-text-field
-
         v-if="!MaxCpu"
         :rules="MaxCpuRules"
-        required 
-        
+        required
+
         id="MaxCpu" 
         v-model="MaxCpu" />
 
         <v-text-field
         v-else
         :rules="MaxCpuRules"
-        required 
+        required
         
         id="MaxCpu" 
-        v-model="MaxCpu" :model-value="MaxCpu" />
+        v-model="MaxCpu"
+        />
       </div>
 
       <div class="modalField flex flex-column">
         <label for="MemoryInMegabytes">Memory (MB)</label>
 
         <v-text-field
-
+        required
         v-if="!Memory"
         :rules="MemoryInMegabytesRules"
-        required 
         
         id="MemoryInMegabytes"
         v-model="Memory" />
 
         <v-text-field
+        required
         v-else
         :rules="MemoryInMegabytesRules"
-        required 
         
         id="MemoryInMegabytes"
-        v-model="Memory" :model-value="Memory" />
+        v-model="Memory"
+        />
 
       </div>
 
@@ -69,49 +68,49 @@
           <label for="MaxMemory">Max Memory Capacity (MB)</label>
 
           <v-text-field
+          required
           v-if="!MaxMemory"
           :rules="MaxMemoryRules"
-          required 
           
           id="MaxMemory" 
           v-model="MaxMemory" />
 
           <v-text-field
+          required
           v-else
           :rules="MaxMemoryRules"
-          required 
-          
+
           id="MaxMemory" 
-          v-model="MaxMemory" :model-value="MaxMemory" />
+          v-model="MaxMemory"/>
         </div>
 
         <div class="modalField flex flex-column">
           <label for="Storage">Storage (GB)</label>
 
           <v-text-field
+          required
           v-if="!StorageCapacity"
           :rules="StorageRules"
-          required 
           
           id="StorageCapacity"
           v-model="StorageCapacity" />
 
           <v-text-field
+          required
           v-else
           :rules="StorageRules"
-          required 
           
           id="StorageCapacity"
-          v-model="StorageCapacity" :model-value="StorageCapacity" />
+          v-model="StorageCapacity"/>
         </div>
 
         <div class="modalField flex flex-column">
           <label for="MaxStorage">Max Storage Capacity (GB)</label>
 
           <v-text-field
+          required
           v-if="!MaxStorageCapacity"
           :rules="StorageRules"
-          required 
           
           id="MaxStorageCapacity"
           v-model="MaxStorageCapacity" />
@@ -122,7 +121,7 @@
           required 
           
           id="MaxStorageCapacity"
-          v-model="MaxStorageCapacity" :model-value="MaxStorageCapacity" />
+          v-model="MaxStorageCapacity"/>
         </div>
       </div>
 
@@ -161,44 +160,37 @@ export default {
       // Validation Rules
 
       StorageRules: [
-        storageCapacity => !storageCapacity || 'This field is required',
-        storageCapacity => String(storageCapacity).length == 0 || 'This field is required',
-        storageCapacity => Number(storageCapacity) == null || 'Invalid Storage Capacity',
+        storageCapacity => String(storageCapacity).length != 0 || 'This is required',
+        storageCapacity => !isNaN(storageCapacity) || 'Invalid Storage Capacity',
       ],
 
       MaxCpuRules: [
-        maxCpu => !maxCpu || 'This field is required',
-        maxCpu => String(maxCpu).length == 0 || 'This field is required',
-        maxCpu => Number(maxCpu) == null || 'Invalid Max CPU Capacity',
+        maxCpu => String(maxCpu).length != 0 || 'This field is required',
+        maxCpu => !isNaN(maxCpu) || 'Invalid Max CPU Capacity',
       ],
 
       CpuRules: [
-        Cpu => !Cpu || 'This field is required',
-        Cpu => String(Cpu).length == 0 || 'This field is required',
-        Cpu => Number(Cpu) == null || 'Invalid CPU Capacity',
+        Cpu => String(Cpu).length != 0 || 'This field is required',
+        Cpu => !isNaN(Cpu) || 'Invalid CPU Capacity',
       ],
 
       MaxMemoryRules: [
-        MaxMemory => !MaxMemory || 'This field is required',
-        MaxMemory => String(MaxMemory).length == 0 || 'This field is required',
-        MaxMemory => Number(MaxMemory) == null || 'Invalid Max Memory Capacity',
+        MaxMemory => String(MaxMemory).length != 0 || 'This field is required',
+        MaxMemory => !isNaN(MaxMemory) || 'Invalid Max Memory Capacity',
       ],
 
       MemoryInMegabytesRules: [
-        Memory => !Memory || 'This field is required',
-        Memory => String(Memory).length == 0 || 'This field is required',
-        Memory => Number(Memory) == null || 'Invalid Memory Capacity',
+        Memory => String(Memory).length != 0 || 'This field is required',
+        Memory => !isNaN(Memory) || 'Invalid Memory Capacity',
       ],
 
       DiskCapacityRules: [
-        DiskCapacity => !DiskCapacity || 'This Field is required',
-        DiskCapacity => String(DiskCapacity).length == 0 || 'This field is required',
-        DiskCapacity => Number(DiskCapacity) == null || 'Invalid Disk Capacity'
+        DiskCapacity => String(DiskCapacity).length != 0 || 'This field is required',
+        DiskCapacity => !isNaN(DiskCapacity) || 'Invalid Disk Capacity'
       ],
       MaxDiskCapacityRules: [
-        MaxDiskCapacity => !MaxDiskCapacity || 'This field is required',
-        MaxDiskCapacity => String(MaxDiskCapacity).length == 0 || 'This field is required',
-        MaxDiskCapacity => Number(MaxDiskCapacity) == null || 'Invalid Disk Capacity',
+        MaxDiskCapacity => String(MaxDiskCapacity).length != 0 || 'This field is required',
+        MaxDiskCapacity => !isNaN(MaxDiskCapacity)|| 'Invalid Disk Capacity',
       ]
     }
   },
