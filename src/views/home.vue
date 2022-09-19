@@ -1,4 +1,5 @@
 <template>
+
   <div class="homeWrapper">
 
     <router-link :to="{ name: 'login_page'}"></router-link>
@@ -8,34 +9,32 @@
     <!-- Header -->
 
     <div :v-if="virtualMachineData.length > 0 && virtualMachinesLoaded == true" class="header flex">
-      <div class="right flex">
         <div @click="toggleFilterMenu" class="filter flex">
           <span
-            >Filter by status <span v-if="filteredVirtualMachine">: {{ filteredVirtualMachines }}</span></span
+            >Filter by status <span v-if="filteredVirtualMachine">: {{ filterParams }}</span></span
           >
           <img :src="require('@/assets/icon-arrow-down.svg')" alt="icon-arrow-down" style="width:10%; height:10%"/>
           <ul v-show="filterMenu" class="filter-menu">
-            <li @click="filteredVirtualMachine">Running</li>
-            <li @click="filteredVirtualMachine">Shutdown</li>
-            <li @click="filteredVirtualMachine">Deploying</li>
-            <li @click="filteredVirtualMachine">Clear</li>
+            <li @click="filterVirtualMachine">Running</li>
+            <li @click="filterVirtualMachine">Shutdown</li>
+            <li @click="filterVirtualMachine">Deploying</li>
+            <li @click="filterVirtualMachine">Clear</li>
           </ul>
         </div>
 
-        <div  @click="newVirtualMachine" class="button flex">
+        <div @click="newVirtualMachine" class="button flex">
           <div class="inner-button flex">
             <img :src="require('@/assets/icon-plus.svg')" alt="icon_plus" />
           </div>
           <span >New Virtual Machine</span>
         </div>
-      </div>
     </div>
 
     <!-- Virtual Machines -->
 
-    <div v-if="virtualMachineData.length > 0 && virtualMachinesLoaded == true">
+    <div style="margin-top: 5px;" v-if="virtualMachineData.length > 0 && virtualMachinesLoaded == true">
       <div class="left flex flex-column" style="margin-bottom: 70px; justify-content: center;">
-        <h1 style="margin-top: 20px;">Virtual Servers</h1>
+        <h1 style="margin-top: 10px;">Virtual Servers</h1>
         <span style="margin-bottom: 20px;">You have {{ virtualMachineData.length }} Virtual Servers</span>
       </div>
       <VirtualMachineBannerInfo style="justify-content: center; margin-bottom: 30px; margin-left: 200px; margin-right: 200px;" v-for="(VirtualMachine, index) in filteredData" :VirtualMachine="VirtualMachine" :key="index" />
@@ -68,7 +67,7 @@ export default {
     return {
       // Filter Params
       filterMenu: null,
-      filteredVirtualMachine: null,
+      filterParams: null,
     };
   },
   created() {
@@ -90,10 +89,10 @@ export default {
     },
     filterVirtualMachine(e) {
       if (e.target.innerText === "Clear") {
-        this.filteredVirtualMachine = null;
+        this.filterParams = null;
         return;
       }
-      this.filteredVirtualMachine = e.target.innerText;
+      this.filterParams = e.target.innerText;
     },
   },
   components: {
@@ -103,6 +102,7 @@ export default {
     ...mapState(["virtualMachineData", "virtualMachinesLoaded"]),
     filteredData() {
       return this.virtualMachineData.filter((virtualMachine) => {
+
         if (this.filteredVirtualMachine === "Clear") {
           this.filteredVirtualMachine = null
           return true
@@ -125,26 +125,28 @@ export default {
 
 
 <style lang="scss" scoped>
-  .homeWrapper {
+
+.homeWrapper {
     text-align: center;
     justify-content: center;
     align-items: center;
     padding: 0 20px;
     flex: 1;
     position: relative;
-  }
-.home {
+
   color: #fff;
   .header {
-    margin-bottom: 65px;
+    margin-top: 30px;
+    margin-bottom: 10px;
     .left,
     .right {
       flex: 1;
       align-content: center;
     }
-    .right {
       justify-content: flex-end;
       align-items: center;
+      flex: 1;
+      align-content: center;
       .button,
       .filter {
         align-items: center;
@@ -217,7 +219,6 @@ export default {
       margin-top: 16px;
     }
   }
-}
 .dark-purple {
   background-color: #252945;
 }

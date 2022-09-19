@@ -11,7 +11,7 @@
           d="M730.6 18.4l-505.4 505.2 505.4 505.4 144.8-144.8-360.6-360.6 360.6-360.4z"
         ></path>
       </svg>
-      <span class="back-text" @click="redirectToPreviousPage()">Go Back</span>
+      <span class="back-text" @click="redirectToPreviousPage">Go Back</span>
     </router-link>
     <div class="status-container">
       <p class="status-title" style="margin-top: 6px; margin-right: 3px;">Status</p>
@@ -126,10 +126,13 @@
           })"
           :key="index"
         >
-          <p class="prj-text" v-if="PropertyName.toLowerCase() !== 'storagecapacity'">{{ PropertyName }}</p>
-          <p class="prj-text" v-else>Storage Capacity</p>
+          <p class="prj-text" v-if="PropertyName.toLowerCase() === 'cpunum'">CPU Numbers</p>
           <p class="prj-text" v-if="PropertyName.toLowerCase() == 'cpunum'">{{ VirtualMachine[PropertyName]|| 0 }}</p>
+          
+          <p class="prj-text" v-if="PropertyName.toLowerCase() === 'memory'">Memory</p>
           <p class="prj-text" v-if="PropertyName.toLowerCase() == 'memory'">{{ VirtualMachine[PropertyName] || 0 }}MB</p>
+          
+          <p class="prj-text" v-if="PropertyName.toLowerCase() === 'storagecapacity'">Storage Capacity</p>
           <p class="prj-text" v-if="PropertyName.toLowerCase() == 'storagecapacity'">{{ VirtualMachine[PropertyName] || 0 }}GB</p>
 
           <!-- Receiving the Cost of the Specific Property  (Cpu, Memory, etc....)-->

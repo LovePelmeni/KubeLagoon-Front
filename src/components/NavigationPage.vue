@@ -2,8 +2,16 @@
   <header class="flex">
 
     <div class="branding flex" style="max-height: 100px; justify-content: space-between;">
-      <v-avatar :v-if="authenticated" size="50">
+      <v-avatar v-if="authenticated" size="50">
         <div @click="redirectToProfile" class="button flex">
+          <div class="inner-button flex">
+            <img :src="require('@/assets/customer_avatar.png')" alt="icon_plus" />
+          </div>
+        </div>
+      </v-avatar>
+
+       <v-avatar v-else size="50">
+        <div class="button flex">
           <div class="inner-button flex">
             <img :src="require('@/assets/customer_avatar.png')" alt="icon_plus" />
           </div>
@@ -55,9 +63,6 @@ export default {
     ...mapMutations([
       "TOGGLE_LOGOUT_MODAL",
     ]),
-    ...mapState([
-      "authenticated",
-    ]),
     triggerLogoutModal() {
       // Triggers Logout Modal Window 
       this.TOGGLE_LOGOUT_MODAL()
@@ -78,6 +83,11 @@ export default {
       // Redirects to the Home Page 
       this.$router.push({name: "main_page"})
     }
+  },
+  computed: {
+    ...mapState([
+      "authenticated"
+    ]),
   }
 };
 

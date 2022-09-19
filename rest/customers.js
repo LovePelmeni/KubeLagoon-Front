@@ -1,15 +1,13 @@
-var BACKEND_APPLICATION_HOST = process.env.BACKEND_APPLICATION_HOST
-var BACKEND_APPLICATION_PORT = process.env.BACKEND_APPLICATION_PORT
+var BACKEND_APPLICATION_HOST = process.env.BACKEND_APPLICATION_HOST || 'localhost'
+var BACKEND_APPLICATION_PORT = process.env.BACKEND_APPLICATION_PORT || '8000'
 
-var $ = global.jQuery;
-window.jquery = $;
-
-
+import { useCookies } from "vue3-cookies"
+const Cookie = useCookies();
 
 function CreateCustomerRestController(CustomerData) {
   // Rest Controller, that is responsible for creating new Customer Profile
 
-    var APIUrl = new URL("http://%s:%s/customer/create/" % (BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
+    var APIUrl = new URL(`http://${BACKEND_APPLICATION_HOST}:${BACKEND_APPLICATION_PORT}/customer/create/`)
     var HttpResponse, HttpErrors = global.jQuery.ajax({
       type: "POST",
       data: JSON.stringify(CustomerData),
@@ -26,7 +24,7 @@ function CreateCustomerRestController(CustomerData) {
           return false, newError
         }
         if (Response.StatusCode == 201) {
-          $.SetCookie("jwt-token", Response.getResponseHeader("jwt-token"))
+          Cookie.cookies.set("jwt-token", Response.getResponseHeader("jwt-token"))
           return true, null
         }
         if (Response.StatusCode == 500) {
@@ -50,7 +48,7 @@ function CreateCustomerRestController(CustomerData) {
 function ResetPasswordRestController(JwtToken, NewPassword){
   // Rest Controller, that Is Responsible for Resetting Password
 
-  var APIUrl = new URL("http://%s:%s/customer/reset/password" % (BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
+  var APIUrl = new URL(`http://${BACKEND_APPLICATION_HOST}:${BACKEND_APPLICATION_PORT}/customer/reset/password`)
   let ResponseStatus, ResponseErrors = global.jQuery.ajax({
     data: JSON.stringify({"NewPassword": NewPassword}),
     dataType: "json",
@@ -79,7 +77,7 @@ function ResetPasswordRestController(JwtToken, NewPassword){
 function DeleteCustomerRestController(JwtToken) {
   // Rest Controller, that is used to deleting the Customer Profile
 
-  var APIUrl = new URL("http://%s:%s/customer/delete" % (BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
+  var APIUrl = new URL(`http://${BACKEND_APPLICATION_HOST}:${BACKEND_APPLICATION_PORT}/customer/delete`)
   var Response, ResponseError = global.jQuery.ajax({
     URL: APIUrl,
     type: "DELETE",
@@ -109,8 +107,7 @@ function DeleteCustomerRestController(JwtToken) {
 
 function LoginCustomerRestController(LoginForm) {
   // Logs in Customer into the Profile
-  var APIUrl = urllib.URL("http://%s:%s/login/" % (
-  BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT))
+  var APIUrl = URL(`http://${BACKEND_APPLICATION_HOST}:${BACKEND_APPLICATION_PORT}/login/`)
   var Response, ResponseError = global.jQuery.ajax({
     type: "POST",
     URL: APIUrl,
@@ -139,8 +136,7 @@ function LoginCustomerRestController(LoginForm) {
 function GetCustomerProfileRestController(JwtToken) {
   // Returns the Customer Profile Info 
 
-  let APIUrl = new urllib.URL("http://%s:%s/customer/get/profile/",
-  BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT) 
+  let APIUrl = new URL(`http://${BACKEND_APPLICATION_HOST}:${BACKEND_APPLICATION_PORT}/customer/get/profile`) 
   let Response, ResponseError = global.jQuery.ajax({
     url: APIUrl, 
     type: "GET",

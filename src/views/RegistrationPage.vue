@@ -50,7 +50,7 @@
                     label="Country"
                     placeholder="select Country"
                     prepend-inner-icon="mdi-account"
-                    required:items="countries">
+                    required:items="countries" required>
 
                            <template v-slot:selection="{ item, index}">
                               <input type="hidden" :value="index">
@@ -83,7 +83,11 @@
                   required
                 />
 
-            <v-switch label="Remember me" color="indigo"></v-switch>
+            <v-switch 
+            @click="RememberUserFunction"
+            v-model="RememberUser"
+            label="Remember me"
+            color="indigo"></v-switch>
             </v-card-text>
 
             <v-card-actions class="justify-center">
@@ -96,11 +100,11 @@
         </v-card>
       </v-col>
 
-      <v-snackbar top color="green" v-model="snackbar">
+      <v-snackbar top color="green">
         Registration success
       </v-snackbar>
 
-      <v-snackbar :v-if="RegisterFailed" top color="red" v-model="snackbar">
+      <v-snackbar v-if="RegisterFailed" top color="red">
         Registration Failed, {{ RegisterError }}
       </v-snackbar>
       </div>
@@ -144,6 +148,8 @@ export default {
     passwordShow:false,
     Valid: false,
 
+    RememberUser: false,
+
     Username: '',
     UsernameRules: [
       username => !!username || 'This Field is Required',
@@ -166,32 +172,51 @@ export default {
 
     Country: '',
     CountryRules: [
-      country => !country || 'Country is required',
+      country => !!country || 'Country is required',
     ],
 
 
     ZipCode: '',
     ZipCodeRules: [
-      zipcode => !zipcode.length || 'Zip Code is required',
+      zipcode => zipcode.length > 0 || 'Zip Code is required',
+      zipcode => isNaN(zipcode) == false || 'Invalid Zip Code',
     ],
 
     Street: '',
       StreetRules: [
-        street => !street.length || 'Street is required',
+        street => street.length > 0 || 'Street is required',
     ],
   }),
 
   methods: {
 
+    RememberUserFunction() {
+      // Remembers the Username and Password 
+    },
+    
     submitRegisterForm(){
-      if (this.$refs.form.validate()){
-          this.loading = true
-        setTimeout(()=> {
-          this.loading = false
-          this.snackbar = true
-        }, 3000)
-        this.registerCustomer()
+      // Submitting the Registration Form 
+      for (let Property in Object.keys(this.$data)) {
+        if (this.$data[Property] == null || this.$data[Property].length == 0) {
+          this.RegisterFailed = true 
+          this.RegisterError = "Please Fill out all the Required Fields"
+          break
+        }
       }
+
+      if (this.RegisterFailed != true) {
+
+          if (this.$refs.form.validate()){
+              this.loading = true
+            setTimeout(()=> {
+              this.loading = false
+              this.snackbar = true
+            }, 3000)
+            this.registerCustomer()
+          }
+      }
+      this.RegisterFailed = false 
+      this.RegisterError = null
     },
     registerCustomer() {
       // Submits the Registration Form 

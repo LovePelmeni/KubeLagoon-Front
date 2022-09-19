@@ -1,7 +1,6 @@
 <template>
 
       <h1 style="margin-top: 20px;">Resource Configuration</h1>
-
       <div class="modalField flex flex-column">
         <label for="CpuNum">CPU</label>
 

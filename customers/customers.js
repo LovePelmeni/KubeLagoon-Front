@@ -83,4 +83,3 @@ class CustomerManager {
 }
 
 export {CustomerRegistrationForm, CustomerLoginForm, CustomerManager};
-
