@@ -27,25 +27,37 @@
           <label for="Username">Username</label>
 
           <v-text-field
-          :class="{
-            '!EditProfile': disabled,
-          }"
+          v-if="!EditProfile"
+          :rules="UsernameRules"
+          id="Username" 
+          v-model="Username"
+          />
+
+          <v-text-field
+          v-else
+          disabled
           :rules="UsernameRules"
           id="Username" 
           v-model="Username"
           />
           </div>
 
+    
         <div class="modalField flex flex-column">
           <label for="Email">Email</label>
 
           <v-text-field
-          :class="{
-            '!EditProfile': disabled,
-          }"
+          v-if="!EditProfile"
           :rules="EmailRules"
           id="Email" 
           v-model="Email" />
+
+          <v-text-field
+          v-else
+          disabled
+          id="Email" 
+          v-model="Email"
+          />
 
         </div>
 
@@ -53,12 +65,17 @@
           <label for="Password">Password</label>
 
           <v-text-field
-          :class="{
-            '!EditProfile': disabled,
-          }"
+          v-if="!EditProfile"
           :rules="Password"
           id="Password"
           v-model="Password" />
+
+          <v-text-field
+          v-else
+          disabled
+          id="Password" 
+          v-model="Username"
+          />
 
         </div>
 
@@ -68,13 +85,17 @@
             <label for="BillingAddress">Billing Address</label>
 
             <v-text-field
-            :class="{
-              '!EditProfile': readOnlyField
-            }"
+            v-if="!EditProfile"
             :rules="BillingAddressRules"
             id="BillingAddress" 
             v-model="BillingAddress" />
-
+            
+            <v-text-field
+            v-else
+            disabled
+            id="BillingAddress" 
+            v-model="BillingAddress"
+            />
           </div>
 
           <div class="modalField flex flex-column">
@@ -82,25 +103,36 @@
             <label for="ZipCode">ZIP Code</label>
 
             <v-text-field
-            :class="{
-              '!EditProfile': disabled,
-            }"
+            v-if="!EditProfile"
             :rules="ZipCodeRules"
             id="ZipCode"
             v-model="ZipCode" />
 
+            <v-text-field
+            v-else
+            disabled
+            :rules="ZipCodeRules"
+            id="ZipCode" 
+            v-model="ZipCode"
+            />
+
           </div>
 
           <div class="modalField flex flex-column">
-
             <label for="Street">Street</label>
+
             <v-text-field
-            :class="{
-              '!EditProfile': disabled,
-            }"
+            v-if="!EditProfile"
             :rules="StreetRules"
             id="Street"
             v-model="Street" />
+
+            <v-text-field
+            v-else
+            disabled
+            id="Street" 
+            v-model="Street"
+            />
 
             </div>
           </div>
@@ -144,7 +176,7 @@ import * as customers from "../../customers/customers.js"
 
 export default {
 
-  name: "initializationModal",
+  name: "CustomerProfile",
   setup() {
     const { cookie } = useCookies();
     return { cookie };
@@ -165,12 +197,12 @@ export default {
       activeError: false,
 
       // Customer Profile Form Fields
-      Username: null, 
-      Email: null, 
-      Password: null, 
-      BillingAddress: null, 
-      Street: null, 
-      ZipCode: null,
+      Username: "Not Found", 
+      Email: "Not Found", 
+      Password: "Not Found", 
+      BillingAddress: "Not Found", 
+      Street: "Not Found",
+      ZipCode: "Not Found",
     };
   },
   created() {
@@ -182,10 +214,13 @@ export default {
       // Returns the Customer's Profile 
       let customerManager = new customers.CustomerManager()
       let Customer, CustomerError = customerManager.GetCustomerProfile(this.JwtToken)
-      if (CustomerError != null) {this}
-      for (let CustomerProperty in Object.keys(Customer)) {
+      if (CustomerError != null) {this.activeError = true; this.EditError = "Failed to Render Profile"}else{
+
+      for (let CustomerProperty in Object.keys(Customer || {})) {
           this[CustomerProperty] = Customer[CustomerProperty]
-      }
+      }}
+      this.activeError = false 
+      this.EditError = null
     },
 
     RedirectToMainPage() {
@@ -277,6 +312,9 @@ export default {
       }
       .modalField {
         margin-bottom: 24px;
+        .disabledProfileField {
+          :disabled {background-color: gray}
+        }
       }
         label {
           font-size: 12px;
