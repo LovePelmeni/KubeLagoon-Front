@@ -35,7 +35,7 @@
     <div style="margin-top: 5px;" v-if="virtualMachineData.length > 0 && virtualMachinesLoaded == true">
       <div class="left flex flex-column" style="margin-bottom: 70px; justify-content: center;">
         <h1 style="margin-top: 10px;">Virtual Servers</h1>
-        <span style="margin-bottom: 20px;">You have {{ virtualMachineData.length }} Virtual Servers</span>
+        <span style="margin-bottom: 20px; margin-top: 40px;">You have {{ virtualMachineData.length }} Virtual Servers</span>
       </div>
       <VirtualMachineBannerInfo style="justify-content: center; margin-bottom: 30px; margin-left: 200px; margin-right: 200px;" v-for="(VirtualMachine, index) in filteredData" :VirtualMachine="VirtualMachine" :key="index" />
     </div>

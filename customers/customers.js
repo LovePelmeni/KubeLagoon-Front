@@ -36,6 +36,7 @@ class CustomerLoginForm {
   }
 }
 
+
 class CustomerManager {
   // Class, represents Management tool for handling Customer's Operations
 
@@ -48,6 +49,12 @@ class CustomerManager {
     LogoutCustomer = function(JwtToken) {
       let LoggedOut, LogoutError = customers_rest.LogoutCustomerRestController(JwtToken)
       return LoggedOut, LogoutError
+    }
+
+    EditCustomer = function(JwtToken, EditForm) {
+      // Edits the Customer's Profile with Info that is available to edit
+      let Edited, EditError = customers_rest.EditCustomerProfileRestController(JwtToken, EditForm)
+      return Edited, EditError
     }
 
     CreateCustomer = function(Username, Email, Password, BillingAddress, ZipCode, Street) {
@@ -83,3 +90,4 @@ class CustomerManager {
 }
 
 export {CustomerRegistrationForm, CustomerLoginForm, CustomerManager};
+

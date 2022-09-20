@@ -162,9 +162,37 @@ function GetCustomerProfileRestController(JwtToken) {
   return Response, ResponseError
 }
 
+function EditCustomerProfileRestController(JwtToken, EditFormData) {
+  // Rest Controller, that Updates the Customer with new Data 
+  var APIUrl = new URL(`http://${BACKEND_APPLICATION_HOST}:${BACKEND_APPLICATION_PORT}/customer/edit/profile/`); 
+  var Response, ResponseError = global.jQuery.ajax({
+    url: APIUrl, 
+    type: "PUT",
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Authorization": JwtToken,
+    },
+    data: JSON.stringify(EditFormData),
+    success: function(Response) { 
+      if (Response.StatusCode == 200 || Response.StatusCode == 201) {
+        return true, null
+      }else{
+        let newError = new Error(Response.Error)
+        return false, newError
+      }
+    },
+    error: function(APIError) {
+      let newError = new Error(APIError)
+      return false, newError
+    },
+  })
+  return Response, ResponseError
+}
+
 
 export {CreateCustomerRestController,
 DeleteCustomerRestController,
 LoginCustomerRestController,
 ResetPasswordRestController,
+EditCustomerProfileRestController,
 GetCustomerProfileRestController}
