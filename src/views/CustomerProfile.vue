@@ -15,13 +15,12 @@ export default {
   },
 
   template: `
-  <template>
-<v-app>
-
+    <v-app>
     <div class="profile-content" style="background-color: #141625">
     <div style="margin-top: 5px;">
       <div class="left flex flex-column" style="margin-bottom: 5px; justify-content: center;">
-        <h1 style="margin-top: 10px; color: white; align-text: center;">Hello, {{ Username }}!</h1>
+        <h1 v-if="Username.length > 0" style="margin-top: 10px; color: white; align-text: center;">Hello, {{ Username }}!</h1>
+        <h1 v-else style="margin-top: 10px; color: white; align-text: center;">Oops, Your Profile Is Not Found :(</h1>
       </div>
     </div>
 
@@ -142,11 +141,13 @@ export default {
                   placeholder="Street"
                 />
 
+              </v-card-text>
+
 
               <div class="save flex">
 
                   <div class="buttonBlock flex" style="width: 800px">
-                    <v-btn type="submit" v-if="EditProfile == true" @submit="closeVirtualMachineSettings" id="CancelSetup" style="background-color: #ec5757" :loading="CancelLoading">Cancel Setup</v-btn>
+                    <v-btn type="submit" v-if="EditProfile == true" @click="CancelEditProfileController" id="CancelSetup" style="background-color: #ec5757" :loading="CancelLoading">Cancel Setup</v-btn>
                     <v-btn v-if="EditProfile == true" style="background-color: green;" :loading="ApplyChangesloading" type="submit" @click="ApplyChangesProfileController">Save</v-btn>
                     <v-btn v-if="EditProfile == false" style="background-color: #7c5dfa;" type="submit" @click="EditProfileController">Edit Profile</v-btn>
                   </div>
@@ -160,8 +161,8 @@ export default {
         Edited Successfully
       </v-snackbar>
 
-      <v-snackbar v-if="RegisterFailed" top color="red">
-        Update Failed, {{ RegisterError }}
+      <v-snackbar v-if="activeError" top color="red">
+        Update Failed, {{ EditError }}
       </v-snackbar>
       </div>
   </v-app>
@@ -170,8 +171,6 @@ export default {
       <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
       <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css" rel="stylesheet">
   </body>
-
-</template>
 `,
 
   data() {
@@ -188,7 +187,7 @@ export default {
 
       // Customer Profile Form Fields
   
-    Username: 'Failed to Fetch Username',
+    Username: '',
     UsernameRules: [
       username => !!username || 'Please enter Valid Username',
       username => (username && username.length >= 10) || 'Username should be 10 characters or more!',

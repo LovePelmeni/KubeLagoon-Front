@@ -146,6 +146,10 @@ function GetCustomerProfileRestController(JwtToken) {
     },
     success: function(Response) { 
       // Returning the Customer's Profile
+      if (Response.StatusCode == 404) {
+        let newError = new Error("Failed to Fetch Profile")
+        return null, newError
+      }
       if (Response.StatusCode == 200 || Response.StatusCode == 201){
         return Response["Customer"], null
       }else{

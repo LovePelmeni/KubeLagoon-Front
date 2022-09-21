@@ -1,84 +1,19 @@
-<script>
-
-import { mapState } from "vuex"
-import navigationPage from "./components/NavigationPage.vue"
-import modalPage from "./components/ModalWindow.vue"
-
-import notificationBanner from "./components/notification.vue"
-import errorBanner from "./components/error.vue"
-import loadingPage from "./components/LoadingPage.vue"
-import logoutPage from "./components/LogoutPage.vue"
-
-
+<script lang="javascript">
 export default {
-  name: "App",
-  data() {
-    return {
-      mobile: null,
-    };
-  },
-
-  template: `
-  <div>
-      <div v-if="!mobile" class="app flex flex-column">
-          <navigationPage />
-          <logoutPage v-if="logout" />
-          <loadingPage v-if="loading" />
-          <modalPage v-if="modalActive" />
-          <errorBanner v-for="(Error, index) in [error]" v-if="activeError" :errorMessage="Error" :key="index" />
-          <notificationBanner v-for="(Notification, index) in [notification]" v-if="activeNotification" :notificationMessage="Notification" :key="index" />
-        <router-view />
-
-      </div>
+    name: "NotFoundPage",
+    template: `
+      <div>
       <div v-else class="mobile-message flex flex-column">
-        <h2>Sorry, this app is not supported on Mobile Devices</h2>
-        <p>To use this app, please use a Laptop or Another Device</p>
+        <h2>Sorry, Page you are looking for does not exist  :(</h2>
+        <p>Please make sure, that you typed the route correctly</p>
       </div>
-  </div>
-  `,
-
-  components: {
-    loadingPage,
-    navigationPage,
-    modalPage,
-    errorBanner,
-    notificationBanner,
-    logoutPage,
-  },
-
-  created() {
-    this.checkScreen();
-    window.addEventListener("resize", this.checkScreen);
-  },
-
-  methods: {
-    checkScreen() {
-      const windowWidth = window.innerWidth;
-      if (windowWidth <= 750) {
-        this.mobile = true;
-        return;
-      }
-      this.mobile = false;
-    },
-  },
-
-  computed: {
-    ...mapState(["loading", "modalActive", "virtualMachinesLoaded",
-    "notification", "error", "activeError", "activeNotification", "logout"]),
-  },
-};
-
+    </div>
+    `
+}
 </script>
 
-
 <style lang="scss">
-@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap");
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: "Poppins", sans-serif;
-}
+
 .app {
   background-color: #141625;
   min-height: 100vh;

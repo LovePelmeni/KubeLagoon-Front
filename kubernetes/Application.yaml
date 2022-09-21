@@ -48,3 +48,4 @@ metadata:
 data:
   BACKEND_APPLICATION_HOST: infrastructure.app-namespace.svc.cluster.local:8000
   BACKEND_APPLICATION_PORT: 8000
+

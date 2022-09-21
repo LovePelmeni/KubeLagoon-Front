@@ -9,6 +9,8 @@ import RegistrationPage from "../views/RegistrationPage.vue";
 import initializationModal from "../views/InitializationModal.vue";
 import deployErrorDescription from "../components/deployError.vue";
 import ResetPassword from "../views/ResetPassword.vue";
+import NotFoundPage from "../components/NotFoundWindow.vue";
+
 
 const routes = [
   {
@@ -50,6 +52,11 @@ const routes = [
     path: "/customer/profile/",
     name: "customer_profile",
     component: CustomerProfile,
+  },
+  {
+    path: "/not/found/",
+    name: "not_found_page",
+    component: NotFoundPage,
   }
 ]
 
