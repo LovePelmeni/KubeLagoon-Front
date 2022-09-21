@@ -1,13 +1,17 @@
 <template>
   <v-app>
     <div class="loginWrapper" style="background-color: #141625">
+      
+    <div style="margin-top: 5px;">
+      <div class="left flex flex-column" style="margin-bottom: 5px; justify-content: center;">
+        <h1 style="margin-top: 10px; color: white; align-text: center;">Sign In</h1>
+      </div>
+    </div>
+
     <v-main class="d-flex justify-center align-center">
-      <v-col cols="10" lg="4" class="mx-auto">
+      <v-col cols="10" lg="6" class="mx-auto">
 
         <v-card class="pa-4">
-          <div class="text-center">
-            <h2 class="indigo--text">Sign in</h2>
-          </div>
           <v-form @submit.prevent="submitLoginForm" ref="form">
             <v-card-text>
               <v-text-field
@@ -42,11 +46,11 @@
       </v-col>
     </v-main>
     
-    <v-snackbar :v-if="this.logged == true" top color="green" v-model="snackbar">
+    <v-snackbar style="margin-bottom: 100px;" :v-if="this.logged == true" top color="green" v-model="snackbar">
       Login success
     </v-snackbar>
 
-    <v-snackbar :v-if="this.loggedFailed == true" top color="red" v-model="snackbar">
+    <v-snackbar style="margin-bottom: 100px;" :v-if="this.loggedFailed == true" top color="red" v-model="snackbar">
       Login Failed, Invalid Credentials
     </v-snackbar>
     </div>

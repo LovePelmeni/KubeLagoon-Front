@@ -2,13 +2,16 @@
   <v-app>
 
     <div class="registrationWrapper" style="background-color: #141625">
-      <v-col cols="10" lg="4" class="mx-auto">
+
+        <div style="margin-top: 5px;">
+      <div class="left flex flex-column" style="margin-bottom: 5px; justify-content: center;">
+        <h1 style="margin-top: 10px; color: white; align-text: center;">Sign Up</h1>
+      </div>
+        </div>
+
+      <v-col cols="10" lg="6" class="mx-auto">
 
         <v-card class="pa-4">
-          <div class="text-center">
-            <h2 class="indigo--text" style="margin-bottom: 30px">Sign up</h2>
-          </div>
-
           <v-form @submit.prevent="submitRegisterForm" ref="form">
             <v-card-text>
               <v-text-field

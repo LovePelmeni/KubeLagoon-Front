@@ -15,5 +15,3 @@ networks:
   cloud-infrastructure-network:
       external: true 
       name: "cloud-infrastructure-network"
-
-

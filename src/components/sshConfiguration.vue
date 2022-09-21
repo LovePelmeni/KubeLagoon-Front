@@ -48,6 +48,7 @@ export default {
         this[PropertyKey] = this.virtualMachineSavedDraft[PropertyKey]
       }
     },
+
     toRootCertificate() {
       this.useRootCertificate = true
       this.useRootCredentials = false

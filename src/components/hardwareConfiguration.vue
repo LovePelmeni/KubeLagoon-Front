@@ -195,21 +195,7 @@ export default {
         }else{
         this.selectOperationalSystem(OperationalSystem)}
     },
-
-    ValidateDatacenter(Datacenter) {
-      // Validates Load Balancer Configuration
-      if (Datacenter.Type.length == 0) {
-        this.errors["LoadBalancer"]["Type"] = "This field is required"
-      }
-      if (Datacenter.Port != 0) {
-        this.errors["LoadBalancer"]["Port"] = "Please specify the default value"
-      }
-      if (this.AddedDatacenter != null && this.AddedDatacenter == Datacenter) {
-          this.AddedDatacenter = null
-        }else{
-        this.selectDatacenter(Datacenter)}
-    },
-
+    
     GetSuggestedDatacenters() {
       // Returns Array of the Available Datacenters
       let Datacenters = [

@@ -1,10 +1,10 @@
 <template>
+
   <div class="virtual-machine-wrap">
-
     <v-col cols="10" lg="4" class="mx-auto">
-      <v-card style="max-width: 5000px;" class="pa-4">
+      <v-card style="max-width: 50000px;" class="pa-4">
 
-    <v-form class="virtual-machine-content" id="form" ref="form" style="max-width: 10000px; gap: 1">
+    <v-form class="virtual-machine-content" id="form" ref="form" style=" justify-content: center; max-width: 100000px; gap: 1">
 
       <!-- Virtual Machine Work Details -->
 
@@ -50,7 +50,6 @@
           <p>In Total Per Day</p>
           <p>${{ TotalCost }}</p>
         </div>
-
 
       <!-- Save/Exit -->
 

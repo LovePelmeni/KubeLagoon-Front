@@ -7,7 +7,8 @@
         <v-text-field
         v-if="!CpuNum"
         :rules="CpuRules"
-        id="CpuNum" v-model="CpuNum"
+        id="CpuNum" 
+        v-model="CpuNum"
         required
         />
 
@@ -15,7 +16,8 @@
         required
         v-else
         :rules="CpuRules"
-        id="CpuNum" v-model="CpuNum" :model-value="CpuNum" />
+        id="CpuNum" 
+        v-model="CpuNum"/>
       </div>
 
       <div class="modalField flex flex-column">
@@ -33,7 +35,6 @@
         v-else
         :rules="MaxCpuRules"
         required
-        
         id="MaxCpu" 
         v-model="MaxCpu"
         />
@@ -46,7 +47,6 @@
         required
         v-if="!Memory"
         :rules="MemoryInMegabytesRules"
-        
         id="MemoryInMegabytes"
         v-model="Memory" />
 
@@ -54,7 +54,6 @@
         required
         v-else
         :rules="MemoryInMegabytesRules"
-        
         id="MemoryInMegabytes"
         v-model="Memory"
         />
@@ -70,7 +69,6 @@
           required
           v-if="!MaxMemory"
           :rules="MaxMemoryRules"
-          
           id="MaxMemory" 
           v-model="MaxMemory" />
 
@@ -78,7 +76,6 @@
           required
           v-else
           :rules="MaxMemoryRules"
-
           id="MaxMemory" 
           v-model="MaxMemory"/>
         </div>
