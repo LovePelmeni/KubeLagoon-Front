@@ -103,17 +103,17 @@ export default {
     filteredData() {
       return this.virtualMachineData.filter((virtualMachine) => {
 
-        if (this.filteredVirtualMachine === "Clear") {
+        if (this.filterParams === "Clear") {
           this.filteredVirtualMachine = null
           return true
         }
-        if (this.filteredVirtualMachine === "Running") {
+        if (this.filterParams === "Running") {
           return virtualMachine.Running === true;
         }
-        if (this.filteredVirtualMachine === "Shutdown") {
+        if (this.filterParams === "Shutdown") {
           return virtualMachine.Shutdown === true;
         }
-        if (this.filteredVirtualMachine === "Deploying") {
+        if (this.filterParams === "Deploying") {
           return virtualMachine.Deploying === true;
         }
         return virtualMachine;

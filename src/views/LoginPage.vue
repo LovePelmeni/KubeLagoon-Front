@@ -24,15 +24,15 @@
                 required
               />
               <v-text-field
-                      v-model="Password"
-                      :rules="PasswordRules"
-                      :type="passwordShow?'text':'password'"
-                      label="Password"
-                      placeholder="Password"
-                      prepend-inner-icon="mdi-key"
-                      :append-icon="passwordShow ? 'mdi-eye':'mdi-eye-off'"
-                      @click:append="passwordShow = !passwordShow"
-                      required
+                v-model="Password"
+                :rules="PasswordRules"
+                :type="passwordShow?'text':'password'"
+                label="Password"
+                placeholder="Password"
+                prepend-inner-icon="mdi-key"
+                :append-icon="passwordShow ? 'mdi-eye':'mdi-eye-off'"
+                @click:append="passwordShow = !passwordShow"
+                required
               />
               <v-switch label="Remember me" color="indigo"></v-switch>
             </v-card-text>
@@ -46,11 +46,11 @@
       </v-col>
     </v-main>
     
-    <v-snackbar style="margin-bottom: 100px;" :v-if="this.logged == true" top color="green" v-model="snackbar">
+    <v-snackbar style="margin-bottom: 100px;" :v-if="this.logged == true" top color="green">
       Login success
     </v-snackbar>
 
-    <v-snackbar style="margin-bottom: 100px;" :v-if="this.loggedFailed == true" top color="red" v-model="snackbar">
+    <v-snackbar style="margin-bottom: 100px;" :v-if="this.loggedFailed == true" top color="red">
       Login Failed, Invalid Credentials
     </v-snackbar>
     </div>
@@ -99,19 +99,41 @@ export default {
   }),
 
   methods: {
+
     ...mapMutations(["TOGGLE_ERROR"]),
     ...mapState(["loading"]),
+
+
+    checkLoginFormValues(){
+      // Submitting the Registration Form 
+      for (let Property in ["Username", "Password"]) {
+        if (this.$data[Property] == null || this.$data[Property].length == 0) {
+          this.loggedFailed = true
+          this.LoginError = "Please Fill out all the Required Fields"
+          break
+        }
+      }
+
+      if (this.loggedFailed != true) {
+
+          if (this.$refs.form.validate()){
+              this.loading = true
+            setTimeout(()=> {
+              this.loading = false
+            }, 3000)
+            this.loginCustomer()
+          }
+      }
+      this.loggedFailed = false
+      this.LoginError = null
+    },
     
     submitLoginForm(){
-      if (this.$refs.form.validate()){
-          this.loading = true
-        setTimeout(()=> {
-          this.loading = false
-          this.snackbar = true
-        },3000)
-      }
+      // Submits the Login Form 
+      this.checkLoginFormValues()
     },
     loginCustomer() {
+      // Loggs Customer Inside the Application using JWT Token
       let newCustomerManager = new customers.CustomerManager()
       let loggedIn, LogError = newCustomerManager.LoginCustomer(this.Username, this.password)
       if (LogError != null && loggedIn != true){this.LoginError = LogError; this.loggedFailed = true}else{

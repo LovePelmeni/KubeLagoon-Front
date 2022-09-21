@@ -1,30 +1,22 @@
-<script>
-
-import { useCookies } from "vue3-cookies";
-import * as customers from "../../customers/customers.js"
-
-export default {
-
-  name: "CustomerProfile",
-  setup() {
-    const { cookie } = useCookies();
-    return { cookie };
-  },
-  mounted() {
-    this.JwtToken = this.cookie?.get("jwt-token")
-  },
-
-  template: `
-    <v-app>
+<template>
+  <v-app>
     <div class="profile-content" style="background-color: #141625">
     <div style="margin-top: 5px;">
       <div class="left flex flex-column" style="margin-bottom: 5px; justify-content: center;">
-        <h1 v-if="Username.length > 0" style="margin-top: 10px; color: white; align-text: center;">Hello, {{ Username }}!</h1>
-        <h1 v-else style="margin-top: 10px; color: white; align-text: center;">Oops, Your Profile Is Not Found :(</h1>
+
+        <div v-if="Username.length > 0">
+        <h1 style="margin-top: 10px; color: white; align-text: center;">Hello, {{ Username }}!</h1>
+        </div>
+
+        <div v-else class="mobile-message flex flex-column">
+        <h2>Oops, You Profile Not Found :(</h2>
+        <p>Please make sure you are authenticated and retry again</p>
+        </div>
+
       </div>
     </div>
 
-      <v-col cols="10" lg="6" class="mx-auto">
+      <v-col v-if="Username.length > 0" cols="10" lg="6" class="mx-auto">
 
         <v-card class="pa-4">
           <v-form id="CustomerProfileForm" ref="form">
@@ -171,8 +163,24 @@ export default {
       <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
       <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css" rel="stylesheet">
   </body>
-`,
+</template>
 
+<script>
+
+
+import { useCookies } from "vue3-cookies";
+import * as customers from "../../customers/customers.js"
+
+export default {
+
+  name: "CustomerProfile",
+  setup() {
+    const { cookie } = useCookies();
+    return { cookie };
+  },
+  mounted() {
+    this.JwtToken = this.cookie?.get("jwt-token")
+  },
   data() {
     return {
 
@@ -298,7 +306,8 @@ export default {
   position: relative;
   width: 100%;
   background-color: #141625;
-  color: #1e2139
+  color: #141625;
+  // color: #1e2139
 }
 
 .v-application__wrap {
@@ -320,5 +329,17 @@ export default {
 }
 .orange {
   background-color: #ff8f00;
+}
+
+.mobile-message {
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  height: 50vh;
+  background-color: #141625;
+  color: #fff;
+  p {
+    margin-top: 16px;
+  }
 }
 </style>

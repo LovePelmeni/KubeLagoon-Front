@@ -56,7 +56,7 @@
               <div class="save flex">
 
                   <div class="buttonBlock flex" style="width: 800px">
-                    <v-btn type="submit" @submit="closeVirtualMachineSettings" id="" style="background-color: #ec5757" :loading="CancelLoading"> Cancel Setup</v-btn>
+                    <v-btn type="submit" @click="closeVirtualMachineSettings" id="" style="background-color: #ec5757" :loading="CancelLoading"> Cancel Setup</v-btn>
                     <v-btn v-if="!updateVirtualMachine" style="background-color: #252945;" :loading="Saveloading" type="submit" @submit="saveVirtualMachineDraft">Save Setup</v-btn>
                     <v-btn v-if="!updateVirtualMachine" style="background-color: #7c5dfa;" :loading="Createloading" type="submit" @submit="CreateNewVirtualMachine">Create Server</v-btn>
                   </div>
