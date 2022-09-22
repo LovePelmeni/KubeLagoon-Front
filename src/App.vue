@@ -11,13 +11,13 @@ import logoutPage from "./components/LogoutPage.vue"
 
 
 export default {
+
   name: "App",
   data() {
     return {
       mobile: null,
     };
   },
-
   template: `
   <div>
       <div v-if="!mobile" class="app flex flex-column">

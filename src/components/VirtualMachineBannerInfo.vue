@@ -3,7 +3,7 @@
     
     <div class="left flex">
       <span class="tracking-number">#{{ VirtualMachine.VirtualMachineName }}</span>
-      <span class="due-date">{{ VirtualMachine.paymentDueDate }}</span>
+      <span class="due-date">{{ GetDateDifference(VirtualMachine.CreatedAt) }} days ago</span>
       <span class="person">{{ VirtualMachine.Owner.Username }}</span>
     </div>
     <div class="right flex">
@@ -41,8 +41,21 @@ export default {
         Number(this.VirtualMachine?.Resources.StorageCapacity),
       )
       return BillCalculator.CalculateCostPerMonth()
+    },
+    parseDate(str) {
+      // Parses Date from the String to the Date Object
+      var date = str.split('/');
+      return new Date(date[2], date[0]-1, date[1]);
+    },
+    GetDateDifference(CreationDateValue) {
+      // Returns the Value between
+      let currentDate = new Date();
+      let Datetime = this.parseDate(CreationDateValue)
+      let Now = this.parseDate(currentDate.toLocaleDateString())
+      console.log(Now, Datetime)
+      return Math.round((Now-Datetime)/(1000*60*60*24));
     }
-  }
+  }, 
 };
 </script>
 

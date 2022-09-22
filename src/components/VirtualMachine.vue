@@ -121,13 +121,13 @@
         <div
           class="project-item"
           v-for="(PropertyName, index) in Object.keys(
-            {'CpuNum': VirtualMachine.Cpu, 'Memory': VirtualMachine.Memory, 
+            {'CpuNum': VirtualMachine.CpuNum, 'Memory': VirtualMachine.Memory, 
             'StorageCapacity': VirtualMachine.StorageCapacity,
           })"
           :key="index"
         >
           <p class="prj-text" v-if="PropertyName.toLowerCase() === 'cpunum'">CPU Numbers</p>
-          <p class="prj-text" v-if="PropertyName.toLowerCase() == 'cpunum'">{{ VirtualMachine[PropertyName]|| 0 }}</p>
+          <p class="prj-text" v-if="PropertyName.toLowerCase() == 'cpunum'">{{ VirtualMachine[PropertyName] || 0 }}</p>
           
           <p class="prj-text" v-if="PropertyName.toLowerCase() === 'memory'">Memory</p>
           <p class="prj-text" v-if="PropertyName.toLowerCase() == 'memory'">{{ VirtualMachine[PropertyName] || 0 }}MB</p>
@@ -166,7 +166,7 @@
 
 <script>
 
-import { mapMutations } from "vuex";
+import {  mapState } from "vuex";
 import { mapActions } from "vuex";
 import { useCookies } from "vue3-cookies";
 import * as cost from "../../cost/virtualMachineCost";
@@ -195,27 +195,7 @@ export default {
       OperationSuccessMessage: null,
       VirtualMachineServerError: null, 
 
-      VirtualMachine: {
-        "VirtualMachineName": "virtual-server",
-        "VirtualMachineId": "125",
-        "CpuNum": 1,
-        "Memory": 10,
-        "StorageCapacity": 10,
-        "paymentDueDate": "2020-02-02",
-        "paymentDueTerms": "30",
-        "Running": true, 
-        "Deploying": false, 
-        "Shutdown": false,
-        Owner: {
-        "Username": "some_username",
-        "Email": "some_email@gmail.com",
-        "BillingAddress": "some-address",
-        "City": "Vancoover",
-        "Country": "Canada",
-        "ZipCode": "some-zip-code",
-        "Street": "Smith Street, 4",
-      }
-      }, // Object
+      VirtualMachine: null,
     }
   },
   methods: { 
@@ -225,9 +205,6 @@ export default {
       "SHUTDOWN_VIRTUAL_MACHINE",
       "REBOOT_VIRTUAL_MACHINE",
       "GET_VIRTUAL_MACHINE",
-    ]),
-    ...mapMutations([
-      "TOGGLE_ERROR",
     ]),
 
     toggleError(ErrorMessage) {
@@ -279,11 +256,12 @@ export default {
     getVirtualMachineServerInfo() {
       // Returns the Virtual Machine Object Info based on the ID passed at query params 
 
-      let VirtualMachineId = this.$route.query.VirtualMachineId
-      let VirtualMachine, VirtualMachineError = this.GET_VIRTUAL_MACHINE(this.JwtToken, VirtualMachineId)
-      if (VirtualMachineError != null) {
-      this.ServerDoesExist = false}else{
-      this.VirtualMachine = VirtualMachine; this.ServerDoesExist = true}
+      let VirtualMachineId = this.$route.params.VirtualMachineId
+      let VirtualMachines = this.virtualMachineData.filter((virtualMachine) => {
+        return virtualMachine.VirtualMachineId === VirtualMachineId
+      })
+      this.VirtualMachine = VirtualMachines[0]
+      if (this.VirtualMachine != null) {this.ServerDoesExist = true}
     },
 
     DeleteVirtualMachine() {
@@ -329,8 +307,12 @@ export default {
         this.toggleSuccess("Server Rebooted Successfully")
       }
     },
-
   },
+  computed: {
+    ...mapState([
+      "virtualMachineData"
+    ])
+  }
 };
 
 </script>

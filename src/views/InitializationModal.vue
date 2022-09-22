@@ -237,11 +237,6 @@ export default {
 
     closeVirtualMachineSettings() {
       // Closing the initialization Modal Window and redirects to the Main Page
-      this.CancelLoading = true 
-      setTimeout(()=> function(){}, 3)
-      if (this.updateVirtualMachine) {
-        this.TOGGLE_UPDATE_VIRTUAL_MACHINE();
-      }
       this.$router.push({name: "main_page"})
     },
 

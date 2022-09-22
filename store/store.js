@@ -3,7 +3,6 @@ import * as preparer from "../configuration_preparer/preparer.js"
 import Vuex from "vuex";
 import { useCookies } from "vue3-cookies";
 
-
 export default new Vuex.Store({
 
   state: {
@@ -31,12 +30,13 @@ export default new Vuex.Store({
     authenticated: false,
     virtualMachineData: [
       {
-        "VirtualMachineId": "Id",
+        "VirtualMachineId": "1567",
         "VirtualMachineName": "New Virtual Machine",
         "Running": true, 
         "Deploying": false, 
         "Shutdown": false, 
-        "paymentDueDate": "2020-20-02",                
+        "paymentDueDate": "2020-20-02",         
+        "CreatedAt": "1/2/2020",
         "Owner": {
           "Username": "some-user",
           "Email": "email@gmail.com",
@@ -51,17 +51,63 @@ export default new Vuex.Store({
         },
       },
       {
-        "VirtualMachineId": "Id",
+        "VirtualMachineId": "125",
+        "VirtualMachineName": "Server-Vm",
+        "Running": false, 
+        "Deploying": true, 
+        "Shutdown": false, 
+        "paymentDueDate": "2020-20-02",         
+        "CreatedAt": "1/2/2019",
+        "Owner": {
+          "Username": "johnMa",
+          "Email": "john@gmail.com",
+          "City": "",
+          "Country": "Canada",
+          "Street": "Smith's Street, 4",
+          "ZipCode": "125167",
+        },
+        "Resources": {
+          "CpuNum": 100,
+          "Memory": 1000,
+          "StorageCapacity": 100,
+        },
+      },
+      {
+        "VirtualMachineId": "1256632",
+        "VirtualMachineName": "New Virtual Machine",
+        "Running": true, 
+        "Deploying": false, 
+        "Shutdown": false, 
+        "paymentDueDate": "2020-20-02",         
+        "CreatedAt": "1/2/2020",
+        "Owner": {
+          "Username": "some-user",
+          "Email": "email@gmail.com",
+          "Country": "Canada",
+          "City": "Vancouver",
+          "Street": "Smith's Street, 4",
+          "ZipCode": "125167",
+        },
+        "Resources": {
+          "CpuNum": 10,
+          "Memory": 100,
+          "StorageCapacity": 100,
+        },
+      },
+      {
+        "VirtualMachineId": "1243567",
         "VirtualMachineName": "Another Virtual Machine Server",
         "Running": false, 
         "Deploying": true, 
         "Shutdown": false, 
         "paymentDueDate": "2020-20-02",
+        "CreatedAt": "1/2/2021",
         
         "Owner": {
           "Username": "some-user",
           "Email": "email@gmail.com",
-          "BillingAddress": "Vancoover,Canada",
+          "Country": "Canada",
+          "City": "Toronto",
           "Street": "Smith's Street, 4",
           "ZipCode": "125167",
         },
@@ -74,18 +120,19 @@ export default new Vuex.Store({
 
       },
       {
-        "VirtualMachineId": "Id",
+        "VirtualMachineId": "124426",
         "VirtualMachineName": "Third Virtual Machine Server",
         "Running": false, 
         "Deploying": false, 
         "Shutdown": true, 
         "paymentDueDate": "2020-20-02",
+        "CreatedAt": "10/5/2021",
 
-                
         "Owner": {
           "Username": "some-user",
           "Email": "email@gmail.com",
-          "BillingAddress": "Vancoover,Canada",
+          "Country": "Canada",
+          "City": "Toronto",
           "Street": "Smith's Street, 4",
           "ZipCode": "125167",
         },
