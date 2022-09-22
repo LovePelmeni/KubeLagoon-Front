@@ -10,9 +10,7 @@
 
     <div :v-if="virtualMachineData.length > 0 && virtualMachinesLoaded == true" class="header flex">
         <div @click="toggleFilterMenu" class="filter flex">
-          <span
-            >Filter by status <span v-if="filteredVirtualMachine">: {{ filterParams }}</span></span
-          >
+          <span>Filter by status</span>
           <img :src="require('@/assets/icon-arrow-down.svg')" alt="icon-arrow-down" style="width:10%; height:10%"/>
           <ul v-show="filterMenu" class="filter-menu">
             <li @click="filterVirtualMachine">Running</li>

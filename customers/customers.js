@@ -65,21 +65,18 @@ class CustomerManager {
       
       // Creates New Customer and Returns A Response 
       let newCustomer, CustomerError = customers_rest.CreateCustomerRestController(registrationForm.ToBlob())
-      if (CustomerError != null){return null, CustomerError}
       return newCustomer, CustomerError
     }
 
     DeleteCustomer = function(JwtToken) {
       // Deletes Existing Customer's Profile
       let Deleted, DeleteError = customers_rest.DeleteCustomerRestController(JwtToken)
-      if (DeleteError != null) {return null, DeleteError}
       return Deleted, DeleteError
     }
 
     ResetPassword = function(JwtToken, newPassword) {
       // Resets password for the Customer's Profile
       let Reset, ResetError = customers_rest.ResetPasswordRestController(JwtToken, newPassword)
-      if (ResetError != null){return null, ResetError}
       return Reset, ResetError
     }
     GetCustomerProfile(JwtToken) {

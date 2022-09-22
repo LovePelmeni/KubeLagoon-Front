@@ -13,6 +13,11 @@ class VirtualMachineManager {
       return vm_rest.ApplyVirtualMachineConfigurationRestController(JwtToken, CustomizedConfiguration, VirtualMachineId)
     }
 
+    DestroyVirtualMachine(JwtToken, VirtualMachineId) {
+      // Destroyes the Virtual Machine Server 
+      return vm_rest.DestroyVirtualMachineRestController(JwtToken, VirtualMachineId)
+    }
+
     StartVirtualMachine(JwtToken, VirtualMachineId) {
       // Starts up the Virtual Machine Server 
       return vm_rest.StartVirtualMachineRestController(JwtToken, VirtualMachineId)

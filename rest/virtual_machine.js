@@ -5,9 +5,10 @@ var BACKEND_APPLICATION_HOST = process.env.BACKEND_APPLICATION_HOST || `localhos
 
 function GetVirtualMachineRestController(JwtToken, VirtualMachineId) {
   // Rest Controller, that returns Info about the Virtual Machine
-  var APIUrl = new URL(String(`http://${BACKEND_APPLICATION_HOST}:${BACKEND_APPLICATION_PORT}/vm/get/`));
+  var APIUrl = new URL(`http://${BACKEND_APPLICATION_HOST}:${BACKEND_APPLICATION_PORT}/vm/get/`);
   APIUrl.searchParams.append("VirtualMachineId", VirtualMachineId)
   var Response, ResponseError = global.jQuery.ajax({
+    async: false,
     url: APIUrl.toString(),
     type: "GET",
     headers: {
@@ -37,6 +38,7 @@ function GetVirtualMachinesRestController(JwtToken) {
   // Rest Controller, that returns Queryset of the Customer's Virtual Machines
   var APIUrl = new URL(`http://${BACKEND_APPLICATION_HOST}:${BACKEND_APPLICATION_PORT}/vm/get/list/`);
   var Response, ResponseError = global.jQuery.ajax({
+    async: false,
     url: APIUrl.toString(),
     headers: {
       "Access-Control-Allow-Origin": "*",
@@ -95,6 +97,7 @@ function InitializeVirtualMachineRestController(JwtToken, Configuration) {
 
 function ApplyVirtualMachineConfigurationRestController(JwtToken, CustomConfiguration, VirtualMachineId) {
   // Rest Controller, that Applying Custom Configuration to the Initialized Virtual Machine
+  
   var APIUrl = new URL(`http://${BACKEND_APPLICATION_HOST}:${BACKEND_APPLICATION_PORT}/vm/apply/configuration/`);
   APIUrl.searchParams.append("VirtualMachineId", VirtualMachineId)
 
@@ -128,6 +131,7 @@ function ApplyVirtualMachineConfigurationRestController(JwtToken, CustomConfigur
 
 function DestroyVirtualMachineRestController(JwtToken, VirtualMachineId) {
   // Rest Controller, deletes Virtual Machine Server, that Customer is desired to
+
   var APIUrl = new URL(`http://${BACKEND_APPLICATION_HOST}:${BACKEND_APPLICATION_PORT}/vm/destroy/`);
   APIUrl.searchParams.append("VirtualMachineId", VirtualMachineId)
   let Response, ResponseError = global.jQuery.ajax({
@@ -143,14 +147,14 @@ function DestroyVirtualMachineRestController(JwtToken, VirtualMachineId) {
       // Processing Success Response
       if (Response.StatusCode != 200 && Response.StatusCode != 201) {
         let newError = new Error(Response.Error)
-        return null, newError
+        return false, newError
       }else{
-        return "Successfully Removed", null
+        return true, null
       }
     },
     error: function(ResponseError) {
       // Processing Error Response
-      return null, new Error(ResponseError)
+      return false, new Error(ResponseError)
     }
   })
   return Response, ResponseError
@@ -174,15 +178,15 @@ function StartVirtualMachineRestController(JwtToken, VirtualMachineId) {
         // Processing Initialization Response
         if (Response.StatusCode != 201 && Response.StatusCode != 200) {
           let newError = new Error(Response.Error)
-          return null, newError
+          return false, newError
         }else{
-          return "Successfully Started", null // Returns Info About Initialized Instance
+          return true, null // Returns Info About Initialized Instance
         }
     },
     error: function(APIError) {
       // Processing Initialization Error
       let newError = new Error(APIError)
-      return null, newError
+      return false, newError
     }
   })
   return Response, ResponseError
@@ -206,15 +210,15 @@ function ShutdownVirtualMachineRestController(JwtToken, VirtualMachineId) {
         // Processing Initialization Response
         if (Response.StatusCode != 201 && Response.StatusCode != 200) {
             let newError = new Error(Response.Error)
-            return null, newError
+            return false, newError
         }else{
-          return Response.Operation, null // Returns Info About Initialized Instance
+          return true, null // Returns Info About Initialized Instance
         }
     },
     error: function(APIError) {
       // Processing Initialization Error
       let newError = new Error(APIError)
-      return null, newError
+      return false, newError
     }
   })
   return Response, ResponseError
@@ -238,21 +242,19 @@ function RebootVirtualMachineRestController(JwtToken, VirtualMachineId) {
         // Processing Initialization Response
         if (Response.StatusCode != 201 && Response.StatusCode != 200) {
           let newError = new Error(Response.Error)
-          return null, newError
+          return false, newError
         }else{
-          return Response.Operation, null // Returns Info About Initialized Instance
+          return true, null // Returns Info About Initialized Instance
         }
     },
     error: function(APIError) {
       // Processing Initialization Error
       let newError = new Error(APIError)
-      return null, newError
+      return false, newError
     }
   })
   return Response, ResponseError
 }
-
-
 
 
 function StartVmOsRestController(JwtToken, VirtualMachineId) {
@@ -273,15 +275,15 @@ function StartVmOsRestController(JwtToken, VirtualMachineId) {
         // Processing Initialization Response
         if (Response.StatusCode != 201 && Response.StatusCode != 200) {
           let newError = new Error(Response.Error)
-          return null, newError
+          return false, newError
         }else{
-          return "OS Successfully Started", null // Returns Info About Initialized Instance
+          return true, null // Returns Info About Initialized Instance
         }
     },
     error: function(APIError) {
       // Processing Initialization Error
       let newError = new Error(APIError)
-      return null, newError
+      return false, newError
     }
   })
   return Response, ResponseError
@@ -305,15 +307,15 @@ function ShutdownVmOsRestController(JwtToken, VirtualMachineId) {
         // Processing Initialization Response
         if (Response.StatusCode != 201 && Response.StatusCode != 200) {
           let newError = new Error(Response.Error)
-          return null, newError
+          return false, newError
         }else{
-          return "OS Successfully Shutdown", null // Returns Info About Initialized Instance
+          return true, null // Returns Info About Initialized Instance
         }
     },
     error: function(APIError) {
       // Processing Initialization Error
       let newError = new Error(APIError)
-      return null, newError
+      return false, newError
     }
   })
   return Response, ResponseError
@@ -337,15 +339,15 @@ function RebootVmOsRestController(JwtToken, VirtualMachineId) {
         // Processing Initialization Response
         if (Response.StatusCode != 201 && Response.StatusCode != 200) {
           let newError = new Error(Response.Error)
-          return null, newError
+          return false, newError
         }else{
-          return "OS Successfully Reboot", null // Returns Info About Initialized Instance
+          return true, null // Returns Info About Initialized Instance
         }
     },
     error: function(APIError) {
       // Processing Initialization Error
       let newError = new Error(APIError)
-      return null, newError
+      return false, newError
     }
   })
   return Response, ResponseError

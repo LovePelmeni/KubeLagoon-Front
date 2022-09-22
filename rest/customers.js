@@ -8,7 +8,7 @@ function CreateCustomerRestController(CustomerData) {
   // Rest Controller, that is responsible for creating new Customer Profile
 
     var APIUrl = new URL(`http://${BACKEND_APPLICATION_HOST}:${BACKEND_APPLICATION_PORT}/customer/create/`)
-    var HttpResponse, HttpErrors = global.jQuery.ajax({
+    var HttpResponse, HttpError = global.jQuery.ajax({
       type: "POST",
       data: JSON.stringify(CustomerData),
       dataType: "json",
@@ -19,29 +19,44 @@ function CreateCustomerRestController(CustomerData) {
       },
       async: false,
       success: function(Response) {
-        if (Response.StatusCode == 400) {
-          let newError = new Error(Response.Error)
+
+        if (Response.status == 404) {
+          let newError = new Error(Response.Error || "Server Didn't Respond")
           return false, newError
         }
-        if (Response.StatusCode == 201) {
+        if (Response.status == 400) {
+          let newError = new Error(Response.Error || 'Bad Credentials')
+          return false, newError
+        }
+        if (Response.status == 201) {
           Cookie.cookies.set("jwt-token", Response.getResponseHeader("jwt-token"))
           return true, null
         }
-        if (Response.StatusCode == 500) {
-          let newError = new Error(Response.Error)
+        if (Response.status == 500) {
+          let newError = new Error(Response.Error || 'Internal Server Error')
           return false, newError
         }
-        if (Response.StatusCode == 501) {
-          let newError = new Error(Response.Error)
+        if (Response.status == 501) {
+          let newError = new Error(Response.Error || "Server Error")
+          return false, newError
+        }
+        if (Response.status == 503) {
+          let newError = new Error(Response.Error || "Server Unavailable")
           return false, newError
         }
       },
       error: function(error) {
-        let newError = new Error(error)
-        return false, newError
+        // Processing Exception 
+        console.log(error)
+        if (error.status == 404) {
+          let newError = new Error("Server did not respond")
+          return false, newError
+        }else{
+        let newError = new Error(error.statusText)
+        return false, newError}
       }
     })
-    return HttpResponse, HttpErrors
+    return HttpResponse, HttpError
 }
 
 
@@ -50,6 +65,7 @@ function ResetPasswordRestController(JwtToken, NewPassword){
 
   var APIUrl = new URL(`http://${BACKEND_APPLICATION_HOST}:${BACKEND_APPLICATION_PORT}/customer/reset/password`)
   let ResponseStatus, ResponseErrors = global.jQuery.ajax({
+    async: false,
     data: JSON.stringify({"NewPassword": NewPassword}),
     dataType: "json",
     URL: APIUrl,
@@ -60,15 +76,17 @@ function ResetPasswordRestController(JwtToken, NewPassword){
       "Authorization": JwtToken,
     },
     success: function(Response){
-      if (Response.StatusCode == 201) {
-        return true, []
+      if (Response.status == 201) {
+        return true, null
       }
-      if (Response.StatusCode == 400 || Response.StatusCode == 501 || Response.StatusCode == 500) {
-        return false, "Failed to Apply New Password, Contact Support"
+      if (Response.status == 400 || Response.StatusCode == 501 || Response.StatusCode == 500) {
+        let newError = new Error("Failed to Apply New Password, Contact Support")
+        return false, newError
       }
     },
     error: function(APIError) {
-      return false, new Error(APIError)
+      let DecodedErrorData = JSON.parse(APIError)
+      return false, new Error(DecodedErrorData.statusText)
     }
   })
   return ResponseStatus, ResponseErrors
@@ -79,6 +97,7 @@ function DeleteCustomerRestController(JwtToken) {
 
   var APIUrl = new URL(`http://${BACKEND_APPLICATION_HOST}:${BACKEND_APPLICATION_PORT}/customer/delete`)
   var Response, ResponseError = global.jQuery.ajax({
+    async: false,
     URL: APIUrl,
     type: "DELETE",
     headers: {
@@ -92,7 +111,7 @@ function DeleteCustomerRestController(JwtToken) {
       if (Response.StatusCode == 201) {
         // Removing Jwt Cookie...
         let Expired = global.jQuery.RemoveCookie("jwt-token")
-        return Expired, []
+        return Expired, null
       }
     },
     error: function(Error) {
@@ -102,13 +121,15 @@ function DeleteCustomerRestController(JwtToken) {
         return null, newError}
     }
   })
+  console.log(Response, ResponseError)
   return Response, ResponseError
 }
 
 function LoginCustomerRestController(LoginForm) {
   // Logs in Customer into the Profile
-  var APIUrl = URL(`http://${BACKEND_APPLICATION_HOST}:${BACKEND_APPLICATION_PORT}/login/`)
+  var APIUrl = new URL(`http://${BACKEND_APPLICATION_HOST}:${BACKEND_APPLICATION_PORT}/login/`)
   var Response, ResponseError = global.jQuery.ajax({
+    async: false,
     type: "POST",
     URL: APIUrl,
     data: JSON.stringify(LoginForm),
@@ -138,6 +159,7 @@ function GetCustomerProfileRestController(JwtToken) {
 
   let APIUrl = new URL(`http://${BACKEND_APPLICATION_HOST}:${BACKEND_APPLICATION_PORT}/customer/get/profile`) 
   let Response, ResponseError = global.jQuery.ajax({
+    async: false,
     url: APIUrl, 
     type: "GET",
     headers: {
@@ -170,6 +192,7 @@ function EditCustomerProfileRestController(JwtToken, EditFormData) {
   // Rest Controller, that Updates the Customer with new Data 
   var APIUrl = new URL(`http://${BACKEND_APPLICATION_HOST}:${BACKEND_APPLICATION_PORT}/customer/edit/profile/`); 
   var Response, ResponseError = global.jQuery.ajax({
+    async: false,
     url: APIUrl, 
     type: "PUT",
     headers: {

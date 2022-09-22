@@ -47,7 +47,7 @@ export default new Vuex.Store({
         "Resources": {
           "CpuNum": 10,
           "Memory": 100,
-          "StorageCapacity": 1000,
+          "StorageCapacity": 100,
         },
       },
       {
@@ -69,7 +69,7 @@ export default new Vuex.Store({
         "Resources": {
           "CpuNum": 5,
           "Memory": 100,
-          "StorageCapacity": 1000,
+          "StorageCapacity": 100,
         },
 
       },
@@ -343,8 +343,8 @@ export default new Vuex.Store({
     GET_VIRTUAL_MACHINE(JwtToken, VirtualMachineId) {
       // Returns A Virtual Machine Server Object Info
       let virtualMachineManager = new vm.VirtualMachineManager()
-      let virtualMachine = virtualMachineManager.GetCustomerVirtualMachine(JwtToken, VirtualMachineId)
-      return virtualMachine
+      let virtualMachine, virtualMachineError = virtualMachineManager.GetCustomerVirtualMachine(JwtToken, VirtualMachineId)
+      return virtualMachine, virtualMachineError
     },
 
     GET_VIRTUAL_MACHINES({commit, state}, JwtToken) {
@@ -444,15 +444,16 @@ export default new Vuex.Store({
         }
     },
 
-    DELETE_VIRTUAL_MACHINE({commit, state}, JwtToken, VirtualMachineId) {
+    DELETE_VIRTUAL_MACHINE({state}, JwtToken, VirtualMachineId) {
       // Deletes Virtual Machine Server
       let vmManager = new vm.VirtualMachineManager()
-      let deleted, deletionError = vmManager.DeleteVirtualMachine(JwtToken, VirtualMachineId)
+      let deleted, deletionError = vmManager.DestroyVirtualMachine(JwtToken, VirtualMachineId)
       if (deleted && deletionError == null) {
         state.VirtualMachineData = state.VirtualMachineData.filter(
         (virtualMachine) => virtualMachine.VirtualMachineId !== VirtualMachineId);
+        return deleted, deletionError
       }else {
-        commit('TOGGLE_ERROR', "Failed to Delete Virtual Machine")
+        return deleted, deletionError
       }
     },
 
@@ -468,34 +469,34 @@ export default new Vuex.Store({
 
         let virtualMachine = vmManager.GetVirtualMachine(JwtToken, updatedInfo["VirtualMachineId"])
         commit('INSERT_NEW_VIRTUAL_MACHINE', state.virtualMachineData, virtualMachine)
-
+        return true, updateError
       }else{
-        commit('TOGGLE_ERROR', "Failed To Update Virtual Machine")
+        return false, updateError
       }
     },
 
-    SHUTDOWN_VIRTUAL_MACHINE({ commit }, JwtToken, virtualMachineId) {
+    SHUTDOWN_VIRTUAL_MACHINE(JwtToken, virtualMachineId) {
       // Shuts down the Virtual Machine  Server
 
       let vmManager = new vm.VirtualMachineManager()
       let Shutdown, ShutdownError = vmManager.ShutdownVirtualMachine(JwtToken, virtualMachineId)
-      if (Shutdown != true || ShutdownError != null) {commit('TOGGLE_ERROR', ShutdownError)}
+      return Shutdown, ShutdownError
     },
 
-    START_VIRTUAL_MACHINE({ commit }, JwtToken, VirtualMachineId) {
+    START_VIRTUAL_MACHINE(JwtToken, VirtualMachineId) {
       // Starting up the Virtual Machine
 
       let vmManager = new vm.VirtualMachineManager()
       let Started, StartError = vmManager.StartVirtualMachine(JwtToken, VirtualMachineId)
-      if (Started != true || StartError != null) {commit('TOGGLE_ERROR', StartError)}
+      return Started, StartError
     },
 
-    REBOOT_VIRTUAL_MACHINE({ commit }, JwtToken, VirtualMachineId) {
+    REBOOT_VIRTUAL_MACHINE(JwtToken, VirtualMachineId) {
       // Reboots Virtual Machine
 
       let vmManager = new vm.VirtualMachineManager()
       let Rebooted, RebootError = vmManager.RebootVirtualMachine(JwtToken, VirtualMachineId)
-      if (Rebooted != true || RebootError != null ) {commit('TOGGLE_ERROR', RebootError)}
+      return Rebooted, RebootError
     },
   },
   modules: {},

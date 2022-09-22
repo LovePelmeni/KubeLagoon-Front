@@ -159,6 +159,12 @@ export default {
       this.VirtualMachineItemList = currentVirtualMachine.VirtualMachineItemList;
     }
   },
+  computed: {
+    ...mapState([
+      "loading",
+      "virtualMachineSavedDraft"
+    ]),
+  },
   methods: {
 
     ...mapMutations([
@@ -172,10 +178,6 @@ export default {
       "GET_VIRTUAL_MACHINES",
       "CREATE_VIRTUAL_MACHINE",
       "DELETE_VIRTUAL_MACHINE",
-    ]),
-    ...mapState([
-      "loading",
-      "virtualMachineSavedDraft"
     ]),
 
     checkClick(e) {
@@ -298,9 +300,6 @@ export default {
       customizedConfigurationData, hardwareConfigurationData)
       this.Saveloading = false
     },
-  },
-  computed: {
-    ...mapState(["updateVirtualMachine", "currentVirtualMachineArray"]),
   },
 
   watch: {

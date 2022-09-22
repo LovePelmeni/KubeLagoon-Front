@@ -1,4 +1,6 @@
 <template>
+
+  <div v-if="ServerDoesExist">
   <main class="detail">
     <router-link :to="{ name: 'main_page' }" style="margin-right: 40px;" class="link">
       <svg
@@ -7,9 +9,7 @@
         viewBox="0 0 1024 1024"
         style="stroke: currentcolor; fill: currentcolor"
       >
-        <path
-          d="M730.6 18.4l-505.4 505.2 505.4 505.4 144.8-144.8-360.6-360.6 360.6-360.4z"
-        ></path>
+        <path d="M730.6 18.4l-505.4 505.2 505.4 505.4 144.8-144.8-360.6-360.6 360.6-360.4z"></path>
       </svg>
       <span class="back-text" @click="redirectToPreviousPage">Go Back</span>
     </router-link>
@@ -52,7 +52,7 @@
           Run
         </button>
 
-        <button class="btn btn-delete" @click="deleteVirtualMachine">Delete</button>
+        <button class="btn btn-delete" @click="DeleteVirtualMachine">Delete</button>
         <button
           class="btn btn-mark"
           v-if="VirtualMachine.Shutdown === false"
@@ -148,10 +148,20 @@
         </p>
       </div>
     </div>
-    <v-snackbar :v-if="VirtualMachineError" top color="red">
-        Registration Failed, {{ RegisterError }}
-      </v-snackbar>
+    <v-snackbar v-model="OperationFailed" top color="red">
+        Operation Failed, {{ VirtualMachineServerError }}
+    </v-snackbar>
+
+    <v-snackbar v-model="OperationSucceeded" top color="red">
+      {{ OperationSuccessMessage }}
+    </v-snackbar>
+
   </main>
+
+  </div>
+  <div v-else> 
+    <virtual-server-not-found-window />
+  </div>
 </template>
 
 <script>
@@ -160,8 +170,11 @@ import { mapMutations } from "vuex";
 import { mapActions } from "vuex";
 import { useCookies } from "vue3-cookies";
 import * as cost from "../../cost/virtualMachineCost";
+import VirtualServerNotFoundWindow from "./VirtualServerNotFoundWindow.vue";
 
 export default {
+
+  components: { VirtualServerNotFoundWindow },
   name: "VirtualMachineInfo",
   setup() {
     const { cookie } = useCookies();
@@ -173,7 +186,15 @@ export default {
   },
   data() {
     return {
-      VirtualMachineError: null,
+      // Operation Information 
+      ServerDoesExist: false,
+      OperationFailed: false,
+      OperationSucceeded: false,
+
+      // Operations Messages Parameters
+      OperationSuccessMessage: null,
+      VirtualMachineServerError: null, 
+
       VirtualMachine: {
         "VirtualMachineName": "virtual-server",
         "VirtualMachineId": "125",
@@ -209,6 +230,17 @@ export default {
       "TOGGLE_ERROR",
     ]),
 
+    toggleError(ErrorMessage) {
+      // Shows up Banner with an Exception
+      this.VirtualMachineServerError = ErrorMessage
+      this.OperationFailed = true
+    },
+
+    toggleSuccess(SuccessMessage) {
+      // Shows up Banner with Success Operation 
+      this.OperationSuccessMessage = SuccessMessage
+      this.OperationSucceeded = true 
+    },
 
     RedirectToPreviousPage() {
       // redirects customer to the Previous Page 
@@ -237,7 +269,6 @@ export default {
       }
     },
 
-
     GetTotalAmount(CpuNum, MemoryUsage, StorageUsage) {
       // Returns the Full Total Amount for the Whole Virtual Machine Server Per Month
       let calculator = new cost.VirtualMachineCostCalculator(
@@ -247,33 +278,58 @@ export default {
 
     getVirtualMachineServerInfo() {
       // Returns the Virtual Machine Object Info based on the ID passed at query params 
+
       let VirtualMachineId = this.$route.query.VirtualMachineId
       let VirtualMachine, VirtualMachineError = this.GET_VIRTUAL_MACHINE(this.JwtToken, VirtualMachineId)
-      if (VirtualMachineError != null) {let ErrorMessage = "Server Not Found";
-
-      this.TOGGLE_ERROR(ErrorMessage); 
-      this.$router.push({name: 'main_page'})}else{
-      this.VirtualMachine = VirtualMachine}
+      if (VirtualMachineError != null) {
+      this.ServerDoesExist = false}else{
+      this.VirtualMachine = VirtualMachine; this.ServerDoesExist = true}
     },
 
     DeleteVirtualMachine() {
-      // Deletes the Virtual Machine Server 
+      // Deletes the Virtual Machine Server by calling Rest API on the Backend
       let VirtualMachineId = this.$route.query.VirtualMachineId 
-      this.DELETE_VIRTUAL_MACHINE(VirtualMachineId)
+      let Deleted, DeleteError = this.DELETE_VIRTUAL_MACHINE(VirtualMachineId)
+      if (Deleted != true || DeleteError != null) {
+        this.toggleError("Failed to Delete Virtual Server")
+      }else{
+        this.toggleSuccess("Server Deleted Successfully")
+      }
     },
 
     StartVirtualMachine() {
+      // Starts the Virtual Machine Server by calling Rest API on the Backend
       let VirtualMachineId = this.$route.query.VirtualMachineId 
-      this.RUN_VIRTUAL_MACHINE(this.JwtToken, VirtualMachineId)
+      let Started, StartError = this.RUN_VIRTUAL_MACHINE(this.JwtToken, VirtualMachineId)
+      if (Started != true || StartError != null) {
+        this.toggleError("Failed to Start Virtual Server")
+      }else{
+        this.toggleSuccess("Server Started Successfully")
+      }
     },
+
     ShutdownVirtualMachine() {
+      // Shuts down the Virtual Machine Server by calling Rest API on the Backend
       let VirtualMachineId = this.$route.query.VirtualMachineId 
-      this.SHUTDOWN_VIRTUAL_MACHINE(this.JwtToken, VirtualMachineId)
+      let Shutdowned, ShutdownError = this.SHUTDOWN_VIRTUAL_MACHINE(this.JwtToken, VirtualMachineId)
+      if (Shutdowned != true || ShutdownError != null) {
+        this.toggleError("Failed to Shutdown Virtual Server")
+      }else{
+        this.toggleSuccess("Server Shutdown Successfully")
+      }
     },
+
     RebootVirtualMachine() {
+      // Reboots Virtual Machine Server by calling Rest API on the Backend
       let VirtualMachineId = this.$route.query.VirtualMachineId 
-      this.REBOOT_VIRTUAL_MACHINE(this.JwtToken, VirtualMachineId)
+      let Rebooted, RebootError = this.REBOOT_VIRTUAL_MACHINE(this.JwtToken, VirtualMachineId)
+      if (Rebooted != true || RebootError != null) {
+        this.toggleError("Failed to Reboot Virtual Server")
+      }else{
+        this.toggleSuccess("Server Rebooted Successfully")
+      }
     },
+
   },
 };
 

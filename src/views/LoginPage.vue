@@ -34,10 +34,10 @@
                 @click:append="passwordShow = !passwordShow"
                 required
               />
-              <v-switch label="Remember me" color="indigo"></v-switch>
+              <v-switch label="Remember me" color="indigo" v-model="RememberUser"></v-switch>
             </v-card-text>
             <v-card-actions class="justify-center">
-              <v-btn :loading="loading" type="submit" color="indigo">
+              <v-btn :loading="LoginLoading" type="submit" color="indigo">
                 <span class="white--text px-8">Sign in</span>
               </v-btn>
             </v-card-actions>
@@ -46,11 +46,11 @@
       </v-col>
     </v-main>
     
-    <v-snackbar style="margin-bottom: 100px;" :v-if="this.logged == true" top color="green">
-      Login success
+    <v-snackbar style="margin-bottom: 100px;" v-model="logged" top color="green">
+      Logged In Successfully
     </v-snackbar>
 
-    <v-snackbar style="margin-bottom: 100px;" :v-if="this.loggedFailed == true" top color="red">
+    <v-snackbar style="margin-bottom: 100px;" v-model="loggedFailed" top color="red">
       Login Failed, Invalid Credentials
     </v-snackbar>
     </div>
@@ -63,27 +63,28 @@
 
 </template>
 
-
 <script>
 
 
-
 import * as customers from "../../customers/customers.js";
-import {  mapMutations, mapState } from "vuex";
+import {  mapMutations } from "vuex";
 
 export default {
 
   name: 'LoginPage',
   data: () => ({
     
+    // Remember User Data Attributes
+    RememberUser: false,
+
     // Login Statuses
     LoginError: null,
     loggedFailed: false,
     logged: false,
 
-    loading:false,
-    snackbar:false,
-    passwordShow:false,
+    LoginLoading: false,
+    snackbar: false,
+    passwordShow: false,
 
     Username: '',
     UsernameRules: [
@@ -99,52 +100,34 @@ export default {
   }),
 
   methods: {
-
-    ...mapMutations(["TOGGLE_ERROR"]),
-    ...mapState(["loading"]),
-
-
-    checkLoginFormValues(){
-      // Submitting the Registration Form 
-      for (let Property in ["Username", "Password"]) {
-        if (this.$data[Property] == null || this.$data[Property].length == 0) {
-          this.loggedFailed = true
-          this.LoginError = "Please Fill out all the Required Fields"
-          break
-        }
-      }
-
-      if (this.loggedFailed != true) {
-
-          if (this.$refs.form.validate()){
-              this.loading = true
-            setTimeout(()=> {
-              this.loading = false
-            }, 3000)
-            this.loginCustomer()
-          }
-      }
-      this.loggedFailed = false
-      this.LoginError = null
-    },
     
+    ...mapMutations(["TOGGLE_ERROR"]),
     submitLoginForm(){
       // Submits the Login Form 
-      this.checkLoginFormValues()
+      if (this.$refs.form.validate()){
+          this.LoginLoading = true
+          setTimeout(()=> {
+            this.LoginLoading = false
+          }, 1000)
+          this.loginCustomer(this.Username, this.Password)
+          }
     },
-    loginCustomer() {
+    loginCustomer(Username, Password) {
       // Loggs Customer Inside the Application using JWT Token
+
       let newCustomerManager = new customers.CustomerManager()
-      let loggedIn, LogError = newCustomerManager.LoginCustomer(this.Username, this.password)
-      if (LogError != null && loggedIn != true){this.LoginError = LogError; this.loggedFailed = true}else{
-        this.loggedIn = true 
+      let loggedIn, LogError = newCustomerManager.LoginCustomer(Username, Password)
+      if (LogError != null && loggedIn != true){
+
+        this.LoginError = LogError || "Failed to Login, Invalid Credentials"; 
+        this.loggedFailed = true}else{
+
         this.logged = true
         this.$router.push({name: "main_page"})
       }
     },
   }
-};
-
+}
 </script>
 
 <style lang="scss">

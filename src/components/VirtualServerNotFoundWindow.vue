@@ -1,11 +1,11 @@
 <script lang="javascript">
 export default {
-    name: "NotFoundPage",
+    name: "VirtualServerNotFoundPage",
     template: `
       <div>
       <div v-else class="mobile-message flex flex-column">
-        <h2>Sorry, Page you are looking for does not exist  :(</h2>
-        <p>Please make sure, that you typed the route correctly</p>
+        <h2>Virtual Server Not Found  :(</h2>
+        <p>Sorry, but seems like this server no longer exist</p>
       </div>
     </div>
     `
@@ -33,7 +33,7 @@ export default {
   text-align: center;
   justify-content: center;
   align-items: center;
-  height: 60vh;
+  height: 100vh;
   background-color: #141625;
   color: #fff;
   p {

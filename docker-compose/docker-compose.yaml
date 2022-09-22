@@ -1,5 +1,18 @@
 version: "3.9"
 services:
+
+  front_nginx_server:
+    container_name: front-nginx-server 
+    image: nginx:latest 
+    volumes:
+      - ../nginx/nginx.conf:/etc/nginx/nginx.conf 
+    ports:
+      - "8010:90"
+    depends_on:
+      - front_application 
+    networks:
+      - cloud-infrastructure-network 
+
   front_application:
     container_name: front_application_server 
     image: crazycoderrr/cloud-infrastructure-front-app 
@@ -10,6 +23,7 @@ services:
     healthcheck:
       test: ["curl", "-f", "http://localhost:3000/ping"]
       period: 10 
+      
   
 networks:
   cloud-infrastructure-network:

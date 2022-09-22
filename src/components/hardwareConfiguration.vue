@@ -170,7 +170,7 @@ export default {
       // Checks if there is some saved drafts before initializing a new one 
       if (this.virtualMachineSavedDraft != null) {
         for (let PropertyKey in Object.keys(this.virtualMachineSavedDraft)) {
-          this[PropertyKey] = this.virtualMachineSavedDraft[PropertyKey]
+          this.$data[PropertyKey] = this.virtualMachineSavedDraft[PropertyKey]
         }
       }
     },

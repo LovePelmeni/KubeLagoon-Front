@@ -103,11 +103,11 @@
         </v-card>
       </v-col>
 
-      <v-snackbar top color="green">
+      <v-snackbar v-model="Registered" top color="green">
         Registration success
       </v-snackbar>
 
-      <v-snackbar v-if="RegisterFailed" top color="red">
+      <v-snackbar v-model="RegisterFailed" top color="red">
         Registration Failed, {{ RegisterError }}
       </v-snackbar>
       </div>
@@ -199,40 +199,30 @@ export default {
     
     submitRegisterForm(){
       // Submitting the Registration Form 
-      for (let Property in Object.keys(this.$data)) {
-        if (this.$data[Property] == null || this.$data[Property].length == 0) {
-          this.RegisterFailed = true 
-          this.RegisterError = "Please Fill out all the Required Fields"
-          break
+
+      if (this.$refs.form.validate()){
+        this.loading = true
+      setTimeout(()=> {
+        this.loading = false
+        this.snackbar = true
+      }, 2000)
+        this.registerCustomer()
         }
-      }
-
-      if (this.RegisterFailed != true) {
-
-          if (this.$refs.form.validate()){
-              this.loading = true
-            setTimeout(()=> {
-              this.loading = false
-              this.snackbar = true
-            }, 3000)
-            this.registerCustomer()
-          }
-      }
-      this.RegisterFailed = false 
-      this.RegisterError = null
     },
     registerCustomer() {
       // Submits the Registration Form 
+      
       let newCustomerManager = new customers.CustomerManager()
       let Registered, RegisterError = newCustomerManager.CreateCustomer(this.Username, this.Email, this.Password,
       this.BillingAddress, this.ZipCode, this.Street)
-      this.Registered = Registered 
-      this.RegisterError = RegisterError
+      this.Registered = Registered || false
+
+      if (Registered == false || RegisterError != null) {
+      this.RegisterError = RegisterError || "Failed to Register";
+      this.RegisterFailed = true}
     },
   }
-};
-
-
+}
 </script>
 
 <style lang="scss">

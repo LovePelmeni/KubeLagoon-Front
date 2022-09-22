@@ -26,7 +26,27 @@ spec:
       labels:
         app: front-app
     spec:
+      volumes:
+        - name: nginx-configuration-mapping 
+          configMap:
+            - name: nginx-config-map 
+              items:
+                - key: nginx.conf
+        
       terminationGracePeriodSeconds: 60
+      initContainers:
+        - name: nginx-configuration 
+          image: nginx  
+          ports:
+            - containerPort: 8010 
+              protocol: TCP 
+          imagePullPolicy: IfNotPresent 
+          volumeMounts:
+            - name: nginx-configuration-mapping 
+              path: nginx.conf
+              subPath: nginx.conf
+              readOnly: true
+
       containers:
         - name: front-app-container
           image: crazycoderrr/infrastructure_front_app
@@ -49,3 +69,44 @@ data:
   BACKEND_APPLICATION_HOST: infrastructure.app-namespace.svc.cluster.local:8000
   BACKEND_APPLICATION_PORT: 8000
 
+
+--- 
+
+apiVersion: v1
+kind: ConfigMap 
+metadata:
+  name: nginx-configuration-map 
+  namespace: app-namespace 
+data:
+  nginx.conf: | 
+    events {
+    worker_connections 1024;
+    }
+
+    http {
+
+        # Upstreams Configuration for the Frontend Nginx Server
+        upstream front_application_upstream {
+            server front_application:3000;
+        }
+        # Server Configuration for the Nginx Server 
+        server {
+            listen 90;
+            # Base Location for the Not Found Page 
+            location @not_found {
+                proxy_pass http://front_application:3000/not/found;
+                proxy_set_header Host $http_host;
+                proxy_set_header Upgrade $http_upgrade;
+            }
+            # Base Location for All Routes
+            location / {
+                proxy_pass http://application_upstream;
+                proxy_set_header Host    $http_host;
+                proxy_set_header Upgrade $http_upgrade;
+                add_header Access-Control-Allow-Origin "*";
+                add_header Access-Control-Allow-Credentials "true";
+                add_header Access-Control-Allow-Methods "GET,POST,PUT,OPTIONS,DELETE";
+                error_page 404;
+            }
+        }
+    }
