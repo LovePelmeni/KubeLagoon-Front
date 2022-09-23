@@ -11,6 +11,11 @@ import { router } from './router/index';
 import { globalCookiesConfig } from "vue3-cookies";
 import Vuetify from './plugins/vuetify.ts';
 
+import VueFusionCharts from 'vue-fusioncharts';
+import FusionCharts from 'fusioncharts';
+import TimeSeries from 'fusioncharts/fusioncharts.timeseries';
+
+
 globalCookiesConfig({
   expireTimes: "30d",
   path: "/",
@@ -26,6 +31,9 @@ app.use(VueCookies)
 app.use(store)
 app.use(Vuex)
 app.use(Vuetify)
+app.use(VueFusionCharts)
+app.use(FusionCharts)
+app.use(TimeSeries)
 
 app.mount('#app')
 

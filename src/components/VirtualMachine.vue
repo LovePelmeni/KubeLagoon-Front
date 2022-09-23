@@ -119,33 +119,105 @@
         <div
           class="project-item"
           v-for="(PropertyName, index) in Object.keys(
-            {'CpuNum': VirtualMachine.CpuNum, 'Memory': VirtualMachine.Memory, 
-            'StorageCapacity': VirtualMachine.StorageCapacity,
-          })"
+            {
+                'CpuNum': VirtualMachine.CpuNum, 
+                'Memory': VirtualMachine.Memory, 
+                'StorageCapacity': VirtualMachine.StorageCapacity,
+            }
+          )"
           :key="index"
         >
           <p class="prj-text" v-if="PropertyName.toLowerCase() === 'cpunum'">CPU Numbers</p>
-          <p class="prj-text" v-if="PropertyName.toLowerCase() == 'cpunum'">{{ VirtualMachine[PropertyName] || 0 }}</p>
+          <p class="prj-text" v-if="PropertyName.toLowerCase() == 'cpunum'">{{ VirtualMachine['Resources'][PropertyName] || 0 }}</p>
           
-          <p class="prj-text" v-if="PropertyName.toLowerCase() === 'memory'">Memory</p>
-          <p class="prj-text" v-if="PropertyName.toLowerCase() == 'memory'">{{ VirtualMachine[PropertyName] || 0 }}MB</p>
+          <p class="prj-text" v-if="PropertyName.toLowerCase() === 'memory'">Used Memory</p>
+          <p class="prj-text" v-if="PropertyName.toLowerCase() == 'memory'">{{ VirtualMachine['Resources'][PropertyName] || 0 }}MB</p>
           
-          <p class="prj-text" v-if="PropertyName.toLowerCase() === 'storagecapacity'">Storage Capacity</p>
-          <p class="prj-text" v-if="PropertyName.toLowerCase() == 'storagecapacity'">{{ VirtualMachine[PropertyName] || 0 }}GB</p>
+          <p class="prj-text" v-if="PropertyName.toLowerCase() === 'storagecapacity'">Used Storage Capacity</p>
+          <p class="prj-text" v-if="PropertyName.toLowerCase() == 'storagecapacity'">{{ VirtualMachine['Resources'][PropertyName] || 0 }}GB</p>
 
           <!-- Receiving the Cost of the Specific Property  (Cpu, Memory, etc....)-->
           <p class="prj-text">
-            &#36;{{ GetPropertyCost(PropertyName, VirtualMachine[PropertyName]) }} 
+            &#36;{{ GetPropertyCost(PropertyName, VirtualMachine['Resources'][PropertyName]) }} 
           </p>
         </div>
       </div>
       <div class="amount">
         <p class="amount-text">Total Amount Per Month</p>
         <p class="amount-number">
-          &#36;{{ GetTotalAmount(VirtualMachine["CpuNum"], VirtualMachine["Memory"], VirtualMachine["StorageCapacity"]) }}
+          &#36;{{ 
+          GetTotalAmount(
+          VirtualMachine['Resources']["CpuNum"], 
+          VirtualMachine['Resources']["Memory"], 
+          VirtualMachine['Resources']["StorageCapacity"]
+          ) }}
         </p>
       </div>
     </div>
+
+    <h1 style="background-color: white; margin-top: 20px;">Configuration</h1>
+
+     <div class="details">
+      <div class="project-info">
+        <p class="project-id">#{{ VirtualMachine.VirtualMachineId }}</p>
+        <p class="project-desc">{{ VirtualMachine.VirtualMachineName }}</p>
+      </div>
+
+      <div class="date">
+        <p class="project-id" style="margin-bottom: 10px">Bill Due Date</p>
+        <p class="date-body">{{ VirtualMachine.paymentDueDate || new Date() }}</p>
+
+        <p class="project-id" style="margin-top: 30px">Bill Due Terms</p>
+        <p class="due-body">{{ VirtualMachine.PaymentDue || 0 }} days</p>
+      </div>
+      <div class="name">
+        <p class="project-id" style="margin-bottom: 10px">Bill to</p>
+        <p class="name-body">{{ VirtualMachine.Owner.Username }}</p>
+        <p class="name-body">{{ VirtualMachine.Owner.Email }}</p>
+        <p class="name-body">{{ VirtualMachine.Owner.City }}, {{ VirtualMachine.Owner.Country }}</p>
+        <p class="name-body">{{ VirtualMachine.Owner.ZipCode }}</p>
+      </div>
+
+      <div class="adress">
+        <p class="project-id">Bill From</p>
+        <p class="adress-street" style="margin-top: 10px">KubeLagoon, Inc</p>
+        <p class="adress-city" style="margin-top: 10px">Vancoover, Canada</p>
+        <p class="adress-postcode" style="margin-top: 10px">125167</p>
+        <p class="adress-country" style="margin-top: 10px">Smith Street, 4</p>
+      </div>
+      <div class="item-container">
+        <p>Resource</p> 
+        <p>Usage</p>
+        <p>Total Per Day</p>
+        <div
+          class="project-item"
+          v-for="(PropertyName, index) in Object.keys(
+            {
+                'CpuNum': VirtualMachine.CpuNum, 
+                'Memory': VirtualMachine.Memory, 
+                'StorageCapacity': VirtualMachine.StorageCapacity,
+            }
+          )"
+          :key="index"
+        >
+          <p class="prj-text" v-if="PropertyName.toLowerCase() === 'cpunum'">CPU Numbers</p>
+          <p class="prj-text" v-if="PropertyName.toLowerCase() == 'cpunum'">{{ VirtualMachine['Resources'][PropertyName] || 0 }}</p>
+          
+          <p class="prj-text" v-if="PropertyName.toLowerCase() === 'memory'">Memory</p>
+          <p class="prj-text" v-if="PropertyName.toLowerCase() == 'memory'">{{ VirtualMachine['Resources'][PropertyName] || 0 }}MB</p>
+          
+          <p class="prj-text" v-if="PropertyName.toLowerCase() === 'storagecapacity'">Storage Capacity</p>
+          <p class="prj-text" v-if="PropertyName.toLowerCase() == 'storagecapacity'">{{ VirtualMachine['Resources'][PropertyName] || 0 }}GB</p>
+
+          <!-- Receiving the Cost of the Specific Property  (Cpu, Memory, etc....)-->
+          <p class="prj-text">
+            &#36;{{ GetPropertyCost(PropertyName, VirtualMachine['Resources'][PropertyName]) }} 
+          </p>
+        </div>
+      </div>
+    </div>
+
+
     <v-snackbar v-model="OperationFailed" top color="red">
         Operation Failed, {{ VirtualMachineServerError }}
     </v-snackbar>
@@ -228,19 +300,25 @@ export default {
       if (PropertyName.toLowerCase() == "cpunum") {
         // Calculating Price for the Cpu Property
         let calculator = new cost.CpuUsageBillCalculator(Number(PropertyValue) || 0)
-        return Math.round(calculator.Calculate() / 30)
+        let Value = calculator.Calculate() / 30
+        let SplitedValue = Value.toString().split(".")
+        return SplitedValue[0] + "." + SplitedValue[1][0] || 0
       }
   
       if (PropertyName.toLowerCase() == "memory") {   
         // Calculating Price for the Memory Property 
         let calculator = new cost.MemoryUsageBillCalculator(Number(PropertyValue) || 0)
-        return Math.round(calculator.Calculate() / 30)
+        let Value = calculator.Calculate() / 30
+        let SplitedValue = Value.toString().split(".")
+        return SplitedValue[0] + "." + SplitedValue[1][0] || 0
       }
 
       if (PropertyName.toLowerCase() == "storagecapacity") {
         // Calculating Price for the Storage Capacity Property
         let calculator = new cost.StorageUsageBillCalculator(Number(PropertyValue) || 0)
-        return Math.round(calculator.Calculate() / 30)
+        let Value = calculator.Calculate() / 30
+        let SplitedValue = Value.toString().split(".")
+        return SplitedValue[0] + "." + SplitedValue[1][0] || 0
       }
     },
 

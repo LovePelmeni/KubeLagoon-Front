@@ -31,7 +31,7 @@ export default new Vuex.Store({
     virtualMachineData: [
       {
         "VirtualMachineId": "1567",
-        "VirtualMachineName": "New Virtual Machine",
+        "VirtualMachineName": "Virtual Machine",
         "Running": true, 
         "Deploying": false, 
         "Shutdown": false, 
@@ -75,7 +75,7 @@ export default new Vuex.Store({
       },
       {
         "VirtualMachineId": "1256632",
-        "VirtualMachineName": "New Virtual Machine",
+        "VirtualMachineName": "Virtual Machine",
         "Running": true, 
         "Deploying": false, 
         "Shutdown": false, 
@@ -97,7 +97,7 @@ export default new Vuex.Store({
       },
       {
         "VirtualMachineId": "1243567",
-        "VirtualMachineName": "Another Virtual Machine Server",
+        "VirtualMachineName": "Virtual Machine Server",
         "Running": false, 
         "Deploying": true, 
         "Shutdown": false, 
@@ -122,7 +122,7 @@ export default new Vuex.Store({
       },
       {
         "VirtualMachineId": "124426",
-        "VirtualMachineName": "Third Virtual Machine Server",
+        "VirtualMachineName": "Third Server",
         "Running": false, 
         "Deploying": false, 
         "Shutdown": true, 
