@@ -1,213 +1,280 @@
 <template>
-    <div class="charts-block"> 
-  
-    <!-- Chart Metrics for the CPU Usage -->
 
-    <fusioncharts
-    :type="CpuType"
-    :width="width"
-    :height="height"
-    :dataFormat="dataFormat"
-    :dataSource="dataSource"
-    ></fusioncharts>
+    <div class="chartsBlock">
 
-    <!-- Chart Metrics for the Operational Memory Usage -->
+        <div className="column is-half-tablet is-one-third-desktop is-half-fullhd">
+            <div className="card">
+                <div className="card-content has-chart">
+                    <div className="columns is-marginless is-mobile is-desktop has-block-display">
+                        <div className="column header is-two-thirds-desktop is-full-tablet is-two-thirds-mobile has-text-left is-bottom-paddingless">CPU</div>
+                        <div id="cac-changeper" className="column has-text-right has-text-left-tablet-only has-text-left-desktop-only is-bottom-paddingless"
+                        data-up="↑" data-down="↓">...</div>
+                    </div>
+                <div id="cac-val">...</div>
+                </div>
+            <div id="cac-chart"></div>
+            </div>
+        </div>
 
-    <fusioncharts
-    :type="MemoryType"
-    :width="MemoryWidth"
-    :height="MemoryHeight"
-    :dataFormat="MemoryDataFormat"
-    :dataSource="MemoryDataSource"
-    ></fusioncharts>
+          <div className="column is-half-tablet is-one-third-desktop is-half-fullhd">
+            <div className="card">
+                <div className="card-content has-chart">
+                    <div className="columns is-marginless is-mobile is-desktop has-block-display">
+                        <div className="column header is-two-thirds-desktop is-full-tablet is-two-thirds-mobile has-text-left is-bottom-paddingless">Memory</div>
+                        <div id="cac-changeper" className="column has-text-right has-text-left-tablet-only has-text-left-desktop-only is-bottom-paddingless"
+                        data-up="↑" data-down="↓">...</div>
+                    </div>
+                <div id="cac-val">...</div>
+                </div>
+            <div id="cac-chart"></div>
+            </div>
+        </div>
 
-    <!-- Chart Metrics for the Storage Disk Usage -->
-
-    <fusioncharts   
-    :type="StorageType"
-    :width="StorageWidth"
-    :height="StorageHeight"
-    :dataFormat="StorageDataFormat"
-    :dataSource="StorageDataSource"
-    ></fusioncharts>
+          <div className="column is-half-tablet is-one-third-desktop is-half-fullhd">
+            <div className="card">
+                <div className="card-content has-chart">
+                    <div className="columns is-marginless is-mobile is-desktop has-block-display">
+                        <div className="column header is-two-thirds-desktop is-full-tablet is-two-thirds-mobile has-text-left is-bottom-paddingless">Storage</div>
+                        <div id="cac-changeper" className="column has-text-right has-text-left-tablet-only has-text-left-desktop-only is-bottom-paddingless"
+                        data-up="↑" data-down="↓">...</div>
+                    </div>
+                <div id="cac-val">...</div>
+                </div>
+            <div id="cac-chart"></div>
+            </div>
+        </div>
 
     </div>
+
 </template>
 
 <script>
-import * as resources from "../../usage/usage.vue"
 
-import FusionCharts from 'fusioncharts';
+import * as resources from "../../usage/usage.js"
+import * as chartCosmetics from "../components/chartCosmetics.js"
 
-export const ResourceCpuChart = {
-    name: "ResourceCpuChart",
+export const StorageResourceUsageChart = {
+    name: "StorageResourceUsageChart",
+    props: ["VirtualMachineId"],
     data() {
         return {
-            CpuSchema: [], // Data Schema of the CPU Usage Metrics 
-            CpuWidth: "30%",
-            CpuHeight: "200",
-
-            CpuType: "timeseries",
-            CpuDataFormat: "json",
-
-            CpuDataSource: {
-                caption: { text: "Online Sales of a SuperStore in the US" },
-                data: null,
-                chart: {
-                showLegend: 0
-                },
-                caption: {
-                text: 'Daily Visitors Count of a Website'
-                },
-                yAxis: [
-                {
-                    plot: {
-                    value: 'Daily Visitors',
-                    type: 'area'
-                    },
-                    title: 'Daily Visitors (in thousand)'
+            type: "mscombi2d",
+            width: "100%",
+            height: "100%",
+            dataFormat: "json",
+            dataSource: {
+                chart: chartCosmetics.currencyChart,
+                categories: [{
+                    category: []
+                }],
+                dataset: [
+                        {
+                        renderAs: "spline",
+                        lineThickness: "3",
+                        alpha: process.env.CHART_STORAGE_RESOURCE_ALPHA || "10000",
+                        data: []
+                        },
+                        {
+                        renderAs: "splinearea",
+                        showPlotBorder: "0",
+                        plotToolText: " ",
+                        data: []
+                        }
+                    ]
                 }
-                ]
-            }
         }
     },
+    mounted() {
+        this.MountStorageMetrics()
+    },
     methods: {
-        MountMemoryMetrics() {
-        // Mounts the Memory Metrics inside the Charts 
-        let data, error = this.GetCpuUsageMetrics()
-        const fusionTable = new FusionCharts.DataStore().createDataTable(data, this.CpuSchema);
-        this.dataSource.data = fusionTable;
-        }, 
-        GetCpuUsageMetrics() {
-            // Returns the Metrics for the CPU for the Virtual Machine Server 
-            let VirtualMachineId = this.$route.params.VirtualMachineId
+        MountStorageMetrics() {
+            // Mounting CPU Metrics
+            let StorageData = this.GetStorageUsageMetrics()
+            for (let StorageMetric in StorageData.Metrics) {
+                this.$data.dataSource.dataset[0].data.push(
+                    {
+                        "value": StorageMetric["value"], 
+                        "alpha": process.env.CHART_RESOURCE_STORAGE_ALPHA || "10000",
+                    }
+                )
+                this.$data.dataSource.dataset[1].data.push(
+                    {
+                        "value": StorageMetric["value"],
+                        "alpha": process.env.CHART_RESOURCE_STORAGE_ALPHA || "10000",
+                    }
+                )
+            }
+        },
+        GetStorageUsageMetrics() {
+            // Returns CPU Usage Metrics Data 
+
+            let VirtualMachineId = this.VirtualMachineId 
             let ResourceManager = new resources.ResourceUsageManager()
-            let data, dataError = ResourceManager.GetCpuUsageMetrics(this.JwtToken, VirtualMachineId)
-            return data, dataError
+            let data  = ResourceManager.GetStorageUsageInfo(this.JwtToken, VirtualMachineId) 
+            return data
+        },
+    }
+}
+
+
+export const MemoryResourceUsageChart = {
+    name: "MemoryResourceUsageChart",
+    props: ["VirtualMachineId"],
+    data() {
+        return {
+            type: "mscombi2d",
+            width: "100%",
+            height: "100%",
+            dataFormat: "json",
+            dataSource: {
+                chart: chartCosmetics.currencyChart,
+                categories: [{
+                    category: []
+                }],
+                dataset: [
+                        {
+                        renderAs: "spline",
+                        lineThickness: "3",
+                        alpha: process.env.CHART_MEMORY_RESOURCE_ALPHA || "128",
+                        data: []
+                        },
+                        {
+                        renderAs: "splinearea",
+                        showPlotBorder: "0",
+                        plotToolText: " ",
+                        data: []
+                        }
+                    ]
+                }
         }
-    }, 
+    },
     mounted() {
         this.MountMemoryMetrics()
     },
-};
-
-
-// Component, that Shows up the Chart Usage Metrics for the Operational Memory of the Virtual Machine Server
-export const ResourceMemoryChart = {
-    
-    name: "ResourceMemoryChart",
-    data() {
-        return { 
-            MemorySchema: null, // Data Schema of the Operational Memory Usage Metrics  
-            MemoryWidth: "40%",
-            MemoryHeight: "200",
-            MemoryType: "timeseries",
-            MemoryDataFormat: "json",
-            MemoryDataSource: {
-                caption: { text: "Online Sales of a SuperStore in the US" },
-                data: null,
-                chart: {
-                showLegend: 0
-                },
-                caption: {
-                text: 'Daily Visitors Count of a Website'
-                },
-                yAxis: [
-                {
-                    plot: {
-                    value: 'Daily Visitors',
-                    type: 'area'
-                    },
-                    title: 'CPU Usage'
-                }
-                ]
+    methods: {
+        MountMemoryMetrics() {
+            // Mounting CPU Metrics
+            let MemoryData = this.GetMemoryUsageMetrics()
+            for (let MemoryMetric in MemoryData.Metrics) {
+                this.$data.dataSource.dataset[0].data.push(
+                    {
+                        "value": CpuMetric["value"], 
+                        "alpha": process.env.CHART_RESOURCE_CPU_ALPHA || "10000",
+                    }
+                )
+                this.$data.dataSource.dataset[1].data.push(
+                    {
+                        "value": MemoryMetric["value"],
+                        "alpha": process.env.CHART_RESOURCE_MEMORY_ALPHA || "10000",
+                    }
+                )
             }
+        },
+        GetMemoryUsageMetrics() {
+            // Returns CPU Usage Metrics Data 
+
+            let VirtualMachineId = this.VirtualMachineId 
+            let ResourceManager = new resources.ResourceUsageManager()
+            let data  = ResourceManager.GetMemoryUsageInfo(this.JwtToken, VirtualMachineId) 
+            console.log(data)
+            return data
+        },
+    }
+}
+
+
+export const CpuResourceUsageChart = {
+    name: "CpuResourceUsageChart",
+    props: ["VirtualMachineId"],
+    data() {
+        return {
+            type: "mscombi2d",
+            width: "100%",
+            height: "100%",
+            dataFormat: "json",
+            dataSource: {
+                chart: chartCosmetics.currenyChart,
+                categories: [{
+                    category: []
+                }],
+                dataset: [
+                        {
+                        renderAs: "spline",
+                        lineThickness: "3",
+                        alpha: process.env.CHART_CPU_RESOURCE_ALPHA || "128",
+                        data: []
+                        },
+                        {
+                        renderAs: "splinearea",
+                        showPlotBorder: "0",
+                        plotToolText: " ",
+                        data: []
+                        }
+                    ]
+                }
         }
     },
     mounted() {
         this.MountCpuMetrics()
     },
-    methods: { 
-        MountCpuMetrics() {
-            // Mounts Metrics Data Inside the Charts
-            let data, error = this.GetMemoryResourceUsageMetrics()
-            const fusionTable = new FusionCharts.DataStore().createDataTable(data, this.MemorySchema);
-            this.dataSource.data = fusionTable;
-        },
-        GetMemoryResourceUsageMetrics() {
-            // Returns Info about the Operational Memory Usage for the Virtual Machine Server 
-            let VirtualMachineId = this.$route.params.VirtualMachineId 
-            let ResourceManager = new resources.ResourceUsageManager()
-            let data, dataError = ResourceManager.GetMemoryResourceUsageMetrics(this.JwtToken, VirtualMachineId)
-            return data, dataError
-        }
-    },
-};
-
-
-export const ResourceStorageChart = {
-    // Component, Responsible for Showing up the Usage Metrics of the Disk Storage for the Virtual Machine Server
-    name: "ResourceStorageChart",
-    data: {
-      StorageDataSchema: [], // Data Schema of the Storage Disk Metrics 
-      StorageWidth: "40%",
-      StorageHeight: "200",
-      StorageType: "timeseries",
-      StorageDataFormat: "json",
-      StorageDataSource: {
-        caption: { text: "Storage Disk Usage during last week" },
-        data: null,
-        chart: {
-          showLegend: 0
-        },
-        caption: {
-          text: 'Daily Storage Disk Usage'
-        },
-        yAxis: [
-          {
-            plot: {
-              value: 'Daily Visitors',
-              type: 'area'
-            },
-            title: 'Storage Disk Usage'
-          }
-        ]
-      }
-    },
     methods: {
-        MountStorageUsageMetrics() {
-            // Mount Storage Usage Metrics inside the Chart
-            let data, error = this.GetStorageUsageMetrics()
-            const fusionTable = new FusionCharts.DataStore().createDataTable(data, this.StorageDataSchema);
-            this.dataSource.data = fusionTable;
+        MountCpuMetrics() {
+            // Mounting CPU Metrics
+            let CpuData = this.GetCpuUsageMetrics()
+            for (let CpuMetric in CpuData.Metrics) {
+                this.$data.dataSource.dataset[0].data.push(
+                    {
+                        "value": CpuMetric["value"], 
+                        "alpha": process.env.CHART_RESOURCE_CPU_ALPHA || "128",
+                    }
+                )
+                this.$data.dataSource.dataset[1].data.push(
+                    {
+                        "value": CpuMetric["value"],
+                        "alpha": process.env.CHART_RESOURCE_CPU_ALPHA || "128",
+                    }
+                )
+            }
         },
-        GetStorageUsageMetrics() {
-            // Returns Storage Usage Metrics of the Virtual Machine Server
-            let VirtualMachineId = this.$route.params.VirtualMachineId 
+        GetCpuUsageMetrics() {
+            // Returns CPU Usage Metrics Data 
+
+            let VirtualMachineId = this.VirtualMachineId 
             let ResourceManager = new resources.ResourceUsageManager()
-            let data, dataError = ResourceManager.GetStorageUsageMetrics(this.JwtToken, VirtualMachineId)
-            return data, dataError
-        }
+            let data  = ResourceManager.GetCpuUsageInfo(this.JwtToken, VirtualMachineId) 
+            console.log(data)
+            return data
+        },
     }
-};
-
-export default {
-    name: "ChartComponent", 
-    components: {
-        ResourceCpuChart, 
-        ResourceMemoryChart, 
-        ResourceStorageChart,
-    },
-    data() {},
-
 }
 
 
+export default {
+    // Component, Responsible for Showing up the Usage Metrics of the Disk Storage for the Virtual Machine Server
+    name: "ChartPage",
+    props: ["VirtualMachineId"],
+    components: {
+        CpuResourceUsageChart, 
+        MemoryResourceUsageChart, 
+        StorageResourceUsageChart,
+    },
+    mounted() {
+        this.MountUsageMetrics()
+    },
+    methods: {
+        MountUsageMetrics() {
+            // Mount Storage Usage Metrics inside the Chart
+            this.MountCpuMetrics()
+            this.MountMemoryMetrics()
+            this.MountStorageMetrics()
+        },
+    },
+}; 
 </script>
 
-
 <style lang="scss">
-    .charts-block {
+    .chartsBlock {
         // Styles for the Charts block
         justify-content: space-between; 
         align-items: center;

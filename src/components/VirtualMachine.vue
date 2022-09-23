@@ -217,6 +217,7 @@
       </div>
     </div>
 
+    <chart-page :VirtualMachineId="VirtualMachineId" />
 
     <v-snackbar v-model="OperationFailed" top color="red">
         Operation Failed, {{ VirtualMachineServerError }}
@@ -237,15 +238,17 @@
 
 <script>
 
+
 import {  mapState } from "vuex";
 import { mapActions } from "vuex";
 import { useCookies } from "vue3-cookies";
 import * as cost from "../../cost/virtualMachineCost";
 import VirtualServerNotFoundWindow from "./VirtualServerNotFoundWindow.vue";
+import ChartPage from "../components/ResourceCharts.vue"
 
 export default {
 
-  components: { VirtualServerNotFoundWindow },
+  components: { VirtualServerNotFoundWindow, ChartPage },
   name: "VirtualMachineInfo",
   setup() {
     const { cookie } = useCookies();
@@ -266,6 +269,7 @@ export default {
       OperationSuccessMessage: null,
       VirtualMachineServerError: null, 
       VirtualMachine: null,
+      VirtualMachineId: this.$route.params.VirtualMachineId
     }
   },
   methods: { 
