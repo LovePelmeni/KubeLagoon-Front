@@ -15,20 +15,18 @@
     </router-link>
     <div class="status-container">
       <p class="status-title" style="margin-top: 6px; margin-right: 3px;">Status</p>
-      <div style="margin-top: 6px; margin-left: 60px;"
-         class="status-body"
-        :class="[
-          VirtualMachine.Running === true
-            ? 'running'
-            : VirtualMachine.Shutdown === true
-            ? 'shutdown'
-            ? VirtualMachine.Deploying === true
-            : 'deploying'
-            : 'unknown',
-        ]"> <a style="margin-right: 10px;" v-if="VirtualMachine.Running === true">Running</a>
-            <a style="margin-right: 10px;" v-if="VirtualMachine.Deploying === true">Running</a>
-            <a style="margin-right: 10px;" v-if="VirtualMachine.Shutdown">Shutdown</a>
-            <a style="margin-right: 10px;" v-if="VirtualMachine.Running === false && VirtualMachine.Deploying === false && VirtualMachine.Shutdown === false">Unknown</a>
+      <div style="margin-top: 6px; margin-left: 40px;"
+        class="status-body"
+        :class="{
+          'running': VirtualMachine.Running === true, 
+          'deploying': VirtualMachine.Deploying === true,
+          'shutdown': VirtualMachine.Shutdown === true,
+          'unknown': VirtualMachine.Running === false && VirtualMachine.Deploying === false && VirtualMachine.Shutdown === false,
+        }"
+        > <a v-if="VirtualMachine.Running === true">Running</a>
+          <a v-if="VirtualMachine.Deploying === true">Deploying</a>
+          <a v-if="VirtualMachine.Shutdown === true">Shutdown</a>
+          <a v-if="VirtualMachine.Running === false && VirtualMachine.Deploying === false && VirtualMachine.Shutdown === false">Unknown</a>
             
         <span class="status-circle" style="margin-right: 5px" v-if="VirtualMachine.Running" />
         <span class="status-circle" style="margin-right: 5px" v-if="VirtualMachine.Deploying" />
@@ -162,6 +160,7 @@
   <div v-else> 
     <virtual-server-not-found-window />
   </div>
+
 </template>
 
 <script>
@@ -194,7 +193,6 @@ export default {
       // Operations Messages Parameters
       OperationSuccessMessage: null,
       VirtualMachineServerError: null, 
-
       VirtualMachine: null,
     }
   },
@@ -362,7 +360,7 @@ export default {
 .status-body {
   width: 105px;
   padding: 13px 0 13px 13px;
-  border-radius: 6px;
+  border-radius: 10px;
   font-weight: 700;
   display: flex;
   align-items: center;
@@ -378,18 +376,22 @@ export default {
   background-color: #292c45;
   color: rgb(224, 228, 251);
 }
+
 .deploying {
-  background-color: rgba(255, 145, 0, 0.06);
+  background-color: rgba(51, 215, 160, 0.06);
   color: rgb(255, 145, 0);
 }
+
 .running {
   background-color: rgba(51, 215, 160, 0.06);
   color: rgb(51, 215, 160);
 }
+
 .unknown {
   background-color: rgba(51, 215, 160, 0.06);
-  color: white;
+  color: rgb(252, 2, 2);
 }
+
 .btn-container {
   margin-left: auto;
 }

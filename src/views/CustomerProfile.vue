@@ -4,8 +4,8 @@
     <div style="margin-top: 5px;">
       <div class="left flex flex-column" style="margin-bottom: 5px; justify-content: center;">
 
-        <div v-if="Username.length > 0">
-        <h1 style="margin-top: 10px; color: white; align-text: center;">Hello, {{ Username }}!</h1>
+        <div v-if="JwtToken != null">
+        <h1 style="color: white; align-text: center;">Hello, {{ Username }}!</h1>
         </div>
 
         <div v-else class="mobile-message flex flex-column">
@@ -15,14 +15,15 @@
 
       </div>
     </div>
+      <!-- Checking if the Customer Profile has been Obtained, otherwise, it is going to be not found page -->
+      <v-col v-if="JwtToken != null" cols="10" lg="6" class="mx-auto"> 
 
-      <v-col v-if="Username.length > 0" cols="10" lg="6" class="mx-auto">
-
-        <v-card class="pa-4">
+        <v-card class="pa-4" style="background-color: #141625;">
           <v-form id="CustomerProfileForm" ref="form">
             <v-card-text>
 
               <v-text-field
+                style="background-color: #1e2139; border-radius: 2px; 2px; 2px; 2px;"
                 v-if="EditProfile"
                 v-model="Username"
                 :rules="UsernameRules"
@@ -34,6 +35,7 @@
               />
 
               <v-text-field
+                style="background-color: #1e2139; border-radius: 2px; 2px; 2px; 2px; margin-top: 20px;"
                 v-else
                 disabled
                 label="Username"
@@ -41,6 +43,7 @@
               />
               
               <v-text-field
+                style="background-color: #1e2139; margin-top: 20px;"
                 v-if="EditProfile"
                 v-model="Password"
                 :rules="PasswordRules"
@@ -51,6 +54,7 @@
               />
 
               <v-text-field
+                style="background-color: #1e2139; margin-top: 20px;"
                 v-else
                 disabled
                 label="Password"
@@ -59,6 +63,7 @@
               
 
               <v-text-field
+              style="background-color: #1e2139; margin-top: 20px;"
               v-if="EditProfile"
               v-model="Email"
               :rules="EmailRules"
@@ -70,14 +75,14 @@
               />
 
               <v-text-field
+                style="background-color: #1e2139; margin-top: 20px;"
                 v-else
                 disabled
                 label="Email"
                 placeholder="Email"
               />
-              
-
                     <v-select
+                    style="background-color: #1e2139; margin-top: 20px;"
                     v-model="Country"
                     type="country"
                     label="Country"
@@ -97,6 +102,7 @@
                       </v-select>
 
                 <v-text-field
+                style="background-color: #1e2139; margin-top: 20px;"
                 v-if="EditProfile"
                 v-model="ZipCode"
                 :rules="ZipCodeRules"
@@ -108,6 +114,7 @@
                 />
 
                 <v-text-field
+                style="background-color: #1e2139; margin-top: 20px;"
                 v-else
                 disabled
                 label="ZipCode"
@@ -116,6 +123,7 @@
               
 
                 <v-text-field
+                  style="background-color: #1e2139; margin-top: 20px;"
                   v-if="EditProfile"
                   v-model="Street"
                   :rules="StreetRules"
@@ -127,6 +135,7 @@
                 />
 
                 <v-text-field
+                  style="background-color: #1e2139; margin-top: 20px;"
                   v-else
                   disabled
                   label="Street"
@@ -167,7 +176,6 @@
 
 <script>
 
-
 import { useCookies } from "vue3-cookies";
 import * as customers from "../../customers/customers.js"
 
@@ -179,7 +187,7 @@ export default {
     return { cookie };
   },
   mounted() {
-    this.JwtToken = this.cookie?.get("jwt-token")
+    this.JwtToken = this.cookie?.get("jwt-token") || "jwt-token"
   },
   data() {
     return {
@@ -242,8 +250,8 @@ export default {
       let Customer, CustomerError = customerManager.GetCustomerProfile(this.JwtToken)
       if (CustomerError != null) {this.activeError = true; this.EditError = "Failed to Render Profile"}else{
 
-      for (let CustomerProperty in Object.keys(Customer || {})) {
-          this[CustomerProperty] = Customer[CustomerProperty]
+      for (let CustomerProperty in Object.keys(Customer || {"Username": "Username", "Email": "email@gmail.com", "Password": "Password"})) {
+          this.$data[CustomerProperty] = Customer[CustomerProperty]
       }}
       this.activeError = false 
       this.EditError = null
@@ -286,7 +294,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
 
 .profile-content {
 

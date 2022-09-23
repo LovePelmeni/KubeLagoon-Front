@@ -6,4 +6,5 @@ export default {
     name: "deployErrorDescription",
     props: ["virtualMachineErrors"],
 }
+
 </script>

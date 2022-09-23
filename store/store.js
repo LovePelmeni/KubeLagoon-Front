@@ -40,7 +40,8 @@ export default new Vuex.Store({
         "Owner": {
           "Username": "some-user",
           "Email": "email@gmail.com",
-          "BillingAddress": "Vancoover,Canada",
+          "City": "Vancouver",
+          "Country": "Canada",
           "Street": "Smith's Street, 4",
           "ZipCode": "125167",
         },
@@ -61,7 +62,7 @@ export default new Vuex.Store({
         "Owner": {
           "Username": "johnMa",
           "Email": "john@gmail.com",
-          "City": "",
+          "City": "Toronto",
           "Country": "Canada",
           "Street": "Smith's Street, 4",
           "ZipCode": "125167",
@@ -381,10 +382,12 @@ export default new Vuex.Store({
     },
 
     VIRTUAL_MACHINES_LOADED(state) {
-      state.virtualMachineLoaded = true;
+      // Turns that the Virtual Machine Servers Objects has been Successfully Obtained 
+      state.virtualMachinesLoaded = true
     },
-  },
+  },  
 
+  // Action Methods
   actions: {
 
     GET_VIRTUAL_MACHINE(JwtToken, VirtualMachineId) {

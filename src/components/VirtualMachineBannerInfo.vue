@@ -44,7 +44,6 @@ export default {
     },
     parseDate(str) {
       // Parses Date from the String to the Date Object
-      console.log(str, "raw-date")
       var date = str.split('/');
       return new Date(date[2], date[0]-1, date[1]);
     },
@@ -53,7 +52,6 @@ export default {
       let currentDate = new Date();
       let Datetime = this.parseDate(CreationDateValue)
       let Now = this.parseDate(currentDate.toLocaleDateString().replaceAll(".", "/"))
-      console.log(Now, Datetime)
       let DaysAgo =  Math.round((Now-Datetime)/(1000*60*60*24))
       return DaysAgo
     }
