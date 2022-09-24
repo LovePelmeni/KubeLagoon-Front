@@ -23,7 +23,7 @@ services:
     healthcheck:
       test: ["curl", "-f", "http://localhost:3000/ping"]
       period: 10 
-      
+
   
 networks:
   cloud-infrastructure-network:

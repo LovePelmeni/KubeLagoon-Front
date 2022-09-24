@@ -115,7 +115,7 @@
       <div class="item-container">
         <p>Resource</p> 
         <p>Usage</p>
-        <p>Total Per Day</p>
+        <p>Total Bill</p>
         <div
           class="project-item"
           v-for="(PropertyName, index) in Object.keys(
@@ -127,13 +127,13 @@
           )"
           :key="index"
         >
-          <p class="prj-text" v-if="PropertyName.toLowerCase() === 'cpunum'">CPU Numbers</p>
+          <p class="prj-text" v-if="PropertyName.toLowerCase() === 'cpunum'">Used CPU</p>
           <p class="prj-text" v-if="PropertyName.toLowerCase() == 'cpunum'">{{ VirtualMachine['Resources'][PropertyName] || 0 }}</p>
           
           <p class="prj-text" v-if="PropertyName.toLowerCase() === 'memory'">Used Memory</p>
           <p class="prj-text" v-if="PropertyName.toLowerCase() == 'memory'">{{ VirtualMachine['Resources'][PropertyName] || 0 }}MB</p>
           
-          <p class="prj-text" v-if="PropertyName.toLowerCase() === 'storagecapacity'">Used Storage Capacity</p>
+          <p class="prj-text" v-if="PropertyName.toLowerCase() === 'storagecapacity'">Used Storage</p>
           <p class="prj-text" v-if="PropertyName.toLowerCase() == 'storagecapacity'">{{ VirtualMachine['Resources'][PropertyName] || 0 }}GB</p>
 
           <!-- Receiving the Cost of the Specific Property  (Cpu, Memory, etc....)-->
@@ -143,9 +143,9 @@
         </div>
       </div>
       <div class="amount">
-        <p class="amount-text">Total Amount Per Month</p>
+        <p class="amount-text">Total Amount</p>
         <p class="amount-number">
-          &#36;{{ 
+          &#36;{{  // getting total amount for the used resources of the Virtual Machine Server 
           GetTotalAmount(
           VirtualMachine['Resources']["CpuNum"], 
           VirtualMachine['Resources']["Memory"], 
@@ -155,7 +155,7 @@
       </div>
     </div>
 
-    <h1 style="background-color: white; margin-top: 20px;">Configuration</h1>
+    <h1 style="color: white; margin-top: 40px; margin-bottom: 20px;">Configuration</h1>
 
      <div class="details">
       <div class="project-info">
@@ -187,8 +187,8 @@
       </div>
       <div class="item-container">
         <p>Resource</p> 
-        <p>Usage</p>
-        <p>Total Per Day</p>
+        <p>Capacities</p>
+        <p>Bill</p>
         <div
           class="project-item"
           v-for="(PropertyName, index) in Object.keys(
@@ -200,13 +200,13 @@
           )"
           :key="index"
         >
-          <p class="prj-text" v-if="PropertyName.toLowerCase() === 'cpunum'">CPU Numbers</p>
+          <p class="prj-text" v-if="PropertyName.toLowerCase() === 'cpunum'">CPU</p>
           <p class="prj-text" v-if="PropertyName.toLowerCase() == 'cpunum'">{{ VirtualMachine['Resources'][PropertyName] || 0 }}</p>
           
           <p class="prj-text" v-if="PropertyName.toLowerCase() === 'memory'">Memory</p>
           <p class="prj-text" v-if="PropertyName.toLowerCase() == 'memory'">{{ VirtualMachine['Resources'][PropertyName] || 0 }}MB</p>
           
-          <p class="prj-text" v-if="PropertyName.toLowerCase() === 'storagecapacity'">Storage Capacity</p>
+          <p class="prj-text" v-if="PropertyName.toLowerCase() === 'storagecapacity'">Storage</p>
           <p class="prj-text" v-if="PropertyName.toLowerCase() == 'storagecapacity'">{{ VirtualMachine['Resources'][PropertyName] || 0 }}GB</p>
 
           <!-- Receiving the Cost of the Specific Property  (Cpu, Memory, etc....)-->

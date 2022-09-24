@@ -4,6 +4,7 @@ metadata:
   name: front
   namespace: app-namespace
 spec:
+  type: ClusterIP
   selector:
     app: front-app
   ports:
@@ -69,7 +70,6 @@ data:
   BACKEND_APPLICATION_HOST: infrastructure.app-namespace.svc.cluster.local:8000
   BACKEND_APPLICATION_PORT: 8000
 
-
 --- 
 
 apiVersion: v1
@@ -79,11 +79,12 @@ metadata:
   namespace: app-namespace 
 data:
   nginx.conf: | 
-    events {
-    worker_connections 1024;
-    }
 
-    http {
+      events {
+      worker_connections 1024;
+      }
+
+      http {
 
         # Upstreams Configuration for the Frontend Nginx Server
         upstream front_application_upstream {
@@ -91,22 +92,22 @@ data:
         }
         # Server Configuration for the Nginx Server 
         server {
-            listen 90;
-            # Base Location for the Not Found Page 
-            location @not_found {
-                proxy_pass http://front_application:3000/not/found;
-                proxy_set_header Host $http_host;
-                proxy_set_header Upgrade $http_upgrade;
-            }
-            # Base Location for All Routes
-            location / {
-                proxy_pass http://application_upstream;
-                proxy_set_header Host    $http_host;
-                proxy_set_header Upgrade $http_upgrade;
-                add_header Access-Control-Allow-Origin "*";
-                add_header Access-Control-Allow-Credentials "true";
-                add_header Access-Control-Allow-Methods "GET,POST,PUT,OPTIONS,DELETE";
-                error_page 404;
-            }
-        }
-    }
+              listen 90;
+              # Base Location for the Not Found Page 
+              location @not_found {
+                  proxy_pass http://front_application:3000/not/found;
+                  proxy_set_header Host $http_host;
+                  proxy_set_header Upgrade $http_upgrade;
+              }
+              # Base Location for All Routes
+              location / {
+                  proxy_pass http://application_upstream;
+                  proxy_set_header Host    $http_host;
+                  proxy_set_header Upgrade $http_upgrade;
+                  add_header Access-Control-Allow-Origin "*";
+                  add_header Access-Control-Allow-Credentials "true";
+                  add_header Access-Control-Allow-Methods "GET,POST,PUT,OPTIONS,DELETE";
+                  error_page 404;
+              }
+          }
+      }
