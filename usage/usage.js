@@ -1,6 +1,6 @@
 class ResourceMetric {
     constructor(MetricInfo) {
-        this.MetricInfo = MetricInfo
+        this.MetricInfo = MetricInfo // array of metrics
     }
     ToBlob() {
         // Returns Serialized Version of the JSON Block
@@ -16,7 +16,7 @@ class ResourceUsageManager {
     GetCpuUsageInfo(JwtToken, VirtualMachineId) {
         // Returns Info about the CPU, Memory and Storage Disk Usage at the Current Time
         console.log(JwtToken, VirtualMachineId)
-        let NewMetric = new ResourceMetric({"value": "10"})
+        let NewMetric = new ResourceMetric([{"value": "10"}])
         console.log(NewMetric.ToBlob())
         return NewMetric.ToBlob()
     }
@@ -24,7 +24,7 @@ class ResourceUsageManager {
     GetMemoryUsageInfo(JwtToken, VirtualMachineId) {
         // Returns Info about the Operational Memory Usage at the Current Time
         console.log(JwtToken, VirtualMachineId)
-        let NewMetric = new ResourceMetric({"value": "1000"})
+        let NewMetric = new ResourceMetric([{"value": "1000"}])
         console.log(NewMetric.ToBlob())
         return NewMetric.ToBlob()
     }
@@ -32,7 +32,7 @@ class ResourceUsageManager {
     GetStorageUsageInfo(JwtToken, VirtualMachineId) {
         // Returns Info abou the Storage Disk Usage at the Current Time
         console.log(JwtToken, VirtualMachineId)
-        let NewMetric = new ResourceMetric({"value": "1000"})
+        let NewMetric = new ResourceMetric([{"value": "1000"}])
         console.log(NewMetric.ToBlob())
         return NewMetric.ToBlob()
     }

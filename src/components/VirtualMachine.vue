@@ -13,7 +13,11 @@
       </svg>
       <span class="back-text" @click="redirectToPreviousPage">Go Back</span>
     </router-link>
+
+
+    <chart-page :VirtualMachineId="VirtualMachine.VirtualMachineId"  />
     <div class="status-container">
+
       <p class="status-title" style="margin-top: 6px; margin-right: 3px;">Status</p>
       <div style="margin-top: 6px; margin-left: 40px;"
         class="status-body"
@@ -114,8 +118,9 @@
       </div>
       <div class="item-container">
         <p>Resource</p> 
-        <p>Usage</p>
-        <p>Total Bill</p>
+        <p>Capacity</p>
+        <p>Used</p>
+        <p>Total Price</p>
         <div
           class="project-item"
           v-for="(PropertyName, index) in Object.keys(
@@ -128,18 +133,21 @@
           :key="index"
         >
           <p class="prj-text" v-if="PropertyName.toLowerCase() === 'cpunum'">Used CPU</p>
-          <p class="prj-text" v-if="PropertyName.toLowerCase() == 'cpunum'">{{ VirtualMachine['Resources'][PropertyName] || 0 }}</p>
+          <p class="prj-text" v-if="PropertyName.toLowerCase() == 'cpunum'">{{ VirtualMachine['Resources'][PropertyName] || 0 }}</p> 
+          <p class="prj-text" v-if="PropertyName.toLowerCase() == 'cpunum'">{{ GetCpuUsage() || 0 }}</p>
           
           <p class="prj-text" v-if="PropertyName.toLowerCase() === 'memory'">Used Memory</p>
           <p class="prj-text" v-if="PropertyName.toLowerCase() == 'memory'">{{ VirtualMachine['Resources'][PropertyName] || 0 }}MB</p>
+          <p class="prj-text" v-if="PropertyName.toLowerCase() == 'memory'">{{ GetMemoryUsage() || 0 }}MB</p>
           
           <p class="prj-text" v-if="PropertyName.toLowerCase() === 'storagecapacity'">Used Storage</p>
           <p class="prj-text" v-if="PropertyName.toLowerCase() == 'storagecapacity'">{{ VirtualMachine['Resources'][PropertyName] || 0 }}GB</p>
-
+          <p class="prj-text" v-if="PropertyName.toLowerCase() == 'storagecapacity'">{{ GetStorageDiskUsage() || 0 }}GB</p>
           <!-- Receiving the Cost of the Specific Property  (Cpu, Memory, etc....)-->
           <p class="prj-text">
             &#36;{{ GetPropertyCost(PropertyName, VirtualMachine['Resources'][PropertyName]) }} 
           </p>
+
         </div>
       </div>
       <div class="amount">
@@ -154,70 +162,6 @@
         </p>
       </div>
     </div>
-
-    <h1 style="color: white; margin-top: 40px; margin-bottom: 20px;">Configuration</h1>
-
-     <div class="details">
-      <div class="project-info">
-        <p class="project-id">#{{ VirtualMachine.VirtualMachineId }}</p>
-        <p class="project-desc">{{ VirtualMachine.VirtualMachineName }}</p>
-      </div>
-
-      <div class="date">
-        <p class="project-id" style="margin-bottom: 10px">Bill Due Date</p>
-        <p class="date-body">{{ VirtualMachine.paymentDueDate || new Date() }}</p>
-
-        <p class="project-id" style="margin-top: 30px">Bill Due Terms</p>
-        <p class="due-body">{{ VirtualMachine.PaymentDue || 0 }} days</p>
-      </div>
-      <div class="name">
-        <p class="project-id" style="margin-bottom: 10px">Bill to</p>
-        <p class="name-body">{{ VirtualMachine.Owner.Username }}</p>
-        <p class="name-body">{{ VirtualMachine.Owner.Email }}</p>
-        <p class="name-body">{{ VirtualMachine.Owner.City }}, {{ VirtualMachine.Owner.Country }}</p>
-        <p class="name-body">{{ VirtualMachine.Owner.ZipCode }}</p>
-      </div>
-
-      <div class="adress">
-        <p class="project-id">Bill From</p>
-        <p class="adress-street" style="margin-top: 10px">KubeLagoon, Inc</p>
-        <p class="adress-city" style="margin-top: 10px">Vancoover, Canada</p>
-        <p class="adress-postcode" style="margin-top: 10px">125167</p>
-        <p class="adress-country" style="margin-top: 10px">Smith Street, 4</p>
-      </div>
-      <div class="item-container">
-        <p>Resource</p> 
-        <p>Capacities</p>
-        <p>Bill</p>
-        <div
-          class="project-item"
-          v-for="(PropertyName, index) in Object.keys(
-            {
-                'CpuNum': VirtualMachine.CpuNum, 
-                'Memory': VirtualMachine.Memory, 
-                'StorageCapacity': VirtualMachine.StorageCapacity,
-            }
-          )"
-          :key="index"
-        >
-          <p class="prj-text" v-if="PropertyName.toLowerCase() === 'cpunum'">CPU</p>
-          <p class="prj-text" v-if="PropertyName.toLowerCase() == 'cpunum'">{{ VirtualMachine['Resources'][PropertyName] || 0 }}</p>
-          
-          <p class="prj-text" v-if="PropertyName.toLowerCase() === 'memory'">Memory</p>
-          <p class="prj-text" v-if="PropertyName.toLowerCase() == 'memory'">{{ VirtualMachine['Resources'][PropertyName] || 0 }}MB</p>
-          
-          <p class="prj-text" v-if="PropertyName.toLowerCase() === 'storagecapacity'">Storage</p>
-          <p class="prj-text" v-if="PropertyName.toLowerCase() == 'storagecapacity'">{{ VirtualMachine['Resources'][PropertyName] || 0 }}GB</p>
-
-          <!-- Receiving the Cost of the Specific Property  (Cpu, Memory, etc....)-->
-          <p class="prj-text">
-            &#36;{{ GetPropertyCost(PropertyName, VirtualMachine['Resources'][PropertyName]) }} 
-          </p>
-        </div>
-      </div>
-    </div>
-
-    <chart-page :VirtualMachineId="VirtualMachineId" />
 
     <v-snackbar v-model="OperationFailed" top color="red">
         Operation Failed, {{ VirtualMachineServerError }}
@@ -245,6 +189,7 @@ import { useCookies } from "vue3-cookies";
 import * as cost from "../../cost/virtualMachineCost";
 import VirtualServerNotFoundWindow from "./VirtualServerNotFoundWindow.vue";
 import ChartPage from "../components/ResourceCharts.vue"
+import * as usage from "../../usage/usage.js"
 
 export default {
 
@@ -387,6 +332,27 @@ export default {
         this.toggleSuccess("Server Rebooted Successfully")
       }
     },
+
+    GetStorageDiskUsage() {
+      // Returns Storage Disk Usage Capacity of the Virtual Machine Server 
+      let StorageManager = new usage.ResourceUsageManager()
+      let CurrentUsage = StorageManager.GetStorageUsageInfo(this.JwtToken, this.VirtualMachineId)["Metrics"][0]["value"]
+      return CurrentUsage
+    }, 
+
+    GetCpuUsage() {
+      // Returns CPU Usage of the Virtual Machine Server 
+      let CpuManager = new usage.ResourceUsageManager()
+      let CurrentUsage = CpuManager.GetCpuUsageInfo(this.JwtToken, this.VirtualMachineId)["Metrics"][0]["value"]
+      return CurrentUsage
+    },
+
+    GetMemoryUsage() {
+      // Returns Memory Usage of the Virtual Machine Server 
+      let MemoryManager = new usage.ResourceUsageManager()
+      let CurrentUsage = MemoryManager.GetMemoryUsageInfo(this.JwtToken, this.VirtualMachineId)["Metrics"][0]["value"]
+      return CurrentUsage
+    }
   },
   computed: {
     ...mapState([

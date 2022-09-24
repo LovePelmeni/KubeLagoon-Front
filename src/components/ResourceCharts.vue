@@ -1,12 +1,11 @@
 <template>
 
-      <!-- Resource Chart -->
-<div class="py-4 container" style="justify-content: space-between; flex-direction: row; display: flex;">
+<!-- Resource Chart -->
+<div class="py-4 container-fluid" style="justify-content: space-between; display: flex; max-width: 5000px;">
     
-   <div class="mt-4 row">
+   <div class="mt-4 row" style="justify-content: space-between; display: flex;">
 
-      <div class="mb-3=4 col-lg-5 mb-lg-0">
-
+    <div class="mb-4 col-lg-5 mb-lg-0" style="">
         <div class="card z-index-2">
           <div class="p-3 card-body">
 
@@ -39,8 +38,11 @@
           />
             </div>
           </div>
-      </div>
-      
+        </div>
+
+    <div class="mb-4 col-lg-5 mb-lg-0" style="   
+    margin: 0;
+    position: relative">
         <div class="card z-index-2">
           <div class="p-3 card-body">
             <capacity-chart
@@ -49,15 +51,13 @@
               description="(<strong>+23%</strong>) than last week"
               :chart="{
                 labels: [
-                  'Apr',
-                  'May',
-                  'Jun',
-                  'Jul',
-                  'Aug',
-                  'Sep',
-                  'Oct',
-                  'Nov',
-                  'Dec',
+                'Monday',
+                'Tuesday',
+                'Wednesday',
+                'Thirsday',
+                'Friday',
+                'Saturday',
+                'Sunday',
                 ],
                 datasets: {
                   label: '',
@@ -68,23 +68,24 @@
                 {
                   icon: { color: 'primary', component: faUsers },
                   label: 'CPU',
-                  progress: { content: CurrentCpuCapacity, percentage: CpuCapacityPercentage },
+                  progress: { content: CurrentCpuCapacity, percentage: 90 },
                 },
                 {
                   icon: { color: 'info', component: faHandPointer },
                   label: 'RAM Memory',
-                  progress: { content: CurrentMemoryCapacity, percentage: MemoryCapacityPercentage },
+                  progress: { content: CurrentMemoryCapacity, percentage: 10 },
                 },
                 {
                   icon: { color: 'warning', component: faCreditCard },
                   label: 'Storage Disk',
-                  progress: { content: CurrentStorageDiskCapacity, percentage: StorageCapacityPercentage },
+                  progress: { content: CurrentStorageDiskCapacity, percentage: 20 },
                 },
               ]"
             />
           </div>
         </div>
       </div> 
+   </div>
    </div>
 
 </template>
@@ -99,7 +100,7 @@ import GradientChart from "../components/charts/gradientChart.vue"
 import CapacityChart from "../components/charts/capacityChart.vue"
 import { mapState } from "vuex";
 
-import {faUsers, faCreditCard, faHandPointer} from "@fortawesome/free-solid-svg-icons"
+import { faUsers, faCreditCard, faHandPointer } from "@fortawesome/free-solid-svg-icons"
 
 
 class CpuMetricsMountManager {
@@ -145,7 +146,7 @@ class MemoryMetricsMountManager {
         // Returns CPU Usage Metrics Data 
         let VirtualMachineId = this.self.VirtualMachineId 
         let ResourceManager = new resources.ResourceUsageManager()
-        let data  = ResourceManager.GetMemoryUsageInfo(this.self.JwtToken, VirtualMachineId) 
+        let data = ResourceManager.GetMemoryUsageInfo(this.self.JwtToken, VirtualMachineId) 
         return data
     }
     GetCurrentMemoryCapacity(JwtToken, VirtualMachineId) {
@@ -273,10 +274,159 @@ export default {
     }
 }; 
 
+
 </script>
 
 
 <style lang="scss">
+
+.mb-lg-0 {
+    margin-bottom: 0!important;
+}
+.mb-4 {
+    margin-bottom: 1.5rem!important;
+}
+.col-lg-5 {
+    flex: 0 0 auto;
+}
+
+.progress-bar {
+    height: 6px;
+    border-radius: 0.25rem;
+    margin-top: -2px;
+}
+.bg-dark {
+    background-color: #344767!important;
+}
+
+.w-30 {
+    width: 30%!important;
+}
+
+.progress-bar {
+    flex-direction: column;
+    justify-content: center;
+    color: #fff;
+    text-align: center;
+    white-space: nowrap;
+    background-color: #cb0c9f;
+    transition: width .6s ease;
+}
+
+.progress, .progress-bar {
+    display: flex;
+}
+
+.progress {
+    overflow: visible;
+}
+
+.w-75 {
+    width: 75%!important;
+    background-color: black;
+}
+.progress, .progress-bar {
+    display: flex;
+    overflow: hidden;
+}
+.progress {
+    height: 3px;
+    font-size: .75rem;
+    background-color: #e9ecef;
+    border-radius: 0.5rem;
+}
+
+text-sm {
+    font-size: .875rem!important;
+}
+
+.ps-0 {
+    padding-left: 0!important;
+}
+
+.py-3 {
+    padding-top: 1rem!important;
+    padding-bottom: 1rem!important;
+}
+.col-3 {
+    flex: 0 0 auto;
+    width: 25%;
+}
+
+.fa-arrow-up:before {
+    content: "\f062";
+}
+
+.fa-arrow-up:before {
+    content: "\f062";
+}
+*, :after, :before {
+    box-sizing: border-box;
+}
+
+.border-radius-lg {
+    border-radius: 0.75rem;
+}
+
+.bg-gradient-dark {
+    background-image: linear-gradient(310deg,#141727,#3a416f);
+}
+.pe-1 {
+    padding-right: 0.25rem!important;
+}
+.py-3 {
+    padding-top: 1rem!important;
+    padding-bottom: 1rem!important;
+}
+.mb-3 {
+    margin-bottom: 1rem!important;
+}
+
+.mb-0 {
+    margin-bottom: 0!important;
+}
+.mt-4 {
+    margin-top: 1.5rem!important;
+}
+.h4, .h5, .h6, h4, h5, h6 {
+    font-weight: 600;
+}
+.h6, h6 {
+    font-size: 1rem;
+    line-height: 1.625;
+}
+
+.text-sm {
+    line-height: 1.5;
+}
+.ms-2 {
+    margin-left: 0.5rem!important;
+}
+p {
+    line-height: 1.625;
+    font-weight: 400;
+}
+.p, p {
+    font-size: 1rem;
+}
+.lead, .p, p {
+    font-weight: 400;
+}
+.p, p {
+    line-height: 1.6;
+}
+
+.ps-0 {
+    padding-left: 0!important;
+}
+.py-3 {
+    padding-top: 1rem!important;
+    padding-bottom: 1rem!important;
+}
+.col-3 {
+    flex: 0 0 auto;
+    width: 25%;
+}
 
 card .card-header {
     padding: 1.5rem;
@@ -285,17 +435,17 @@ card .card-header {
 .card-header:first-child {
     border-radius: 1rem 1rem 0 0;
 }
-.pb-0 {
-    padding-bottom: 0!important;
-}
-.p-3 {
-    padding: 1rem!important;
-}
+
 .card-header {
     padding: 0.5rem 1rem;
     margin-bottom: 0;
     background-color: #1e2238;;
     border-bottom: 0 solid rgba(0,0,0,.125);
+}
+
+body {
+    font-weight: 400;
+    line-height: 1.6;
 }
 
 .col-lg-7 {
@@ -336,14 +486,20 @@ div {
     border: 0 solid rgba(0,0,0,.125);
     border-radius: 1rem;
 }
-.row {
+.row>* {
     --bs-gutter-x: 1.5rem;
     --bs-gutter-y: 0;
-    display: flex;
+    // display: flex;
+
+    justify-content: space-between;
+    
     flex-wrap: wrap;
     margin-top: calc(var(--bs-gutter-y)*-1);
     margin-right: calc(var(--bs-gutter-x)*-0.5);
     margin-left: calc(var(--bs-gutter-x)*-0.5);
+    padding-top: calc(var(--bs-gutter-x)*0.5);
+    padding-right: calc(var(--bs-gutter-x)*0.5);
+    padding-left: calc(var(--bs-gutter-x)*0.5);
 }
 body {
     font-weight: 400;
