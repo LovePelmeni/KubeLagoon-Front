@@ -45,7 +45,12 @@ export default new Vuex.Store({
           "Street": "Smith's Street, 4",
           "ZipCode": "125167",
         },
-        "Resources": {
+        "Capacities": { // Capacities, specified by the Customer 
+          "MaxMemory": 1000,
+          "MaxCpuNum": 1000,
+          "MaxStorageCapacity": 1000,
+        },
+        "Resources": { // Used Resources by the Virtual Machine Server by now
           "CpuNum": 10,
           "Memory": 100,
           "StorageCapacity": 100,
@@ -59,6 +64,7 @@ export default new Vuex.Store({
         "Shutdown": false, 
         "paymentDueDate": "2020-20-02",         
         "CreatedAt": "1/2/2019",
+
         "Owner": {
           "Username": "johnMa",
           "Email": "john@gmail.com",
@@ -66,6 +72,11 @@ export default new Vuex.Store({
           "Country": "Canada",
           "Street": "Smith's Street, 4",
           "ZipCode": "125167",
+        },
+        "Capacities": { // Capacities, specified by the Customer 
+          "MaxMemory": 1000,
+          "MaxCpuNum": 1000,
+          "MaxStorageCapacity": 1000,
         },
         "Resources": {
           "CpuNum": 100,
@@ -89,6 +100,11 @@ export default new Vuex.Store({
           "Street": "Smith's Street, 4",
           "ZipCode": "125167",
         },
+        "Capacities": { // Capacities, specified by the Customer 
+          "MaxMemory": 1000,
+          "MaxCpuNum": 1000,
+          "MaxStorageCapacity": 1000,
+        },
         "Resources": {
           "CpuNum": 10,
           "Memory": 100,
@@ -111,6 +127,12 @@ export default new Vuex.Store({
           "City": "Toronto",
           "Street": "Smith's Street, 4",
           "ZipCode": "125167",
+        },
+
+        "Capacities": { // Capacities, specified by the Customer 
+          "MaxMemory": 1000,
+          "MaxCpuNum": 1000,
+          "MaxStorageCapacity": 1000,
         },
 
         "Resources": {
@@ -138,6 +160,11 @@ export default new Vuex.Store({
           "ZipCode": "125167",
         },
 
+        "Capacities": { // Capacities, specified by the Customer 
+          "MaxMemory": 1000,
+          "MaxCpuNum": 1000,
+          "MaxStorageCapacity": 1000,
+        },
 
         "Resources": {
           "CpuNum": 5,

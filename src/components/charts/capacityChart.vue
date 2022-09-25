@@ -4,11 +4,12 @@
       <canvas style="height: 170px; width: 400px; max-width: 1000px; display: block; box-sizing: border-box;" :id="id" class="chart-canvas" height="150"></canvas>
     </div>
   </div>
-  <h6 class="mt-4 mb-0 ms-2" style="margin-top: 20px;">Total Resource Usage</h6>
+  <h6 class="mt-4 mb-0 ms-2" style="margin-top: 50px;">Total Resource Usage</h6>
+
   <!-- eslint-disable vue/no-v-html -->
   <p class="text-sm ms-2" v-html="description" />
   <div class="container border-radius-lg" style="max-height: 300px; height: 188px; align-items: center;">
-    <div class="row" style="justify-content: space-between; display: flex; margin-bottom: 30px; align-items: center;">
+    <div class="row" style="justify-content: space-between; display: flex; align-items: center;">
       <div
         v-for="(
           {
@@ -25,7 +26,7 @@
         <div class="mb-2 d-flex">
           <div
             class="text-center shadow icon icon-shape icon-xxs border-radius-sm me-2 d-flex align-items-center justify-content-center"
-            :class="`bg-gradient-${colour}`"
+            :class="`bg-gradient-${colour}`" style="border-radius: 0.25rem;"
           >
             <font-awesome-icon
               :icon="component"
@@ -35,7 +36,7 @@
           </div>
           <p class="mt-1 mb-0 text-xs font-weight-bold" style="margin-top: 50px;">{{ label }}</p>
         </div>
-        <h4 class="font-weight-bolder">{{ content }}</h4>
+        <h4 class="font-weight-bolder" style="margin-right: 15px;">{{ content }}</h4>
         <div class="progress w-75">
           <div
             class="progress-bar bg-dark"

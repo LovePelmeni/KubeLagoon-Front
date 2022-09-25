@@ -48,7 +48,7 @@
             <capacity-chart
               id="chart-bar"
               title="Total Resource Usage Per Day (CPU + Memory + Disk)"
-              description="(<strong>+23%</strong>) than last week"
+              :description="`(<strong>${Sign + String(AverageComparisationPercentage) }%</strong>) of Usage than yesterday`"
               :chart="{
                 labels: [
                 'Monday',
@@ -66,19 +66,19 @@
               }"
               :items="[
                 {
-                  icon: { color: 'primary', component: faUsers },
+                  icon: { color: 'primary', component: faMicrochip },
                   label: 'CPU',
-                  progress: { content: CurrentCpuCapacity, percentage: 90 },
+                  progress: { content: CurrentCpuCapacity, percentage: CpuCapacityPercentage },
                 },
                 {
-                  icon: { color: 'info', component: faHandPointer },
-                  label: 'RAM Memory',
-                  progress: { content: CurrentMemoryCapacity, percentage: 10 },
+                  icon: { color: 'info', component: faMemory },
+                  label: 'RAM',
+                  progress: { content: String(CurrentMemoryCapacity) + 'MB', percentage: MemoryCapacityPercentage },
                 },
                 {
-                  icon: { color: 'warning', component: faCreditCard },
-                  label: 'Storage Disk',
-                  progress: { content: CurrentStorageDiskCapacity, percentage: 20 },
+                  icon: { color: 'warning', component: faHardDrive },
+                  label: 'Storage',
+                  progress: { content: String(CurrentStorageDiskCapacity) + 'GB', percentage: StorageCapacityPercentage },
                 },
               ]"
             />
@@ -95,12 +95,17 @@
 
 /* eslint-disable no-extra-semi */
 
+
 import * as resources from "../../usage/usage.js"
 import GradientChart from "../components/charts/gradientChart.vue"
 import CapacityChart from "../components/charts/capacityChart.vue"
 import { mapState } from "vuex";
 
-import { faUsers, faCreditCard, faHandPointer } from "@fortawesome/free-solid-svg-icons"
+import { 
+    faMicrochip,
+    faMemory,
+    faHardDrive,
+} from "@fortawesome/free-solid-svg-icons"
 
 
 class CpuMetricsMountManager {
@@ -203,14 +208,20 @@ export default {
         this.MountCurrentResourceCapacities()
         this.MountResourcePercentages()
         this.GetVirtualMachineServer()
+        this.GetComparedAveragePercentage()
     },
     data() {
         return {
-            // Font SVG Files 
 
-            faUsers: faUsers,
-            faHandPointer: faHandPointer,
-            faCreditCard: faCreditCard,
+            // Avarage Usage Percentage 
+            AverageComparisationPercentage: null,
+            Sign: null, // can be + or - , depeding on the usage between the days
+
+            // Font SVG Files 
+        
+            faHardDrive: faHardDrive,
+            faMemory: faMemory,
+            faMicrochip: faMicrochip,
 
             // Resource Usage Chart Data 
             totalResources: [100, 200, 250, 100, 10, 130, 120, 110, 100], // total Resource Usage summary within the Week 
@@ -225,7 +236,7 @@ export default {
             // Current Resource Capacities
             CurrentMemoryCapacity: 10,
             CurrentCpuCapacity: 15,
-            CurrentStorageCapacity: 30,
+            CurrentStorageDiskCapacity: 30,
 
             VirtualMachine: {},
 
@@ -241,12 +252,34 @@ export default {
     },
     methods: {
 
+
+        GetComparedAveragePercentage() {
+            // Returns the Percentage of the Resource Usage, depending on the previous day
+
+            let TodayTotalUsage = Number(this.totalResources.at(-1))
+            let YesterdayTotalUsage = Number(this.totalResources.at(-2))
+            let Average = 0
+            let Sign = "~"
+
+            // Compares Today's and Yesterday's Total Resource Usage and make an average
+            if (TodayTotalUsage > YesterdayTotalUsage) {
+                Average = Math.round(TodayTotalUsage - YesterdayTotalUsage)
+                Sign = "+"
+            }
+            if (YesterdayTotalUsage > TodayTotalUsage) {
+                Average = Math.round(YesterdayTotalUsage - TodayTotalUsage)
+                Sign = "-"
+            }
+            this.AverageComparisationPercentage = Average
+            this.Sign = Sign
+        },
+
         GetVirtualMachineServer() {
             // Gets Info about the Virtual Machine Server 
             let VirtualMachine = this.virtualMachineData.filter((virtualMachine) => {
                 return virtualMachine.VirtualMachineId === this.VirtualMachineId
             })
-            this.VirtualMachine = VirtualMachine
+            return VirtualMachine 
         },
 
         MountCurrentResourceCapacities() {
@@ -255,10 +288,11 @@ export default {
 
         MountResourcePercentages() {
             // Mounts Resource Percentage to the Chart
+            let VirtualMachine = this.GetVirtualMachineServer()[0]
 
-            let StorageDiskPercentage = this.StorageManager.GetStorageDiskOverflowPercentage(this.CurrentStorageCapacity, this.VirtualMachine.MaxStorageCapacity)
-            let MemoryPercentage = this.MemoryManager.GetMemoryOverflowPercentage(this.CurrentMemoryCapacity, this.VirtualMachine.MaxMemory)
-            let CpuPercentage = this.CpuManager.GetCpuOverflowPercentage(this.CurrentCpuCapacity, this.VirtualMachine.MaxCpu)
+            let StorageDiskPercentage = Math.round(this.StorageManager.GetStorageDiskOverflowPercentage(Number(this.CurrentStorageDiskCapacity), Number(VirtualMachine["Capacities"].MaxStorageCapacity)))
+            let MemoryPercentage = Math.round(this.MemoryManager.GetMemoryOverflowPercentage(Number(this.CurrentMemoryCapacity), Number(VirtualMachine["Capacities"].MaxMemory)))
+            let CpuPercentage = Math.round(this.CpuManager.GetCpuOverflowPercentage(Number(this.CurrentCpuCapacity), Number(VirtualMachine["Capacities"].MaxCpuNum)))
 
             this.StorageCapacityPercentage = StorageDiskPercentage 
             this.MemoryCapacityPercentage = MemoryPercentage 
@@ -279,6 +313,135 @@ export default {
 
 
 <style lang="scss">
+
+
+.mb-2 {
+    margin-bottom: 0.5rem!important;
+}
+
+.d-flex {
+    display: flex!important;
+}
+
+svg:not(:root).svg-inline--fa, svg:not(:host).svg-inline--fa {
+    overflow: visible;
+    box-sizing: content-box;
+}
+
+.border-radius-sm {
+    border-radius: 0.25rem;
+}
+
+.svg-inline--fa.fa-xs {
+    vertical-align: 0em;
+}
+.fa-xs {
+    font-size: .75em;
+}
+.fa-xs {
+    font-size: 0.75em;
+    line-height: 0.0833333337em;
+    vertical-align: 0.125em;
+}
+
+.svg-inline--fa {
+    display: var(--fa-display, inline-block);
+    height: 1em;
+    overflow: visible;
+    vertical-align: -0.125em;
+}
+
+.bg-gradient-primary {
+    background-image: linear-gradient(310deg,#7928ca,#ff0080);
+}
+
+.bg-gradient-warning {
+    background-image: linear-gradient(310deg,#f53939,#fbcf33);
+}
+
+.bg-gradient-info {
+    background-image: linear-gradient(310deg,#2152ff,#21d4fd);
+}
+
+.border-radius-sm {
+    border-radius: 0.25rem;
+}
+
+.icon-xxs {
+    width: 20px;
+    height: 20px;
+}
+.icon-shape {
+    width: 48px;
+    height: 48px;
+    background-position: 50%;
+    border-radius: 0.75rem;
+}
+
+.text-center {
+    text-align: center!important;
+}
+.me-2 {
+    margin-right: 0.5rem!important;
+}
+.align-items-center {
+    align-items: center!important;
+}
+.justify-content-center {
+    justify-content: center!important;
+}
+.shadow {
+    box-shadow: 0 .25rem .375rem -.0625rem rgba(20,20,20,.12),0 .125rem .25rem -.0625rem rgba(20,20,20,.07)!important;
+}
+.d-flex {
+    display: flex!important;
+}
+
+.icon {
+    fill: currentColor;
+    stroke: none;
+}
+
+.icon {
+    display: inline-block;
+    color: #111;
+    height: 2em;
+    width: 2em;
+}
+
+
+.font-weight-bolder {
+    font-weight: 700!important;
+}
+
+.h1, .h2, .h3, .h4 {
+    letter-spacing: -.05rem;
+}
+.h4 {
+    font-weight: 600;
+}
+.h4 {
+    font-size: 1.5rem;
+    line-height: 1.375;
+}
+
+
+.font-weight-bold {
+    font-weight: 600!important;
+}
+
+.text-xs {
+    font-size: .75rem!important;
+}
+.text-xs {
+    line-height: 1.25;
+}
+.mb-0 {
+    margin-bottom: 0!important;
+}
+.mt-1 {
+    margin-top: 0.25rem!important;
+}
 
 .mb-lg-0 {
     margin-bottom: 0!important;
@@ -324,7 +487,14 @@ export default {
 .w-75 {
     width: 75%!important;
     background-color: black;
+    --bs-gutter-x: 1.5rem;
+    --bs-gutter-y: 0;
 }
+
+progress {
+    overflow: visible;
+}
+
 .progress, .progress-bar {
     display: flex;
     overflow: hidden;
@@ -516,5 +686,14 @@ body {
     background-color: var(--bs-body-bg);
     -webkit-text-size-adjust: 100%;
     -webkit-tap-highlight-color: transparent;
+}
+
+h4 {
+    display: block;
+    margin-block-start: 1.33em;
+    margin-block-end: 1.33em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    font-weight: bold;
 }
 </style>
