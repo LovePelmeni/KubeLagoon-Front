@@ -172,8 +172,8 @@
     </v-snackbar>
 
   </main>
-
   </div>
+
   <div v-else> 
     <virtual-server-not-found-window />
   </div>
@@ -625,5 +625,7 @@ export default {
   }
 }
 
+html {width:100%; overflow:hidden}
+body {width: 100%;}
 
 </style>

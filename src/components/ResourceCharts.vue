@@ -1,13 +1,13 @@
 <template>
 
 <!-- Resource Chart -->
-<div class="py-4 container-fluid" style="justify-content: space-between; display: flex; max-width: 5000px;">
+<div class="py-4 container-fluid">
     
    <div class="mt-4 row" style="justify-content: space-between; display: flex;">
 
-    <div class="mb-4 col-lg-5 mb-lg-0" style="">
+    <div class="mb-4 col-lg-5 mb-lg-0" style="max-width: 5000px;">
         <div class="card z-index-2">
-          <div class="p-3 card-body">
+          <div class="p-3 card-body" style="max-width: 5000px;">
 
           <gradient-chart
             id="chart-line"
@@ -42,9 +42,9 @@
 
     <div class="mb-4 col-lg-5 mb-lg-0" style="   
     margin: 0;
-    position: relative">
+    max-width: 100%">
         <div class="card z-index-2">
-          <div class="p-3 card-body">
+          <div class="p-3 card-body" style="max-width: 100%">
             <capacity-chart
               id="chart-bar"
               title="Total Resource Usage Per Day (CPU + Memory + Disk)"

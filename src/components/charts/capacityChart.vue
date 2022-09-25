@@ -1,14 +1,14 @@
 <template>
   <div class="py-3 mb-3 border-radius-lg pe-1" :class="`bg-gradient-${color}`">
     <div class="chart">
-      <canvas style="height: 170px; width: 368.5px; display: block; box-sizing: border-box;" :id="id" class="chart-canvas" height="150"></canvas>
+      <canvas style="height: 170px; width: 400px; max-width: 1000px; display: block; box-sizing: border-box;" :id="id" class="chart-canvas" height="150"></canvas>
     </div>
   </div>
   <h6 class="mt-4 mb-0 ms-2" style="margin-top: 20px;">Total Resource Usage</h6>
   <!-- eslint-disable vue/no-v-html -->
   <p class="text-sm ms-2" v-html="description" />
-  <div class="container border-radius-lg">
-    <div class="row">
+  <div class="container border-radius-lg" style="max-height: 300px; height: 188px; align-items: center;">
+    <div class="row" style="justify-content: space-between; display: flex; margin-bottom: 30px; align-items: center;">
       <div
         v-for="(
           {
