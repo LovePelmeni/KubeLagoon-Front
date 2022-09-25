@@ -1,5 +1,7 @@
 <template>
 
+      <div class="resourceConfigurationBlock" style="justify-content: space-around;">
+
       <h1 style="margin-top: 20px;">Resource Configuration</h1>
       <div class="modalField flex flex-column">
         <label for="CpuNum">CPU</label>
@@ -119,6 +121,8 @@
           id="MaxStorageCapacity"
           v-model="MaxStorageCapacity"/>
         </div>
+      </div>
+
       </div>
 
 </template>

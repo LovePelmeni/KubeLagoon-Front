@@ -2,28 +2,28 @@
 
   <div class="virtual-machine-wrap">
     <v-col cols="10" lg="4" class="mx-auto">
-      <v-card style="max-width: 50000px;" class="pa-4">
+      <v-card style="min-width: 30%; max-width: 100%; overflow: hidden;" class="pa-4">
 
-    <v-form class="virtual-machine-content" id="form" ref="form" style=" justify-content: center; max-width: 100000px; gap: 1">
+    <v-form class="min-width: 30%; virtual-machine-content" id="form" ref="form" style="max-width: 100%; overflow: hidden; gap: 1">
 
       <!-- Virtual Machine Work Details -->
 
-        <div class="resourceConfigBlock" style="width: 800px">
+        <div class="resourceConfigBlock" style="width: 800px max-width: 100%; overflow: hidden;">
         <!-- Hardware Configuration  -->
           <hardwareConfiguration />
         </div>
 
-        <div class="resourceConfigBlock" style="width: 800px">
+        <div class="resourceConfigBlock" style="width: 800px; max-width: 100%; overflow: hidden;">
           <!-- resource Configuration -->
           <resourceConfiguration />
         </div>
 
-        <div class="resourceConfigBlock" style="width: 800px">
+        <div class="resourceConfigBlock" style="width: 800px; max-width: 100%; overflow: hidden;">
           <!-- SSH Configuration -->
           <sshConfiguration />
         </div>
 
-        <div class="payment flex" style="width: 800px">
+        <div class="payment flex" style="width: 800px; max-width: 100%; overflow: hidden;">
 
           <div class="modalField flex flex-column">
             <label for="virtualMachineCreationDate">Creation Date</label>
@@ -39,14 +39,14 @@
         <div class="modalField flex flex-column">
 
           <label for="paymentTerms">Payment Terms</label>
-          <select @change="ProcessPaymentTermsChangeEvent" style="width: 750px" type="text" id="paymentTerms" v-model="paymentTerms">
+          <select @change="ProcessPaymentTermsChangeEvent" style="margin-left: 50px; width: 750px; max-width: 100%; overflow: hidden;" type="text" id="paymentTerms" v-model="paymentTerms">
             <option value="30">Net 30 Days</option>
             <option value="60">Net 60 Days</option>
           </select>
           
         </div>
 
-        <div class="TotalCost flex" style="width: 750px; justify-content: center;">
+        <div class="TotalCost flex" style="width: 750px; max-width: 100%; overflow: hidden;">
           <p>In Total Per Day</p>
           <p>${{ TotalCost }}</p>
         </div>
@@ -55,7 +55,7 @@
 
               <div class="save flex">
 
-                  <div class="buttonBlock flex" style="width: 800px">
+                  <div class="buttonBlock flex" style="width: 800px; max-width: 100%; overflow: hidden;">
                     <v-btn type="submit" @click="closeVirtualMachineSettings" id="" style="background-color: #ec5757" :loading="CancelLoading"> Cancel Setup</v-btn>
                     <v-btn v-if="!updateVirtualMachine" style="background-color: #252945;" :loading="Saveloading" type="submit" @submit="saveVirtualMachineDraft">Save Setup</v-btn>
                     <v-btn v-if="!updateVirtualMachine" style="background-color: #7c5dfa;" :loading="Createloading" type="submit" @submit="CreateNewVirtualMachine">Create Server</v-btn>
@@ -316,6 +316,8 @@ export default {
   position: relative;
   width: 100%;
   background-color: #141625;
+  margin-left: auto;
+  margin-right: auto;
 
   .resourceConfigBlock {
     margin-top: 30px;
