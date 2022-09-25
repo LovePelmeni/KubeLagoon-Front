@@ -12,8 +12,11 @@
           <gradient-chart
             id="chart-line"
             title="Gradient Line Chart"
-            description="<i class='fa fa-arrow-up text-success'></i>
-            <span class='font-weight-bold'>4% more</span> in 2021"
+            :description="`
+            
+            <i class='fa fa-arrow-up text-success'></i>
+            <span class='font-weight-bold'>${AverageComparisationPercentage}%</span> than Yesterday`"
+
             :chart="{
               labels: [
                 'Monday',
@@ -527,9 +530,10 @@ text-sm {
     content: "\f062";
 }
 
-.fa-arrow-up:before {
-    content: "\f062";
+.fa-arrow-down:before {
+    content: "\f062"
 }
+
 *, :after, :before {
     box-sizing: border-box;
 }
