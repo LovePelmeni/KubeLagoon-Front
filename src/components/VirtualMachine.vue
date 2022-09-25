@@ -16,7 +16,7 @@
 
 
     <chart-page :VirtualMachineId="VirtualMachine.VirtualMachineId"  />
-    <div class="status-container">
+    <div class="status-container" style="max-width: 100%; overflow: hidden">
 
       <p class="status-title" style="margin-top: 6px; margin-right: 3px;">Status</p>
       <div style="margin-top: 6px; margin-left: 40px;"

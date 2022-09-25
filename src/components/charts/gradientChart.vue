@@ -6,7 +6,7 @@
   </div>
   <div class="p-3 card-body">
     <div class="chart">
-      <canvas style="width: 400px; height: 350px; display: block; box-sizing: border-box;" :id="id" class="chart-canvas" :height="height" :width="width"></canvas>
+      <canvas style="min-width: 450px; height: 350px; display: block; box-sizing: border-box;" :id="id" class="chart-canvas" :height="height" :width="width"></canvas>
     </div>
   </div>
 </template>
