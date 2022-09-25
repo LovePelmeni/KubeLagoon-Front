@@ -34,8 +34,14 @@ Platform Provides the Virtual Server Info Page so you can Get Specific Informati
   <a><img src="./extra_photos/virtual_server_page.png" style="width: 100%; height: 100%" alt="Infrastructure"></a>
 </p>
 
-
 Provides the Configuration Form, where you can setup hardware / customized resources and get realtime cost of your setup
+
+Supports the Chart Diagrams to show the  Resources Usage of your Server 
+
+
+<p align="center">
+  <a><img src="./extra_photos/chart_diagrams.png" style="width: 100%; height: 100%" alt="Infrastructure"></a>
+</p>
 
 
 Also provides some basic Login / Registration / Reset Password Pages as well
