@@ -79,35 +79,34 @@ metadata:
   namespace: app-namespace 
 data:
   nginx.conf: | 
-
       events {
-      worker_connections 1024;
+          worker_connections 1024;
       }
 
       http {
 
-        # Upstreams Configuration for the Frontend Nginx Server
-        upstream front_application_upstream {
-            server front_application:3000;
-        }
-        # Server Configuration for the Nginx Server 
-        server {
-              listen 90;
+          # Upstreams Configuration for the Frontend Nginx Server
+          upstream front_application_upstream {
+              server front_application:3000;
+          }
+          # Server Configuration for the Nginx Server 
+          server {
+
+              listen 4000;
               # Base Location for the Not Found Page 
               location @not_found {
-                  proxy_pass http://front_application:3000/not/found;
-                  proxy_set_header Host $http_host;
-                  proxy_set_header Upgrade $http_upgrade;
+                  # Redirects to the Not Found Page
+                  rewrite ^/not/found(.*)$ https://${applicationHost}:${applicationPort}/$1 redirect;
               }
               # Base Location for All Routes
               location / {
-                  proxy_pass http://application_upstream;
+                  proxy_pass http://front_application_upstream;
                   proxy_set_header Host    $http_host;
                   proxy_set_header Upgrade $http_upgrade;
                   add_header Access-Control-Allow-Origin "*";
-                  add_header Access-Control-Allow-Credentials "true";
+                  add_header Access-Control-Allow-Credentials: "true";
                   add_header Access-Control-Allow-Methods "GET,POST,PUT,OPTIONS,DELETE";
-                  error_page 404;
+                  error_page 404 @not_found;
               }
           }
       }

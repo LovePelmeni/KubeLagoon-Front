@@ -12,9 +12,7 @@
           <gradient-chart
             id="chart-line"
             title="Gradient Line Chart"
-            :description="`
-            
-            <i class='fa fa-arrow-up text-success'></i>
+            :description="`<i :v-if='Sign = '+'' class='fa fa-arrow-up text-success'></i> <i v-else='Sign == '-'' class='fa fa-arrow-down text-success' />
             <span class='font-weight-bold'>${AverageComparisationPercentage}%</span> than Yesterday`"
 
             :chart="{
@@ -95,9 +93,7 @@
 
 <script>
 
-
 /* eslint-disable no-extra-semi */
-
 
 import * as resources from "../../usage/usage.js"
 import GradientChart from "../components/charts/gradientChart.vue"
@@ -110,29 +106,21 @@ import {
     faHardDrive,
 } from "@fortawesome/free-solid-svg-icons"
 
-
 class CpuMetricsMountManager {
     // Manager, that Manages, Cpu Usage Resource Metrics 
     constructor(self) {
         this.self = self
+        this.ResourceManager = new resources.ResourceUsageManager()
     }
-    MountCpuMetrics() {
+    MountCpuMetrics(Metrics) {
         // Mounting CPU Metrics
-        let CpuData = this.GetCpuUsageMetrics()
-        this.self.$data.CpuChartData = CpuData.Metrics
+        let CpuData = this.ResourceManager.GetCpuUsageInfo(Metrics)
+        this.self.$data.CpuChartData = CpuData
     }
-    GetCpuUsageMetrics() {
-            // Returns CPU Usage Metrics Data 
-        let VirtualMachineId = this.self.VirtualMachineId 
-        let ResourceManager = new resources.ResourceUsageManager()
-        let data = ResourceManager.GetCpuUsageInfo(this.self.JwtToken, VirtualMachineId) 
-        console.log(data)
-        return data
-    }
-    GetCurrentCpuCapacity(JwtToken, VirtualMachineId) {
+    GetCurrentCpuCapacity(Metrics) {
         // Returns Current Cpu Capacity for the Virtual Machine Server 
-        console.log(JwtToken, VirtualMachineId)
-        return 5
+        let MetricsData = this.ResourceManager.GetCpuUsageInfo(Metrics)
+        return MetricsData.at(-1)
     }
     GetCpuOverflowPercentage(CurrentUsage, MaxCapacity) {
         // Returns the Overflow Percentage of the CPU, depeding on the Current Usage and Max Capacity Specified 
@@ -141,26 +129,22 @@ class CpuMetricsMountManager {
 }
 
 class MemoryMetricsMountManager {
-    // Manager, that Manages Memory Usage Resource Metrics 
+
+    // Manager, that Manages Memory Usage Resource Metrics
+
     constructor(self) {
+        this.ResourceManager = new resources.ResourceUsageManager()
         this.self = self
     }
-    MountMemoryMetrics() {
+    MountMemoryMetrics(MemoryMetricsData) {
         // Mounting CPU Metrics
-        let MemoryData = this.GetMemoryUsageMetrics()
-        this.self.$data.MemoryChartData = MemoryData.Metrics
+        let MemoryData = this.ResourceManager.GetMemoryUsageInfo(MemoryMetricsData)
+        this.self.$data.MemoryChartData = MemoryData
     }
-    GetMemoryUsageMetrics() {
-        // Returns CPU Usage Metrics Data 
-        let VirtualMachineId = this.self.VirtualMachineId 
-        let ResourceManager = new resources.ResourceUsageManager()
-        let data = ResourceManager.GetMemoryUsageInfo(this.self.JwtToken, VirtualMachineId) 
-        return data
-    }
-    GetCurrentMemoryCapacity(JwtToken, VirtualMachineId) {
+    GetCurrentMemoryCapacity(MemoryMetricsData) {
         // Returns Current Memory Capacity of the Virtual Machine Server
-        console.log(JwtToken, VirtualMachineId) 
-        return 100
+        let MemoryMetrics = this.ResourceManager.GetMemoryUsageInfo(MemoryMetricsData)
+        return MemoryMetrics.at(-1)
     }
     GetMemoryOverflowPercentage(CurrentUsage, MaxMemoryCapacity) {
         // Returns Percentage of the RAM Memory Overflow, depending on the Current Usage and Max Capacity Specified 
@@ -172,26 +156,20 @@ class StorageMetricsMountManager {
     // Manager, that manages Storage Disk Resource Usage Metrics
 
     constructor(self) {
+        // Initialization Parameters
         this.self = self
+        this.ResourceManager = new resources.ResourceUsageManager()
     }
 
-    MountStorageMetrics() {
+    MountStorageMetrics(Metrics) {
         // Mounting Storage Metrics Inside the Chart 
-        let StorageData = this.GetStorageUsageMetrics()
-        this.self.$data.StorageChartData = StorageData.Metrics
+        let StorageData = this.ResourceManager.GetStorageUsageInfo(Metrics) 
+        this.self.$data.StorageChartData = StorageData
     }
-
-    GetStorageUsageMetrics() {
-        // Returns Storage Usage Metrics Data 
-        let VirtualMachineId = this.self.VirtualMachineId 
-        let ResourceManager = new resources.ResourceUsageManager()
-        let data  = ResourceManager.GetStorageUsageInfo(this.self.JwtToken, VirtualMachineId) 
-        return data
-    }
-    GetCurrentStorageDiskCapacity(JwtToken, VirtualMachineId) {
+    GetCurrentStorageDiskCapacity(Metrics) {
         // Returns Current Storage Disk Capacity
-        console.log(JwtToken, VirtualMachineId)
-        return 150
+        let CurrentStorageDiskUsage = this.ResourceManager.GetStorageUsageInfo(Metrics)
+        return CurrentStorageDiskUsage.at(-1)
     }
     GetStorageDiskOverflowPercentage(CurrentUsageDisk, MaxDiskCapacity) {
         // Returns the Percentage of the Storage Disk, Depending on the Current Usage
@@ -208,6 +186,7 @@ export default {
         CapacityChart,
     },
     mounted() {
+        this.MountResourceUsageMetrics()
         this.MountCurrentResourceCapacities()
         this.MountResourcePercentages()
         this.GetVirtualMachineServer()
@@ -225,6 +204,8 @@ export default {
             faHardDrive: faHardDrive,
             faMemory: faMemory,
             faMicrochip: faMicrochip,
+
+            ResourceMetrics: {},
 
             // Resource Usage Chart Data 
             totalResources: [100, 200, 250, 100, 10, 130, 120, 110, 100], // total Resource Usage summary within the Week 
@@ -255,6 +236,12 @@ export default {
     },
     methods: {
 
+        MountResourceUsageMetrics() {
+            // Mounts the Initial resource Metrics of the Virtual Machine Server 
+            let ResourceManager = new resources.ResourceUsageManager()
+            let Metrics = ResourceManager.GetResourceMetrics(this.JwtToken, this.VirtualMachineId)
+            this.ResourceMetrics = Metrics
+        },
 
         GetComparedAveragePercentage() {
             // Returns the Percentage of the Resource Usage, depending on the previous day
@@ -287,6 +274,7 @@ export default {
 
         MountCurrentResourceCapacities() {
             // Mounts Current Resource Capacities to the Chart 
+
         },
 
         MountResourcePercentages() {
@@ -304,13 +292,13 @@ export default {
 
         MountMetrics() {
             // Mounting the Data inside the Charts
-            this.StorageManager.MountStorageMetrics()
-            this.MemoryManager.MountMemoryMetrics()
-            this.CpuManager.MountCpuMetrics()
+            let Metrics = this.GetResourceUsageMetrics()
+            this.StorageManager.MountStorageMetrics(Metrics)
+            this.MemoryManager.MountMemoryMetrics(Metrics)
+            this.CpuManager.MountCpuMetrics(Metrics)
         }
     }
 }; 
-
 
 </script>
 

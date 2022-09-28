@@ -7,7 +7,7 @@ services:
     volumes:
       - ../nginx/nginx.conf:/etc/nginx/nginx.conf 
     ports:
-      - "8010:90"
+      - "8010:80"
     depends_on:
       - front_application 
     networks:
@@ -17,12 +17,15 @@ services:
     container_name: front_application_server 
     image: crazycoderrr/cloud-infrastructure-front-app 
     ports:
-      - "3000:3000"
+      - "8080:8080"
     networks:
       - cloud-infrastructure-network 
     healthcheck:
-      test: ["curl", "-f", "http://localhost:3000/ping"]
-      period: 10 
+      test: ["CMD", "curl", "-f", "http://localhost:8080/ping"]
+      interval: 10s
+      timeout: 5s
+      start_period: 10s
+      retries: 5
 
   
 networks:

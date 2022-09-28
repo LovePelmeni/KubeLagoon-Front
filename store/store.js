@@ -534,14 +534,25 @@ export default new Vuex.Store({
       }
     },
 
-    UPDATE_VIRTUAL_MACHINE({commit, state}, JwtToken, VirtualMachineId) {
+    UPDATE_VIRTUAL_MACHINE({commit, state}, hardwareConfiguration, customizedConfiguration, JwtToken, VirtualMachineId) {
       // Updates Virtual Machine Server
 
       let vmManager = new vm.VirtualMachineManager()
-      let hardwareConfiguration = new preparer.HardwareConfiguration()
-      let customizedConfiguration = new preparer.CustomizedConfiguration()
 
-      let updatedInfo, updateError = vmManager.UpdateVirtualMachine(JwtToken, VirtualMachineId, hardwareConfiguration, customizedConfiguration)
+      // Initializing Hardware Configuration
+      let HardwareConfiguration = new preparer.HardwareConfiguration(
+          hardwareConfiguration["Datacenter"],
+          hardwareConfiguration["OperationalSystem"],
+          hardwareConfiguration["Tools"],
+      )
+      
+      // Initializing Customized Configuration with the Resources, Custom OS, Preinstalled Tools etc...
+      let CustomizedConfiguration = new preparer.CustomConfiguration(
+          customizedConfiguration["Metadata"], customizedConfiguration["Resource"],
+          customizedConfiguration["HostSystem"], customizedConfiguration["Ssl"], customizedConfiguration["Tools"]
+      )
+
+      let updatedInfo, updateError = vmManager.UpdateVirtualMachine(JwtToken, VirtualMachineId, HardwareConfiguration, CustomizedConfiguration)
       if (updateError == null) {
 
         let virtualMachine = vmManager.GetVirtualMachine(JwtToken, updatedInfo["VirtualMachineId"])

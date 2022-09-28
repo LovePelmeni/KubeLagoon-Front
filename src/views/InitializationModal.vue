@@ -2,41 +2,41 @@
 
   <div class="virtual-machine-wrap">
     <v-col cols="10" lg="4" class="mx-auto">
-      <v-card style="min-width: 30%; max-width: 100%; overflow: hidden;" class="pa-4">
+      <v-card style="max-width: 100%; overflow: hidden;" class="pa-4">
 
-    <v-form class="min-width: 30%; virtual-machine-content" id="form" ref="form" style="max-width: 100%; overflow: hidden; gap: 1">
+    <v-form class="virtual-machine-content" id="form" ref="form" style="max-width: 100%; overflow: hidden; gap: 1; margin-left: auto !important; margin-right: auto !important">
 
       <!-- Virtual Machine Work Details -->
 
-        <div class="resourceConfigBlock" style="width: 800px max-width: 100%; overflow: hidden;">
+        <div class="resourceConfigBlock" style="width: 800px max-width: 100%; overflow: hidden; margin-left: auto !important; margin-right: auto !important;">
         <!-- Hardware Configuration  -->
           <hardwareConfiguration />
         </div>
 
-        <div class="resourceConfigBlock" style="width: 800px; max-width: 100%; overflow: hidden;">
+        <div class="resourceConfigBlock" style="width: 800px; max-width: 100%; overflow: hidden; margin-left: auto !important; margin-right: auto !important">
           <!-- resource Configuration -->
           <resourceConfiguration />
         </div>
 
-        <div class="resourceConfigBlock" style="width: 800px; max-width: 100%; overflow: hidden;">
+        <div class="resourceConfigBlock" style="width: 800px; max-width: 100%; overflow: hidden; margin-left: auto !important; margin-right: auto !important">
           <!-- SSH Configuration -->
           <sshConfiguration />
         </div>
 
-        <div class="payment flex" style="width: 800px; max-width: 100%; overflow: hidden;">
+        <div class="payment flex" style="width: 800px; max-width: 100%; overflow: hidden; margin-left: auto !important; margin-right: auto !important ">
 
           <div class="modalField flex flex-column">
             <label for="virtualMachineCreationDate">Creation Date</label>
             <input disabled type="text" id="virtualMachineCreationDate" v-model="virtualMachineCreationDate" />
           </div>
 
-          <div class="modalField flex flex-column">
+          <div class="modalField flex flex-column" style="margin-left: auto !important; margin-right: auto !important">
             <label for="paymentDueDate">Payment Due</label>
             <input disabled type="text" id="paymentDueDate" v-model="paymentDueDate" />
           </div>
         </div>
 
-        <div class="modalField flex flex-column">
+        <div class="modalField flex flex-column" style="margin-left: auto !important; margin-right: auto !important">
 
           <label for="paymentTerms">Payment Terms</label>
           <select @change="ProcessPaymentTermsChangeEvent" style="margin-left: 50px; width: 750px; max-width: 100%; overflow: hidden;" type="text" id="paymentTerms" v-model="paymentTerms">
@@ -46,7 +46,7 @@
           
         </div>
 
-        <div class="TotalCost flex" style="width: 750px; max-width: 100%; overflow: hidden;">
+        <div class="TotalCost flex" style="width: 750px; max-width: 100%; overflow: hidden; margin-left: auto !important; margin-right: auto !important">
           <p>In Total Per Day</p>
           <p>${{ TotalCost }}</p>
         </div>
@@ -55,7 +55,7 @@
 
               <div class="save flex">
 
-                  <div class="buttonBlock flex" style="width: 800px; max-width: 100%; overflow: hidden;">
+                  <div class="buttonBlock flex" style="width: 800px; max-width: 100%; overflow: hidden; margin-left: auto !important; margin-right: auto !important">
                     <v-btn type="submit" @click="closeVirtualMachineSettings" id="" style="background-color: #ec5757" :loading="CancelLoading"> Cancel Setup</v-btn>
                     <v-btn v-if="!updateVirtualMachine" style="background-color: #252945;" :loading="Saveloading" type="submit" @submit="saveVirtualMachineDraft">Save Setup</v-btn>
                     <v-btn v-if="!updateVirtualMachine" style="background-color: #7c5dfa;" :loading="Createloading" type="submit" @submit="CreateNewVirtualMachine">Create Server</v-btn>
@@ -91,7 +91,6 @@ import hardwareConfiguration from "../components/hardwareConfiguration.vue";
 import resourceConfiguration from "../components/resourceConfiguration.vue";
 import sshConfiguration from  "../components/sshConfiguration.vue";
 import { VirtualMachineCostCalculator } from "../../cost/virtualMachineCost.js";
-
 
 export default {
 
@@ -283,10 +282,12 @@ export default {
     },
 
     saveVirtualMachineDraft() {
+
       // Marks the Virtual Machine Configuration the Virtual Machine
       this.Saveloading = true
 
       // Receiving the Values from the Filled Form and Putting in the Single Object of the Configuration 
+
       let customizedConfigurationData = this.GetResourceConfigurationSubmittedFormData() 
       let hardwareConfigurationData = this.GetHardwareSubmittedFormData()
 

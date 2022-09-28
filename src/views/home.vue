@@ -24,7 +24,7 @@
           <div class="inner-button flex">
             <img :src="require('@/assets/icon-plus.svg')" alt="icon_plus" />
           </div>
-          <span >New Virtual Machine</span>
+          <span>New Virtual Machine</span>
         </div>
     </div>
 
@@ -58,7 +58,6 @@
 
 import { mapMutations, mapActions, mapState } from "vuex";
 import VirtualMachineBannerInfo from "../components/VirtualMachineBannerInfo.vue";
-
 export default {
   name: "HomePage",
   data() {

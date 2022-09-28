@@ -46,13 +46,13 @@
                     <v-select ref="Tools" v-model="AddedPreInstalledTools" label="Pre Install Tools" :items="PreInstalledTools" >
 
                           <template v-slot:selection="{ item, index }">
-                                    <input type="hidden" :value="index">
-                                    <img :src="item.IconImageUrl">{{ item.ToolName }}
+                                  <input type="hidden" :value="index">
+                                  <img :src="item.IconImageUrl">{{ item.ToolName }}
                                   </template>
 
                                   <template v-slot:item="{ item }">
-                                    <input hidden :value="index">
-                                    <img :src="item.IconImageUrl">{{ item.ToolName }}
+                                  <input hidden :value="index">
+                                  <img :src="item.IconImageUrl">{{ item.ToolName }}
                           </template>
                   </v-select>
           </v-col>

@@ -1,11 +1,27 @@
+<template>
+    <div>
+      <div v-if="!mobile" class="app flex flex-column">
+          <navigationPage />
+          <logoutPage v-if="logout" />
+          <loadingPage v-if="loading" />
+          <modalPage v-if="modalActive" />
+        <router-view />
+
+      </div>
+      <div v-else class="mobile-message flex flex-column">
+        <h2>Sorry, this app is not supported on Mobile Devices</h2>
+        <p>To use this app, please use a Laptop or Another Device</p>
+      </div>
+  </div>
+</template>
+
+
+
 <script>
 
 import { mapState } from "vuex"
 import navigationPage from "./components/NavigationPage.vue"
 import modalPage from "./components/ModalWindow.vue"
-
-import notificationBanner from "./components/notification.vue"
-import errorBanner from "./components/error.vue"
 import loadingPage from "./components/LoadingPage.vue"
 import logoutPage from "./components/LogoutPage.vue"
 
@@ -18,31 +34,10 @@ export default {
       mobile: null,
     };
   },
-  template: `
-  <div>
-      <div v-if="!mobile" class="app flex flex-column">
-          <navigationPage />
-          <logoutPage v-if="logout" />
-          <loadingPage v-if="loading" />
-          <modalPage v-if="modalActive" />
-          <errorBanner v-for="(Error, index) in [error]" v-if="activeError" :errorMessage="Error" :key="index" />
-          <notificationBanner v-for="(Notification, index) in [notification]" v-if="activeNotification" :notificationMessage="Notification" :key="index" />
-        <router-view />
-
-      </div>
-      <div v-else class="mobile-message flex flex-column">
-        <h2>Sorry, this app is not supported on Mobile Devices</h2>
-        <p>To use this app, please use a Laptop or Another Device</p>
-      </div>
-  </div>
-  `,
-
   components: {
     loadingPage,
     navigationPage,
     modalPage,
-    errorBanner,
-    notificationBanner,
     logoutPage,
   },
 

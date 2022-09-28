@@ -16,7 +16,7 @@
 
 
     <chart-page :VirtualMachineId="VirtualMachine.VirtualMachineId"  />
-    <div class="status-container" style="max-width: 100%; overflow: hidden">
+    <div class="status-container" style="max-width: 100%; overflow: hidden; min-width: 1030px;">
 
       <p class="status-title" style="margin-top: 6px; margin-right: 3px;">Status</p>
       <div style="margin-top: 6px; margin-left: 40px;"
@@ -88,7 +88,7 @@
       </div>
     </div>
 
-    <div class="details">
+    <div class="details" style="min-width: 1030px; max-width: 100%; overflow: hidden;">
       <div class="project-info">
         <p class="project-id">#{{ VirtualMachine.VirtualMachineId }}</p>
         <p class="project-desc">{{ VirtualMachine.VirtualMachineName }}</p>
@@ -134,15 +134,15 @@
         >
           <p class="prj-text" v-if="PropertyName.toLowerCase() === 'cpunum'">Used CPU</p>
           <p class="prj-text" v-if="PropertyName.toLowerCase() == 'cpunum'">{{ VirtualMachine['Resources'][PropertyName] || 0 }}</p> 
-          <p class="prj-text" v-if="PropertyName.toLowerCase() == 'cpunum'">{{ GetCpuUsage() || 0 }}</p>
+          <p class="prj-text" v-if="PropertyName.toLowerCase() == 'cpunum'">{{ GetCpuUsage(ResourceUsageMetrics) || 0 }}</p>
           
           <p class="prj-text" v-if="PropertyName.toLowerCase() === 'memory'">Used Memory</p>
           <p class="prj-text" v-if="PropertyName.toLowerCase() == 'memory'">{{ VirtualMachine['Resources'][PropertyName] || 0 }}MB</p>
-          <p class="prj-text" v-if="PropertyName.toLowerCase() == 'memory'">{{ GetMemoryUsage() || 0 }}MB</p>
+          <p class="prj-text" v-if="PropertyName.toLowerCase() == 'memory'">{{ GetMemoryUsage(ResourceUsageMetrics) || 0 }}MB</p>
           
           <p class="prj-text" v-if="PropertyName.toLowerCase() === 'storagecapacity'">Used Storage</p>
           <p class="prj-text" v-if="PropertyName.toLowerCase() == 'storagecapacity'">{{ VirtualMachine['Resources'][PropertyName] || 0 }}GB</p>
-          <p class="prj-text" v-if="PropertyName.toLowerCase() == 'storagecapacity'">{{ GetStorageDiskUsage() || 0 }}GB</p>
+          <p class="prj-text" v-if="PropertyName.toLowerCase() == 'storagecapacity'">{{ GetStorageDiskUsage(ResourceUsageMetrics) || 0 }}GB</p>
           <!-- Receiving the Cost of the Specific Property  (Cpu, Memory, etc....)-->
           <p class="prj-text">
             &#36;{{ GetPropertyCost(PropertyName, VirtualMachine['Resources'][PropertyName]) }} 
@@ -186,10 +186,12 @@
 import {  mapState } from "vuex";
 import { mapActions } from "vuex";
 import { useCookies } from "vue3-cookies";
-import * as cost from "../../cost/virtualMachineCost";
+
+
 import VirtualServerNotFoundWindow from "./VirtualServerNotFoundWindow.vue";
 import ChartPage from "../components/ResourceCharts.vue"
-import * as usage from "../../usage/usage.js"
+import * as cost from "../../cost/virtualMachineCost";
+import * as resources from "../../usage/usage.js"
 
 export default {
 
@@ -202,10 +204,32 @@ export default {
   mounted() {
     this.JwtToken = this.cookie?.get("jwt-token")
     this.getVirtualMachineServerInfo()
+    this.MountResourceUsageMetrics()
   },
   data() {
     return {
-      // Operation Information 
+      // Operation Information  
+      ResourceUsageMetrics: {
+        "CpuMetrics": "-",
+        "MemoryMetrics": "-",
+        "StorageMetrics": "-",
+      }, // Initial Object
+      ResourceManager: new resources.ResourceUsageManager(),
+
+      // Current Resource Usage Metrics 
+
+      CurrentCpuUsageMetrics: {}, 
+      CurrentMemoryUsageMetrics: {}, 
+      CurrentStorageDiskUsageMetrics: {},
+
+      // Week Resource Usage Metrics 
+
+      WeekResourceUsageMetrics: [], 
+      WeekMemoryUsageMetrics: [],
+      WeekStorageDiskMetrics: [],
+
+      // Extra Statuses
+
       ServerDoesExist: false,
       OperationFailed: false,
       OperationSucceeded: false,
@@ -333,26 +357,44 @@ export default {
       }
     },
 
-    GetStorageDiskUsage() {
+    MountResourceUsageMetrics() {
+      // Mounts General Resource Metrics, before page loading 
+      let Metrics = this.GetResourceMetrics()
+      this.ResourceUsageMetrics = Metrics
+    },
+     
+    GetResourceMetrics() {
+
+      // Mounts Initial Resource Usage Metrics 
+
+      let VirtualMachineId = this.$route.params.VirtualMachineId 
+      let JwtToken = this.JwtToken 
+
+      let Resources, ResourceError = this.ResourceManager.GetResourceMetrics(JwtToken, VirtualMachineId)
+      if (ResourceError != null) {console.log(ResourceError)}
+      return Resources
+    },
+
+    GetStorageDiskUsage(Metrics) {
       // Returns Storage Disk Usage Capacity of the Virtual Machine Server 
-      let StorageManager = new usage.ResourceUsageManager()
-      let CurrentUsage = StorageManager.GetStorageUsageInfo(this.JwtToken, this.VirtualMachineId)["Metrics"][0]["value"]
+
+      let CurrentUsage = this.ResourceManager.GetStorageUsageInfo(Metrics) || "0"
       return CurrentUsage
     }, 
 
-    GetCpuUsage() {
+    GetCpuUsage(Metrics) {
       // Returns CPU Usage of the Virtual Machine Server 
-      let CpuManager = new usage.ResourceUsageManager()
-      let CurrentUsage = CpuManager.GetCpuUsageInfo(this.JwtToken, this.VirtualMachineId)["Metrics"][0]["value"]
+
+      let CurrentUsage = this.ResourceManager.GetCpuUsageInfo(Metrics) || "0"
       return CurrentUsage
     },
 
-    GetMemoryUsage() {
+    GetMemoryUsage(Metrics) {
       // Returns Memory Usage of the Virtual Machine Server 
-      let MemoryManager = new usage.ResourceUsageManager()
-      let CurrentUsage = MemoryManager.GetMemoryUsageInfo(this.JwtToken, this.VirtualMachineId)["Metrics"][0]["value"]
+
+      let CurrentUsage = this.ResourceManager.GetMemoryUsageInfo(Metrics) || "0"
       return CurrentUsage
-    }
+    }, 
   },
   computed: {
     ...mapState([
@@ -478,7 +520,7 @@ export default {
   margin-left: 10px;
 }
 .btn-reboot:disabled {
-  background-color: darkorange;
+  background-color: rgb(179, 100, 3);
   margin-left: 10px;
 }
 
