@@ -13,7 +13,6 @@
                   <form role="form" class="text-start">
 
                     <v-card-text>
-                    <label>Email</label>
                     <v-text-field
                         v-model="Email"
                         :rules="EmailValidationRules"
@@ -23,9 +22,9 @@
                         prepend-inner-icon="mdi-account"
                         required
                     />
-                    <label>Password</label>
 
                     <v-text-field
+                            class="password-field"
                             v-model="Password"
                             :rules="PasswordValidationRules"
                             :type="passwordShow?'text':'password'"
@@ -178,6 +177,21 @@ export default {
 }
 
 
+
+.v-messages__message {
+    align-items: center;
+    align-content: center;
+    text-align: center;
+    line-height: 12px;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    -webkit-hyphens: auto;
+    hyphens: auto;
+    transition-duration: 150ms;
+    color: red;
+}
+
 .px-1 {
     padding-right: 4px !important;
     padding-left: 4px !important;
@@ -202,6 +216,13 @@ label {
     display: inline-block;
 }
 
+.password-field {
+
+.v-messages__message {
+    margin-left: 50px;
+}
+
+}
 .btn-danger, .btn-danger:hover, .btn-dark, .btn-dark:hover, .btn-info, .btn-info:hover, .btn-primary, .btn-primary:hover, .btn-secondary, .btn-secondary:hover, .btn-success, .btn-success:hover, .btn-warning, .btn-warning:hover, .btn.bg-gradient-danger, .btn.bg-gradient-danger:hover, .btn.bg-gradient-dark, .btn.bg-gradient-dark:hover, .btn.bg-gradient-info, .btn.bg-gradient-info:hover, .btn.bg-gradient-primary, .btn.bg-gradient-primary:hover, .btn.bg-gradient-secondary, .btn.bg-gradient-secondary:hover, .btn.bg-gradient-success, .btn.bg-gradient-success:hover, .btn.bg-gradient-warning, .btn.bg-gradient-warning:hover {
     color: #fff;
 }
