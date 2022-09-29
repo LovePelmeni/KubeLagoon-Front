@@ -24,22 +24,23 @@
                     />
 
                     <v-text-field
-                            class="password-field"
-                            v-model="Password"
-                            :rules="PasswordValidationRules"
-                            :type="passwordShow?'text':'password'"
-                            label="Password"
-                            placeholder="Password"
-                            prepend-inner-icon="mdi-key"
-                            :append-icon="passwordShow ? 'mdi-eye':'mdi-eye-off'"
-                            @click:append="passwordShow = !passwordShow"
-                            required
+                        class="password-field"
+                        v-model="Password"
+                        :rules="PasswordValidationRules"
+                        :type="passwordShow?'text':'password'"
+                        label="Password"
+                        placeholder="Password"
+                        prepend-inner-icon="mdi-key"
+                        :append-icon="passwordShow ? 'mdi-eye':'mdi-eye-off'"
+                        @click:append="passwordShow = !passwordShow"
+                        required
                     />
-                        <v-switch 
+                    <v-switch 
                         @click="RememberUserFunction"
                         v-model="RememberUser"
                         label="Remember me"
-                        color="indigo"></v-switch>
+                        color="indigo">
+                    </v-switch>
 
                     <div class="text-center">
                       <soft-button
@@ -343,6 +344,9 @@ label {
 }
 
 
+html {
+    height: 100% !important;
+}
 .card .card-header {
     padding: 1.5rem;
 }
@@ -602,27 +606,5 @@ input {
     margin-inline-start: 0px;
     margin-inline-end: 0px;
 }
-
-  // .background{
-  //   position: relative;
-  //   padding: 56px;
-  //   width: 100%;
-  //   background-color: #141625;
-  //   color: #fff;
-  //   box-shadow: 10px 4px 6px -1px rgba(0, 0, 0, 0.2), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  // }
-  // .v-application__wrap {
-  // position: relative;
-  //  padding: 56px;
-  //  width: 100%;
-  //  background-color: #141625;
-  // }
-
-  // .pa-4 {
-  //   justify-content: space-between;
-  //   margin-top: 50px; 
-  //   max-width: 900px; 
-  //   background-color: #1e2139;
-  // }
 
 </style>
