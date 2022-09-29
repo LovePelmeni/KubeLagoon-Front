@@ -128,6 +128,7 @@
                     />
               
                     <v-text-field
+                            class="password-field"
                             v-model="Password"
                             :rules="PasswordValidationRules"
                             :type="passwordShow?'text':'password'"
@@ -410,6 +411,14 @@ export default {
     color: #e9ecef;
     border-color: #e9ecef;
 }
+
+.password-field {
+
+.v-messages__message {
+    margin-left: 50px;
+}
+}
+
 .btn-class {
     display: inline-block;
     font-weight: 700;

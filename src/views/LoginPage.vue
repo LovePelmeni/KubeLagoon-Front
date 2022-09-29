@@ -219,10 +219,11 @@ label {
 .password-field {
 
 .v-messages__message {
-    margin-left: 50px;
+    margin-left: 40px;
+}
 }
 
-}
+
 .btn-danger, .btn-danger:hover, .btn-dark, .btn-dark:hover, .btn-info, .btn-info:hover, .btn-primary, .btn-primary:hover, .btn-secondary, .btn-secondary:hover, .btn-success, .btn-success:hover, .btn-warning, .btn-warning:hover, .btn.bg-gradient-danger, .btn.bg-gradient-danger:hover, .btn.bg-gradient-dark, .btn.bg-gradient-dark:hover, .btn.bg-gradient-info, .btn.bg-gradient-info:hover, .btn.bg-gradient-primary, .btn.bg-gradient-primary:hover, .btn.bg-gradient-secondary, .btn.bg-gradient-secondary:hover, .btn.bg-gradient-success, .btn.bg-gradient-success:hover, .btn.bg-gradient-warning, .btn.bg-gradient-warning:hover {
     color: #fff;
 }
