@@ -31,16 +31,69 @@ class BaseConfiguration {
 
 
 class HardwareConfigurationValidator extends BaseConfigurationValidator {
-  // Validator for the hardware Configuration
+  // Validator for the Hardware Configuration 
+
+  constructor() {
+    super();
+    this.HardwareValidationParameters = {
+
+      // Resource CPU Numbers 
+
+      "Datacenter": new RegExp("^[A-Za-z0-9].{1,}$"),
+      "OperationalSystem": new RegExp("^[0-9].{1,}$"),
+      "Tool": new RegExp("^[A-Za-z0-9].{1,}$"),
+    }
+    this.Validators = {
+      "Datacenter": this.ValidateDatacenter, 
+      "OperationalSystem": this.ValidateOperationalSystem, 
+      "Tool": this.ValidateTool,
+    }
+  }
+
+  ValidateTool(Tool) {
+    // Validates Tool, customer would like to preinstall 
+    return this.HardwareValidationParameters["Tool"].test(Tool)
+  }
+
+  ValidateOperationalSystem(OperationalSystem) {
+    // Validates Operational System, selected by the Customer 
+    return this.HardwareValidationParameters["OperationalSystem"].test(OperationalSystem)
+  }
+
+  ValidateDatacenter(Datacenter) {
+    // Validates Datacenter, selected by the Customer 
+    return this.HardwareValidationParameters["Datacenter"].test(Datacenter)
+  }
+
   ValidateInput = function(Configuration) {
-    // Validates Hardware Configuration, Customized by the Client
+    // Validates the Whole Hardware Configuration, 
+    for (let ValidationParameter in Object.keys(this.HardwareValidationParameters)){
+      if (Configuration[ValidationParameter]) {return false}
+    }
   }
 }
 
+
 class CustomizedConfigurationValidator extends BaseConfigurationValidator {
+
+  // Base Validator Customized Configuration (Custom Specification of the CPU, Memory, Max Memory, Max CPU, etc...)
+
+  constructor() {
+    super();
+    this.ValidationParameters = {
+      "MaxCpu": new RegExp(""),
+      "CpuNum": new RegExp(""),
+      "MaxMemory": new RegExp(""),
+      "Memory": new RegExp(""),
+      "StorageCapacity": new RegExp(""),
+      "MaxStorageCapacity": new RegExp(""),
+    }
+  }
+
   ValidateInput = function(Configuration) {
     // Validates Customized Configuration by the Client
   }
+  
 }
 
 class Metadata extends BaseResource {
@@ -84,8 +137,10 @@ class Resources extends BaseResource {
 }
 
 class SSlResources extends BaseResource {
+
   // SSL Management for the Virtual Machine, Provides ability to setup SSL Certificate
   // To Secure SSH Connection
+
   constructor(Type) {
     super();
     this.Type = Type
@@ -223,9 +278,11 @@ class CustomConfiguration extends BaseConfiguration {
 
 export {
 
+  // Configuration Types
   CustomConfiguration, 
-  HardwareConfiguration, 
-  
+  HardwareConfiguration,  
+
+  // Resource types 
   DatacenterResources,
   DiskResources,
   SSlResources, 
@@ -234,4 +291,8 @@ export {
   PreInstalledToolsResources, 
   Metadata,
 
+  // Validators 
+
+  CustomizedConfigurationValidator, 
+  HardwareConfigurationValidator,
 }

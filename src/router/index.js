@@ -6,6 +6,7 @@ import HomePage from "../views/home.vue";
 import CustomerProfile from "../views/CustomerProfile.vue";
 import LoginPage from "../views/LoginPage.vue";
 import RegistrationPage from "../views/RegistrationPage.vue";
+
 import initializationModal from "../views/InitializationModal.vue";
 import deployErrorDescription from "../components/deployError.vue";
 import ResetPassword from "../views/ResetPassword.vue";
@@ -13,6 +14,7 @@ import NotFoundPage from "../components/NotFoundWindow.vue";
 
 
 const routes = [
+
   {
     path: "/",
     name: "main_page",

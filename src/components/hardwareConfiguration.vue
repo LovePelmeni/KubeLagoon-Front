@@ -1,69 +1,91 @@
 <template>
-
     <h1 style="margin-top: 20px;">Hardware Configuration</h1>
     <div class="resourceSelectors">
     
-            <v-col cols="10" lg="4" class="mx-auto">
-                <div class="text-center">
-                  <h2 class="indigo--text" style="margin-bottom: 30px">Datacenters</h2>
-                </div>
-
-                    <v-select ref="Datacenter" v-model="AddedDatacenter" label="Datacenter" :items="Datacenters" >
-
-                           <template v-slot:selection="{ item, index }">
-                              <input :required="AddedDatacenter" hidden :value="index">
-                              <img :src="item.IconImageUrl">{{ item.DatacenterName }}
-                            </template>
-
-                            <template v-slot:item="{ item, index }">
-                              <input hidden :value="index">
-                              <img :src="item.IconImageUrl">{{ item.DatacenterName }}
-                            </template>
-
-                      </v-select>
+            <v-col cols="10" lg="4" class="mx-auto" style="max-width: 90%">
 
                   <div class="text-center">
-                    <h2 class="indigo--text" style="margin-bottom: 30px">Operational Systems</h2>
+                    <h2 class="indigo--text" style="margin-bottom: 20px; margin-top: 20px;">Datacenters</h2>
                   </div>
 
-                  <v-select ref="OperationalSystem" v-model="AddedOperationalSystem" label="Operational System" :items="OperationalSystems" >
+                  <v-col
+                  cols="10"
+                  lg="4"
+                  class="mx-auto"
+                  style="max-width: 90%;">
 
-                              <template v-slot:selection="{ item, index}">
-                                  <input type="hidden" :value="index">
-                                  <img :src="item.IconImageUrl">{{ item.SystemName }}
-                              </template>
+                  <v-select
+                  v-model="AddedDatacenter"
+                  :items="[
+                    'Europe/Moscow',
+                    'Europe/Berlin',
+                    'US/Washington'
+                  ]"
+                  label="Select Datacenter"
+                  hint="* Select the Datacenter for your Server *"
+                  persistent-hint />
 
-                              <template v-slot:item="{ item, index }">
-                                  <input type="hidden" :value="index">
-                                  <img :src="item.IconImageUrl">{{ item.SystemName }}
-                              </template>
-
-                      </v-select>
+                </v-col>
 
                 <div class="text-center">
-                  <h2 class="indigo--text" style="margin-bottom: 30px">Tools</h2>
+                  <h2 class="indigo--text" style="margin-bottom: 20px; margin-top: 20px">Operational Systems</h2>
                 </div>
-                    <v-select ref="Tools" v-model="AddedPreInstalledTools" label="Pre Install Tools" :items="PreInstalledTools" >
 
-                          <template v-slot:selection="{ item, index }">
-                                  <input type="hidden" :value="index">
-                                  <img :src="item.IconImageUrl">{{ item.ToolName }}
-                                  </template>
 
-                                  <template v-slot:item="{ item }">
-                                  <input hidden :value="index">
-                                  <img :src="item.IconImageUrl">{{ item.ToolName }}
-                          </template>
+                <v-col
+                    style="margin-top: 15px; max-width: 90%;"
+                    cols="10"
+                    lg="4"
+                    class="mx-auto"
+                  >
+
+                  <v-select
+                    v-model="AddedOperationalSystem"
+                    :items="[
+                      'CentOS',
+                      'Ubuntu',
+                      'Debian',
+                      'Windows'
+                    ]"
+                    label="Select Operational System"
+                    hint="* Select the OS for your Server *"
+                    persistent-hint
+                  />
+                </v-col>
+
+                  <div class="text-center">
+                    <h2 class="indigo--text" style="margin-bottom: 20px; margin-top: 20px;">Tools</h2>
+                  </div>
+
+                  <v-col
+                    style="margin-top: 15px; max-width: 90%;"
+                    cols="10"
+                    lg="4"
+                    class="mx-auto">
+                  <v-select
+                    v-model="AddedPreInstalledTools"
+                    :items="[
+                      'Docker',
+                      'Docker-Compose',
+                      'VirtualBox',
+                      'Kubernetes',
+                    ]"
+                    label="Select Tools"
+                    multiple
+                    chips
+                    hint="* Select some Optional Tools for your Server *"
+                    persistent-hint>
                   </v-select>
+
+                </v-col>
           </v-col>
-    </div>
+  </div>
 
 </template>
 
 <script>
 
 import { mapState } from "vuex";
-
 
 /* eslint-disable */
 
@@ -84,70 +106,94 @@ export default {
     return {
       // hardware Configuration Validation Rules
 
-      Datacenters : [
-        {
-          "IconImageUrl": "@/assets/datacenters/europe_moscow.png",
-          "DatacenterName": "Europe/Moscow",
-        },
-        {
-          "IconImageUrl": "@/assets/datacenters/europe_berlin.png",
-          "DatacenterName": "Europe/Berlin",
-        },
-        {
-          "IconImageUrl": "@/assets/datacenters/us_washington.png",
-          "DatacenterName": "US/Washington",
-        }
-      ], // array of the Objects with attrs { 'DatacenterName', 'IconImageUrl' }
+      items: [
+      { name: 'Foo', image: 'https://www.gravatar.com/avatar/b17065ea1655f1e3283aac8d8fc16019?s=48&d=identicon&r=PG'},
+      { name: 'Bar', image: 'https://www.gravatar.com/avatar/b17065ea1655f1e3283aac8d8fc16019?s=48&d=identicon&r=PG'},
+      { name: 'Hoo', image: 'https://www.gravatar.com/avatar/b17065ea1655f1e3283aac8d8fc16019?s=48&d=identicon&r=PG'},
+      { name: 'Coo', image: 'https://www.gravatar.com/avatar/b17065ea1655f1e3283aac8d8fc16019?s=48&d=identicon&r=PG'}],
 
-      OperationalSystems : [
-        {
-          "SystemName": "Debian",
-          "Version": "10",
-          "bit": "64",
-          "IconImageUrl": "@/assets/os/debian.svg"
-        },
-        {
-          "SystemName": "Ubuntu",
-          "Version": "10",
-          "bit": "64",
-          "IconImageUrl": "@/assets/os/ubuntu.svg"
-        },
-        {
-          "SystemName": "CentOS",
-          "Version": "10",
-          "bit": "64",
-          "IconImageUrl": "@/assets/os/centos.svg"
-        },
-        {
-          "SystemName": "Windows",
-          "Version": "10",
-          "bit": "64",
-          "IconImageUrl": "@/assets/os/windows.svg"
-        }
-      ], // array of the Objects with attrs { 'OperationalSystems', 'IconImageUrl' }
+      Datacenters: [
+        "Europe/Moscow",
+        "Europe/Berlin",
+        "US/Washington"
+      ],
 
-      PreInstalledTools : [
-        {
-          "ToolName": "Docker",
-          "IconImageUrl": "@/assets/tools/docker.svg",
-        },
-        {
-          "ToolName": "Docker Compose",
-          "IconImageUrl": "@/assets/tools/docker_compose.svg",
-        },
-        {
-          "ToolName": "VirtualBox",
-          "IconImageUrl": "@/assets/tools/virtual_box.svg",
-        },
-        {
-          "ToolName": "Podman",
-          "IconImageUrl": "@/assets/tools/podman.png",
-        },
-        {
-          "ToolName": "Kubernetes",
-          "IconImageUrl": "@/assets/tools/kubernetes.png",
-        }
-      ], // array of the Objects with attrs { 'ToolName', 'IconImageUrl' }
+      OperationalSystems: [
+        "Centos",
+        "Ubuntu",
+        "Debian",
+      ],
+      PreInstalledTools: [
+        "Docker",
+        "Docker-Compose",
+        "VirtualBox",
+        "Kubernetes"
+      ],
+
+      // Datacenters : [
+      //   {
+      //     "IconImageUrl": "@/assets/datacenters/europe_moscow.png",
+      //     "DatacenterName": "Europe/Moscow",
+      //   },
+      //   {
+      //     "IconImageUrl": "@/assets/datacenters/europe_berlin.png",
+      //     "DatacenterName": "Europe/Berlin",
+      //   },
+      //   {
+      //     "IconImageUrl": "@/assets/datacenters/us_washington.png",
+      //     "DatacenterName": "US/Washington",
+      //   }
+      // ], // array of the Objects with attrs { 'DatacenterName', 'IconImageUrl' }
+
+      // OperationalSystems : [
+      //   {
+      //     "SystemName": "Debian",
+      //     "Version": "10",
+      //     "bit": "64",
+      //     "IconImageUrl": "@/assets/os/debian.svg"
+      //   },
+      //   {
+      //     "SystemName": "Ubuntu",
+      //     "Version": "10",
+      //     "bit": "64",
+      //     "IconImageUrl": "@/assets/os/ubuntu.svg"
+      //   },
+      //   {
+      //     "SystemName": "CentOS",
+      //     "Version": "10",
+      //     "bit": "64",
+      //     "IconImageUrl": "@/assets/os/centos.svg"
+      //   },
+      //   {
+      //     "SystemName": "Windows",
+      //     "Version": "10",
+      //     "bit": "64",
+      //     "IconImageUrl": "@/assets/os/windows.svg"
+      //   }
+      // ], // array of the Objects with attrs { 'OperationalSystems', 'IconImageUrl' }
+
+      // PreInstalledTools : [
+      //   {
+      //     "ToolName": "Docker",
+      //     "IconImageUrl": "@/assets/tools/docker.svg",
+      //   },
+      //   {
+      //     "ToolName": "Docker Compose",
+      //     "IconImageUrl": "@/assets/tools/docker_compose.svg",
+      //   },
+      //   {
+      //     "ToolName": "VirtualBox",
+      //     "IconImageUrl": "@/assets/tools/virtual_box.svg",
+      //   },
+      //   {
+      //     "ToolName": "Podman",
+      //     "IconImageUrl": "@/assets/tools/podman.png",
+      //   },
+      //   {
+      //     "ToolName": "Kubernetes",
+      //     "IconImageUrl": "@/assets/tools/kubernetes.png",
+      //   }
+      // ], // array of the Objects with attrs { 'ToolName', 'IconImageUrl' }
 
       AddedDatacenter: null,
       AddedOperationalSystem: null,
@@ -295,6 +341,20 @@ export default {
 
 <style lang="scss">
 
+.v-messages__message {
+  align-items: center;
+  align-content: center;
+  text-align: center;
+  line-height: 12px;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+  transition-duration: 150ms;
+  color: #344767;
+}
+
 .virtual-machine-wrap {
   position: fixed;
   top: 0;
@@ -427,6 +487,7 @@ export default {
   .modalField {
     margin-bottom: 24px;
   }
+
   label {
     font-size: 12px;
     margin-bottom: 6px;

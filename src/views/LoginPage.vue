@@ -10,7 +10,7 @@
                 <h1 class="text-center" style="margin-top: 10px; color: #fff;">Sign In</h1>
                 </div>
                 <div class="login-card-body">
-                  <form role="form" class="text-start">
+                  <form role="form" ref="form" class="text-start" @submit.prevent="submitLoginForm">
 
                     <v-card-text>
                     <v-text-field
@@ -18,7 +18,6 @@
                         :rules="EmailValidationRules"
                         type="email"
                         label="Email"
-                        placeholder="Email"
                         prepend-inner-icon="mdi-account"
                         required
                     />
@@ -29,7 +28,6 @@
                         :rules="PasswordValidationRules"
                         :type="passwordShow?'text':'password'"
                         label="Password"
-                        placeholder="Password"
                         prepend-inner-icon="mdi-key"
                         :append-icon="passwordShow ? 'mdi-eye':'mdi-eye-off'"
                         @click:append="passwordShow = !passwordShow"
@@ -61,8 +59,7 @@
                     <router-link
                       :to="{ name: 'register_page' }"
                       class="text-success text-gradient font-weight-bold"
-                      >Sign up</router-link
-                    >
+                      >Sign up</router-link>
                   </p>
                 </div>
               </div>
@@ -177,8 +174,6 @@ export default {
     margin-bottom: 0.125rem;
 }
 
-
-
 .v-messages__message {
     align-items: center;
     align-content: center;
@@ -223,7 +218,6 @@ label {
     margin-left: 40px;
 }
 }
-
 
 .btn-danger, .btn-danger:hover, .btn-dark, .btn-dark:hover, .btn-info, .btn-info:hover, .btn-primary, .btn-primary:hover, .btn-secondary, .btn-secondary:hover, .btn-success, .btn-success:hover, .btn-warning, .btn-warning:hover, .btn.bg-gradient-danger, .btn.bg-gradient-danger:hover, .btn.bg-gradient-dark, .btn.bg-gradient-dark:hover, .btn.bg-gradient-info, .btn.bg-gradient-info:hover, .btn.bg-gradient-primary, .btn.bg-gradient-primary:hover, .btn.bg-gradient-secondary, .btn.bg-gradient-secondary:hover, .btn.bg-gradient-success, .btn.bg-gradient-success:hover, .btn.bg-gradient-warning, .btn.bg-gradient-warning:hover {
     color: #fff;
@@ -488,20 +482,11 @@ input {
     flex: 0 0 auto;
     width: 50%;
 }
-// .row>* {
-//     flex-shrink: 0;
-//     width: 100%;
-//     max-width: 100%;
-//     margin-right: auto !important;
-//     margin-left: auto !important;
-//     margin-top: var(--bs-gutter-y);
-// }
 
 .text-start {
     text-align: left!important;
 }
 
-// user agent stylesheet
 .form {
     display: block;
     margin-top: 0em;

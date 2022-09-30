@@ -14,7 +14,6 @@
       <span class="back-text" @click="redirectToPreviousPage">Go Back</span>
     </router-link>
 
-
     <chart-page :VirtualMachineId="VirtualMachine.VirtualMachineId"  />
     <div class="status-container" style="max-width: 100%; overflow: hidden; min-width: 1030px;">
 
@@ -181,7 +180,6 @@
 </template>
 
 <script>
-
 
 import {  mapState } from "vuex";
 import { mapActions } from "vuex";

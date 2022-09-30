@@ -1,9 +1,11 @@
 <template>
-  <main class="mt-0 main-content main-content-bg">
+  <!-- <main class="mt-0 main-content main-content-bg"> -->
     <section>
+
       <div class="page-header min-vh-75">
-        <div class="container">
-          <div class="login-row">
+        <div class="registration-container">
+          <div class="registration-row">
+
             <div class="mx-auto col-xl-4 col-lg-5 col-md-6 d-flex flex-column">
               <div class="mt-8 login-card login-card-plain" style="height: 550px;">
                 <div class="pb-0 card-header text-start">
@@ -130,10 +132,11 @@
         </div>
       </div>
     </section>
-  </main>
+  <!-- </main> -->
 </template>
 
 <script>
+
 
 import SoftButton from "@/components/SoftButton.vue";
 import * as customers from "../../customers/customers.js";
@@ -256,6 +259,23 @@ export default {
 </script>
 
 <style lang="scss">
+
+
+.registration-container {
+    // Container for the Registration Page Component
+    width: auto !important;
+    height: auto !important;
+}
+
+.registration-row {
+    --bs-gutter-x: 1.5rem;
+    --bs-gutter-y: 0;
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: calc(var(--bs-gutter-y)*-1);
+    margin-right: calc(var(--bs-gutter-x)*-0.5);
+    margin-left: calc(var(--bs-gutter-x)*-0.5);
+}
 
 .registrationWrapper {
 
@@ -410,6 +430,29 @@ label {
 .v-messages__message {
     margin-left: 40px;
 }
+}
+
+
+.mx-auto {
+    margin-right: auto !important;
+    margin-left: auto !important;
+}
+
+.flex-column {
+    flex-direction: column !important;
+}
+
+.d-flex {
+    display: flex !important;
+}
+
+.flex-column {
+    flex-direction: column;
+}
+
+.col-md-6 {
+    flex: 0 0 auto;
+    width: 50%;
 }
 
 
@@ -672,6 +715,7 @@ input {
 .col-md-6 {
     flex: 0 0 auto;
     width: 50%;
+    height: 100%;
 }
 .text-start {
     text-align: left!important;

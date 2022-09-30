@@ -108,14 +108,14 @@
           <v-text-field
           required
           v-if="!MaxStorageCapacity"
-          :rules="StorageRules"
+          :rules="MaxStorageRules"
           
           id="MaxStorageCapacity"
           v-model="MaxStorageCapacity" />
 
           <v-text-field
           v-else
-          :rules="StorageRules"
+          :rules="MaxStorageRules"
           required 
           
           id="MaxStorageCapacity"
@@ -163,6 +163,11 @@ export default {
       StorageRules: [
         storageCapacity => String(storageCapacity).length != 0 || 'This is required',
         storageCapacity => !isNaN(storageCapacity) || 'Invalid Storage Capacity',
+      ],
+
+      MaxStorageRules: [
+        storageCapacity => String(storageCapacity).length != 0 || 'This is required',
+        storageCapacity => !isNaN(storageCapacity) || 'Invalid Max Storage Capacity',
       ],
 
       MaxCpuRules: [
@@ -278,6 +283,23 @@ input#StorageCapacity {
 input#MaxStorageCapacity {
   background-color: #1e2139;
   color: #fff;
+}
+
+
+.resourceConfigurationBlock {
+  .v-messages__message {
+    align-items: center;
+    align-content: center;
+    text-align: center;
+    line-height: 12px;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    -webkit-hyphens: auto;
+    hyphens: auto;
+    transition-duration: 150ms;
+    color: red;
+}
 }
 
 .virtual-machine-wrap {
@@ -414,7 +436,7 @@ input#MaxStorageCapacity {
 
   .modalField {
     margin-bottom: 24px;
-    margin-right: 50px;
+    margin-left: 15px;
   }
   label {
     font-size: 12px;

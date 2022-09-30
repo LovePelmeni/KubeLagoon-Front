@@ -1,8 +1,8 @@
 <template>
 
   <div class="virtual-machine-wrap">
-    <v-col cols="10" lg="4" class="mx-auto">
-      <v-card style="max-width: 100%; overflow: hidden;" class="pa-4">
+    <v-col cols="10" lg="4" class="mx-auto" style="max-width: 80%;">
+      <v-card style="max-width: 100%; overflow: hidden;" class="pa-4" ref="initialization-card">
 
     <v-form class="virtual-machine-content" id="form" ref="form" style="max-width: 100%; overflow: hidden; gap: 1; margin-left: auto !important; margin-right: auto !important">
 
@@ -25,7 +25,7 @@
 
         <div class="payment flex" style="width: 800px; max-width: 100%; overflow: hidden; margin-left: auto !important; margin-right: auto !important ">
 
-          <div class="modalField flex flex-column">
+          <div class="modalField flex flex-column" style="margin-right: 20px;">
             <label for="virtualMachineCreationDate">Creation Date</label>
             <input disabled type="text" id="virtualMachineCreationDate" v-model="virtualMachineCreationDate" />
           </div>
@@ -36,17 +36,17 @@
           </div>
         </div>
 
-        <div class="modalField flex flex-column" style="margin-left: auto !important; margin-right: auto !important">
+        <div class="modalField flex flex-column" style="width: 800px; max-width: 100%; overflow: hidden; margin-left: auto !important; margin-right: auto !important ">
 
           <label for="paymentTerms">Payment Terms</label>
-          <select @change="ProcessPaymentTermsChangeEvent" style="margin-left: 50px; width: 750px; max-width: 100%; overflow: hidden;" type="text" id="paymentTerms" v-model="paymentTerms">
+          <select @change="ProcessPaymentTermsChangeEvent" style="width: 750px; max-width: 100%; overflow: hidden;" type="text" id="paymentTerms" v-model="paymentTerms">
             <option value="30">Net 30 Days</option>
             <option value="60">Net 60 Days</option>
           </select>
           
         </div>
 
-        <div class="TotalCost flex" style="width: 750px; max-width: 100%; overflow: hidden; margin-left: auto !important; margin-right: auto !important">
+        <div class="TotalCost flex" style="width: 800px; max-width: 100%; overflow: hidden; margin-left: auto !important; margin-right: auto !important ">
           <p>In Total Per Day</p>
           <p>${{ TotalCost }}</p>
         </div>
@@ -55,7 +55,7 @@
 
               <div class="save flex">
 
-                  <div class="buttonBlock flex" style="width: 800px; max-width: 100%; overflow: hidden; margin-left: auto !important; margin-right: auto !important">
+                  <div class="buttonBlock flex" style="width: 800px; max-width: 100%; overflow: hidden;">
                     <v-btn type="submit" @click="closeVirtualMachineSettings" id="" style="background-color: #ec5757" :loading="CancelLoading"> Cancel Setup</v-btn>
                     <v-btn v-if="!updateVirtualMachine" style="background-color: #252945;" :loading="Saveloading" type="submit" @submit="saveVirtualMachineDraft">Save Setup</v-btn>
                     <v-btn v-if="!updateVirtualMachine" style="background-color: #7c5dfa;" :loading="Createloading" type="submit" @submit="CreateNewVirtualMachine">Create Server</v-btn>
@@ -310,6 +310,26 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
+
+.v-card[data-v-8b415dba] {
+    overflow: initial;
+    max-width: auto !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    background-color: #1e2139;
+}
+
+@media (min-width: 1280px){}
+.v-col-lg-4 {
+    flex: 0 0 33.3333333333%;
+    max-width: auto !important;
+}
+
+.v-col-10 {
+    flex: 0 0 83.3333333333%;
+    max-width: auto !important;
+}
 
 .virtual-machine-wrap {
   

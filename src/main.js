@@ -4,7 +4,7 @@ import App from './App.vue';
 import store from "../store/store.js";
 import VueCookies from "vue3-cookies";
 
-import Vuex from 'vuex'
+import Vuex from 'vuex';
 import { createApp } from 'vue/dist/vue.esm-bundler';
 import { router } from './router/index';
 
@@ -20,6 +20,7 @@ globalCookiesConfig({
 });
 
 const app = createApp(App).use(router)
+global.VuetifyModule = Vuetify
 
 app.use(require("vue3-cookies"))
 app.use(VueCookies)

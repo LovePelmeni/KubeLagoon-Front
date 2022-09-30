@@ -12,8 +12,11 @@
           <gradient-chart
             id="chart-line"
             title="Gradient Line Chart"
-            :description="`<i :v-if='Sign = '+'' class='fa fa-arrow-up text-success'></i> <i v-else='Sign == '-'' class='fa fa-arrow-down text-success' />
-            <span class='font-weight-bold'>${AverageComparisationPercentage}%</span> than Yesterday`"
+            :description='`<i class="fa-solid text-success" :class={
+                "fa-arrow-up": Sign === "+",
+                "fa-arrow-down": Sign === "-", 
+            } ></i>
+            <span class="font-weight-bold">${Sign}${AverageComparisationPercentage}%</span> than Yesterday`'
 
             :chart="{
               labels: [
@@ -519,7 +522,7 @@ text-sm {
 }
 
 .fa-arrow-down:before {
-    content: "\f062"
+    content: "\f063"
 }
 
 *, :after, :before {
