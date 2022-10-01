@@ -3,7 +3,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import virtualMachine from "../components/VirtualMachine.vue";
 import HomePage from "../views/home.vue";
 
-import CustomerProfile from "../views/CustomerProfile.vue";
+import EditCustomerProfile from "../views/EditCustomerProfile.vue";
 import LoginPage from "../views/LoginPage.vue";
 import RegistrationPage from "../views/RegistrationPage.vue";
 
@@ -51,9 +51,9 @@ const routes = [
     component: deployErrorDescription,
   },
   {
-    path: "/customer/profile/",
-    name: "customer_profile",
-    component: CustomerProfile,
+    path: "/edit/customer/profile/",
+    name: "edit_customer_profile",
+    component: EditCustomerProfile,
   },
   {
     path: "/not/found/",

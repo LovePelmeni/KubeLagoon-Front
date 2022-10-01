@@ -1,21 +1,93 @@
 <template>
       <h1>SSH Configuration</h1>
-      <v-container fluid>
+      <div class="container fluid">
           <v-switch
           color="red"
           @click="toRootCertificate"
           v-model="useRootCertificate"
           label="Use Public Key"
-          ></v-switch>
+          style="
+            .v-selection-control .v-label {
+                height: 100%;
+                width: 50%;
+            }"
+          />
+         
+          <v-card-actions style="  
+              align-items: flex-end;
+              flex: 0 0 auto;
+              min-height: 52px;
+              padding: 0.5rem;
+              max-width: 20%;
+              position: absolute;
+              right: 0;
+              top: 0;
+              ">
+
+                <v-btn icon @click="showRootCertificateDescription = !showRootCertificateDescription">
+                  <v-icon>{{ showRootCertificateDescription ? 'mdi-chevron-up' : 'mdi-chevron-down' }}</v-icon>
+                </v-btn>
+
+          </v-card-actions>
+
+          <v-expand-transition>
+            <div v-show="showRootCertificateDescription">
+              <v-divider style="max-width: 40%"></v-divider>
+
+              <v-card-text style="max-width: 60%">
+                <label style="color: #fff; max-width: 60%">Provides the ability for you to connect to your Server Using Root SSH Certificate 
+                It is more secure, but to maintain that security you will need to change them regularly</label> 
+              </v-card-text>
+            </div>
+          </v-expand-transition>
+
+        </div>
+
+
+
+        <div class="container fluid">
 
           <v-switch
           color="blue"
           @click="toRootCredentials"
           v-model="useRootCredentials"
           label="Use Root User Credentials"
-          ></v-switch>
+          style="
+          .v-selection-control .v-label {
+              height: 100%;
+              width: 50%;
+          }"
+          />
 
-      </v-container>
+          <v-card-actions style="    
+            align-items: flex-end;
+            flex: 0 0 auto;
+            min-height: 52px;
+            padding: 0.5rem;
+            max-width: 20%;
+            position: absolute;
+            right: 0;
+            top: 0;">
+
+                <v-btn icon @click="showRootCredentialsDescription = !showRootCredentialsDescription">
+                  <v-icon>{{ showRootCredentialsDescription ? 'mdi-chevron-up' : 'mdi-chevron-down' }}</v-icon>
+                </v-btn>
+
+          </v-card-actions>
+
+
+          <v-expand-transition>
+            <div v-show="showRootCredentialsDescription">
+              <v-divider style="max-width: 60%"></v-divider>
+
+              <v-card-text>
+                <label style="color: #fff; max-width: 60%">Provides ability for you to connect to your Virtual Server, by using Credentials of the Host System
+                It makes it easier to connect, but lack security</label>
+              </v-card-text>
+            </div>
+          </v-expand-transition>
+
+      </div>
 </template>
 
 <script>
@@ -25,7 +97,13 @@ export default {
 
   name: "sshConfiguration",
   data() {
-    return {
+    return {  
+
+
+      // Triggers 
+
+      showRootCredentialsDescription: false, 
+      showRootCertificateDescription: false,
 
       // Configuration of the SSH for the Virtual Machine Server
       useRootCredentials: false,

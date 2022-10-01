@@ -4,7 +4,6 @@
 
     <router-link :to="{ name: 'login_page'}"></router-link>
     <router-link :to="{ name: 'register_page'}"></router-link>
-    <router-link :to="{ name: 'customer_profile'}"></router-link>
 
     <!-- Header -->
 

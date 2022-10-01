@@ -13,8 +13,8 @@
             id="chart-line"
             title="Gradient Line Chart"
             :description='`<i class="fa-solid text-success" :class={
-                "fa-arrow-up": Sign === "+",
-                "fa-arrow-down": Sign === "-", 
+                "fa-arrow-up": ${Sign} === "+",
+                "fa-arrow-down": ${Sign} === "-", 
             } ></i>
             <span class="font-weight-bold">${Sign}${AverageComparisationPercentage}%</span> than Yesterday`'
 
@@ -211,9 +211,9 @@ export default {
             ResourceMetrics: {},
 
             // Resource Usage Chart Data 
-            totalResources: [100, 200, 250, 100, 10, 130, 120, 110, 100], // total Resource Usage summary within the Week 
-            CpuChartData: [100, 200, 300, 200, 100, 35, 36, 80, 79, 100],  // CPU Usage within the Week
-            MemoryChartData: [50, 103, 235, 13, 100, 34, 21, 89, 93], // Memory Usage within the Week
+            totalResources: [100, 200, 250, 100, 10, 130, 120], // total Resource Usage summary within the Week 
+            CpuChartData: [100, 200, 300, 2, 100, 35, 36, 80],  // CPU Usage within the Week
+            MemoryChartData: [50, 103, 235, 13, 100, 34, 21], // Memory Usage within the Week
       
             // Capacity Percentage %
             StorageCapacityPercentage: 0, 
@@ -519,10 +519,12 @@ text-sm {
 
 .fa-arrow-up:before {
     content: "\f062";
+    color: green;
 }
 
 .fa-arrow-down:before {
-    content: "\f063"
+    content: "\f063";
+    color: red;
 }
 
 *, :after, :before {

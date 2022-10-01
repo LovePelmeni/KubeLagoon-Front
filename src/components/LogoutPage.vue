@@ -24,7 +24,7 @@ export default {
   methods: {
 
     ...mapState(["logout", "authenticated"]),
-    ...mapMutations(["TOGGLE_LOGOUT_MODAL", "TOGGLE_NOT_AUTHENTICATED"]),
+    ...mapMutations(["TOGGLE_LOGOUT_MODAL", "TOGGLE_HIDE_LOGOUT_MODAL", "TOGGLE_NOT_AUTHENTICATED"]),
 
     closeModal() {
     // Closing the Modal Window 
@@ -34,6 +34,7 @@ export default {
       // Removing the Jwt Token so customer is no longer able to perform any operations, that requires authentication 
       this.cookie?.delete("jwt-token")
       this.TOGGLE_NOT_AUTHENTICATED()
+      this.TOGGLE_HIDE_LOGOUT_MODAL()
       this.$router.push({name: "login_page"})
     },
   },

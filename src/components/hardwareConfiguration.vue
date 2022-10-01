@@ -106,11 +106,36 @@ export default {
     return {
       // hardware Configuration Validation Rules
 
-      items: [
-      { name: 'Foo', image: 'https://www.gravatar.com/avatar/b17065ea1655f1e3283aac8d8fc16019?s=48&d=identicon&r=PG'},
-      { name: 'Bar', image: 'https://www.gravatar.com/avatar/b17065ea1655f1e3283aac8d8fc16019?s=48&d=identicon&r=PG'},
-      { name: 'Hoo', image: 'https://www.gravatar.com/avatar/b17065ea1655f1e3283aac8d8fc16019?s=48&d=identicon&r=PG'},
-      { name: 'Coo', image: 'https://www.gravatar.com/avatar/b17065ea1655f1e3283aac8d8fc16019?s=48&d=identicon&r=PG'}],
+
+
+    select: null,
+    countries: [
+      {
+        name: "Andorra",
+        flag: "em-flag-ad"
+      },
+      {
+        name: "Arab Emirates",
+        flag: "em-flag-ae"
+      },
+      {
+        name: "Afghanistan",
+        flag: "em-flag-af"
+      },
+      {
+        name: "Antigua & Barbuda",
+        flag: "em-flag-ag"
+      },
+      {
+        name: "Albania",
+        flag: "em-flag-al"
+      },
+      {
+        name: "Anguilla",
+        flag: "em-flag-ai"
+      }
+   ],
+   
 
       Datacenters: [
         "Europe/Moscow",
@@ -320,19 +345,40 @@ export default {
       this.PreInstalledTools = PreInstalledTools
     },
     
-    GetDatacenter(DatacenterName) {
-      // Returns Load Balancers Object
-      return this.Datacenters.filter((dc) => {
-        return dc.DatacenterName === DatacenterName
+    GetDatacenterObject(DatacenterName) {
+      // Converts Datacenter to the JSON Object 
+      let Datacenter = this.Datacenters.filter((dc) => {
+        return dc === DatacenterName
       })[0]
+      let DatacenterObject = {"DatacenterName": Datacenter}
+      return DatacenterObject 
     },
 
-    GetOperationalSystem(OperationalSystemName, Version, Bit) {
-      // Returns Load Balancers Object
-      return this.LoadBalancers.filter((os) => {
-        return os.SystemName === OperationalSystemName && os.Version === Version && os.Bit === Bit
+    GetOperationalSystemObject(OsName) {
+      // Converts String with the Operational System Info, into an JSON object 
+      let OperationalSystem = this.OperationalSystems.filter((os) => {
+        return os === OsName
       })[0]
+      let SystemName = OperationalSystem.split(" ")[0]
+      let Version = OperationalSystem.split(" ")[1]
+      let Bit = OperationalSystem.split(" ")[2].trim("bit")
+      let OperationalSystemObject = {
+        "SystemName": SystemName,
+        "Version": Version, 
+        "Bit": Bit,
+      }
+      return OperationalSystemObject
     },
+    GetToolsObjects(Tools) {
+      // Converts Tools Into an array of the JSON Objects
+      let ToolsObjectsArray = [];
+      for (let Tool in Tools) {
+        ToolsObjectsArray.push({
+          "ToolName": Tool
+        })
+      }
+      return ToolsObjectsArray
+    }
   }
 };
 

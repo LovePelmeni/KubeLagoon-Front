@@ -5,6 +5,7 @@
           <logoutPage v-if="logout" />
           <loadingPage v-if="loading" />
           <modalPage v-if="modalActive" />
+          <customer-profile  v-if="showCustomerProfile" :Customer="fetchCustomerProfile()" />
         <router-view />
 
       </div>
@@ -24,10 +25,19 @@ import navigationPage from "./components/NavigationPage.vue"
 import modalPage from "./components/ModalWindow.vue"
 import loadingPage from "./components/LoadingPage.vue"
 import logoutPage from "./components/LogoutPage.vue"
-
+import CustomerProfile from './components/CustomerProfileNavBar.vue'
+// import * as customers from "../customers/customers.js";
+import { useCookies } from "vue3-cookies";
 
 export default {
 
+  setup() {
+    const cookies = useCookies();
+    return cookies
+  },
+  mounted() {
+    this.JwtToken = this.cookies?.get("jwt-token")
+  },
   name: "App",
   data() {
     return {
@@ -39,6 +49,7 @@ export default {
     navigationPage,
     modalPage,
     logoutPage,
+    CustomerProfile,
   },
 
   created() {
@@ -47,6 +58,23 @@ export default {
   },
 
   methods: {
+
+    fetchCustomerProfile() {
+      // Fetches Customer Profile by the Jwt Token
+      // let CustomerManager = new customers.CustomerManager()
+      // let CustomerProfile = CustomerManager.GetCustomerProfile(this.JwtToken)
+      // return CustomerProfile
+      return {
+        "Username": "John Pandey",
+        "Email": "some_email@gmail.com",
+        "Password": "some_password",
+        "Country": "Canada",
+        "City": "Toronto",
+        "Street": "National Street, 6",
+        "ZipCode": "125189",
+      }
+    },
+
     checkScreen() {
       const windowWidth = window.innerWidth;
       if (windowWidth <= 750) {
@@ -58,7 +86,7 @@ export default {
   },
 
   computed: {
-    ...mapState(["loading", "modalActive", "virtualMachinesLoaded",
+    ...mapState(["loading", "modalActive", "virtualMachinesLoaded", "showCustomerProfile",
     "notification", "error", "activeError", "activeNotification", "logout"]),
   },
 };
@@ -199,6 +227,21 @@ button,
   text-align: center;
   color: #2c3e50;
 }
+
+
+.v-application__wrap {
+  // Application Wrapper Initialization Parameters
+  background-color: #141625;
+  color: #141625;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  position: relative;
+}
+  
+
 
 nav {
   padding: 30px;

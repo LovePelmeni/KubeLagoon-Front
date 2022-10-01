@@ -88,18 +88,12 @@
                     label="Country"
                     placeholder="select Country"
                     prepend-inner-icon="mdi-account"
-                    required:items="countries" required>
-
-                           <template v-slot:selection="{ item, index}">
-                              <input type="hidden" :value="index">
-                              <img :src="item.IconImageUrl">{{ item.CountryName }}
-                            </template>
-
-                            <template v-slot:item="{ item, index }">
-                              <input type="hidden" :value="index">
-                              <img :src="item.IconImageUrl">{{ item.CountryName }}
-                            </template>
-                      </v-select>
+                    :items="[
+                    'Russia', 'USA', 
+                    'England', 'Germany', 
+                    'France', 'Italy', 
+                    'Norway', 'Ukraine', 'Canada']" required>
+                    </v-select>
 
                 <v-text-field
                 style="background-color: #1e2139; margin-top: 20px;"
@@ -320,6 +314,14 @@ export default {
 .v-application__wrap {
   background-color: #141625;
   color: #141625;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  /* max-width: 100%; */
+  /* min-height: 100vh; */
+  position: relative;
 }
   
 .dark-purple {

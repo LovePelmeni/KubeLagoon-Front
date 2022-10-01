@@ -92,6 +92,8 @@ import resourceConfiguration from "../components/resourceConfiguration.vue";
 import sshConfiguration from  "../components/sshConfiguration.vue";
 import { VirtualMachineCostCalculator } from "../../cost/virtualMachineCost.js";
 
+
+
 export default {
 
   name: "initializationModal",

@@ -1,9 +1,9 @@
 <template>
   <header class="flex">
 
-    <div class="branding flex" style="max-height: 100px; justify-content: space-between;">
+    <div class="branding flex" style="max-height: 100px; max-width: 100%; justify-content: space-between;">
       <v-avatar v-if="authenticated" size="50">
-        <div @click="redirectToProfile" class="button flex">
+        <div @click="triggerCustomerProfile" class="button flex">
           <div class="inner-button flex">
             <img :src="require('@/assets/customer_avatar.png')" alt="icon_plus" />
           </div>
@@ -63,6 +63,19 @@ export default {
     ...mapMutations([
       "TOGGLE_LOGOUT_MODAL",
     ]),
+    ...mapMutations([
+      "TOGGLE_SHOW_CUSTOMER_PROFILE",
+      "TOGGLE_HIDE_CUSTOMER_PROFILE",
+    ]),
+
+    triggerCustomerProfile() {
+      this.TOGGLE_SHOW_CUSTOMER_PROFILE()
+    },
+
+    triggerHideCustomerProfile() {
+      this.TOGGLE_HIDE_CUSTOMER_PROFILE()
+    },
+
     triggerLogoutModal() {
       // Triggers Logout Modal Window 
       this.TOGGLE_LOGOUT_MODAL()
@@ -86,7 +99,7 @@ export default {
   },
   computed: {
     ...mapState([
-      "authenticated"
+      "authenticated", 
     ]),
   }
 };

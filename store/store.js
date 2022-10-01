@@ -6,6 +6,7 @@ import { useCookies } from "vue3-cookies";
 export default new Vuex.Store({
 
   state: {
+    showCustomerProfile: false,
     virtualMachineSavedDraft: {
       // Hardware Configuration goes there...
 
@@ -27,7 +28,7 @@ export default new Vuex.Store({
     },
     logout: false,
     loading: false,
-    authenticated: false,
+    authenticated: true,
     virtualMachineData: [
       {
         "VirtualMachineId": "1567",
@@ -188,6 +189,16 @@ export default new Vuex.Store({
 
     // Handles Customer's Statuses
 
+    TOGGLE_SHOW_CUSTOMER_PROFILE(state) {
+      // Triggers event to show the Customer's Profile
+      state.showCustomerProfile = true
+    },
+
+    TOGGLE_HIDE_CUSTOMER_PROFILE(state) {
+      // Triggers event to hide the Customer's Profile
+      state.showCustomerProfile = false
+    },
+
     GET_AUTHENTICATION_STATUS() {
       // Returns the Registered Status for the Customer 
       let CookiesModule = useCookies() 
@@ -210,7 +221,11 @@ export default new Vuex.Store({
 
     TOGGLE_LOGOUT_MODAL(state) {
       // Changing state to the logged out, in order to trigger approval logout window
-      state.logout = !state.logout;
+      state.logout = true;
+    },
+
+    TOGGLE_HIDE_LOGOUT_MODAL(state) {
+      state.logout = false
     },
 
     TOGGLE_MODAL(state) {

@@ -31,6 +31,7 @@ function GetVirtualMachineWeekResourceMetricsRestController(JwtToken, VirtualMac
     })
     return ResponseMetrics, ResponseError
 }
+
 function GetVirtualMachineResourceMetricsRestController(JwtToken, VirtualMachineId) {
     // Rest Controller, that Parses current Resource Usage Info of the Virtual Machine Server 
 

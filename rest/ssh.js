@@ -7,7 +7,7 @@ var Url = require('url-parse');
 
 function DownloadSshKeyRestController(JwtToken, SshKeyPath, VirtualMachineId) {
   // Downloads SSH Public Key File to the Customer's Desktop, if the Virtual Machine has One
-  var APIUrl = new Url("http://%s:%s/download/ssh/key" % BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT)
+  var APIUrl = new URL("http://%s:%s/download/ssh/key" % BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT)
   let Response, ResponseError = global.jQuery.ajax({
     url: APIUrl, 
     type: "GET", 
