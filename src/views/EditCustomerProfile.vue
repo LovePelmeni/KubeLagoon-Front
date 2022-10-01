@@ -5,7 +5,7 @@
       <div class="left flex flex-column" style="margin-bottom: 5px; justify-content: center;">
 
         <div v-if="JwtToken != null">
-        <h1 style="color: white; align-text: center;">Hello, {{ Username }}!</h1>
+        <h1 style="color: white; align-text: center;" v-if="Username.length > 0">Hello, {{ Customer.Username }}!</h1>
         </div>
 
         <div v-else class="mobile-message flex flex-column">
@@ -183,7 +183,10 @@ export default {
   mounted() {
     this.JwtToken = this.cookie?.get("jwt-token") || "jwt-token"
   },
-  data() {
+  props: [
+    "Customer"
+  ],
+  data: (selfInstance) => {
     return {
 
       // Loading Statuses
@@ -197,37 +200,37 @@ export default {
 
       // Customer Profile Form Fields
   
-    Username: '',
+    Username: selfInstance.Customer.Username || 'Failed to Fetch Username',
     UsernameRules: [
       username => !!username || 'Please enter Valid Username',
       username => (username && username.length >= 10) || 'Username should be 10 characters or more!',
     ],
 
-    Email: 'Failed to Fetch Email',
+    Email: selfInstance.Customer.Email || 'Failed to Fetch Email',
     EmailRules: [
       email => !!email || 'Please Enter Valid E-mail',
       email => /.+@.+\..+/.test(email) || 'E-mail must be valid',
       email => (email && email.length >= 11) || 'E-mail must be at least 11 characters'
     ],
 
-    Password: 'Failed to Fetch Password',
+    Password: selfInstance.Customer.Password || 'Failed to Fetch Password',
     PasswordRules: [
       password => !!password || 'Please enter the Valid Password',
       password => (password && password.length >= 10) || 'Password must be 10 characters or more!',
     ],
 
-    Country: 'Failed to Fetch Country',
+    Country: selfInstance.Customer.Country || 'Failed to Fetch Country',
     CountryRules: [
       country => !!country || 'Please select the Country',
     ],
 
-    ZipCode: 'Failed to Fetch Zip Code',
+    ZipCode: selfInstance.Customer.ZipCode || 'Failed to Fetch Zip Code',
     ZipCodeRules: [
       zipcode => zipcode.length > 0 || 'Please Enter the Valid ZIP Code',
       zipcode => isNaN(zipcode) == false || 'Invalid Zip Code',
     ],
 
-    Street: 'Failed to Fetch Street',
+    Street: selfInstance.Customer.Street || 'Failed to Fetch Street',
       StreetRules: [
         street => street.length > 0 || 'Please Enter the Valid Street',
     ],
@@ -311,19 +314,6 @@ export default {
   // color: #1e2139
 }
 
-.v-application__wrap {
-  background-color: #141625;
-  color: #141625;
-  -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
-  display: flex;
-  flex-direction: column;
-  flex: 1 1 auto;
-  /* max-width: 100%; */
-  /* min-height: 100vh; */
-  position: relative;
-}
-  
 .dark-purple {
   background-color: #252945;
 }

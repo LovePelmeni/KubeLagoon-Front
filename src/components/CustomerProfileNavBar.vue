@@ -6,24 +6,26 @@
       <v-list>
 
         <v-list-item>
-          <v-list-item-avatar>
-            <v-img src="https://cdn.vuetifyjs.com/images/john.png"></v-img>
-          </v-list-item-avatar>
+          <v-avatar size="150">
+            <v-img :src="require('@/assets/customer_avatar.png')"></v-img>
+          </v-avatar>
         </v-list-item>
 
         <v-list-item link>
-          <v-list-item-content>
+
             <v-list-item-title class="text-h6">
               {{ CustomerData.Username.value }}
             </v-list-item-title>
-            <v-list-item-subtitle>{{ CustomerData.Email.value }}</v-list-item-subtitle>
-          </v-list-item-content>
 
-          <v-list-item-action>
-            <v-icon>mdi-menu-down</v-icon>
-          </v-list-item-action>
+            <v-list-item-subtitle>{{ CustomerData.Email.value }}</v-list-item-subtitle>
+
+            <v-list-item-action>
+              <v-icon>mdi-menu-down</v-icon>
+            </v-list-item-action>
+
         </v-list-item>
       </v-list>
+
       <v-divider></v-divider>
       <v-list
         nav
@@ -35,24 +37,24 @@
         >
 
           <v-list-item
-            v-for="(CustomerProperty, index) in Object.keys(CustomerData)"
+            v-for="(CustomerProperty, index) in ['Password', 'Country', 'City', 'ZipCode', 'Street']"
             :key="index"
           >
-            <v-list-item-icon>
+            <v-list-item-media>
             <v-icon>mdi-menu-icon</v-icon> 
-            </v-list-item-icon>
+            </v-list-item-media>
 
-            <v-list-item-content>
-              <v-list-item-title>{{ CustomerProperty["value"] }}</v-list-item-title>
-            </v-list-item-content>
+            <v-list-item-title>{{ CustomerData[CustomerProperty].value }}</v-list-item-title>
 
           </v-list-item>
 
         </v-list-item-group>
       </v-list>
+          <v-btn type="submit" style="margin-top: 20px;background-color: #ec5757" @click="redirectEditPage" :loading="EditLoading">Edit Profile</v-btn>
     </v-navigation-drawer>
   </v-card>
   </v-app>
+
 </template>
 
 
@@ -60,40 +62,34 @@
 <script>
 
 // import { mdiCloseThick } from '@mdi/js';
-import { mdiAt } from "@mdi/js";
-import { mapMutations } from "vuex"
-import HomePage from "../views/home.vue";
-
+import { mapMutations } from "vuex";
   export default {
     name: "CustomerProfile",
     props: ["Customer"],
-    data: () => ({
+    data: (selfInstance) => ({
+      EditLoading: false,
       selectedItem: 0,
-      CustomerData: {},
+      CustomerData: {
+        "Username": {"icon": "mdi-account-circle", "value": selfInstance.Customer.Username || '-'},
+        "Email": {"icon": "mdi-at", "value": selfInstance.Customer.Email || '-'},
+        "Password": {"icon": "mdi-lock", "value": "*".repeat(selfInstance.Customer.Password.length) || '-'},
+        "Country": {"icon": "mdi-city-variant", "value": selfInstance.Customer.Country || '-'},
+        "City": {"icon": "mdi-city-variant", "value": selfInstance.Customer.City || '-'},
+        "ZipCode": {"icon": "mdi-account-lock-open", "value": selfInstance.Customer.ZipCode || '-'},
+        "Street": {"icon": "mdi-account-lock-open", "value": selfInstance.Customer.Street || '-'},
+      },
     }),
-    components: {
-      HomePage,
-    },
-    created() {
-        this.ConvertCustomerProfileJSONToSchema()
-    },
     methods: {
-
       ...mapMutations([
         "TOGGLE_HIDE_CUSTOMER_PROFILE",
       ]),
-        ConvertCustomerProfileJSONToSchema() {
-            // Converts the Customer Profile info, into an appropriate Object Type 
-            this.CustomerData = {
-                "Username": {"icon": "mdi-account-circle", "value": this.Customer.Username || '-'},
-                "Email": {"icon": "mdi-at", "value": this.Customer.Email || '-'},
-                "Password": {"icon": "mdi-lock", "value": this.Customer.Password || '-'},
-                "Country": {"icon": "mdi-city-variant", "value": this.Customer.Country || '-'},
-                "City": {"icon": "mdi-city-variant", "value": this.Customer.City || '-'},
-                "ZipCode": {"icon": "mdi-account-lock-open", "value": this.Customer.ZipCode || '-'},
-                "Street": {"icon": "mdi-account-lock-open", "value": this.Customer.Street || '-'},
-            }
-        }
+      redirectEditPage() {
+        // Redirects to the Edit Profile Page 
+        this.EditLoading = true
+        this.TOGGLE_HIDE_CUSTOMER_PROFILE()
+        this.$router.push({name: "edit_customer_profile"})
+        this.EditLoading = false
+      }
     },
 }
 
@@ -116,6 +112,7 @@ import HomePage from "../views/home.vue";
     width: 256px;
     background-color: #1e2139;
     color: #fff;
+    border-radius: 0 20px 30px 0;
 }
 .v-system-bar {
     top: 0px !important;

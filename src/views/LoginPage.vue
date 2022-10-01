@@ -185,7 +185,7 @@ export default {
     -webkit-hyphens: auto;
     hyphens: auto;
     transition-duration: 150ms;
-    color: red;
+    color: red !important;
 }
 
 .px-1 {

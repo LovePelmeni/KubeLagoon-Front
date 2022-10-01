@@ -121,7 +121,6 @@ function DeleteCustomerRestController(JwtToken) {
         return null, newError}
     }
   })
-  console.log(Response, ResponseError)
   return Response, ResponseError
 }
 

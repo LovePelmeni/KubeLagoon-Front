@@ -25,7 +25,9 @@ services:
       interval: 10s
       timeout: 5s
       start_period: 10s
+
       retries: 5
+
 
 networks:
   cloud-infrastructure-network:

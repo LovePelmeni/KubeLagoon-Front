@@ -144,9 +144,15 @@ export default {
       ],
 
       OperationalSystems: [
-        "Centos",
-        "Ubuntu",
-        "Debian",
+        "Centos 7 64-bit",
+        "Centos 8 64-bit",
+        "Centos 9 64-bit",
+        "Ubuntu 9 64-bit",
+        "Ubuntu 10 64-bit",
+        "Ubuntu 11 64-bit",
+        "Debian 10 64-bit",
+        "Debian 10 64-bit",
+        "Debian 10 64-bit",
       ],
       PreInstalledTools: [
         "Docker",
