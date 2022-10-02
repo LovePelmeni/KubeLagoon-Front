@@ -9,7 +9,11 @@
 
 **Documentation**: [https://github.com/LovePelmeni/Web-CloudInfrastructure/README.md]("https://github.com/LovePelmeni/Web-Cloud-Infrastructure/README.md")
 
-**Source Code**: ["https://github.com/LovePelmeni/Web-Cloud-Infrastructure.git]("http://github.com/LovePelmeni/Web-Cloud-Infrastructure.git")
+
+**Frontend Source Code**: ["https://github.com/LovePelmeni/KubeLagoon-Front.git]("http://github.com/LovePelmeni/Web-Cloud-Infrastructure.git")
+
+
+**Backend Source Code**: ["https://github.com/LovePelmeni/KubeLagoon.git]("http://github.com/LovePelmeni/Web-Cloud-Infrastructure.git")
 
 
 --- 
@@ -72,7 +76,7 @@ Host Machine, which going to be immitating Datacenter with the `VMWare ESXI Hype
 ### *Using Docker* 
 
 1. Docker-Compose ~ `29.0.1 or higher`
-2. Docker ~ ``
+2. Docker ~ `4.1 or higher`
 
 ## *Extra Requirements* 
 
