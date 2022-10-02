@@ -5,7 +5,7 @@
             <v-col cols="10" lg="4" class="mx-auto" style="max-width: 90%">
 
                   <div class="text-center">
-                    <h2 class="indigo--text" style="margin-bottom: 20px; margin-top: 20px;">Datacenters</h2>
+                    <h2 class="indigo--text" style="margin-bottom: 20px; margin-top: 30px;">Datacenters</h2>
                   </div>
 
                   <v-col
@@ -28,7 +28,7 @@
                 </v-col>
 
                 <div class="text-center">
-                  <h2 class="indigo--text" style="margin-bottom: 20px; margin-top: 20px">Operational Systems</h2>
+                  <h2 class="indigo--text" style="margin-bottom: 20px; margin-top: 30px">Operational Systems</h2>
                 </div>
 
 
@@ -54,7 +54,7 @@
                 </v-col>
 
                   <div class="text-center">
-                    <h2 class="indigo--text" style="margin-bottom: 20px; margin-top: 20px;">Tools</h2>
+                    <h2 class="indigo--text" style="margin-bottom: 20px; margin-top: 30px;">Tools</h2>
                   </div>
 
                   <v-col
@@ -393,7 +393,12 @@ export default {
 
 <style lang="scss">
 
+
+
+.resourceSelectors {
+
 .v-messages__message {
+  margin-top: 10px;
   align-items: center;
   align-content: center;
   text-align: center;
@@ -404,7 +409,8 @@ export default {
   -webkit-hyphens: auto;
   hyphens: auto;
   transition-duration: 150ms;
-  color: #344767;
+  // color: #344767 !important;
+}
 }
 
 .virtual-machine-wrap {
@@ -431,6 +437,9 @@ export default {
     h1 {
       margin-bottom: 48px;
       color: #fff;
+    }
+    h2 {
+            color: #fff !important;
     }
     h3 {
       margin-bottom: 16px;

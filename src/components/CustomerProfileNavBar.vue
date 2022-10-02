@@ -1,13 +1,22 @@
-<template>
+<script>
+
+// import { mdiCloseThick } from '@mdi/js';
+import { mapMutations } from "vuex";
+  export default {
+    name: "CustomerProfile",
+    props: ["Customer"],
+    template: `
   <v-app>
   <v-card class="mx-auto" width="256" tile style="background-color: #1e2139;">
     <v-navigation-drawer permanent>
-      <v-system-bar @click="TOGGLE_HIDE_CUSTOMER_PROFILE()"></v-system-bar>
+      <v-system-bar @click="TOGGLE_HIDE_CUSTOMER_PROFILE()">
+        <v-icon style="color: black;">mdi-close-thick<v-icon>
+        </v-system-bar>
       <v-list>
 
         <v-list-item>
           <v-avatar size="150">
-            <v-img :src="require('@/assets/customer_avatar.png')"></v-img>
+            <v-img src="${require('@/assets/customer_avatar.png')}"></v-img>
           </v-avatar>
         </v-list-item>
 
@@ -18,10 +27,6 @@
             </v-list-item-title>
 
             <v-list-item-subtitle>{{ CustomerData.Email.value }}</v-list-item-subtitle>
-
-            <v-list-item-action>
-              <v-icon>mdi-menu-down</v-icon>
-            </v-list-item-action>
 
         </v-list-item>
       </v-list>
@@ -40,11 +45,8 @@
             v-for="(CustomerProperty, index) in ['Password', 'Country', 'City', 'ZipCode', 'Street']"
             :key="index"
           >
-            <v-list-item-media>
-            <v-icon>mdi-menu-icon</v-icon> 
-            </v-list-item-media>
-
-            <v-list-item-title>{{ CustomerData[CustomerProperty].value }}</v-list-item-title>
+            <v-icon style="position: absolute; bottom: 30%; left: 0">{{ CustomerData[CustomerProperty].icon }}</v-icon> 
+            <v-list-item-title style="font-family: ont-family: 'Poppins', sans-serif; font-size: 0.75em;">{{ CustomerData[CustomerProperty].value }}</v-list-item-title>
 
           </v-list-item>
 
@@ -55,17 +57,7 @@
   </v-card>
   </v-app>
 
-</template>
-
-
-
-<script>
-
-// import { mdiCloseThick } from '@mdi/js';
-import { mapMutations } from "vuex";
-  export default {
-    name: "CustomerProfile",
-    props: ["Customer"],
+    `,
     data: (selfInstance) => ({
       EditLoading: false,
       selectedItem: 0,
@@ -101,6 +93,20 @@ import { mapMutations } from "vuex";
 
 <style lang="scss">
 
+.v-list-item-subtitle {
+    -webkit-box-orient: vertical !important;
+    display: -webkit-box !important;
+    opacity: var(--v-medium-emphasis-opacity) !important;
+    overflow: hidden !important;
+    padding: 0 !important;
+    text-overflow: ellipsis !important;
+    font-size: 0.7rem !important;
+    font-weight: 400 !important;
+    letter-spacing: 0.0178571429em !important;
+    line-height: 1rem !important;
+    text-transform: none !important;
+}
+
 .v-navigation-drawer {
     left: 0px;
     z-index: 1006;
@@ -110,8 +116,8 @@ import { mapMutations } from "vuex";
     top: 0px;
     bottom: 0px;
     width: 256px;
-    background-color: #1e2139;
-    color: #fff;
+    background-color: #1e2139 !important;
+    color: #fff !important;
     border-radius: 0 20px 30px 0;
 }
 .v-system-bar {

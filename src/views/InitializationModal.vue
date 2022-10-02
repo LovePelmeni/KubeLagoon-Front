@@ -8,7 +8,26 @@
 
       <!-- Virtual Machine Work Details -->
 
-        <div class="resourceConfigBlock" style="width: 800px max-width: 100%; overflow: hidden; margin-left: auto !important; margin-right: auto !important;">
+        <div class="resourceConfigBlock" style="
+        width: 800px max-width: 100%; 
+        overflow: hidden;
+        margin-left: auto !important;
+        margin-right: auto !important;
+        
+        .v-messages__message {
+        margin-top: 10px;
+        align-items: center;
+        align-content: center;
+        text-align: center;
+        line-height: 12px;
+        word-break: break-word;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        -webkit-hyphens: auto;
+        hyphens: auto;
+        transition-duration: 150ms;
+        color: #344767 !important;
+      }">
         <!-- Hardware Configuration  -->
           <hardwareConfiguration />
         </div>
@@ -39,7 +58,7 @@
         <div class="modalField flex flex-column" style="width: 800px; max-width: 100%; overflow: hidden; margin-left: auto !important; margin-right: auto !important ">
 
           <label for="paymentTerms">Payment Terms</label>
-          <select @change="ProcessPaymentTermsChangeEvent" style="width: 750px; max-width: 100%; overflow: hidden;" type="text" id="paymentTerms" v-model="paymentTerms">
+          <select @change="ProcessPaymentTermsChangeEvent" style="max-width: 100%; overflow: hidden;" type="text" id="paymentTerms" v-model="paymentTerms">
             <option value="30">Net 30 Days</option>
             <option value="60">Net 60 Days</option>
           </select>
@@ -315,6 +334,7 @@ export default {
 
 
 .v-card[data-v-8b415dba] {
+    margin-top: 50px;
     overflow: initial;
     max-width: auto !important;
     margin-left: auto !important;
