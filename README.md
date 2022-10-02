@@ -46,11 +46,26 @@ Supports the Chart Diagrams to show the  Resources Usage of your Server
   <a><img src="./extra_photos/chart_diagrams.png" style="width: 100%; height: 100%" alt="Infrastructure"></a>
 </p>
 
-Provides Info about Connection 
+Provides Connection Instructions Info for your Virtual Server 
+
+
+It will let you know, if the server is running and you can perform any connections
 
 <p align="center">
-  <a><img src="./extra_photos/connection_banner.png" style="width: 100%; height: 100%" alt="Infrastructure"></a>
+  <a><img src="./extra_photos/running_connection_banner.png" style="width: 100%; height: 100%" alt="Infrastructure"></a>
 </p>
+
+It will let you know, if the server is being shutdown and you cannot perform any connections 
+<p align="center">
+  <a><img src="./extra_photos/shutdown_connection_banner.png" style="width: 100%; height: 100%" alt="Infrastructure"></a>
+</p>
+
+It will let you know, if the server is being updated / deployed and you cannot perform any connections 
+
+<p align="center">
+  <a><img src="./extra_photos/deploying_connection_banner.png" style="width: 100%; height: 100%" alt="Infrastructure"></a>
+</p>
+
 
 Also provides some basic Login / Registration / Reset Password Pages as well
 

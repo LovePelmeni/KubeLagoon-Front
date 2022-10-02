@@ -32,7 +32,7 @@
 
             <v-icon v-if="VirtualMachine.Running === true" style="color: green; margin-bottom: 52px; margin-left: 10px;">mdi-check-bold</v-icon>
             <v-icon v-if="VirtualMachine.Shutdown === true" style="color: red; margin-right: 10px; margin-bottom: 3px;">mdi-close</v-icon>
-            <v-icon v-if="VirtualMachine.Deploying === true" style="color: green; margin-right: 10px; margin-bottom: 3px;">mdi-check-bold</v-icon>
+            <v-icon v-if="VirtualMachine.Deploying === true" style="color: yellow; margin-right: 10px; margin-bottom: 3px;">mdi-clock-outline</v-icon>
 
             <label style="color: #fff; max-width: 60%; margin-top: 10px; margin-bottom: 20px; font-size: 1rem;" v-if="VirtualMachine.Running === true">
             Congrats! your Virtual Server is Running, you can connect to it using instructions down below
