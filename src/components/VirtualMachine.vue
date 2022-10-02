@@ -14,7 +14,15 @@
       <span class="back-text" @click="redirectToPreviousPage">Go Back</span>
     </router-link>
 
+    <!-- Virtual Machine Server Connection Info  -->
+
+    <virtual-machine-connection-info :VirtualMachine="VirtualMachine"/>
+
+    <!-- Charts with the Resource Usage  -->
+
     <chart-page :VirtualMachineId="VirtualMachine.VirtualMachineId"  />
+
+    <!-- Block with other Info  -->
     <div class="status-container" style="max-width: 100%; overflow: hidden; min-width: 1030px;">
 
       <p class="status-title" style="margin-top: 6px; margin-right: 3px;">Status</p>
@@ -185,15 +193,16 @@ import {  mapState } from "vuex";
 import { mapActions } from "vuex";
 import { useCookies } from "vue3-cookies";
 
-
+import VirtualMachineConnectionInfo from "../components/ConnectionInfo.vue";
 import VirtualServerNotFoundWindow from "./VirtualServerNotFoundWindow.vue";
 import ChartPage from "../components/ResourceCharts.vue"
+
 import * as cost from "../../cost/virtualMachineCost";
 import * as resources from "../../usage/usage.js"
 
 export default {
 
-  components: { VirtualServerNotFoundWindow, ChartPage },
+  components: { VirtualServerNotFoundWindow, ChartPage, VirtualMachineConnectionInfo },
   name: "VirtualMachineInfo",
   setup() {
     const { cookie } = useCookies();

@@ -4,7 +4,7 @@
     <div class="left flex">
       <span class="tracking-number">#{{ VirtualMachine.VirtualMachineName }}</span>
       <span class="due-date">{{ GetDateDifference(VirtualMachine.CreatedAt) }} days ago</span>
-      <span class="person">{{ VirtualMachine.Owner.Username }}</span>
+      <span class="person">{{ VirtualMachine.Ssh.IpAddress }}</span>
     </div>
     <div class="right flex">
       <span class="price">{{ GetVirtualMachineTotalCost() }}$</span>

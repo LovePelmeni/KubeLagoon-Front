@@ -42,11 +42,15 @@ Provides the Configuration Form, where you can setup hardware / customized resou
 
 Supports the Chart Diagrams to show the  Resources Usage of your Server 
 
-
 <p align="center">
   <a><img src="./extra_photos/chart_diagrams.png" style="width: 100%; height: 100%" alt="Infrastructure"></a>
 </p>
 
+Provides Info about Connection 
+
+<p align="center">
+  <a><img src="./extra_photos/connection_banner.png" style="width: 100%; height: 100%" alt="Infrastructure"></a>
+</p>
 
 Also provides some basic Login / Registration / Reset Password Pages as well
 

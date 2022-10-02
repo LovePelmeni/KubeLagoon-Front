@@ -31,7 +31,7 @@ export default new Vuex.Store({
       "MaxMemory": 1000,
       "StorageCapacity": 1000,
       "MaxStorageCapacity": 1000,
-
+      
       "useRootCredentials": true,
       "useRootCertificate": false,
     },
@@ -47,6 +47,13 @@ export default new Vuex.Store({
         "Shutdown": false, 
         "paymentDueDate": "2020-20-02",         
         "CreatedAt": "1/2/2020",
+        "Ssh": {
+          "byRootCredentials": false,
+          "byRootCertificate": true,
+          "RootUsername": "root",
+          "RootPassword": "root_password",
+          "IpAddress": "127.235.11.28", // IP Address of the Virtual Machine Server 
+        },
         "Owner": {
           "Username": "some-user",
           "Email": "email@gmail.com",
@@ -83,6 +90,13 @@ export default new Vuex.Store({
           "Street": "Smith's Street, 4",
           "ZipCode": "125167",
         },
+        "Ssh": {
+          "byRootCredentials": true,
+          "byRootCertificate": false,
+          "IpAddress": "127.235.11.28",
+          "RootUsername": "root",
+          "RootPassword": "root_password",
+        },
         "Capacities": { // Capacities, specified by the Customer 
           "MaxMemory": 1000,
           "MaxCpuNum": 1000,
@@ -110,6 +124,13 @@ export default new Vuex.Store({
           "Street": "Smith's Street, 4",
           "ZipCode": "125167",
         },
+        "Ssh": {
+          "byRootCredentials": false,
+          "byRootCertificate": true,
+          "IpAddress": "127.235.11.28",
+          "RootUsername": "root",
+          "RootPassword": "root_password",
+        },
         "Capacities": { // Capacities, specified by the Customer 
           "MaxMemory": 1000,
           "MaxCpuNum": 1000,
@@ -130,6 +151,14 @@ export default new Vuex.Store({
         "paymentDueDate": "2020-20-02",
         "CreatedAt": "1/2/2021",
         
+        "Ssh": {
+          "byRootCredentials": true,
+          "byRootCertificate": false,
+          "IpAddress": "127.235.11.28",
+          "RootUsername": "root",
+          "RootPassword": "root_password",
+        },
+
         "Owner": {
           "Username": "some-user",
           "Email": "email@gmail.com",
@@ -160,6 +189,14 @@ export default new Vuex.Store({
         "Shutdown": true, 
         "paymentDueDate": "2020-20-02",
         "CreatedAt": "10/5/2021",
+
+        "Ssh": {
+          "byRootCredentials": true,
+          "byRootCertificate": false,
+          "IpAddress": "127.235.11.28",
+          "RootUsername": null, // Root Username for the Virtual Server 
+          "RootPassword": null, // Root Password for the Virtual Server 
+        },
 
         "Owner": {
           "Username": "some-user",
