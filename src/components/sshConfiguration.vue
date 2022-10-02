@@ -3,6 +3,7 @@
 
       <div class="container fluid" style="position: relative">
           <v-switch
+          ref="by_root_certificate"
           color="red"
           @click="toRootCertificate"
           v-model="useRootCertificate"
@@ -50,6 +51,7 @@
         <div class="container fluid" style="position: relative">
 
           <v-switch
+          ref="by_root_credentials"
           color="blue"
           @click="toRootCredentials"
           v-model="useRootCredentials"
@@ -103,13 +105,13 @@ export default {
   data() {
     return {  
 
-
       // Triggers 
 
       showRootCredentialsDescription: false, 
       showRootCertificateDescription: false,
 
       // Configuration of the SSH for the Virtual Machine Server
+      
       useRootCredentials: false,
       useRootCertificate: false,
     }

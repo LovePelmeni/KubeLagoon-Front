@@ -7,6 +7,7 @@
         <label for="CpuNum">CPU</label>
 
         <v-text-field
+        ref="CpuNum"
         v-if="!CpuNum"
         :rules="CpuRules"
         id="CpuNum" 
@@ -26,6 +27,7 @@
         <label for="MaxCpu">Max CPU</label>
 
         <v-text-field
+        ref="MaxCpu"
         v-if="!MaxCpu"
         :rules="MaxCpuRules"
         required
@@ -34,6 +36,7 @@
         v-model="MaxCpu" />
 
         <v-text-field
+        ref="MaxCpu"
         v-else
         :rules="MaxCpuRules"
         required
@@ -46,6 +49,7 @@
         <label for="MemoryInMegabytes">Memory (MB)</label>
 
         <v-text-field
+        ref="Memory"
         required
         v-if="!Memory"
         :rules="MemoryInMegabytesRules"
@@ -53,6 +57,7 @@
         v-model="Memory" />
 
         <v-text-field
+        ref="Memory"
         required
         v-else
         :rules="MemoryInMegabytesRules"
@@ -68,6 +73,7 @@
           <label for="MaxMemory">Max Memory Capacity (MB)</label>
 
           <v-text-field
+          ref="MaxMemory"
           required
           v-if="!MaxMemory"
           :rules="MaxMemoryRules"
@@ -75,6 +81,7 @@
           v-model="MaxMemory" />
 
           <v-text-field
+          ref="MaxMemory"
           required
           v-else
           :rules="MaxMemoryRules"
@@ -86,6 +93,7 @@
           <label for="Storage">Storage (GB)</label>
 
           <v-text-field
+          ref="StorageCapacity"
           required
           v-if="!StorageCapacity"
           :rules="StorageRules"
@@ -94,6 +102,7 @@
           v-model="StorageCapacity" />
 
           <v-text-field
+          ref="StorageCapacity"
           required
           v-else
           :rules="StorageRules"
@@ -106,6 +115,7 @@
           <label for="MaxStorage">Max Storage Capacity (GB)</label>
 
           <v-text-field
+          ref="MaxStorageCapacity"
           required
           v-if="!MaxStorageCapacity"
           :rules="MaxStorageRules"
@@ -114,7 +124,9 @@
           v-model="MaxStorageCapacity" />
 
           <v-text-field
+          ref="MaxStorageCapacity"
           v-else
+          
           :rules="MaxStorageRules"
           required 
           

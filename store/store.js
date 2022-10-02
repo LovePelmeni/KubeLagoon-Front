@@ -6,6 +6,15 @@ import { useCookies } from "vue3-cookies";
 export default new Vuex.Store({
 
   state: {
+    customer: {
+      "Username": "John Pandey",
+      "Email": "some_email@gmail.com",
+      "Password": "some_password",
+      "Country": "Canada",
+      "City": "Toronto",
+      "Street": "National Street, 6",
+      "ZipCode": "125189",
+    },
     showCustomerProfile: false,
     virtualMachineSavedDraft: {
       // Hardware Configuration goes there...

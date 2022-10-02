@@ -3,11 +3,12 @@ import * as customers_rest from "../rest/customers.js";
 class CustomerRegistrationForm {
   // Base Class for the Registration Form 
   // Entity, that represents Customer Registration Form Data
-  constructor(Username, Email, Password, BillingAddress, ZipCode, Street) {
+  constructor(Username, Email, Password, Country, City, ZipCode, Street) {
     this.Username = Username
     this.Email = Email
     this.Password = Password
-    this.BillingAddress = BillingAddress 
+    this.Country = Country
+    this.City = City 
     this.ZipCode = ZipCode 
     this.Street = Street 
   }
@@ -17,7 +18,8 @@ class CustomerRegistrationForm {
       "Username": this.Username, 
       "Password": this.Password, 
       "Email": this.Email, 
-      "BillingAddress": this.BillingAddress, 
+      "Country": this.Country,
+      "City": this.City,
       "ZipCode": this.ZipCode, 
       "Street": this.Street
     }
@@ -26,16 +28,39 @@ class CustomerRegistrationForm {
 
 class CustomerLoginForm {
   // Base Class for the Login Form
-  constructor(Username, Password) {
-    this.Username = Username
+  constructor(Email, Password) {
+    this.Email = Email
     this.Password = Password
   }
   ToBlob() {
     // Returns the Blob of the JSON of the Customer login Form 
-    return {"Username": this.Username, "Password": this.Password}
+    return {"Email": this.Email, "Password": this.Password}
   }
 }
 
+class CustomerEditForm {
+  // Validation Form For Editing Customer's Profile 
+  constructor(Username, Email, Password, Country, City, ZipCode, Street) {
+    this.Username = Username 
+    this.Email = Email 
+    this.Password = Password 
+    this.Country = Country 
+    this.City = City 
+    this.ZipCode = ZipCode
+    this.Street = Street
+  }
+  ToBlob() {
+    return {
+      "Username": this.Username, 
+      "Email": this.Email, 
+      "Password": this.Password, 
+      "Country": this.Country, 
+      "City": this.City, 
+      "ZipCode": this.ZipCode, 
+      "Street": this.Street,
+    }
+  }
+}
 
 class CustomerManager {
   // Class, represents Management tool for handling Customer's Operations
@@ -86,5 +111,5 @@ class CustomerManager {
     }
 }
 
-export {CustomerRegistrationForm, CustomerLoginForm, CustomerManager};
+export {CustomerRegistrationForm, CustomerLoginForm, CustomerManager, CustomerEditForm};
 

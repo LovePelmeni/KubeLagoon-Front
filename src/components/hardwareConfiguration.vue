@@ -3,7 +3,6 @@
     <div class="resourceSelectors">
     
             <v-col cols="10" lg="4" class="mx-auto" style="max-width: 90%">
-
                   <div class="text-center">
                     <h2 class="indigo--text" style="margin-bottom: 20px; margin-top: 30px;">Datacenters</h2>
                   </div>
@@ -15,6 +14,7 @@
                   style="max-width: 90%;">
 
                   <v-select
+                  ref="datacenter"
                   v-model="AddedDatacenter"
                   :items="[
                     'Europe/Moscow',
@@ -40,6 +40,7 @@
                   >
 
                   <v-select
+                    ref="operational_system"
                     v-model="AddedOperationalSystem"
                     :items="[
                       'CentOS',
@@ -63,6 +64,7 @@
                     lg="4"
                     class="mx-auto">
                   <v-select
+                    ref="tools"
                     v-model="AddedPreInstalledTools"
                     :items="[
                       'Docker',
@@ -566,7 +568,13 @@ export default {
     &:focus {
       outline: none;
     }
+    border-radius: 5px;
   }
+
+  select .v-field.v-field {
+    cursor: pointer;
+    background-color: #1e2139;
+}
 
 .not_available {
   margin-top: 160px;

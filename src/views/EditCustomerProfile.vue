@@ -172,10 +172,11 @@
 
 import { useCookies } from "vue3-cookies";
 import * as customers from "../../customers/customers.js"
+import {mapState} from "vuex";
 
 export default {
 
-  name: "CustomerProfile",
+  name: "EditCustomerProfile",
   setup() {
     const { cookie } = useCookies();
     return { cookie };
@@ -183,9 +184,6 @@ export default {
   mounted() {
     this.JwtToken = this.cookie?.get("jwt-token") || "jwt-token"
   },
-  props: [
-    "Customer"
-  ],
   data: (selfInstance) => {
     return {
 
@@ -200,59 +198,48 @@ export default {
 
       // Customer Profile Form Fields
   
-    Username: selfInstance.Customer.Username || 'Failed to Fetch Username',
+    Username: selfInstance.customer.Username || 'Failed to Fetch Username',
     UsernameRules: [
       username => !!username || 'Please enter Valid Username',
       username => (username && username.length >= 10) || 'Username should be 10 characters or more!',
     ],
 
-    Email: selfInstance.Customer.Email || 'Failed to Fetch Email',
+    Email: selfInstance.customer.Email || 'Failed to Fetch Email',
     EmailRules: [
       email => !!email || 'Please Enter Valid E-mail',
       email => /.+@.+\..+/.test(email) || 'E-mail must be valid',
       email => (email && email.length >= 11) || 'E-mail must be at least 11 characters'
     ],
 
-    Password: selfInstance.Customer.Password || 'Failed to Fetch Password',
+    Password: selfInstance.customer.Password || 'Failed to Fetch Password',
     PasswordRules: [
       password => !!password || 'Please enter the Valid Password',
       password => (password && password.length >= 10) || 'Password must be 10 characters or more!',
     ],
 
-    Country: selfInstance.Customer.Country || 'Failed to Fetch Country',
+    Country: selfInstance.customer.Country || 'Failed to Fetch Country',
     CountryRules: [
       country => !!country || 'Please select the Country',
     ],
 
-    ZipCode: selfInstance.Customer.ZipCode || 'Failed to Fetch Zip Code',
+    ZipCode: selfInstance.customer.ZipCode || 'Failed to Fetch Zip Code',
     ZipCodeRules: [
       zipcode => zipcode.length > 0 || 'Please Enter the Valid ZIP Code',
       zipcode => isNaN(zipcode) == false || 'Invalid Zip Code',
     ],
 
-    Street: selfInstance.Customer.Street || 'Failed to Fetch Street',
+    Street: selfInstance.customer.Street || 'Failed to Fetch Street',
       StreetRules: [
         street => street.length > 0 || 'Please Enter the Valid Street',
     ],
     };
   },
-  created() {
-    this.GetCustomerProfile(this?.JwtToken)
+  computed: {
+    ...mapState([
+      "customer"
+    ])
   },
   methods: {
-
-    GetCustomerProfile() {
-      // Returns the Customer's Profile 
-      let customerManager = new customers.CustomerManager()
-      let Customer, CustomerError = customerManager.GetCustomerProfile(this.JwtToken)
-      if (CustomerError != null) {this.activeError = true; this.EditError = "Failed to Render Profile"}else{
-
-      for (let CustomerProperty in Object.keys(Customer || {"Username": "Username", "Email": "email@gmail.com", "Password": "Password"})) {
-          this.$data[CustomerProperty] = Customer[CustomerProperty]
-      }}
-      this.activeError = false 
-      this.EditError = null
-    },
 
     RedirectToMainPage() {
       // Redirects to the Main Page of the Application 
@@ -276,14 +263,25 @@ export default {
       this.ApplyChangesloading = true 
       this.EditProfile = false 
 
+      let EditForm = customers.CustomerEditForm(
+        function(){if (this.Username.length > 0) {return this.Username} else{return null} }() || this.customer.Username,
+        function(){if (this.Email.length > 0) {return this.Email} else{return null} }() || this.customer.Email,
+        function(){if (this.Password.length > 0) {return this.Password} else{return null} }() || this.customer.Password,
+        function(){if (this.Country.length > 0) {return this.Country} else{return null} }() || this.customer.Country,
+        function(){if (this.City.length > 0) {return this.City} else{return null} }() || this.customer.City,
+        function(){if (this.ZipCode.length > 0) {return this.ZipCode} else{return null} }() || this.customer.ZipCode,
+        function(){if (this.Street.length > 0) {return this.Street} else{return null} }() || this.customer.Street,
+      )
+
       let customerManager = new customers.CustomerManager()
-      let Edited, EditError = customerManager.EditCustomer()
+      let Edited, EditError = customerManager.EditCustomer(this.JwtToken, EditForm)
 
       if (EditError != null || Edited == false) {
       this.activeError = true; this.EditError = "Error"}
       this.activeError = false 
       this.EditError = null
       this.ApplyChangesLoading = false
+      this.customer = EditForm.ToBlob()
     }
   },
 };

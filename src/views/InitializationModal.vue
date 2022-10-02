@@ -29,17 +29,17 @@
         color: #344767 !important;
       }">
         <!-- Hardware Configuration  -->
-          <hardwareConfiguration />
+          <hardwareConfiguration ref="hardwareConfiguration" />
         </div>
 
         <div class="resourceConfigBlock" style="width: 800px; max-width: 100%; overflow: hidden; margin-left: auto !important; margin-right: auto !important">
           <!-- resource Configuration -->
-          <resourceConfiguration />
+          <resourceConfiguration  ref="resourceConfiguration"/>
         </div>
 
         <div class="resourceConfigBlock" style="width: 800px; max-width: 100%; overflow: hidden; margin-left: auto !important; margin-right: auto !important">
           <!-- SSH Configuration -->
-          <sshConfiguration />
+          <sshConfiguration ref="sshConfiguration" />
         </div>
 
         <div class="payment flex" style="width: 800px; max-width: 100%; overflow: hidden; margin-left: auto !important; margin-right: auto !important ">
@@ -210,21 +210,18 @@ export default {
       // Once customer decided to restore the vm server within the specific amount of days
       // this method gonna calculate the total price, depending on the amount of days
 
-      if (this.CpuNum == null || this.CpuNum == 0) {
-        this.CpuNum = 0
-      }
+      // Resources 
 
-      if (this.Memory == null || this.Memory == 0) {
-        this.Memory = 0
-      }
+      let CpuNum = this.$refs.resourceConfiguration.CpuNum || 0
+      let Memory = this.$refs.resourceConfiguration.Memory || 0
+      let StorageCapacity = this.$refs.resourceConfiguration.StorageCapacity || 0
 
-      if (this.StorageCapacity == null || this.StorageCapacity == 0) {
-        this.StorageCapacity = 0
-      }
+      console.log(CpuNum, Memory, StorageCapacity)
 
       let PricePerDay = document.getElementById("paymentTerms").value;
-      let BillManager = new VirtualMachineCostCalculator(this.CpuNum, this.Memory, this.StorageCapacity)
+      let BillManager = new VirtualMachineCostCalculator(CpuNum, Memory, StorageCapacity)
       let TotalPricePerDay = BillManager.CalculateCostPerDay()
+      console.log(TotalPricePerDay)
       this.getVirtualMachineCostTotal(TotalPricePerDay, Number(PricePerDay))
     },
 
