@@ -1,17 +1,19 @@
-var BACKEND_APPLICATION_HOST = process.env.BACKEND_APPLICATION_HOST
-var BACKEND_APPLICATION_PORT = process.env.BACKEND_APPLICATION_PORT
+var BACKEND_APPLICATION_HOST = process.env.BACKEND_APPLICATION_HOST || "localhost"
+var BACKEND_APPLICATION_PORT = process.env.BACKEND_APPLICATION_PORT || "8000"
 
 /* eslint-disable no-unused-vars */
 
-var Url = require('url-parse');
-
 function DownloadSshKeyRestController(JwtToken, SshKeyPath, VirtualMachineId) {
   // Downloads SSH Public Key File to the Customer's Desktop, if the Virtual Machine has One
-  var APIUrl = new URL("http://%s:%s/download/ssh/key" % BACKEND_APPLICATION_HOST, BACKEND_APPLICATION_PORT)
+  var APIUrl = new URL(`http://${BACKEND_APPLICATION_HOST}:${BACKEND_APPLICATION_PORT}/download/ssh/key/`)
+  APIUrl.searchParams.append("VirtualMachineId", VirtualMachineId)
+  APIUrl.searchParams.append("SshKeyPath", SshKeyPath)
+  
   let Response, ResponseError = global.jQuery.ajax({
     url: APIUrl, 
     type: "GET", 
     headers: {
+      "Access-Control-Allow-Credentials": true,
       "Access-Control-Allow-Origin": "*",
       "Authorization": JwtToken,
     },
@@ -28,6 +30,4 @@ function DownloadSshKeyRestController(JwtToken, SshKeyPath, VirtualMachineId) {
   return Response, ResponseError
 }
 
-export {RemoveSshKeyRestController,
-UpdateSshKeyRestController,
-DownloadSshKeyRestController}
+export {DownloadSshKeyRestController}

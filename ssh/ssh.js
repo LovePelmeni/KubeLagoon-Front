@@ -3,7 +3,7 @@ import * as ssh_rest from "../rest/ssh.js"
 
 class VirtualMachineSshManager {
   // Manager Class, for managing the SSH of the Virtual Machine Server 
-  GetSshCertificate(JwtToken, VirtualMachineId) {
+  GetSshCertificate(JwtToken, SshKeyPath, VirtualMachineId) {
     // Returns the SSH Certificate Content for the Virtual Machine Server 
     let CertificateContent, ContentError = ssh_rest.DownloadSshKeyRestController(
     JwtToken, SshKeyPath, VirtualMachineId)

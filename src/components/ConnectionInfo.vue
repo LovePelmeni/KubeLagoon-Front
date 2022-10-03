@@ -139,38 +139,51 @@
              </pre>
         </div>
 
+        <p v-if="DownloadFailure == true" style="margin-top: 20px; margin-bottom: 30px; color: red; ">{{ DownloadFailureError }}</p>
+
         <button  @click="DownloadSshCertificateFile()"  class="btn btn-upload-certificate" style="margin-top: 20px; color: #fff; !important" v-if="VirtualMachine.Running === true">
-        <a download v-if="VirtualMachine.Ssh.byRootCertificate === true "><label style="color: #fff !important;">Download Certificate</label></a>
+        <a download v-if="VirtualMachine.Ssh.byRootCertificate === true "><label id="downloadLabel" style="color: #fff !important;">Download Certificate</label></a>
         </button>
 
         </v-card-text>
 
         </div>
     </v-expand-transition>
+
 </div>
 </template>
 
 
 <script>
 
-import * as ssh from "../../ssh/ssh.js"
+
+import * as ssh from "../../ssh/ssh.js";
 
 export default {
     name: "VirtualMachineConnectionInfo",
     props: ["VirtualMachine"],
     data() {
         return {
+            DownloadFailure: false,
+            DownloadFailureError: null, 
             showConnectionInfoDocs: false,
         }
     },
     methods: {
        DownloadSshCertificateFile() {
 
-           // Obtaining the Content of the SSH Certificate for the Virtual Machine Server 
+           // Obtaining the Content of the SSH Certificate for the Virtual Machine Server
+
+            let SshKeyPath = "/path/to/cert/"
+            // Initializing SSH Manager For the Virtual Server 
             let sshContentManager = new ssh.VirtualMachineSshManager()
-            let CertificateContent = sshContentManager.GetSshCertificate(this.JwtToken, this.VirtualMachine.VirtualMachineId)
+            let CertificateContent = sshContentManager.GetSshCertificate(this.JwtToken, SshKeyPath, this.VirtualMachine.VirtualMachineId)
+            if (CertificateContent == null) {
+            this.DownloadFailure = true; this.DownloadFailureError = "Failed To Download SSL Certificate, please try again later";
+            document.getElementById("downloadLabel").innerHTML = "Failed"}else{
 
             // Downloading the File with SSH Content from the Browser 
+
             let filename = "customer_avatar"
             var element = document.createElement('a');
             element.setAttribute('href', 'data:application/x-x509-ca-cert;charset=utf-8,' + encodeURIComponent(CertificateContent));
@@ -181,9 +194,13 @@ export default {
             // Imittating the Clicking and downloading the file 
             element.click();
             document.body.removeChild(element);
+
+            }
        },
+    }
 }
-}
+
+
 
 </script>
 
