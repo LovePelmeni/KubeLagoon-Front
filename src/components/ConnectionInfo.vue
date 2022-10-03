@@ -132,7 +132,7 @@
                         font-weight: 400;
                         margin: 0;
                         padding: 0;">{{VirtualMachine.Ssh.RootUsername}}@{{ VirtualMachine.Ssh.IpAddress}}</span> 
-                        -i /path/to/ssh/certificate/
+                        -i <var translate="no">ROOT_CERTIFICATE_PATH</var>
                         </li>
                     </ol>
                 </code>
