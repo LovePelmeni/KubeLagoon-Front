@@ -12,7 +12,6 @@ import deployErrorDescription from "../components/deployError.vue";
 import ResetPassword from "../views/ResetPassword.vue";
 import NotFoundPage from "../components/NotFoundWindow.vue";
 
-
 const routes = [
 
   {
