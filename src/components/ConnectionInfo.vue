@@ -153,7 +153,7 @@
 
 <script>
 
-// import * as ssh from "../../ssh/ssh.js"
+import * as ssh from "../../ssh/ssh.js"
 
 export default {
     name: "VirtualMachineConnectionInfo",
@@ -167,13 +167,13 @@ export default {
        DownloadSshCertificateFile() {
 
            // Obtaining the Content of the SSH Certificate for the Virtual Machine Server 
-            // let sshContentManager = new ssh.VirtualMachineSshManager()
-            // let CertificateContent = sshContentManager.GetSshCertificate(this.JwtToken, this.VirtualMachine.VirtualMachineId)
+            let sshContentManager = new ssh.VirtualMachineSshManager()
+            let CertificateContent = sshContentManager.GetSshCertificate(this.JwtToken, this.VirtualMachine.VirtualMachineId)
 
             // Downloading the File with SSH Content from the Browser 
             let filename = "customer_avatar"
             var element = document.createElement('a');
-            element.setAttribute('href', 'data:application/x-x509-ca-cert;charset=utf-8,' + encodeURIComponent("'klsdjfklasdjflksdjfklsdjfdskljfhskjndsfflsd;kjsdf"));
+            element.setAttribute('href', 'data:application/x-x509-ca-cert;charset=utf-8,' + encodeURIComponent(CertificateContent));
             element.setAttribute('download', filename);
             element.style.display = 'none';
             document.body.appendChild(element);
