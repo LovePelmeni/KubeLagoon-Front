@@ -10,11 +10,16 @@
       <span class="price">{{ GetVirtualMachineTotalCost() }}$</span>
       <div
         class="status-button flex"
-        :class="{ running: VirtualMachine.Running, shutdown: VirtualMachine.Shutdown, deploying: VirtualMachine.Deploying }"
+        :class="{ 
+        running: VirtualMachine.Running,
+        shutdown: VirtualMachine.Shutdown, 
+        deploying: VirtualMachine.Deploying,
+        failure: VirtualMachine.Running === false && VirtualMachine.Shutdown === false && VirtualMachine.Deploying === false}"
       >
         <span v-if="VirtualMachine.Running">Running</span>
         <span v-if="VirtualMachine.Shutdown">Shutdown</span>
         <span v-if="VirtualMachine.Deploying">Deploying</span>
+        <span v-if="VirtualMachine.Deploying === false && VirtualMachine.Running === false && VirtualMachine.Shutdown === false">Failure</span>
       </div>
       <div class="icon">
         <img :src="require('@/assets/icon-arrow-right.svg')" alt="arrow-right" />
@@ -97,4 +102,14 @@ export default {
     }
   }
 }
+
+
+.failure {
+  &::before {
+    background-color: rgba(255, 0, 0, 0.838);
+  }
+  color: rgba(255, 0, 0, 0.838);
+  background-color: rgba(223, 227, 250, 0.1);
+}
+
 </style>

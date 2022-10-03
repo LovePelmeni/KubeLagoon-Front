@@ -30,24 +30,25 @@
         
         <v-card-text style="background-color: #1e2139; border-radius: 10px;">
 
-            <v-icon v-if="VirtualMachine.Running === true" style="color: green; margin-bottom: 52px; margin-left: 10px;">mdi-check-bold</v-icon>
-            <v-icon v-if="VirtualMachine.Shutdown === true" style="color: red; margin-right: 10px; margin-bottom: 3px;">mdi-close</v-icon>
-            <v-icon v-if="VirtualMachine.Deploying === true" style="color: yellow; margin-right: 10px; margin-bottom: 3px;">mdi-clock-outline</v-icon>
+            <v-icon v-if="VirtualMachine?.Running === true" style="color: green; margin-bottom: 52px; margin-left: 10px;">mdi-check-bold</v-icon>
+            <v-icon v-if="VirtualMachine?.Shutdown === true" style="color: red; margin-right: 10px; margin-bottom: 3px;">mdi-close</v-icon>
+            <v-icon v-if="VirtualMachine?.Deploying === true" style="color: yellow; margin-right: 10px; margin-bottom: 3px;">mdi-clock-outline</v-icon>
+            <v-icon v-if="VirtualMachine?.Running === false && VirtualMachine?.Shutdown === false && VirtualMachine?.Deploying === false" style="color: red; margin-right: 10px; margin-bottom: 3px;">mdi-emoticon-dead</v-icon>
 
-            <label style="color: #fff; max-width: 60%; margin-top: 10px; margin-bottom: 20px; font-size: 1rem;" v-if="VirtualMachine.Running === true">
-            Congrats! your Virtual Server is Running, you can connect to it using instructions down below
+            <label style="color: #fff; max-width: 60%; margin-top: 10px; margin-bottom: 20px; font-size: 1rem;" v-if="VirtualMachine?.Running === true">
+            Congrats! Your Virtual Server is Running, you can connect to it using instructions down below
             </label> 
 
-            <label style="color: #fff; max-width: 60%; margin-top: 10px; margin-bottom: 20px; font-size: 1rem;" v-if="VirtualMachine.Deploying === true">
+            <label style="color: #fff; max-width: 60%; margin-top: 10px; margin-bottom: 20px; font-size: 1rem;" v-if="VirtualMachine?.Deploying === true">
             Your Virtual Server is being deployed, please wait
             </label> 
 
-            <label style="color: #fff; max-width: 60%; margin-top: 10px; margin-bottom: 20px; font-size: 1rem;" v-if="VirtualMachine.Shutdown === true">
+            <label style="color: #fff; max-width: 60%; margin-top: 10px; margin-bottom: 20px; font-size: 1rem;" v-if="VirtualMachine?.Shutdown === true">
             Your Virtual Server is shutdown. Run it up in order to connect.
             </label> 
 
-            <label style="color: #fff; max-width: 60%; margin-top: 10px; margin-bottom: 20px; font-size: 1rem;" v-if="VirtualMachine.Running === false && VirtualMachine.Deploying === false && VirtualMachine.Shutdown === false">
-            Oops, your Virtual Server has been Failed to Deploy
+            <label style="color: #fff; max-width: 60%; margin-top: 10px; margin-bottom: 20px; font-size: 1rem;" v-if="VirtualMachine?.Running === false && VirtualMachine?.Deploying === false && VirtualMachine?.Shutdown === false">
+            Oops, Your Virtual Server has been Failed to Deploy
             </label> 
 
 
@@ -72,7 +73,7 @@
         </code>
         button.</p>
 
-        <div v-if="VirtualMachine.Ssh.byRootCredentials === true && VirtualMachine.Running === true" class="code-toolbar"><pre class="prefixed command language-bash" style="    
+        <div v-if="VirtualMachine?.Ssh.byRootCredentials === true && VirtualMachine?.Running === true" class="code-toolbar"><pre class="prefixed command language-bash" style="    
         background: #081b4b;
         color: #fff;
         border-radius: 16px;
@@ -96,8 +97,8 @@
                         display: inline;
                         font-weight: 400;
                         margin: 0;
-                        padding: 0;"> {{VirtualMachine.Ssh.RootUsername}}@{{ VirtualMachine.Ssh.IpAddress}} </span> 
-                         -p {{ VirtualMachine.Ssh.RootPassword }}
+                        padding: 0;"> {{VirtualMachine?.Ssh.RootUsername}}@{{ VirtualMachine?.Ssh.IpAddress}} </span> 
+                         -p {{ VirtualMachine?.Ssh.RootPassword }}
                         </li>
                     </ol>
                 </code>
@@ -106,7 +107,7 @@
 
 
 
-         <div v-if="VirtualMachine.Ssh.byRootCertificate === true && VirtualMachine.Running === true" class="code-toolbar">
+         <div v-if="VirtualMachine?.Ssh.byRootCertificate === true && VirtualMachine?.Running === true" class="code-toolbar">
              <pre class="prefixed command language-bash" style="    
             background: #081b4b;
             color: #fff;
@@ -131,7 +132,7 @@
                         display: inline;
                         font-weight: 400;
                         margin: 0;
-                        padding: 0;">{{VirtualMachine.Ssh.RootUsername}}@{{ VirtualMachine.Ssh.IpAddress}}</span> 
+                        padding: 0;">{{VirtualMachine?.Ssh.RootUsername}}@{{ VirtualMachine?.Ssh.IpAddress}}</span> 
                         -i <var translate="no">ROOT_CERTIFICATE_PATH</var>
                         </li>
                     </ol>
@@ -142,7 +143,7 @@
         <p v-if="DownloadFailure == true" style="margin-top: 20px; margin-bottom: 30px; color: red; ">{{ DownloadFailureError }}</p>
 
         <button  @click="DownloadSshCertificateFile()"  class="btn btn-upload-certificate" style="margin-top: 20px; color: #fff; !important" v-if="VirtualMachine.Running === true">
-        <a download v-if="VirtualMachine.Ssh.byRootCertificate === true "><label id="downloadLabel" style="color: #fff !important;">Download Certificate</label></a>
+        <a download v-if="VirtualMachine?.Ssh.byRootCertificate === true "><label id="downloadLabel" style="color: #fff !important;" v-if="VirtualMachine.Running === true">Download Certificate</label></a>
         </button>
 
         </v-card-text>
@@ -171,10 +172,8 @@ export default {
     },
     methods: {
        DownloadSshCertificateFile() {
-
            // Obtaining the Content of the SSH Certificate for the Virtual Machine Server
-
-            let SshKeyPath = "/path/to/cert/"
+            let SshKeyPath = `/path/to/${this.VirtualMachine.VirtualMachineId}/${this.VirtualMachine.VirtualMachineName}/cert/`
             // Initializing SSH Manager For the Virtual Server 
             let sshContentManager = new ssh.VirtualMachineSshManager()
             let CertificateContent = sshContentManager.GetSshCertificate(this.JwtToken, SshKeyPath, this.VirtualMachine.VirtualMachineId)
