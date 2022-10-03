@@ -139,8 +139,8 @@
              </pre>
         </div>
 
-        <button class="btn btn-upload-certificate" style="margin-top: 20px; color: #fff;" v-if="VirtualMachine.Running === true">
-        <a download v-if="VirtualMachine.Ssh.byRootCertificate === true "><label>Download Certificate</label></a>
+        <button class="btn btn-upload-certificate" style="margin-top: 20px; color: #fff; !important" v-if="VirtualMachine.Running === true">
+        <a download v-if="VirtualMachine.Ssh.byRootCertificate === true "><label style="color: #fff !important;">Download Certificate</label></a>
         </button>
 
         </v-card-text>
@@ -174,6 +174,6 @@ export default {
 <style scoped>
 .btn-upload-certificate {
     background-color: #ec5555;
-    color: #fff;
+    color: #fff !important;
 }
 </style>
