@@ -63,8 +63,7 @@ export default {
       // Fetches Customer Profile by the Jwt Token
       // let CustomerManager = new customers.CustomerManager()
       // let CustomerProfile = CustomerManager.GetCustomerProfile(this.JwtToken)
-      // return CustomerProfile
-      return {
+      this.customer = {
         "Username": "John Pandey",
         "Email": "some_email@gmail.com",
         "Password": "some_password",
@@ -73,6 +72,7 @@ export default {
         "Street": "National Street, 6",
         "ZipCode": "125189",
       }
+      return this.customer
     },
 
     checkScreen() {
@@ -87,7 +87,7 @@ export default {
 
   computed: {
     ...mapState(["loading", "modalActive", "virtualMachinesLoaded", "showCustomerProfile",
-    "notification", "error", "activeError", "activeNotification", "logout"]),
+    "notification", "error", "activeError", "activeNotification", "logout", "customer"]),
   },
 };
 

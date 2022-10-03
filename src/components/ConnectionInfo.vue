@@ -139,7 +139,7 @@
              </pre>
         </div>
 
-        <button class="btn btn-upload-certificate" style="margin-top: 20px; color: #fff; !important" v-if="VirtualMachine.Running === true">
+        <button  @click="DownloadSshCertificateFile()"  class="btn btn-upload-certificate" style="margin-top: 20px; color: #fff; !important" v-if="VirtualMachine.Running === true">
         <a download v-if="VirtualMachine.Ssh.byRootCertificate === true "><label style="color: #fff !important;">Download Certificate</label></a>
         </button>
 
@@ -153,6 +153,8 @@
 
 <script>
 
+// import * as ssh from "../../ssh/ssh.js"
+
 export default {
     name: "VirtualMachineConnectionInfo",
     props: ["VirtualMachine"],
@@ -162,18 +164,32 @@ export default {
         }
     },
     methods: {
-        copyConnectionCommand() {
-        // Copies the Connection Command
+       DownloadSshCertificateFile() {
 
-        }
-    }
+           // Obtaining the Content of the SSH Certificate for the Virtual Machine Server 
+            // let sshContentManager = new ssh.VirtualMachineSshManager()
+            // let CertificateContent = sshContentManager.GetSshCertificate(this.JwtToken, this.VirtualMachine.VirtualMachineId)
+
+            // Downloading the File with SSH Content from the Browser 
+            let filename = "customer_avatar"
+            var element = document.createElement('a');
+            element.setAttribute('href', 'data:application/x-x509-ca-cert;charset=utf-8,' + encodeURIComponent("'klsdjfklasdjflksdjfklsdjfdskljfhskjndsfflsd;kjsdf"));
+            element.setAttribute('download', filename);
+            element.style.display = 'none';
+            document.body.appendChild(element);
+            
+            // Imittating the Clicking and downloading the file 
+            element.click();
+            document.body.removeChild(element);
+       },
 }
+}
+
 </script>
 
-
-<style scoped>
+<style lang="scss">
 .btn-upload-certificate {
     background-color: #ec5555;
     color: #fff !important;
 }
-</style>
+</style> 
