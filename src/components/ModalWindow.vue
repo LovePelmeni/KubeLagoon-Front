@@ -1,6 +1,6 @@
 <template>
   <div class="modal flex">
-    <div class="modal-content">
+    <div class="modal-content" style="width: 500px;">
       <p>Are you sure you want to exit? Your changes will not be saved?</p>
       <div class="actions flex">
         <button @click="closeModal" class="purple">Return</button>
@@ -36,6 +36,16 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
+.modal .modal-content[data-v-1cd6ece9] {
+    border-radius: 20px;
+    padding: 48px 32px;
+    width: 500px;
+    background-color: #252945;
+    color: #fff;
+}
+
+
 .modal {
   z-index: 100;
   position: fixed;
@@ -46,7 +56,8 @@ export default {
   .modal-content {
     border-radius: 20px;
     padding: 48px 32px;
-    max-width: 450px;
+    width: 500px !important; 
+    max-width: 1000px;
     background-color: #252945;
     color: #fff;
     p {

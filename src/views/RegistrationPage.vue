@@ -1,78 +1,65 @@
 <template>
-  <!-- <main class="mt-0 main-content main-content-bg"> -->
+  <main class="mt-0 main-content main-content-bg">
     <section>
-
       <div class="page-header min-vh-75">
-        <div class="registration-container">
-          <div class="registration-row">
-
+        <div class="container" style="position: relative;">
+          <div class="login-row" style="position: relative;">
             <div class="mx-auto col-xl-4 col-lg-5 col-md-6 d-flex flex-column">
               <div class="mt-8 login-card login-card-plain" style="height: 550px;">
-                <div class="pb-0 card-header text-start">
-                <h1 class="text-center" style="margin-top: 10px; color: #fff;">Sign Up</h1>
+                <div class="pb-0 card-header text-start" style="
+                border-radius: 1rem 1rem 0 0;
+                background-color: #7c5dfa!important;">
+                <h1 class="text-center" style="margin-top: 20px; color: #fff; margin-bottom: 30px;">Sign Up</h1>
                 </div>
                 <div class="login-card-body">
-                  <form role="form" class="text-start">
+                  <form role="form" ref="form" class="text-start" @submit.prevent="submitRegisterForm">
 
                     <v-card-text>
-
                     <v-text-field
                         v-model="Username"
                         :rules="UsernameValidationRules"
                         type="username"
                         label="Username"
-                        placeholder="Username"
                         prepend-inner-icon="mdi-account"
                         required
                     />
+
                     <v-text-field
                         v-model="Email"
                         :rules="EmailValidationRules"
                         type="email"
                         label="Email"
-                        placeholder="Email"
                         prepend-inner-icon="mdi-account"
                         required
                     />
+
+
                     <v-text-field
                         class="password-field"
                         v-model="Password"
                         :rules="PasswordValidationRules"
                         :type="passwordShow?'text':'password'"
                         label="Password"
-                        placeholder="Password"
                         prepend-inner-icon="mdi-key"
                         :append-icon="passwordShow ? 'mdi-eye':'mdi-eye-off'"
                         @click:append="passwordShow = !passwordShow"
                         required
                     />
 
-                    <v-select
+                    <v-text-field
                         v-model="Country"
+                        :rules="EmailValidationRules"
                         type="country"
                         label="Country"
-                        placeholder="select Country"
                         prepend-inner-icon="mdi-account"
-                        required:items="countries" required>
-
-                    <template v-slot:selection="{ item, index}">
-                        <input type="hidden" :value="index">
-                        <img :src="item.IconImageUrl">{{ item.CountryName }}
-                      </template>
-
-                      <template v-slot:item="{ item, index }">
-                        <input type="hidden" :value="index">
-                        <img :src="item.IconImageUrl">{{ item.CountryName }}
-                      </template>
-
-                    </v-select>
+                        required
+                    />
 
                     <v-text-field
                         v-model="City"
                         :rules="CityValidationRules"
                         type="city"
                         label="City"
-                        placeholder="City"
                         prepend-inner-icon="mdi-account"
                         required
                     />
@@ -82,7 +69,6 @@
                         :rules="ZipCodeValidationRules"
                         type="zipcode"
                         label="ZipCode"
-                        placeholder="ZipCode"
                         prepend-inner-icon="mdi-account"
                         required
                     />
@@ -92,10 +78,10 @@
                         :rules="StreetValidationRules"
                         type="street"
                         label="Street"
-                        placeholder="Street"
                         prepend-inner-icon="mdi-account"
                         required
                     />
+
                     <v-switch 
                         @click="RememberUserFunction"
                         v-model="RememberUser"
@@ -104,8 +90,8 @@
                     </v-switch>
 
                     <div class="text-center">
-                      <soft-button
-                        
+                      <soft-button  
+                        style="max-width: 400px;"
                         class="my-4 mb-2"
                         variant="gradient"
                         color="success"
@@ -122,8 +108,7 @@
                     <router-link
                       :to="{ name: 'login_page' }"
                       class="text-success text-gradient font-weight-bold"
-                      >Sign in</router-link
-                    >
+                      >Sign in</router-link>
                   </p>
                 </div>
               </div>
@@ -132,242 +117,122 @@
         </div>
       </div>
     </section>
-  <!-- </main> -->
+  </main>
 </template>
 
 <script>
 
+import SoftButton from "../components/SoftButton.vue";
+const body = document.getElementsByTagName("body")[0];
 
-import SoftButton from "@/components/SoftButton.vue";
+import { mapMutations } from "vuex";
 import * as customers from "../../customers/customers.js";
-
-import { mapState } from "vuex";
 
 export default {
 
+  created() {
+    body.classList.remove("bg-gray-100");
+  },
+
+  name: 'RegisterPage',
   components: {
     SoftButton,
   },
-  computed: {
-    ...mapState(["authenticated"])
-  },
-  name: 'RegistrationPage',
   data: () => ({
-
-      // Response Attributes 
-      Registered: false,
-      RegisterFailed: false, 
-      RegisterError: null, 
-
-
-      countries: [
-        {
-          "IconImageUrl": "@/assets/europe_moscow.png",
-          "CountryName": "Russia", 
-        },
-        {
-          "CountryName": "Germany",
-          "IconImageUrl": "@/assets/europe_berlin.png",
-        }
-      ],
-
-    loading:false,
-    snackbar:false,
-    passwordShow:false,
-    Valid: false,
-
+    
+    // Remember User Data Attributes
     RememberUser: false,
+
+    // Login Statuses
+    RegisterError: null,
+    RegisterFailed: false,
+    registered: false,
+
+    RegisterLoading: false,
+    snackbar: false,
+    passwordShow: false,
 
     Username: '',
     UsernameValidationRules: [
-      username => !!username || 'This Field is Required',
-      username => (username && username.length >= 10) || 'Username should be 10 characters or more!',
+      username => !!username || 'Password is required',
+      username => (username && username.length >= 10) || 'Invalid Password',
     ],
 
     Email: '',
     EmailValidationRules: [
-      email => !!email || 'E-mail is required',
-      email => /.+@.+\..+/.test(email) || 'E-mail must be valid',
-      email => (email && email.length >= 11) || 'E-mail must be at least 11 characters'
+      email => !!email || 'Email is required',
+      email => (email && email.length >= 8) || 'Invalid Email',
     ],
 
     Password: '',
     PasswordValidationRules: [
       password => !!password || 'Password is required',
-      password => (password && password.length >= 10) || 'Password must be 10 characters or more!',
+      password => (password && password.length >= 10) || 'Invalid Password',
     ],
-
 
     Country: '',
     CountryValidationRules: [
-      country => !!country || 'Country is required',
+      Country => !!Country || 'Password is required',
+      Country => (Country && Country.length >= 10) || 'Invalid Password',
     ],
 
     City: '',
     CityValidationRules: [
-      city => !!city || 'City is required'
+      city => !!city || 'Password is required',
+      city => (city && city.length >= 10) || 'Invalid Password',
     ],
 
     ZipCode: '',
     ZipCodeValidationRules: [
-      zipcode => zipcode.length > 0 || 'Zip Code is required',
-      zipcode => isNaN(zipcode) == false || 'Invalid Zip Code',
+      zipcode => !!zipcode || 'Password is required',
+      zipcode => (zipcode && zipcode.length >= 10) || 'Invalid Password',
     ],
 
     Street: '',
-      StreetValidationRules: [
-        street => street.length > 0 || 'Street is required',
+    StreetValidationRules: [
+      Street => !!Street || 'Password is required',
+      Street => (Street && Street.length >= 10) || 'Invalid Password',
     ],
   }),
 
   methods: {
-
-    RememberUserFunction() {
-      // Remembers the Username and Password 
-    },
     
-    submitRegisterForm(){
-      // Submitting the Registration Form 
-
+    ...mapMutations(["TOGGLE_ERROR"]),
+    submitLoginForm(){
+      // Submits the Login Form 
       if (this.$refs.form.validate()){
-        this.loading = true
-      setTimeout(()=> {
-        this.loading = false
-        this.snackbar = true
-      }, 2000)
-        this.registerCustomer()
-        }
+          this.RegisterLoading = true
+          setTimeout(() => {
+            this.RegisterLoading = false
+          }, 1000)
+          this.loginCustomer(this.Username, this.Password)
+          }
     },
-    MarkAsAuthenticated() {
-      // Marks Customer as an Authenticated 
-      this.authenticated = true
+    beforeUnmount() {
+      this.toggleEveryDisplay();
+      this.toggleHideConfig();
+      body.classList.add("bg-gray-100");
     },
-    registerCustomer() {
-      // Submits the Registration Form 
-      
-      let newCustomerManager = new customers.CustomerManager()
-      let Registered, RegisterError = newCustomerManager.CreateCustomer(this.Username, this.Email, this.Password,
-      this.BillingAddress, this.ZipCode, this.Street)
-      this.Registered = Registered || false
+    loginCustomer(Username, Password) {
+      // Loggs Customer Inside the Application using JWT Token
 
-      if (Registered == false || RegisterError != null) {
-      this.RegisterError = RegisterError || "Failed to Register";
-      this.RegisterFailed = true}
+      let newCustomerManager = new customers.CustomerManager()
+      let loggedIn, LogError = newCustomerManager.LoginCustomer(Username, Password)
+      if (LogError != null && loggedIn != true){
+
+        this.LoginError = LogError || "Failed to Login, Invalid Credentials"; 
+        this.RegisterFailed = true}else{
+
+        this.registered = true
+        this.$router.push({name: "main_page"})
+      }
     },
   }
 }
+
 </script>
 
 <style lang="scss">
-
-
-.registration-container {
-    // Container for the Registration Page Component
-    width: auto !important;
-    height: auto !important;
-}
-
-.registration-row {
-    --bs-gutter-x: 1.5rem;
-    --bs-gutter-y: 0;
-    display: flex;
-    flex-wrap: wrap;
-    margin-top: calc(var(--bs-gutter-y)*-1);
-    margin-right: calc(var(--bs-gutter-x)*-0.5);
-    margin-left: calc(var(--bs-gutter-x)*-0.5);
-}
-
-.registrationWrapper {
-
-  .registrationForm {
-    background-color:  #d9dcf7;
-  }
-  flex: 1;
-  position: relative;
-  width: 100%;
-  background-color: #141625;
-  color: #1e2139
-}
-
-.v-application__wrap {
-  background-color: #141625;
-  color: #141625;
-}
-.card .card-body {
-    font-family: Open Sans;
-    padding: 1.5rem;
-}
-
-.card-body {
-    flex: 1 1 auto;
-    padding: 1rem;
-}
-
-.btn-outline-light {
-    box-shadow: none;
-}
-
-.btn-class {
-    margin-bottom: 1rem;
-    letter-spacing: -.025rem;
-    box-shadow: 0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%);
-    background-size: 150%;
-    background-position-x: 25%;
-}
-.badge, .btn-class {
-    text-transform: uppercase;
-}
-.w-100 {
-    width: 100%!important;
-}
-.btn-outline-light {
-    color: #e9ecef;
-    border-color: #e9ecef;
-}
-
-.password-field {
-
-.v-messages__message {
-    margin-left: 50px;
-}
-}
-
-.btn-class {
-    display: inline-block;
-    font-weight: 700;
-    line-height: 1.4;
-    color: #67748e;
-    text-align: center;
-    vertical-align: middle;
-    cursor: pointer;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    user-select: none;
-    background-color: transparent;
-    border: 1px solid transparent;
-    padding: 0.75rem 1.5rem;
-    font-size: .75rem;
-    border-radius: 0.5rem;
-    transition: all .15s ease-in;
-}
-.a {
-    letter-spacing: -.025rem;
-    color: #344767;
-}
-html * {
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-}
-.a, .a:hover {
-    text-decoration: none;
-}
-.a {
-    color: #cb0c9f;
-}
-*, :after, :before {
-    box-sizing: border-box;
-}
-
 
 .form-check-label {
     font-size: .875rem;
@@ -385,8 +250,6 @@ html * {
     margin-bottom: 0.125rem;
 }
 
-
-
 .v-messages__message {
     align-items: center;
     align-content: center;
@@ -398,7 +261,7 @@ html * {
     -webkit-hyphens: auto;
     hyphens: auto;
     transition-duration: 150ms;
-    color: red;
+    color: red !important;
 }
 
 .px-1 {
@@ -426,35 +289,12 @@ label {
 }
 
 .password-field {
-
+// Password Field Parameters 
 .v-messages__message {
     margin-left: 40px;
 }
+
 }
-
-
-.mx-auto {
-    margin-right: auto !important;
-    margin-left: auto !important;
-}
-
-.flex-column {
-    flex-direction: column !important;
-}
-
-.d-flex {
-    display: flex !important;
-}
-
-.flex-column {
-    flex-direction: column;
-}
-
-.col-md-6 {
-    flex: 0 0 auto;
-    width: 50%;
-}
-
 
 .btn-danger, .btn-danger:hover, .btn-dark, .btn-dark:hover, .btn-info, .btn-info:hover, .btn-primary, .btn-primary:hover, .btn-secondary, .btn-secondary:hover, .btn-success, .btn-success:hover, .btn-warning, .btn-warning:hover, .btn.bg-gradient-danger, .btn.bg-gradient-danger:hover, .btn.bg-gradient-dark, .btn.bg-gradient-dark:hover, .btn.bg-gradient-info, .btn.bg-gradient-info:hover, .btn.bg-gradient-primary, .btn.bg-gradient-primary:hover, .btn.bg-gradient-secondary, .btn.bg-gradient-secondary:hover, .btn.bg-gradient-success, .btn.bg-gradient-success:hover, .btn.bg-gradient-warning, .btn.bg-gradient-warning:hover {
     color: #fff;
@@ -575,6 +415,9 @@ label {
 }
 
 
+html {
+    height: 100% !important;
+}
 .card .card-header {
     padding: 1.5rem;
 }
@@ -715,8 +558,8 @@ input {
 .col-md-6 {
     flex: 0 0 auto;
     width: 50%;
-    height: 100%;
 }
+
 .text-start {
     text-align: left!important;
 }
@@ -749,6 +592,22 @@ input {
     margin-right: calc(var(--bs-gutter-x)*-0.5);
     margin-left: calc(var(--bs-gutter-x)*-0.5);
 }
+// body {
+//     font-weight: 400;
+//     line-height: 1.6;
+// }
+// body {
+//     margin: 0;
+//     font-family: var(--bs-body-font-family);
+//     font-size: var(--bs-body-font-size);
+//     font-weight: var(--bs-body-font-weight);
+//     line-height: var(--bs-body-line-height);
+//     color: var(--bs-body-color);
+//     text-align: var(--bs-body-text-align);
+//     background-color: var(--bs-body-bg);
+//     -webkit-text-size-adjust: 100%;
+//     -webkit-tap-highlight-color: transparent;
+// }
 
 .text-gradient.text-success {
     background-color: #7c5dfa

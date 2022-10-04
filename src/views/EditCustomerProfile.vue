@@ -170,6 +170,7 @@
 
 <script>
 
+
 import { useCookies } from "vue3-cookies";
 import * as customers from "../../customers/customers.js"
 import {mapState} from "vuex";
@@ -184,7 +185,7 @@ export default {
   mounted() {
     this.JwtToken = this.cookie?.get("jwt-token") || "jwt-token"
   },
-  data: (selfInstance) => {
+  data() {
     return {
 
       // Loading Statuses
@@ -198,37 +199,37 @@ export default {
 
       // Customer Profile Form Fields
   
-    Username: selfInstance.customer.Username || 'Failed to Fetch Username',
+    Username: this?.customer.Username || 'Failed to Fetch Username',
     UsernameRules: [
       username => !!username || 'Please enter Valid Username',
       username => (username && username.length >= 10) || 'Username should be 10 characters or more!',
     ],
 
-    Email: selfInstance.customer.Email || 'Failed to Fetch Email',
+    Email: this?.customer.Email || 'Failed to Fetch Email',
     EmailRules: [
       email => !!email || 'Please Enter Valid E-mail',
       email => /.+@.+\..+/.test(email) || 'E-mail must be valid',
       email => (email && email.length >= 11) || 'E-mail must be at least 11 characters'
     ],
 
-    Password: selfInstance.customer.Password || 'Failed to Fetch Password',
+    Password: this?.customer.Password || 'Failed to Fetch Password',
     PasswordRules: [
       password => !!password || 'Please enter the Valid Password',
       password => (password && password.length >= 10) || 'Password must be 10 characters or more!',
     ],
 
-    Country: selfInstance.customer.Country || 'Failed to Fetch Country',
+    Country: this?.customer.Country || 'Failed to Fetch Country',
     CountryRules: [
       country => !!country || 'Please select the Country',
     ],
 
-    ZipCode: selfInstance.customer.ZipCode || 'Failed to Fetch Zip Code',
+    ZipCode: this?.customer.ZipCode || 'Failed to Fetch Zip Code',
     ZipCodeRules: [
       zipcode => zipcode.length > 0 || 'Please Enter the Valid ZIP Code',
       zipcode => isNaN(zipcode) == false || 'Invalid Zip Code',
     ],
 
-    Street: selfInstance.customer.Street || 'Failed to Fetch Street',
+    Street: this?.customer.Street || 'Failed to Fetch Street',
       StreetRules: [
         street => street.length > 0 || 'Please Enter the Valid Street',
     ],

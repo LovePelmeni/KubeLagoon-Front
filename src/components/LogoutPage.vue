@@ -1,6 +1,6 @@
 <template>
   <div class="modal flex">
-    <div class="modal-content">
+    <div class="modal-content" style="width: 500px !important;">
       <p>Are you sure you want to logout?</p>
       <div class="actions flex">
         <button @click="closeLogoutModal" class="purple">Return Back</button>
@@ -28,7 +28,11 @@ export default {
 
     closeModal() {
     // Closing the Modal Window 
-      this.TOGGLE_LOGOUT_MODAL()
+      this.TOGGLE_HIDE_LOGOUT_MODAL()
+    },
+    closeLogoutModal() {
+      // Closing Logout Modal Window 
+      this.closeModal()
     },
     logoutCustomer() {
       // Removing the Jwt Token so customer is no longer able to perform any operations, that requires authentication 
@@ -52,7 +56,6 @@ export default {
   .modal-content {
     border-radius: 20px;
     padding: 48px 32px;
-    max-width: 450px;
     background-color: #252945;
     color: #fff;
     p {

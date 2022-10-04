@@ -5,7 +5,7 @@ var BACKEND_APPLICATION_PORT = process.env.BACKEND_APPLICATION_PORT || "8000"
 
 function DownloadSshKeyRestController(JwtToken, SshKeyPath, VirtualMachineId) {
   // Downloads SSH Public Key File to the Customer's Desktop, if the Virtual Machine has One
-  var APIUrl = new URL(`http://${BACKEND_APPLICATION_HOST}:${BACKEND_APPLICATION_PORT}/download/ssh/key/`)
+  var APIUrl = new URL(`http://${BACKEND_APPLICATION_HOST}:${BACKEND_APPLICATION_PORT}/get/ssh/certificate/`)
   APIUrl.searchParams.append("VirtualMachineId", VirtualMachineId)
   
   let Response, ResponseError = global.jQuery.ajax({

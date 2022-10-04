@@ -6,8 +6,10 @@
           <div class="login-row">
             <div class="mx-auto col-xl-4 col-lg-5 col-md-6 d-flex flex-column">
               <div class="mt-8 login-card login-card-plain" style="height: 550px;">
-                <div class="pb-0 card-header text-start">
-                <h1 class="text-center" style="margin-top: 10px; color: #fff;">Sign In</h1>
+                <div class="pb-0 card-header text-start" style="
+                border-radius: 1rem 1rem 0 0;
+                background-color: #7c5dfa!important;">
+                <h1 class="text-center" style="margin-top: 20px; color: #fff; margin-bottom: 30px;">Sign In</h1>
                 </div>
                 <div class="login-card-body">
                   <form role="form" ref="form" class="text-start" @submit.prevent="submitLoginForm">
@@ -41,8 +43,8 @@
                     </v-switch>
 
                     <div class="text-center">
-                      <soft-button
-                        
+                      <soft-button  
+                        style="max-width: 400px;"
                         class="my-4 mb-2"
                         variant="gradient"
                         color="success"
