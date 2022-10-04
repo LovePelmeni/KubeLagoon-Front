@@ -27,7 +27,6 @@ services:
       start_period: 10s
       retries: 5
 
-
 networks:
   cloud-infrastructure-network:
       external: true 

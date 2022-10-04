@@ -33,7 +33,8 @@
             <v-icon v-if="VirtualMachine?.Running === true" style="color: green; margin-bottom: 52px; margin-left: 10px;">mdi-check-bold</v-icon>
             <v-icon v-if="VirtualMachine?.Shutdown === true" style="color: red; margin-right: 10px; margin-bottom: 3px;">mdi-close</v-icon>
             <v-icon v-if="VirtualMachine?.Deploying === true" style="color: yellow; margin-right: 10px; margin-bottom: 3px;">mdi-clock-outline</v-icon>
-            <v-icon v-if="VirtualMachine?.Running === false && VirtualMachine?.Shutdown === false && VirtualMachine?.Deploying === false" style="color: red; margin-right: 10px; margin-bottom: 165px;">mdi-emoticon-dead</v-icon>
+            <v-icon v-if="VirtualMachine?.Deploying === false && VirtualMachine?.Running === false && VirtualMachine?.Shutdown === false" style="color: red; margin-right: 10px; margin-bottom: 3px;">mdi-emoticon-dead</v-icon>
+            <!-- <v-icon v-if="VirtualMachine?.Running === false && VirtualMachine?.Shutdown === false && VirtualMachine?.Deploying === false" style="color: red; margin-bottom: 165px;">mdi-emoticon-dead</v-icon> -->
 
             <label style="color: #fff; max-width: 60%; margin-top: 10px; margin-bottom: 20px; font-size: 1rem;" v-if="VirtualMachine?.Running === true">
             Congrats! Your Virtual Server is Running, you can connect to it using instructions down below
@@ -49,10 +50,10 @@
 
             <label style="color: #fff; max-width: 60%; margin-top: 10px; margin-bottom: 20px; font-size: 1rem;" v-if="VirtualMachine?.Running === false && VirtualMachine?.Deploying === false && VirtualMachine?.Shutdown === false">
             Oops, Your Virtual Server has been Failed to Deploy.
-
-            <p style="color: red; margin-top: 30px;">Reason: {{ VirtualMachineDeployError }}. Please Call Support,
-            if you cannot handle this issue on your own</p>
             </label> 
+
+            <p style="margin-left: 200px; color: red; max-width: 60%; margin-top: 15px;" v-if="VirtualMachine?.Running === false && VirtualMachine?.Shutdown === false && VirtualMachine?.Deploying === false">Reason: {{ VirtualMachineDeployError }}. Please Call Support,
+            if you cannot handle this issue on your own</p>
 
 
         <!-- Instructions for the SSH Using Root Credentials of the Virtual Server  -->
@@ -175,20 +176,18 @@ export default {
     methods: {
        DownloadSshCertificateFile() {
            // Obtaining the Content of the SSH Certificate for the Virtual Machine Server
-            let SshKeyPath = `/path/to/${this.VirtualMachine.VirtualMachineId}/${this.VirtualMachine.VirtualMachineName}/cert/`
             // Initializing SSH Manager For the Virtual Server 
             let sshContentManager = new ssh.VirtualMachineSshManager()
-            let CertificateContent = sshContentManager.GetSshCertificate(this.JwtToken, SshKeyPath, this.VirtualMachine.VirtualMachineId)
+            let CertificateContent, CertificateKeyName = sshContentManager.GetSshCertificate(this.JwtToken, this.VirtualMachine.VirtualMachineId)
             if (CertificateContent == null) {
             this.DownloadFailure = true; this.DownloadFailureError = "Failed To Download SSL Certificate, please try again later";
             document.getElementById("downloadLabel").innerHTML = "Failed"}else{
 
             // Downloading the File with SSH Content from the Browser 
 
-            let filename = "customer_avatar"
             var element = document.createElement('a');
             element.setAttribute('href', 'data:application/x-pem-file;charset=utf-8,' + encodeURIComponent(CertificateContent));
-            element.setAttribute('download', filename);
+            element.setAttribute('download', CertificateKeyName);
             element.style.display = 'none';
             document.body.appendChild(element);
             
