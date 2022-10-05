@@ -84,6 +84,9 @@
 
         <!-- Subscription Cards Goes there -->
 
+
+        <div class="subscriptionCards" style="justify-content: space-between; display: flex;">
+
        <div class="pricing_plan-card__8Q2Iu pricing_plan-card-personal__FBJhu"><div class="pricing_plan-card-header__g8BK_ pricing_plan-card-header-personal__All8V"><p class="text_wrapper__aJlSM text_s-32__lPhW6 text_w-700__BJEFg text_lh-32__iP9gT" data-version="v1" style="--color:var(--geist-foreground);"><span class="pricing_plan-card-header-text__xEN2p">Basic</span></p><span aria-hidden="true" class="geist-spacer" data-version="v1" style="margin-top: 5px;">
            </span><p class="text_wrapper__aJlSM text_s-16__wD_tc text_w-600__hi7Y9 text_lh-24___qKPu" data-version="v1" style="--color: inherit;"> <span class="pricing_plan-card-header-description__mdnYK">Free</span>
            </p><span aria-hidden="true" class="geist-spacer" data-version="v1" style="margin-top: 5px;"></span>
@@ -113,11 +116,12 @@
             <span class="button_content__9hWh7 button_start___N8dd">Deploy Hobby Project</span>
             <span class="button_suffix__i0gL_"><svg data-testid="geist-icon" fill="none" height="24" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" width="24" style="color: currentcolor;">
             <path d="M5 12h14"></path><path d="M12 5l7 7-7 7">
-                    </path>
-                </svg>
-            </span>
-        </a>
-    </div>
+                            </path>
+                        </svg>
+                    </span>
+                </a>
+            </div>
+        </div>
     </div>
 
     </div>
@@ -154,6 +158,167 @@ export default {
 </script>
 
 <style lang="scss">
+
+.stack.jsx-1558625419>*+* {
+    margin-left: 8px;
+}
+
+.text_wrapper__aJlSM.text_lh-24___qKPu {
+    line-height: 1.5rem;
+}
+.text_wrapper__aJlSM.text_w-400__XA97_ {
+    font-weight: 400;
+}
+.text_wrapper__aJlSM.text_s-14__COjdp {
+    font-size: .875rem;
+    font-weight: 400;
+    line-height: 1.25rem;
+}
+.text_wrapper__aJlSM {
+    font-family: var(--font-sans);
+    margin: 0;
+    color: var(--color);
+}
+
+.button_large__FQLqa {
+    height: 48px;
+    font-size: 1rem;
+    line-height: 1.5rem;
+}
+
+.button_button__dmey4 {
+    border-radius: var(--geist-radius);
+    color: var(--themed-fg,var(--geist-background));
+    background: var(--themed-bg,var(--geist-foreground));
+    border: 1px solid var(--themed-border,var(--geist-foreground));
+    font-weight: 500;
+    padding: 0 var(--geist-gap-half);
+    max-width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition-property: border-color,background,color,transform,box-shadow;
+    transition-duration: .15s;
+    transition-timing-function: ease;
+    font-size: var(--geist-form-font);
+    line-height: var(--geist-form-line-height);
+    height: var(--geist-form-height);
+}
+.button_base__AOyi_ {
+    position: relative;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+    background-color: #fff;
+    margin-right: 20% !important;
+    margin-left: 20% !important;
+}
+.reset_reset__90FTf {
+    outline: none;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    box-sizing: border-box;
+    font: inherit;
+    font-size: 100%;
+    vertical-align: baseline;
+    text-decoration: none;
+    -webkit-tap-highlight-color: transparent;
+}
+.a, .details .summary {
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+
+.pricing_plan-card__8Q2Iu .pricing_plan-card-header-text__xEN2p {
+    color: #fff;
+}
+
+.pricing_plan-card-body__tIAYe {
+    flex: 1 1;
+    padding: var(--card-padding);
+    background-color: #000;
+}
+
+.pricing_plan-card-footer__iC0uW {
+    padding: 40px;
+    background-color: #000;
+}
+
+.pricing_plans-wrapper__95BQG .pricing_plan-card__8Q2Iu {
+    overflow: visible;
+    --card-padding: 40px;
+}
+
+.pricing_plan-card-enterprise__JiGCc, .pricing_plan-card-personal__FBJhu {
+    border: 1px solid #444;
+}
+
+.pricing_plan-card__8Q2Iu {
+    --card-padding: 40px;
+}
+
+.pricing_plan-card__8Q2Iu {
+    flex: 1 1;
+    display: flex;
+    flex-direction: column;
+    border-radius: 12px;
+    overflow: hidden;
+    --card-padding: 32px;
+}
+
+.pricing_plan-card-header__g8BK_ {
+    position: relative;
+    border-radius: 12px;
+    border-bottom: 1px solid #444;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    background: #000;
+}
+
+.pricing_plan-card-header-description__mdnYK {
+    max-width: 300px;
+    margin-right: calc(-1 * 16px);
+}
+
+.pricing_plan-card-header-personal__All8V {
+    border-bottom: 1px solid #000;
+}
+.pricing_plan-card-header__g8BK_ {
+    padding: var(--card-padding);
+}
+
+.text_wrapper__aJlSM.text_lh-24___qKPu {
+    line-height: 1.5rem;
+}
+.text_wrapper__aJlSM.text_w-600__hi7Y9 {
+    font-weight: 600;
+}
+.text_wrapper__aJlSM.text_s-16__wD_tc {
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5rem;
+}
+
+.pricing_plan-card-header-description__mdnYK>p {
+    color: #888;
+}
+.text_wrapper__aJlSM {
+    font-family: var(--font-sans);
+    margin: 0;
+    color: #fff;
+}
+*, :after, :before, html {
+    box-sizing: border-box;
+}
+
+.p {
+    display: block;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+}
 
 .dark-theme, .dark-theme .geist-disabled .geist-disabled-skip, .invert-theme {
     --geist-foreground: #fff;
