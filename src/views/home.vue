@@ -1,8 +1,26 @@
 <template>
     <div class="homePageWrapper">
         <h4 class="section-title_title__VEDfK" style="color: #fff; margin-top: 30px;">KubeLagoon</h4>
+        <h2 class="hero_description__IXY_z">
+            <span class="hero_description-break__u_niN" style="color:#DE1D8D">KubeLagoon Cloud Platform </span> offers great developer experience and reliability.
+            <br aria-hidden="true" class="hero_description-break__u_niN text-link_link__OUsK1" style="color: #DE1D8D">Get Started right now, and obtain 3 month's 
+            <br aria-hidden="true" class="hero_description-break__u_niN text-link_link__OUsK1" style="color: #DE1D8D">Premium Subscription for free.</h2>
 
-        <div class="list_geistListItem__82_ac">
+        <div class="buttonsBlock" style="justify-content: space-between; display: flex; margin-right: 20%; margin-left: 20%;">
+
+        <div class="
+        list_geistListItem__82_ac" style="
+        padding: 12px;;
+        -webkit-box-flex: 0;
+        -webkit-flex-grow: 0;
+        -moz-box-flex: 0;
+        -ms-flex-positive: 0;
+        flex-grow: 0;
+        -webkit-flex-basis: 50%;
+        -ms-flex-preferred-size: 50%;
+        flex-basis: 50%;
+        max-width: 400px; 
+        border-radius: 5px 5px 5px 5px;">
             <div data-version="v1" style="--flex:1;--justify-content:flex-start;--align-items:stretch"
              class="jsx-499702677 geist-container">
 
@@ -11,17 +29,32 @@
                 </span>
                 <span aria-hidden="true" class="hero_button-bg__seSDp hero_bg-2__OnKew">
                     </span><span aria-hidden="true" class="hero_button-bg__seSDp hero_bg-3__Ik39k">
-                        </span><a role="button" tabindex="0" 
+                        </span><a role="button" tabindex="0"
                         @click="redirectToAboutPage"
                         target="_blank" type="submit" rel="noopener" data-testid="landing-page/hero/get-demo-cta"
                         class="button_base__AOyi_ reset_reset__90FTf button_button__dmey4 reset_reset__90FTf hero_gradient-button__kkwJu button_large__FQLqa button_ghost__sBWMh"
-                        data-geist-button="" data-version="v1"><span class="button_content__9hWh7">About</span>
+                        data-geist-button="" data-version="v1"><span class="button_content__9hWh7" style="
+                        text-overflow: ellipsis;
+                        white-space: nowrap;
+                        overflow: hidden;
+                        display: inline-block;
+                        }">About</span>
                         </a>
                     </div>
                 </div
             ></div>
 
-        <div class="list_geistListItem__82_ac">
+        <div class="list_geistListItem__82_ac" style="
+        padding: var(--geist-gap-half);
+        -webkit-box-flex: 0;
+        -webkit-flex-grow: 0;
+        -moz-box-flex: 0;
+        -ms-flex-positive: 0;
+        flex-grow: 0;
+        -webkit-flex-basis: 50%;
+        -ms-flex-preferred-size: 50%;
+        flex-basis: 50%;
+        max-width: 400px;">
             <div data-version="v1" style="--flex:1;--justify-content:flex-start;--align-items:stretch"
              class="jsx-499702677 geist-container">
 
@@ -38,29 +71,62 @@
                         </a>
                     </div>
                 </div
-        ></div>
+            ></div>
+        </div>
 
-        <h2 class="hero_description__IXY_z">
-            KubeLagoon Cloud Platform offers great developer experience and reliability
-            <br aria-hidden="true" class="hero_description-break__u_niN"> 
-            Our platform enables people to do their best work with remote servers</h2>
+        <div class="tiny-heading_heading__4Znu5" style="margin-top: 50px;"><small style="
+        margin-top: 30px; font-size: 1rem;
+        text-align: center; margin-bottom: 30px; font-size:0.75rem;letter-spacing:0.2rem;margin-top:0;padding-left:0.2rem;color: #fff;"
+        class="jsx-3907808361 text_text__tVl7E text_small__ke4_O geist-themed geist-secondary geist-text-no-margin text_noMargin__uy__0 text_center__uKEGZ text_themed__eHOst">Explore the KubeLagoon<!-- --></small></div>
 
-            <div class="list_geistListItem__82_ac">
-                <div data-version="v1" style="--flex:1;--justify-content:flex-start;--align-items:stretch" 
-                class="jsx-499702677 geist-container">
-                <a role="button" tabindex="0" href="#get-started"
-                 type="submit" class="button_base__AOyi_ reset_reset__90FTf button_button__dmey4 reset_reset__90FTf button_large__FQLqa button_invert__ESQI6"
-                 data-geist-button="" data-version="v1">
-                 <span class="button_content__9hWh7">Start Deploying</span>
-                 </a>
-                </div>
-            </div>
+
+        <h4 class="section-title_title__VEDfK" style="color: #fff; margin-top: 100px;">Start with Best Solutions</h4>
+
+        <!-- Subscription Cards Goes there -->
+
+       <div class="pricing_plan-card__8Q2Iu pricing_plan-card-personal__FBJhu"><div class="pricing_plan-card-header__g8BK_ pricing_plan-card-header-personal__All8V"><p class="text_wrapper__aJlSM text_s-32__lPhW6 text_w-700__BJEFg text_lh-32__iP9gT" data-version="v1" style="--color:var(--geist-foreground);"><span class="pricing_plan-card-header-text__xEN2p">Basic</span></p><span aria-hidden="true" class="geist-spacer" data-version="v1" style="margin-top: 5px;">
+           </span><p class="text_wrapper__aJlSM text_s-16__wD_tc text_w-600__hi7Y9 text_lh-24___qKPu" data-version="v1" style="--color: inherit;"> <span class="pricing_plan-card-header-description__mdnYK">Free</span>
+           </p><span aria-hidden="true" class="geist-spacer" data-version="v1" style="margin-top: 5px;"></span>
+
+            <!-- Pricing Card Headers -->
+           <div class="pricing_plan-card-header-description__mdnYK pricing_plan-card-header-description-personal__iKbGC"><p class="text_wrapper__aJlSM text_s-16__wD_tc text_w-600__hi7Y9 text_lh-24___qKPu" data-version="v1" 
+           style="--color: inherit;">For personal or non-commercial usage</p></div></div>
+           <div class="pricing_plan-card-body__tIAYe"><div data-version="v1" class="jsx-917344996 stack_stack__A16oG stack" style="--flex: initial; --direction:column; --align:stretch; --justify:flex-start;">
+               
+               <div data-version="v1" class="jsx-1558625419 stack_stack__A16oG stack" style="--flex: initial; --direction:row; --align:stretch; --justify:flex-start;"><div>
+                   <svg data-testid="geist-icon" height="24" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" width="24" style="color: var(--geist-foreground); --geist-fill:currentColor; --geist-stroke:var(--geist-background);">
+                       
+                       <path d="M12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2Z" fill="var(--geist-fill)" stroke="var(--geist-fill)"></path><path d="M8 11.8571L10.5 14.3572L15.8572 9" fill="none" stroke="var(--geist-stroke)"></path></svg>
+                       </div><p class="text_wrapper__aJlSM text_s-14__COjdp text_w-400__XA97_ text_lh-24___qKPu" data-version="v1" style="--color:var(--accents-6);">Deploy from CLI or personal git integrations</p></div><div data-version="v1" class="jsx-1558625419 stack_stack__A16oG stack" style="--flex: initial; --direction:row; --align:stretch; --justify:flex-start;"><div>
+                           <svg data-testid="geist-icon" height="24" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" width="24" style="color: var(--geist-foreground); --geist-fill:currentColor; --geist-stroke:var(--geist-background);">
+                               
+                               <path d="M12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2Z" fill="var(--geist-fill)" stroke="var(--geist-fill)"></path>
+                               <path d="M8 11.8571L10.5 14.3572L15.8572 9" fill="none" stroke="var(--geist-stroke)"></path></svg></div><p class="text_wrapper__aJlSM text_s-14__COjdp text_w-400__XA97_ text_lh-24___qKPu" data-version="v1" style="--color:var(--accents-6);">Built-in CI/CD</p></div>
+                               <div data-version="v1" class="jsx-1558625419 stack_stack__A16oG stack" style="--flex: initial; --direction:row; --align:stretch; --justify:flex-start;"><div><svg data-testid="geist-icon" height="24" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" width="24" style="color: var(--geist-foreground); --geist-fill:currentColor; --geist-stroke:var(--geist-background);">
+                                   <path d="M12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2Z" fill="var(--geist-fill)" stroke="var(--geist-fill)"></path><path d="M8 11.8571L10.5 14.3572L15.8572 9" fill="none" stroke="var(--geist-stroke)"></path></svg></div><p class="text_wrapper__aJlSM text_s-14__COjdp text_w-400__XA97_ text_lh-24___qKPu" data-version="v1" style="--color:var(--accents-6);">Automatic HTTPS/SSL</p></div>
+                                   <div data-version="v1" class="jsx-1558625419 stack_stack__A16oG stack" style="--flex: initial; --direction:row; --align:stretch; --justify:flex-start;"><div><svg data-testid="geist-icon" height="24" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" width="24" style="color: var(--geist-foreground); --geist-fill:currentColor; --geist-stroke:var(--geist-background);">
+            
+            <path d="M12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2Z" fill="var(--geist-fill)" stroke="var(--geist-fill)"></path>
+            <path d="M8 11.8571L10.5 14.3572L15.8572 9" fill="none" stroke="var(--geist-stroke)"></path>
+            </svg></div><p class="text_wrapper__aJlSM text_s-14__COjdp text_w-400__XA97_ text_lh-24___qKPu" data-version="v1" style="--color:var(--accents-6);">Previews for every git push</p>
+            </div></div></div><div class="pricing_plan-card-footer__iC0uW"><a role="button" tabindex="0" href="/new" type="submit" class="button_base__AOyi_ reset_reset__90FTf button_button__dmey4 reset_reset__90FTf geist-themed geist-default geist-default-fill button_large__FQLqa button_invert__ESQI6" data-geist-button="" data-version="v1">
+            <span class="button_content__9hWh7 button_start___N8dd">Deploy Hobby Project</span>
+            <span class="button_suffix__i0gL_"><svg data-testid="geist-icon" fill="none" height="24" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" width="24" style="color: currentcolor;">
+            <path d="M5 12h14"></path><path d="M12 5l7 7-7 7">
+                    </path>
+                </svg>
+            </span>
+        </a>
+    </div>
+    </div>
+
     </div>
     
 </template>
 
 
 <script>
+
 
 import  { useCookies } from "vue3-cookies";
 
@@ -89,8 +155,193 @@ export default {
 
 <style lang="scss">
 
+.dark-theme, .dark-theme .geist-disabled .geist-disabled-skip, .invert-theme {
+    --geist-foreground: #fff;
+    --geist-background: #000;
+    --geist-selection: var(--geist-highlight-purple);
+    --accents-8: #fafafa;
+    --accents-7: #eaeaea;
+    --accents-6: #999;
+    --accents-5: #888;
+    --accents-4: #666;
+    --accents-3: #444;
+    --accents-2: #333;
+    --accents-1: #111;
+    --geist-secondary-lighter: var(--accents-2);
+    --geist-secondary-light: var(--accents-3);
+    --geist-secondary: var(--accents-5);
+    --geist-secondary-dark: var(--accents-7);
+    --geist-link-color: var(--geist-success-light);
+    --geist-marketing-gray: var(--accents-1);
+    --geist-code: var(--geist-foreground);
+    --geist-error-light: #f33;
+    --geist-error: red;
+    --geist-error-dark: #e60000;
+    --dropdown-box-shadow: 0 0 0 1px var(--accents-2);
+    --dropdown-triangle-stroke: #333;
+    --scroller-start: #000;
+    --scroller-end: transparent;
+    --header-background: rgba(0,0,0,.5);
+    --header-border-bottom: inset 0 -1px 0 0 hsla(0,0%,100%,.1);
+    --header-import-flow-background: hsla(0,0%,7%,.8);
+    --shadow-smallest: 0 0 0 1px var(--accents-2);
+    --shadow-extra-small: 0 0 0 1px var(--accents-2);
+    --shadow-small: 0 0 0 1px var(--accents-2);
+    --shadow-medium: 0 0 0 1px var(--accents-2);
+    --shadow-large: 0 0 0 1px var(--accents-2);
+    --shadow-sticky: 0 0 0 1px var(--accents-2);
+    --shadow-hover: 0 0 0 1px var(--geist-foreground);
+    --portal-opacity: 0.75;
+    --geist-violet-background: #291d3a;
+    --geist-violet-background-secondary: #211830;
+    --geist-violet-background-tertiary: #211830;
+    --geist-background-rgb: 0,0,0;
+    --geist-foreground-rgb: 255,255,255;
+    --geist-console-header: #0f0310;
+    --geist-console-purple: #8a63d2;
+    --geist-console-text-color-default: var(--geist-foreground);
+    --geist-console-text-color-blue: #3291ff;
+    --geist-console-text-color-pink: #eb367f;
+    --next-icon-border: #fff;
+}
+
+.dark-theme .invert-theme, .geist-disabled .geist-disabled-skip, :root {
+    --geist-success-lighter: #d3e5ff;
+    --geist-success-light: #3291ff;
+    --geist-success: #0070f3;
+    --geist-success-dark: #0761d1;
+    --geist-error-lighter: #f7d4d6;
+    --geist-error-light: #ff1a1a;
+    --geist-error: #e00;
+    --geist-error-dark: #c50000;
+    --geist-warning-lighter: #ffefcf;
+    --geist-warning-light: #f7b955;
+    --geist-warning: #f5a623;
+    --geist-warning-dark: #ab570a;
+    --geist-violet-lighter: #d8ccf1;
+    --geist-violet-light: #8a63d2;
+    --geist-violet: #7928ca;
+    --geist-violet-dark: #4c2889;
+    --geist-violet-background: #fff;
+    --geist-violet-background-secondary: #291c3a;
+    --geist-violet-background-tertiary: #eae5f4;
+    --geist-background-rgb: 255,255,255;
+    --geist-foreground-rgb: 0,0,0;
+    --geist-console-header: #efe7ed;
+    --geist-console-purple: #7928ca;
+    --geist-console-text-color-default: var(--geist-foreground);
+    --geist-console-text-color-blue: #0070f3;
+    --geist-console-text-color-pink: #eb367f;
+    --geist-console-text-color-purple: #7928ca;
+    --geist-cyan-lighter: #aaffec;
+    --geist-cyan-light: #79ffe1;
+    --geist-cyan: #50e3c2;
+    --geist-cyan-dark: #29bc9b;
+    --geist-highlight-purple: #f81ce5;
+    --geist-highlight-magenta: #eb367f;
+    --geist-highlight-pink: #ff0080;
+    --geist-highlight-yellow: #fff500;
+    --geist-foreground: #000;
+    --geist-background: #fff;
+    --geist-selection: var(--geist-cyan-light);
+    --accents-1: #fafafa;
+    --accents-2: #eaeaea;
+    --accents-3: #999;
+    --accents-4: #888;
+    --accents-5: #666;
+    --accents-6: #444;
+    --accents-7: #333;
+    --accents-8: #111;
+    --geist-link-color: var(--geist-success);
+    --geist-marketing-gray: #fafbfc;
+    --geist-code: var(--geist-foreground);
+    --geist-secondary-lighter: var(--accents-2);
+    --geist-secondary-light: var(--accents-3);
+    --geist-secondary: var(--accents-5);
+    --geist-secondary-dark: var(--accents-7);
+    --dropdown-box-shadow: 0 4px 4px 0 rgba(0,0,0,.02);
+    --dropdown-triangle-stroke: #fff;
+    --scroller-start: #fff;
+    --scroller-end: hsla(0,0%,100%,0);
+    --shadow-smallest: 0px 2px 4px rgba(0,0,0,.1);
+    --shadow-extra-small: 0px 4px 8px rgba(0,0,0,.12);
+    --shadow-small: 0 5px 10px rgba(0,0,0,.12);
+    --shadow-medium: 0 8px 30px rgba(0,0,0,.12);
+    --shadow-large: 0 30px 60px rgba(0,0,0,.12);
+    --shadow-hover: 0 30px 60px rgba(0,0,0,.12);
+    --shadow-sticky: 0 12px 10px -10px rgba(0,0,0,.12);
+    --portal-opacity: 0.25;
+    --wv-green: #0cce6b;
+    --wv-orange: #ffa400;
+    --wv-red: #ff4e42;
+    --next-icon-border: #000;
+}
+:root {
+    font-size: 16px;
+    --geist-space: 4px;
+    --geist-space-2x: 8px;
+    --geist-space-4x: 16px;
+    --geist-space-8x: 32px;
+    --geist-space-16x: 64px;
+    --geist-space-24x: 96px;
+    --geist-space-32x: 128px;
+    --geist-space-48x: 192px;
+    --geist-space-64x: 256px;
+    --geist-space-small: 32px;
+    --geist-space-medium: 40px;
+    --geist-space-large: 48px;
+    --geist-space-gap: 24px;
+    --geist-space-gap-half: 12px;
+    --geist-space-gap-quarter: var(--geist-space-2x);
+    --geist-gap: var(--geist-space-gap);
+    --geist-gap-half: var(--geist-space-gap-half);
+    --geist-gap-quarter: var(--geist-space-gap-quarter);
+    --geist-gap-double: var(--geist-space-large);
+    --geist-gap-section: var(--geist-space-small);
+    --geist-space-negative: -4px;
+    --geist-space-2x-negative: -8px;
+    --geist-space-4x-negative: -16px;
+    --geist-space-8x-negative: -32px;
+    --geist-space-16x-negative: -64px;
+    --geist-space-24x-negative: -96px;
+    --geist-space-32x-negative: -128px;
+    --geist-space-48x-negative: -192px;
+    --geist-space-64x-negative: -256px;
+    --geist-space-small-negative: -32px;
+    --geist-space-medium-negative: -40px;
+    --geist-space-large-negative: -48px;
+    --geist-space-gap-negative: -24px;
+    --geist-space-gap-half-negative: -12px;
+    --geist-space-gap-quarter-negative: var(--geist-space-2x-negative);
+    --geist-gap-negative: var(--geist-space-gap-negative);
+    --geist-gap-half-negative: var(--geist-space-gap-half-negative);
+    --geist-gap-quarter-negative: var(--geist-space-gap-quarter-negative);
+    --geist-gap-double-negative: var(--geist-space-large-negative);
+    --geist-page-margin: var(--geist-space-gap);
+    --geist-page-width: 1200px;
+    --geist-page-width-with-margin: calc(var(--geist-page-width) + calc(2 * var(--geist-page-margin)));
+    --geist-radius: 5px;
+    --geist-marketing-radius: 8px;
+    --font-sans: -apple-system,BlinkMacSystemFont,"Segoe UI","Roboto","Oxygen","Ubuntu","Cantarell","Fira Sans","Droid Sans","Helvetica Neue",sans-serif;
+    --font-mono: Menlo,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New,monospace;
+    --header-height: 64px;
+    --header-border-bottom: inset 0 -1px 0 0 rgba(0,0,0,.1);
+    --header-background: hsla(0,0%,100%,.8);
+    --header-import-flow-background: hsla(0,0%,98%,.8);
+    --geist-form-large-font: 1rem;
+    --geist-form-large-line-height: 1.5rem;
+    --geist-form-large-height: var(--geist-space-large);
+    --geist-form-small-font: 0.875rem;
+    --geist-form-small-line-height: 0.875rem;
+    --geist-form-small-height: var(--geist-space-small);
+    --geist-form-font: 0.875rem;
+    --geist-form-line-height: 1.25rem;
+    --geist-form-height: var(--geist-space-medium);
+
+}
+
 .geist-list.jsx-1681548526>.list_geistListItem__82_ac {
-    padding: var(--geist-gap-half);
+    padding: 12px;
     -webkit-box-flex: 0;
     -webkit-flex-grow: 0;
     -moz-box-flex: 0;
@@ -114,16 +365,17 @@ export default {
     display: block;
 }
 .body {
-    font-family: var(--_1psdadq2f);
+    font-family: #fee2e2;;
 }
+
 .body, .html {
-    font-family: var(--font-sans);
+    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI","Roboto","Oxygen","Ubuntu","Cantarell","Fira Sans","Droid Sans","Helvetica Neue",sans-serif;;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    background-color: var(--geist-background);
-    color: var(--geist-foreground);
-    scroll-padding-top: var(--header-height);
+    background-color: #000;
+    color: #fff;
+    scroll-padding-top: 64px;
 }
 
 
@@ -138,11 +390,11 @@ export default {
     box-sizing: border-box;
 }
 .hero_gradient-button-wrapper__bi4sF .hero_gradient-button__kkwJu {
-    background-color: var(--geist-background);
+    background-color: #00000010;
     background-clip: padding-box;
     border: 1px solid transparent;
     box-shadow: 0 4px 4px 0 #00000010;
-    color: var(--geist-foreground);
+    color: #fff;
     transition-property: color,background-color,box-shadow;
     transition-duration: .15s;
     transition-timing-function: ease;
@@ -153,21 +405,21 @@ export default {
 .button_ghost__sBWMh {
     background: none;
     border-color: transparent;
-    color: var(--themed-bg);
+    color: #000;
     --lighten-color: hsla(0,0%,100%,.8);
 }
 .button_large__FQLqa {
-    height: var(--geist-form-large-height);
-    font-size: var(--geist-form-large-font);
-    line-height: var(--geist-form-large-line-height);
+    height: 48px;
+    font-size: 1rem;
+    line-height: 1.5rem;
 }
 .button_button__dmey4 {
-    border-radius: var(--geist-radius);
-    color: var(--themed-fg,var(--geist-background));
-    background: var(--themed-bg,var(--geist-foreground));
-    border: 1px solid var(--themed-border,var(--geist-foreground));
+    border-radius: 4px 4px 4px 4px;
+    color: #000;
+    background: #000;
+    border: 1px solid #fff;
     font-weight: 500;
-    padding: 0 var(--geist-gap-half);
+    padding: 0 12px;
     max-width: 100%;
     display: flex;
     justify-content: center;
@@ -175,9 +427,9 @@ export default {
     transition-property: border-color,background,color,transform,box-shadow;
     transition-duration: .15s;
     transition-timing-function: ease;
-    font-size: var(--geist-form-font);
-    line-height: var(--geist-form-line-height);
-    height: var(--geist-form-height);
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    height: 40px;
 }
 .button_base__AOyi_ {
     position: relative;
@@ -199,11 +451,11 @@ export default {
     text-decoration: none;
     -webkit-tap-highlight-color: transparent;
 }
-a, details summary {
+.a, .details .summary {
     -webkit-tap-highlight-color: rgba(0,0,0,0);
 }
 
-a:-webkit-any-link {
+.a:-webkit-any-link {
     color: -webkit-link;
     cursor: pointer;
 }
@@ -212,11 +464,11 @@ a:-webkit-any-link {
     box-shadow: 0 4px 4px 0 #00000040;
 }
 .hero_gradient-button-wrapper__bi4sF .hero_gradient-button__kkwJu {
-    background-color: var(--geist-background);
+    background-color: #000;
     background-clip: padding-box;
     border: 1px solid transparent;
     box-shadow: 0 4px 4px 0 #00000010;
-    color: var(--geist-foreground);
+    color: #fff;
     transition-property: color,background-color,box-shadow;
     transition-duration: .15s;
     transition-timing-function: ease;
@@ -225,26 +477,26 @@ a:-webkit-any-link {
     --lighten-color: rgba(0,0,0,.75);
 }
 .button_ghost__sBWMh {
-    background-image: linear-gradient(to right,var(--lighten-color),var(--lighten-color));
+    background-image: linear-gradient(to right, rgba(0,0,0,.75), #fff);
 }
 .button_ghost__sBWMh {
     background: none;
     border-color: transparent;
-    color: var(--themed-bg);
+    color: #000;
     --lighten-color: hsla(0,0%,100%,.8);
 }
 .button_large__FQLqa {
-    height: var(--geist-form-large-height);
-    font-size: var(--geist-form-large-font);
-    line-height: var(--geist-form-large-line-height);
+    height: 48px;
+    font-size: 1rem;
+    line-height: 1.5rem;
 }
 .button_button__dmey4 {
-    border-radius: var(--geist-radius);
-    color: var(--themed-fg,var(--geist-background));
-    background: var(--themed-bg,var(--geist-foreground));
-    border: 1px solid var(--themed-border,var(--geist-foreground));
+    border-radius: 5px;
+    color: #000;
+    background: #fff;
+    border: 1px solid #fff;
     font-weight: 500;
-    padding: 0 var(--geist-gap-half);
+    padding: 0 12px;
     max-width: 100%;
     display: flex;
     justify-content: center;
@@ -252,9 +504,9 @@ a:-webkit-any-link {
     transition-property: border-color,background,color,transform,box-shadow;
     transition-duration: .15s;
     transition-timing-function: ease;
-    font-size: var(--geist-form-font);
-    line-height: var(--geist-form-line-height);
-    height: var(--geist-form-height);
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    height: 40px;
 }
 .button_base__AOyi_ {
     position: relative;
@@ -264,36 +516,10 @@ a:-webkit-any-link {
     user-select: none;
     background: none;
 }
-.reset_reset__90FTf {
-    outline: none;
-    margin: 0;
-    padding: 0;
-    border: 0;
-    box-sizing: border-box;
-    font: inherit;
-    font-size: 100%;
-    vertical-align: baseline;
-    text-decoration: none;
-    -webkit-tap-highlight-color: transparent;
-}
-a, details summary {
-    -webkit-tap-highlight-color: rgba(0,0,0,0);
-}
-*, :after, :before, html {
-    box-sizing: border-box;
-}
-
-a:-webkit-any-link {
-    color: -webkit-link;
-    cursor: pointer;
-    text-decoration: underline;
-}
-
-
 
 
 .geist-list.jsx-1681548526>.list_geistListItem__82_ac {
-    padding: var(--geist-gap-half);
+    padding: 12px;
     -webkit-box-flex: 0;
     -webkit-flex-grow: 0;
     -moz-box-flex: 0;
@@ -318,7 +544,7 @@ a:-webkit-any-link {
 }
 
 .button_large__FQLqa {
-    height: var(--geist-form-large-height);
+    height: 48px;
     font-size: var(--geist-form-large-font);
     line-height: var(--geist-form-large-line-height);
 }
@@ -360,14 +586,14 @@ a:-webkit-any-link {
     text-decoration: none;
     -webkit-tap-highlight-color: transparent;
 }
-a, details summary {
+.a, .details .summary {
     -webkit-tap-highlight-color: rgba(0,0,0,0);
 }
 *, :after, :before, html {
     box-sizing: border-box;
 }
 
-a:-webkit-any-link {
+.a:-webkit-any-link {
     color: -webkit-link;
     cursor: pointer;
     text-decoration: underline;
@@ -386,7 +612,7 @@ a:-webkit-any-link {
     letter-spacing: -.05em;
     font-size: 3.75rem;
 }
-*, :after, :before, html {
+*, :after, :before, .html {
     box-sizing: border-box;
 }
 
@@ -402,7 +628,7 @@ a:-webkit-any-link {
 
 .hero_description__IXY_z {
     line-height: 1.6em!important;
-    color: var(--geist-secondary);
+    color: #fff;
     font-weight: 400;
     font-size: 1.25rem;
     letter-spacing: -.02em;
@@ -410,10 +636,9 @@ a:-webkit-any-link {
     margin: var(--geist-gap-quarter) 0 var(--geist-space-16x);
     margin-top: 30px;
 }
-*, :after, :before, html {
+*, :after, :before, .html {
     box-sizing: border-box;
 }
-user agent stylesheet
 .h2 {
     display: block;
     font-size: 1.5em;
