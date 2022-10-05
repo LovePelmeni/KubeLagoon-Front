@@ -1,20 +1,6 @@
 import * as metrics_rest from "../rest/metrics.js"
 
 
-// schema = {
-
-//     "metrics": {
-
-//         "CpuMetrics": [],
-
-//         "MemoryMetrics": [],
-
-//         "StorageMetrics": [],
-
-//     }
-
-// }
-
 class WeekResourceUsageManager {
 
     // Manages the Virtual Machine Server Metrics within the Week
@@ -49,7 +35,6 @@ class WeekResourceUsageManager {
     }
 
 }
-
 
 class ResourceUsageManager {
 

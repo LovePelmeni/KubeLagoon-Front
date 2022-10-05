@@ -170,7 +170,6 @@
 
 <script>
 
-
 import { useCookies } from "vue3-cookies";
 import * as customers from "../../customers/customers.js"
 import {mapState} from "vuex";

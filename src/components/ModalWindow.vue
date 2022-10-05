@@ -37,15 +37,6 @@ export default {
 
 <style lang="scss" scoped>
 
-.modal .modal-content[data-v-1cd6ece9] {
-    border-radius: 20px;
-    padding: 48px 32px;
-    width: 500px;
-    background-color: #252945;
-    color: #fff;
-}
-
-
 .modal {
   z-index: 100;
   position: fixed;

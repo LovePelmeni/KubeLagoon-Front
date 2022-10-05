@@ -8,13 +8,14 @@ class VirtualMachineSshManager {
     let CertificateContent, ContentError = ssh_rest.DownloadSshKeyRestController(
     JwtToken, VirtualMachineId)
     if (ContentError != null) {console.log("Failed to Download SSH Certificate," + ContentError.Error); return null, ''}
-    return CertificateContent.CertificateContent
+    return CertificateContent.CertificateContent, CertificateContent.CertificateFilename
   }
   UpdateSshCertificate(JwtToken, VirtualMachineId) {
     // Updates the SSH Certificate for the Virtual Machine Server 
     console.log(JwtToken, VirtualMachineId)
   }
 }
+
 
 
 export {VirtualMachineSshManager};

@@ -145,7 +145,6 @@
         </div>
 
         <p v-if="DownloadFailure == true" style="margin-top: 20px; margin-bottom: 30px; color: red; ">{{ DownloadFailureError }}</p>
-
         <button  @click="DownloadSshCertificateFile()"  class="btn btn-upload-certificate" style="margin-top: 20px; color: #fff; !important" v-if="VirtualMachine.Running === true">
         <a download v-if="VirtualMachine?.Ssh.byRootCertificate === true "><label id="downloadLabel" style="color: #fff !important;" v-if="VirtualMachine.Running === true">Download Public Key</label></a>
         </button>

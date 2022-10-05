@@ -15,22 +15,54 @@
                   <form role="form" ref="form" class="text-start" @submit.prevent="submitLoginForm">
 
                     <v-card-text>
+        
                     <v-text-field
+                        style="
+
+                        ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+                        color: #fff;
+                        opacity: 2; /* Firefox */
+                        margin-left: 5px;
+                        }
+                        
+                        display: grid;
+                        flex: 1 1 auto;
+                        font-size: 1rem;
+                        font-weight: 400;
+                        line-height: 1.5;
+                        margin-top: 20px;
+                        border-radius: 2px; 2px; 2px; 2px;"
                         v-model="Email"
                         :rules="EmailValidationRules"
                         type="email"
-                        label="Email"
+                        placeholder="Email"
                         prepend-inner-icon="mdi-account"
                         required
                     />
 
                     <v-text-field
+
+                        style="
+                        ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+                        color: #fff;
+                        opacity: 2; /* Firefox */
+                        margin-left: 5px;
+                        }
+                        
+                        display: grid;
+                        flex: 1 1 auto;
+                        font-size: 1rem;
+                        font-weight: 400;
+                        line-height: 1.5;
+                        margin-top: 20px;
+                        border-radius: 2px; 2px; 2px; 2px;"
+
                         class="password-field"
                         v-model="Password"
                         :rules="PasswordValidationRules"
                         :type="passwordShow?'text':'password'"
-                        label="Password"
                         prepend-inner-icon="mdi-key"
+                        placeholder="Password"
                         :append-icon="passwordShow ? 'mdi-eye':'mdi-eye-off'"
                         @click:append="passwordShow = !passwordShow"
                         required
@@ -76,8 +108,9 @@
 <script>
 
 
-// import SoftInput from "../components/SoftInput.vue";
 import SoftButton from "../components/SoftButton.vue";
+
+/* eslint-disable no-useless-escape */
 
 const body = document.getElementsByTagName("body")[0];
 
@@ -89,7 +122,6 @@ export default {
   created() {
     body.classList.remove("bg-gray-100");
   },
-
   name: 'LoginPage',
   components: {
     SoftButton,
@@ -110,8 +142,9 @@ export default {
 
     Email: '',
     EmailValidationRules: [
-      username => !!username || 'Email is required',
-      username => (username && username.length >= 8) || 'Invalid Email',
+      email => !!email || 'Email is required',
+      email => (email && email.length >= 8) || 'Email length should be more than 8 characters in total',
+      email => /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email) || 'Invalid Email'
     ],
 
     Password: '',
@@ -160,6 +193,7 @@ export default {
 
 <style lang="scss">
 
+
 .form-check-label {
     font-size: .875rem;
     font-weight: 400;
@@ -206,7 +240,7 @@ html * {
 .form-label, label {
     font-size: .75rem;
     font-weight: 700;
-    margin-bottom: 0.5rem;
+    margin-bottom: 1rem;
     color: #344767;
     margin-right: 5px;
 }

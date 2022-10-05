@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
 import virtualMachine from "../components/VirtualMachine.vue";
-import HomePage from "../views/home.vue";
+import VirtualMachinesPage from "../views/VirtualMachines.vue";
 
 import EditCustomerProfile from "../views/EditCustomerProfile.vue";
 import LoginPage from "../views/LoginPage.vue";
@@ -12,12 +12,25 @@ import deployErrorDescription from "../components/deployError.vue";
 import ResetPassword from "../views/ResetPassword.vue";
 import NotFoundPage from "../components/NotFoundWindow.vue";
 
+import HomePage from "../views/home.vue";
+import BillPage from "../views/BillPage.vue";
+
 const routes = [
 
   {
     path: "/",
     name: "main_page",
     component: HomePage,
+  },
+  {
+    path: "/virtual/machines/",
+    name: "virtual_machines_page",
+    component: VirtualMachinesPage,
+  },
+  {
+    path: "/bills/",
+    name: "bill_page",
+    component: BillPage,
   },
   {
     path: "/reset/password/:CustomerId",

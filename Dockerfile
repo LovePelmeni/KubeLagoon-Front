@@ -1,7 +1,7 @@
 FROM node:lts-alpine
 LABEL "Author"="Kirill Klimushin"
 
-
+# Initializing Project Directory
 CMD mkdir /project/dir/
 WORKDIR /project/dir/
 

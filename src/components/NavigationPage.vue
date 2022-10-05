@@ -26,16 +26,16 @@
           <h2>Sign In</h2>
         </div>
 
-        <div v-else @click="redirectToLoginPage" class="button flex" style="pointer-events: none;">
-          <h2 style="color: gray;">Sign In</h2>
+        <div v-else @click="redirectToVirtualServersPage" class="button flex">
+          <h2>Servers</h2>
         </div>
 
         <div v-if="!authenticated" @click="redirectToRegisterPage" class="button flex">
           <h2>Sign Up</h2>
         </div>
 
-        <div v-else @click="redirectToLoginPage" class="button flex" style="pointer-events: none;">
-          <h2 style="color: gray;">Sign Up</h2>
+        <div v-else @click="redirectToBillPage" class="button flex">
+          <h2>Bills</h2>
         </div>
 
         <div v-if="authenticated" @click="triggerLogoutModal" class="button flex">
@@ -87,6 +87,14 @@ export default {
     redirectToLoginPage() {
       // Redirects to the Login Page Form 
       this.$router.push({name: "login_page"})
+    },
+    redirectToVirtualServersPage() {
+      // Redirects to the Virtual Servers Page Form 
+      this.$router.push({name: "virtual_machines_page"})
+    },
+    redirectToBillPage() {
+      // Redirects to the Bill Page
+      this.$router.push({name: "bill_page"})
     },
     redirectToRegisterPage() {
       // Redirects to the Register Page Form 

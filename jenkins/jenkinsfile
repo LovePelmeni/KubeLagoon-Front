@@ -1,12 +1,12 @@
 pipeline {
 
-  agent any
-  environment {
-    DOCKERHUB_CREDENTIALS=credentials("Dockerhub")
-    FRONTEND_DOCKEFILE_PATH="../"
-    INTEGRATION_TESTS_PATH="../integration_tests/"
-    ORGANIZATION_EMAIL="kirklimushin@gmail.com"
-  }
+    agent any
+    environment {
+      DOCKERHUB_CREDENTIALS=credentials("Dockerhub")
+      FRONTEND_DOCKEFILE_PATH="../"
+      INTEGRATION_TESTS_PATH="../integration_tests/"
+      ORGANIZATION_EMAIL="kirklimushin@gmail.com"
+    }
     stages {
         stage("build"){
             dir(env.FRONTEND_DOCKERFILE_PATH){
@@ -45,3 +45,4 @@ pipeline {
         }
     }
 }
+
