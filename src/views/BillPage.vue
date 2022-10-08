@@ -1,7 +1,8 @@
 <template>
-    <div class="container">
+    <div class="billingContainer">
         <h4 class="section-title_title__VEDfK" style="color: #fff; margin-top: 30px;">Our Billing Plan for Machine Resources</h4>
-        <p class="geist-text p">As a guidline, we provide the cost in United States Dollars per Action, available in our Resource List. You don't need to pay for the things you don't use, payment will be required, once resources will be necessary to perform the action</p>
+        <p class="geist-text p">As a guidline, we provide the cost in United States Dollars per Action, available in our Resource List. <br> You don't need to pay for the things you don't use, payment will be required, once resources will be necessary to perform the action.</p>
+        <div class="billingContainerTableInfo" style="margin-top: 100px;">
         <table class="jsx-ee4d328d693e50e9 table" style="
         min-width: 800px; !important;
         border-collapse: separate; !important;
@@ -26,7 +27,7 @@
                 </tr>
 
                 <tr aria-roledescription="row" class="row">
-                <td class="table-cell"><div style="color: white;">RAM Memory Per 1MB</div></td>
+                <td class="table-cell"><div style="color: white;">RAM Memory (1GB)</div></td>
                 <td class="table-cell"><div style="color: white;">{{ memoryStockPrice }}$ / per unit</div></td>
                 <td class="table-cell"><div style="color: white;">{{ memoryPerDay}}$ / per day</div></td>
                 <td class="table-cell"><div style="color: white;">{{ memoryPerMonth }}$ / per month</div></td>
@@ -41,6 +42,7 @@
             </tbody>
 
         </table>
+        </div>
     </div>
 </template>
 
@@ -85,33 +87,40 @@ export default {
     methods: {
         CalculateCpuPerMonth() {
             // Calculates the Storage Usage Per Month within the Stock Price 
-            this.cpuPerMonth = bill.CPU_STOCK_PRICE * 1 * 24 * 30
+            this.cpuPerMonth = Math.round(bill.CPU_STOCK_PRICE * 1 * 24 * 30)
         },
         CalculateMemoryPerMonth() {
             // Calculates the Storage Usage Per Month within the Stock Price 
-            this.memoryPerMonth = bill.MEMORY_STOCK_PRICE * 1 * 24 * 30
+            this.memoryPerMonth = Math.round(bill.MEMORY_STOCK_PRICE * 1 * 24 * 30)
         },
         CalculateStoragePerMonth() {
             // Calculates the Storage Usage Per Month within the Stock Price 
-            this.storagePerMonth = bill.STORAGE_STOCK_PRICE * 1 * 24 * 30
+            this.storagePerMonth = Math.round(bill.STORAGE_STOCK_PRICE * 1 * 24 * 30)
         },
         CalculateCpuPerDay() {
             // Calculates the Storage Usage Per Day within the Stock Price 
-            this.cpuPerDay = bill.CPU_STOCK_PRICE * 1 * 24
+            this.cpuPerDay = Math.round(bill.CPU_STOCK_PRICE * 1 * 24)
+
         },
         CalculateMemoryPerDay() {
             // Calculates the Storage Usage Per Day within the Stock Price 
-            this.memoryPerDay = bill.MEMORY_STOCK_PRICE * 1 * 24
+            this.memoryPerDay = Math.round(bill.MEMORY_STOCK_PRICE * 1 * 24)
         },
         CalculateStoragePerDay() {
             // Calculates the Storage Usage Per Day within the Stock Price 
-            this.storagePerDay = bill.STORAGE_STOCK_PRICE * 1 * 24
+            this.storagePerDay = Math.round(bill.STORAGE_STOCK_PRICE * 1 * 24)
         },
     },
 }
+
 </script>
 
 <style lang="scss">
+
+.billingContainerTableInfo {
+    margin-left: 15% !important;
+    margin-right: 15% !important;
+}
 
 .application__wrap {
     min-height: 0vh;

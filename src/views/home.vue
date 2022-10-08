@@ -29,7 +29,7 @@
             <div data-version="v1" style="--flex:1;--justify-content:flex-start;--align-items:stretch"
              class="jsx-499702677 geist-container">
 
-             <div class="hero_gradient-button-wrapper__bi4sF">
+             <div class="hero_gradient-button-wrapper__bi4sF" @click="redirectVirtualMachineSetup">
                  <span aria-hidden="true" class="hero_button-bg__seSDp hero_bg-1__Idwnm">
                 </span>
                 <span aria-hidden="true" class="hero_button-bg__seSDp hero_bg-2__OnKew">
@@ -43,7 +43,7 @@
                         white-space: nowrap;
                         overflow: hidden;
                         display: inline-block;
-                        }">About</span>
+                        }">Create Server</span>
                         </a>
                     </div>
                 </div
