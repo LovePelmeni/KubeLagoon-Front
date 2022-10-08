@@ -215,7 +215,6 @@ function EditCustomerProfileRestController(JwtToken, EditFormData) {
   return Response, ResponseError
 }
 
-
 export {CreateCustomerRestController,
 DeleteCustomerRestController,
 LoginCustomerRestController,

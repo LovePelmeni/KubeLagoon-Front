@@ -13,6 +13,13 @@ var CPU_STOCK_PRICE = STOCK_CPU_PRICE // per number in dollars
 var MEMORY_STOCK_PRICE = STOCK_MEMORY_PRICE // for memory in Megabytes in dollars
 
 
+export {
+  STORAGE_STOCK_PRICE,
+  CPU_STOCK_PRICE,
+  MEMORY_STOCK_PRICE,
+}
+
+
 class BillCalculator {
   // Default Bill Calculator Class for the Virtual Machine Server Resources 
   CalculateForCpu(StockPrice, UsedCpuNums) {

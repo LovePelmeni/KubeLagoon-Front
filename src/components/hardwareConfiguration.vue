@@ -108,37 +108,6 @@ export default {
     return {
       // hardware Configuration Validation Rules
 
-
-
-    select: null,
-    countries: [
-      {
-        name: "Andorra",
-        flag: "em-flag-ad"
-      },
-      {
-        name: "Arab Emirates",
-        flag: "em-flag-ae"
-      },
-      {
-        name: "Afghanistan",
-        flag: "em-flag-af"
-      },
-      {
-        name: "Antigua & Barbuda",
-        flag: "em-flag-ag"
-      },
-      {
-        name: "Albania",
-        flag: "em-flag-al"
-      },
-      {
-        name: "Anguilla",
-        flag: "em-flag-ai"
-      }
-   ],
-   
-
       Datacenters: [
         "Europe/Moscow",
         "Europe/Berlin",
@@ -264,18 +233,6 @@ export default {
       }
       return SubmittedFormData
     },
-
-    ValidateOperationalSystem(OperationalSystem) {
-        //  Validates Operational System, picked up by the Customer
-        if (OperationalSystem.SystemName.length == 0) {
-          this.errors["OS"] = "This field is required"
-        }
-        if (this.AddedOperationalSystem != null && this.AddedOperationalSystem == OperationalSystem) {
-          this.AddedOperationalSystem = null
-        }else{
-        this.selectOperationalSystem(OperationalSystem)}
-    },
-    
     GetSuggestedDatacenters() {
       // Returns Array of the Available Datacenters
       let Datacenters = [

@@ -1,13 +1,10 @@
 // THIS MODULE CURRENTLY IS UNDER DEVELOPMENT AND IS NOT USED 
+import * as healthcheck from "rest/healthcheck.js"
 
-
-
-import "../rest/healthcheck.js"
 /* eslint-disable no-unused-vars */
 
-var DEFAULT_CRONTAB_JOB_TIMEZONE=process.env.DEFAULT_CRONTAB_JOB_TIMEZONE
+var DEFAULT_CRONTAB_JOB_TIMEZONE = process.env.DEFAULT_CRONTAB_JOB_TIMEZONE
 var CrontabJob = require("cron").CronJob
-
 
 
 class VirtualMachineHealthStateChecker {
@@ -48,5 +45,6 @@ class VirtualMachineHealthStateChecker {
     return JobStopped
   }
 }
+
 
 export {VirtualMachineHealthStateChecker};

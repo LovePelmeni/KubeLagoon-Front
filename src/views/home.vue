@@ -1,6 +1,11 @@
 <template>
     <div class="homePageWrapper">
+
+        <div class="home_logo" style="align-items: center; margin-top: 30px; margin-left: 10px;">
+        <img :src="require('../../logo/crown_logo.svg')" style="color: red" height="500" width="500" />
+        </div>
         <h4 class="section-title_title__VEDfK" style="color: #fff; margin-top: 30px;">KubeLagoon</h4>
+        
         <h2 class="hero_description__IXY_z">
             <span class="hero_description-break__u_niN" style="color:#DE1D8D">KubeLagoon Cloud Platform </span> offers great developer experience and reliability.
             <br aria-hidden="true" class="hero_description-break__u_niN text-link_link__OUsK1" style="color: #DE1D8D">Get Started right now, and obtain 3 month's 
@@ -80,14 +85,15 @@
         class="jsx-3907808361 text_text__tVl7E text_small__ke4_O geist-themed geist-secondary geist-text-no-margin text_noMargin__uy__0 text_center__uKEGZ text_themed__eHOst">Explore the KubeLagoon<!-- --></small></div>
 
 
-        <h4 class="section-title_title__VEDfK" style="color: #fff; margin-top: 100px;">Start with Best Solutions</h4>
+        <h4 class="section-title_title__VEDfK" style="color: #fff; margin-top: 100px;">Start with the Best Solutions</h4>
+        <p class="hero_description__EwadB" style="margin-top: 30px; margin-bottom: 50px;">Get the most lucrative solution for yourself<!-- --><br class="geist-hide-on-mobile"><!-- --></p>
 
         <!-- Subscription Cards Goes there -->
 
 
         <div class="subscriptionCards" style="justify-content: space-between; display: flex;">
 
-       <div class="pricing_plan-card__8Q2Iu pricing_plan-card-personal__FBJhu"><div class="pricing_plan-card-header__g8BK_ pricing_plan-card-header-personal__All8V"><p class="text_wrapper__aJlSM text_s-32__lPhW6 text_w-700__BJEFg text_lh-32__iP9gT" data-version="v1" style="--color:var(--geist-foreground);"><span class="pricing_plan-card-header-text__xEN2p">Basic</span></p><span aria-hidden="true" class="geist-spacer" data-version="v1" style="margin-top: 5px;">
+       <div class="pricing_plan-card__8Q2Iu pricing_plan-card-personal__FBJhu"><div class="pricing_plan-card-header__g8BK_ pricing_plan-card-header-personal__All8V"><p class="text_wrapper__aJlSM text_s-32__lPhW6 text_w-700__BJEFg text_lh-32__iP9gT" data-version="v1" style="--color:var(--geist-foreground);"><span class="pricing_plan-card-header-text__xEN2p">Basic Tier</span></p><span aria-hidden="true" class="geist-spacer" data-version="v1" style="margin-top: 5px;">
            </span><p class="text_wrapper__aJlSM text_s-16__wD_tc text_w-600__hi7Y9 text_lh-24___qKPu" data-version="v1" style="--color: inherit;"> <span class="pricing_plan-card-header-description__mdnYK">Free</span>
            </p><span aria-hidden="true" class="geist-spacer" data-version="v1" style="margin-top: 5px;"></span>
 
@@ -97,23 +103,101 @@
            <div class="pricing_plan-card-body__tIAYe"><div data-version="v1" class="jsx-917344996 stack_stack__A16oG stack" style="--flex: initial; --direction:column; --align:stretch; --justify:flex-start;">
                
                <div data-version="v1" class="jsx-1558625419 stack_stack__A16oG stack" style="--flex: initial; --direction:row; --align:stretch; --justify:flex-start;"><div>
-                   <svg data-testid="geist-icon" height="24" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" width="24" style="color: var(--geist-foreground); --geist-fill:currentColor; --geist-stroke:var(--geist-background);">
+                   <svg data-testid="geist-icon" height="24" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" width="24" style="color: green; --geist-fill:currentColor; --geist-stroke:var(--geist-background);">
                        
                        <path d="M12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2Z" fill="var(--geist-fill)" stroke="var(--geist-fill)"></path><path d="M8 11.8571L10.5 14.3572L15.8572 9" fill="none" stroke="var(--geist-stroke)"></path></svg>
                        </div><p class="text_wrapper__aJlSM text_s-14__COjdp text_w-400__XA97_ text_lh-24___qKPu" data-version="v1" style="--color:var(--accents-6);">Deploy from CLI or personal git integrations</p></div><div data-version="v1" class="jsx-1558625419 stack_stack__A16oG stack" style="--flex: initial; --direction:row; --align:stretch; --justify:flex-start;"><div>
-                           <svg data-testid="geist-icon" height="24" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" width="24" style="color: var(--geist-foreground); --geist-fill:currentColor; --geist-stroke:var(--geist-background);">
+                           <svg data-testid="geist-icon" height="24" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" width="24" style="color: green; --geist-fill:currentColor; --geist-stroke:var(--geist-background);">
                                
                                <path d="M12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2Z" fill="var(--geist-fill)" stroke="var(--geist-fill)"></path>
                                <path d="M8 11.8571L10.5 14.3572L15.8572 9" fill="none" stroke="var(--geist-stroke)"></path></svg></div><p class="text_wrapper__aJlSM text_s-14__COjdp text_w-400__XA97_ text_lh-24___qKPu" data-version="v1" style="--color:var(--accents-6);">Built-in CI/CD</p></div>
-                               <div data-version="v1" class="jsx-1558625419 stack_stack__A16oG stack" style="--flex: initial; --direction:row; --align:stretch; --justify:flex-start;"><div><svg data-testid="geist-icon" height="24" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" width="24" style="color: var(--geist-foreground); --geist-fill:currentColor; --geist-stroke:var(--geist-background);">
+                               <div data-version="v1" class="jsx-1558625419 stack_stack__A16oG stack" style="--flex: initial; --direction:row; --align:stretch; --justify:flex-start;"><div><svg data-testid="geist-icon" height="24" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" width="24" style="color: green; --geist-fill:currentColor; --geist-stroke:var(--geist-background);">
                                    <path d="M12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2Z" fill="var(--geist-fill)" stroke="var(--geist-fill)"></path><path d="M8 11.8571L10.5 14.3572L15.8572 9" fill="none" stroke="var(--geist-stroke)"></path></svg></div><p class="text_wrapper__aJlSM text_s-14__COjdp text_w-400__XA97_ text_lh-24___qKPu" data-version="v1" style="--color:var(--accents-6);">Automatic HTTPS/SSL</p></div>
-                                   <div data-version="v1" class="jsx-1558625419 stack_stack__A16oG stack" style="--flex: initial; --direction:row; --align:stretch; --justify:flex-start;"><div><svg data-testid="geist-icon" height="24" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" width="24" style="color: var(--geist-foreground); --geist-fill:currentColor; --geist-stroke:var(--geist-background);">
+                                   <div data-version="v1" class="jsx-1558625419 stack_stack__A16oG stack" style="--flex: initial; --direction:row; --align:stretch; --justify:flex-start;"><div><svg data-testid="geist-icon" height="24" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" width="24" style="color: green;; --geist-fill:currentColor; --geist-stroke:var(--geist-background);">
             
             <path d="M12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2Z" fill="var(--geist-fill)" stroke="var(--geist-fill)"></path>
             <path d="M8 11.8571L10.5 14.3572L15.8572 9" fill="none" stroke="var(--geist-stroke)"></path>
             </svg></div><p class="text_wrapper__aJlSM text_s-14__COjdp text_w-400__XA97_ text_lh-24___qKPu" data-version="v1" style="--color:var(--accents-6);">Previews for every git push</p>
-            </div></div></div><div class="pricing_plan-card-footer__iC0uW"><a role="button" tabindex="0" href="/new" type="submit" class="button_base__AOyi_ reset_reset__90FTf button_button__dmey4 reset_reset__90FTf geist-themed geist-default geist-default-fill button_large__FQLqa button_invert__ESQI6" data-geist-button="" data-version="v1">
-            <span class="button_content__9hWh7 button_start___N8dd">Deploy Hobby Project</span>
+            </div></div></div><div class="pricing_plan-card-footer__iC0uW">
+            <a role="button" tabindex="0"  @click="redirectVirtualMachineSetup()" type="submit" class="button_base_class button_base__AOyi_ reset_reset__90FTf button_button__dmey4 reset_reset__90FTf geist-themed geist-default geist-default-fill button_large__FQLqa button_invert__ESQI6" data-geist-button="" data-version="v1">
+            <span class="button_content__9hWh7 button_start___N8dd">Deploy Server</span>
+            <span class="button_suffix__i0gL_"><svg data-testid="geist-icon" fill="none" height="24" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" width="24" style="color: currentcolor;">
+            <path d="M5 12h14"></path><path d="M12 5l7 7-7 7">
+                            </path>
+                        </svg>
+                    </span>
+                </a>
+            </div>
+        </div>
+
+
+
+       <div class="pricing_plan-card__8Q2Iu pricing_plan-card-personal__FBJhu"><div class="pricing_plan-card-header__g8BK_ pricing_plan-card-header-personal__All8V"><p class="text_wrapper__aJlSM text_s-32__lPhW6 text_w-700__BJEFg text_lh-32__iP9gT" data-version="v1" style="--color:var(--geist-foreground);"><span class="pricing_plan-card-header-text__xEN2p">Middle Tier</span></p><span aria-hidden="true" class="geist-spacer" data-version="v1" style="margin-top: 5px;">
+           </span><p class="text_wrapper__aJlSM text_s-16__wD_tc text_w-600__hi7Y9 text_lh-24___qKPu" data-version="v1" style="--color: inherit;"> <span class="pricing_plan-card-header-description__mdnYK">5$ / month</span>
+           </p><span aria-hidden="true" class="geist-spacer" data-version="v1" style="margin-top: 5px;"></span>
+
+            <!-- Pricing Card Headers -->
+           <div class="pricing_plan-card-header-description__mdnYK pricing_plan-card-header-description-personal__iKbGC"><p class="text_wrapper__aJlSM text_s-16__wD_tc text_w-600__hi7Y9 text_lh-24___qKPu" data-version="v1" 
+           style="--color: inherit;">For Commercial Product Usage</p></div></div>
+           <div class="pricing_plan-card-body__tIAYe"><div data-version="v1" class="jsx-917344996 stack_stack__A16oG stack" style="--flex: initial; --direction:column; --align:stretch; --justify:flex-start;">
+               
+               <div data-version="v1" class="jsx-1558625419 stack_stack__A16oG stack" style="--flex: initial; --direction:row; --align:stretch; --justify:flex-end;"><div>
+                   <svg data-testid="geist-icon" height="24" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" width="24" style="color: green; --geist-fill:currentColor; --geist-stroke:var(--geist-background);">
+                       
+                       <path d="M12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2Z" fill="var(--geist-fill)" stroke="var(--geist-fill)"></path><path d="M8 11.8571L10.5 14.3572L15.8572 9" fill="none" stroke="var(--geist-stroke)"></path></svg>
+                       </div><p class="text_wrapper__aJlSM text_s-14__COjdp text_w-400__XA97_ text_lh-24___qKPu" data-version="v1" style="--color:var(--accents-6);">Deploy from CLI or personal git integrations</p></div><div data-version="v1" class="jsx-1558625419 stack_stack__A16oG stack" style="--flex: initial; --direction:row; --align:stretch; --justify:flex-start;"><div>
+                           <svg data-testid="geist-icon" height="24" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" width="24" style="color: green; --geist-fill:currentColor; --geist-stroke:var(--geist-background);">
+                               
+                               <path d="M12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2Z" fill="var(--geist-fill)" stroke="var(--geist-fill)"></path>
+                               <path d="M8 11.8571L10.5 14.3572L15.8572 9" fill="none" stroke="var(--geist-stroke)"></path></svg></div><p class="text_wrapper__aJlSM text_s-14__COjdp text_w-400__XA97_ text_lh-24___qKPu" data-version="v1" style="--color:var(--accents-6);">Built-in CI/CD</p></div>
+                               <div data-version="v1" class="jsx-1558625419 stack_stack__A16oG stack" style="--flex: initial; --direction:row; --align:stretch; --justify:flex-start;"><div><svg data-testid="geist-icon" height="24" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" width="24" style="color: green; --geist-fill:currentColor; --geist-stroke:var(--geist-background);">
+                                   <path d="M12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2Z" fill="var(--geist-fill)" stroke="var(--geist-fill)"></path><path d="M8 11.8571L10.5 14.3572L15.8572 9" fill="none" stroke="var(--geist-stroke)"></path></svg></div><p class="text_wrapper__aJlSM text_s-14__COjdp text_w-400__XA97_ text_lh-24___qKPu" data-version="v1" style="--color:var(--accents-6);">Automatic HTTPS/SSL</p></div>
+                                   <div data-version="v1" class="jsx-1558625419 stack_stack__A16oG stack" style="--flex: initial; --direction:row; --align:stretch; --justify:flex-start;"><div><svg data-testid="geist-icon" height="24" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" width="24" style="color: green;; --geist-fill:currentColor; --geist-stroke:var(--geist-background);">
+            
+            <path d="M12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2Z" fill="var(--geist-fill)" stroke="var(--geist-fill)"></path>
+            <path d="M8 11.8571L10.5 14.3572L15.8572 9" fill="none" stroke="var(--geist-stroke)"></path>
+            </svg></div><p class="text_wrapper__aJlSM text_s-14__COjdp text_w-400__XA97_ text_lh-24___qKPu" data-version="v1" style="--color:var(--accents-6);">Previews for every git push</p>
+            </div></div></div><div class="pricing_plan-card-footer__iC0uW">
+            <a role="button" tabindex="0" @click="redirectVirtualMachineSetup()" type="submit" class="button_base_class button_base__AOyi_ reset_reset__90FTf button_button__dmey4 reset_reset__90FTf geist-themed geist-default geist-default-fill button_large__FQLqa button_invert__ESQI6" data-geist-button="" data-version="v1">
+            <span class="button_content__9hWh7 button_start___N8dd">Deploy Server</span>
+            <span class="button_suffix__i0gL_"><svg data-testid="geist-icon" fill="none" height="24" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" width="24" style="color: currentcolor;">
+            <path d="M5 12h14"></path><path d="M12 5l7 7-7 7">
+                            </path>
+                        </svg>
+                    </span>
+                </a>
+            </div>
+        </div>
+
+
+       <div class="pricing_plan-card__8Q2Iu pricing_plan-card-personal__FBJhu"><div class="pricing_plan-card-header__g8BK_ pricing_plan-card-header-personal__All8V"><p class="text_wrapper__aJlSM text_s-32__lPhW6 text_w-700__BJEFg text_lh-32__iP9gT" data-version="v1" style="--color:var(--geist-foreground);"><span class="pricing_plan-card-header-text__xEN2p">Advanced Tier</span></p><span aria-hidden="true" class="geist-spacer" data-version="v1" style="margin-top: 5px;">
+           </span><p class="text_wrapper__aJlSM text_s-16__wD_tc text_w-600__hi7Y9 text_lh-24___qKPu" data-version="v1" style="--color: inherit;"> <span class="pricing_plan-card-header-description__mdnYK">10$ / month</span>
+           </p><span aria-hidden="true" class="geist-spacer" data-version="v1" style="margin-top: 5px;"></span>
+
+            <!-- Pricing Card Headers -->
+           <div class="pricing_plan-card-header-description__mdnYK pricing_plan-card-header-description-personal__iKbGC"><p class="text_wrapper__aJlSM text_s-16__wD_tc text_w-600__hi7Y9 text_lh-24___qKPu" data-version="v1" 
+           style="--color: inherit;">For Commercial and Huge Projects</p></div></div>
+           <div class="pricing_plan-card-body__tIAYe"><div data-version="v1" class="jsx-917344996 stack_stack__A16oG stack" style="--flex: initial; --direction:column; --align:stretch; --justify:flex-start;">
+               
+               <div data-version="v1" class="jsx-1558625419 stack_stack__A16oG stack" style="--flex: initial; --direction:row; --align:stretch; --justify:flex-start;"><div>
+                   <svg data-testid="geist-icon" height="24" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" width="24" style="color: green; --geist-fill:currentColor; --geist-stroke:var(--geist-background);">
+                       
+                       <path d="M12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2Z" fill="var(--geist-fill)" stroke="var(--geist-fill)"></path><path d="M8 11.8571L10.5 14.3572L15.8572 9" fill="none" stroke="var(--geist-stroke)"></path></svg>
+                       </div><p class="text_wrapper__aJlSM text_s-14__COjdp text_w-400__XA97_ text_lh-24___qKPu" data-version="v1" style="--color:var(--accents-6);">Deploy from CLI or personal git integrations</p></div><div data-version="v1" class="jsx-1558625419 stack_stack__A16oG stack" style="--flex: initial; --direction:row; --align:stretch; --justify:flex-start;"><div>
+                           <svg data-testid="geist-icon" height="24" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" width="24" style="color: green; --geist-fill:currentColor; --geist-stroke:var(--geist-background);">
+                               
+                               <path d="M12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2Z" fill="var(--geist-fill)" stroke="var(--geist-fill)"></path>
+                               <path d="M8 11.8571L10.5 14.3572L15.8572 9" fill="none" stroke="var(--geist-stroke)"></path></svg></div><p class="text_wrapper__aJlSM text_s-14__COjdp text_w-400__XA97_ text_lh-24___qKPu" data-version="v1" style="--color:var(--accents-6);">Built-in CI/CD</p></div>
+                               <div data-version="v1" class="jsx-1558625419 stack_stack__A16oG stack" style="--flex: initial; --direction:row; --align:stretch; --justify:flex-start;"><div><svg data-testid="geist-icon" height="24" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" width="24" style="color: green; --geist-fill:currentColor; --geist-stroke:var(--geist-background);">
+                                   <path d="M12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2Z" fill="var(--geist-fill)" stroke="var(--geist-fill)"></path><path d="M8 11.8571L10.5 14.3572L15.8572 9" fill="none" stroke="var(--geist-stroke)"></path></svg></div><p class="text_wrapper__aJlSM text_s-14__COjdp text_w-400__XA97_ text_lh-24___qKPu" data-version="v1" style="--color:var(--accents-6);">Automatic HTTPS/SSL</p></div>
+                                   <div data-version="v1" class="jsx-1558625419 stack_stack__A16oG stack" style="--flex: initial; --direction:row; --align:stretch; --justify:flex-start;"><div><svg data-testid="geist-icon" height="24" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" width="24" style="color: green;; --geist-fill:currentColor; --geist-stroke:var(--geist-background);">
+            
+            <path d="M12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2Z" fill="var(--geist-fill)" stroke="var(--geist-fill)"></path>
+            <path d="M8 11.8571L10.5 14.3572L15.8572 9" fill="none" stroke="var(--geist-stroke)"></path>
+            </svg></div><p class="text_wrapper__aJlSM text_s-14__COjdp text_w-400__XA97_ text_lh-24___qKPu" data-version="v1" style="--color:var(--accents-6);">Previews for every git push</p>
+            </div></div></div><div class="pricing_plan-card-footer__iC0uW">
+            <a role="button" tabindex="0" @click="redirectVirtualMachineSetup()" type="submit" class="button_base_class button_base__AOyi_ reset_reset__90FTf button_button__dmey4 reset_reset__90FTf geist-themed geist-default geist-default-fill button_large__FQLqa button_invert__ESQI6" data-geist-button="" data-version="v1">
+            <span class="button_content__9hWh7 button_start___N8dd">Deploy Server</span>
             <span class="button_suffix__i0gL_"><svg data-testid="geist-icon" fill="none" height="24" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" width="24" style="color: currentcolor;">
             <path d="M5 12h14"></path><path d="M12 5l7 7-7 7">
                             </path>
@@ -130,7 +214,6 @@
 
 
 <script>
-
 
 import  { useCookies } from "vue3-cookies";
 
@@ -152,12 +235,102 @@ export default {
             // Redirects to the Bill Page
             this.$router.push({name: "bill_page"})
         },
+        redirectVirtualMachineSetup() {
+            // Redirects To Virtual Machine Setup Page
+            this.$router.push({name: "virtual_machine_setup"})
+        }
     } 
 }
 
 </script>
 
+
 <style lang="scss">
+
+
+.button_suffix__i0gL_ {
+    margin-top: 5px;
+}
+.link_primary__8ELPN {
+    color: var(--geist-foreground);
+}
+
+.link_link__LTNaQ {
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+    outline: none;
+}
+.a, .details .summary {
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+*, :after, :before, html {
+    box-sizing: border-box;
+}
+
+.a:-webkit-any-link {
+    color: -webkit-link;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+
+.hero_description__EwadB {
+    font-size: 24px;
+    line-height: 34px;
+}
+
+.hero_description__EwadB {
+    font-size: 20px;
+    line-height: 26px;
+    letter-spacing: -.03em;
+    text-align: center;
+    margin: 0;
+    color: var(--accents-5);
+}
+
+.button_base_class {
+    cursor: pointer;
+    background-color: #fff !important;
+}
+
+.text_wrapper__aJlSM.text_lh-32__iP9gT {
+    line-height: 2rem;
+}
+
+.text_wrapper__aJlSM.text_w-700__BJEFg {
+    font-weight: 700;
+}
+.text_wrapper__aJlSM.text_s-32__lPhW6 {
+    font-size: 2rem;
+    letter-spacing: -.049375rem;
+    font-weight: 600;
+    line-height: 2.5rem;
+}
+.text_wrapper__aJlSM {
+    font-family: "Inter",-apple-system,BlinkMacSystemFont,"Segoe UI","Roboto","Oxygen","Ubuntu","Cantarell","Fira Sans","Droid Sans","Helvetica Neue",sans-serif;;
+    margin: 0;
+    color: var(--color);
+}
+
+
+.svg {
+
+    color: green !important;
+    --geist-fill: currentColor;
+    --geist-stroke: #fff;
+    height: 24;
+    shape-rendering: geometricprecision;
+    stroke: currentcolor;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 1.5;
+    width: 24;
+}
+
+.svg:not(:root) {
+    overflow: hidden;
+}
 
 .stack.jsx-1558625419>*+* {
     margin-left: 8px;
@@ -175,7 +348,9 @@ export default {
     line-height: 1.25rem;
 }
 .text_wrapper__aJlSM {
-    font-family: var(--font-sans);
+    font-family: "Inter",-apple-system,
+    BlinkMacSystemFont,"Segoe UI","Roboto","Oxygen",
+    "Ubuntu","Cantarell","Fira Sans","Droid Sans","Helvetica Neue",sans-serif;;
     margin: 0;
     color: var(--color);
 }
@@ -237,12 +412,12 @@ export default {
 .pricing_plan-card-body__tIAYe {
     flex: 1 1;
     padding: var(--card-padding);
-    background-color: #000;
+    background-color: hsl(233, 35%, 15%);
 }
 
 .pricing_plan-card-footer__iC0uW {
     padding: 40px;
-    background-color: #000;
+    background-color: hsl(233, 35%, 15%);
 }
 
 .pricing_plans-wrapper__95BQG .pricing_plan-card__8Q2Iu {
@@ -265,6 +440,7 @@ export default {
     border-radius: 12px;
     overflow: hidden;
     --card-padding: 32px;
+    margin: 20px;
 }
 
 .pricing_plan-card-header__g8BK_ {
@@ -273,7 +449,7 @@ export default {
     border-bottom: 1px solid #444;
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
-    background: #000;
+    background: hsl(233, 35%, 15%);
 }
 
 .pricing_plan-card-header-description__mdnYK {
@@ -282,7 +458,7 @@ export default {
 }
 
 .pricing_plan-card-header-personal__All8V {
-    border-bottom: 1px solid #000;
+    border-bottom: 1px solid hsl(233, 35%, 15%);
 }
 .pricing_plan-card-header__g8BK_ {
     padding: var(--card-padding);
@@ -304,7 +480,9 @@ export default {
     color: #888;
 }
 .text_wrapper__aJlSM {
-    font-family: var(--font-sans);
+    font-family: "Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",
+    "Roboto","Oxygen","Ubuntu","Cantarell","Fira Sans",
+    "Droid Sans","Helvetica Neue",sans-serif;;
     margin: 0;
     color: #fff;
 }
@@ -322,7 +500,7 @@ export default {
 
 .dark-theme, .dark-theme .geist-disabled .geist-disabled-skip, .invert-theme {
     --geist-foreground: #fff;
-    --geist-background: #000;
+    --geist-background: hsl(233, 35%, 15%);
     --geist-selection: var(--geist-highlight-purple);
     --accents-8: #fafafa;
     --accents-7: #eaeaea;
@@ -543,7 +721,6 @@ export default {
     scroll-padding-top: 64px;
 }
 
-
 .button_content__9hWh7 {
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -551,9 +728,6 @@ export default {
     display: inline-block;
 }
 
-*, :after, :before, html {
-    box-sizing: border-box;
-}
 .hero_gradient-button-wrapper__bi4sF .hero_gradient-button__kkwJu {
     background-color: #00000010;
     background-clip: padding-box;
