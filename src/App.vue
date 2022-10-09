@@ -16,8 +16,6 @@
   </div>
 </template>
 
-
-
 <script>
 
 import { mapState, mapMutations } from "vuex"

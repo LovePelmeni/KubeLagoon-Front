@@ -19,9 +19,9 @@ export default new Vuex.Store({
     virtualMachineSavedDraft: {
       // Hardware Configuration goes there...
 
-      "AddedDatacenter": "",
-      "AddedOperationalSystem": "", 
-      "AddedPreInstalledTools": "", 
+      "AddedDatacenter": "", // empty string with the datacenter name 
+      "AddedOperationalSystem": "",  // empty string with the OS system name in the specific format 
+      "AddedPreInstalledTools": [],  // array of the names of the tools, going to be preinstalled on the customer's virtual server
 
       // Resource Configuration goes there...
       "CpuNum": 100,

@@ -2,13 +2,14 @@
   <header class="flex">
 
     <div class="branding flex" style="max-height: 100px; max-width: 100%; justify-content: space-between;">
-      <v-avatar v-if="authenticated" size="50">
+      <!-- <v-avatar v-if="authenticated" size="50">
         <div @click="triggerCustomerProfile" class="button flex">
           <div class="inner-button flex">
             <img :src="require('@/assets/customer_avatar.png')" alt="icon_plus" />
           </div>
         </div>
       </v-avatar>
+      
 
        <v-avatar v-else size="50">
         <div class="button flex">
@@ -16,8 +17,12 @@
             <img :src="require('@/assets/customer_avatar.png')" alt="icon_plus" />
           </div>
         </div>
-      </v-avatar>
+      </v-avatar> -->
       
+      <v-icon size="40" @click="triggerCustomerProfile" style="margin-left: 20px; margin-top: 5px; color: black;" v-if="authenticated">mdi-account-circle</v-icon>
+      <v-icon v-else size="40" style="margin-left: 20px; margin-top: 5px; color: black">mdi-account-off</v-icon>
+
+
         <div @click="redirectToHome" class="button flex" style="margin-bottom: 5px;">
           <h2>Home</h2>
         </div>

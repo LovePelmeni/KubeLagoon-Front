@@ -1,5 +1,7 @@
 <template>
 
+  <div class="initializationModalWindowView">
+
   <div class="virtual-machine-wrap">
     <v-col cols="10" lg="4" class="mx-auto" style="max-width: 80%;">
       <v-card style="max-width: 100%; overflow: hidden;" class="pa-4" ref="initialization-card">
@@ -97,6 +99,8 @@
         <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
         <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css" rel="stylesheet">
     </body>
+
+  </div>
 
 </template>
 
@@ -570,6 +574,10 @@ export default {
       outline: none;
     }
   }
+}
+
+.virtual-machine-wrap {
+  left: 0px;
 }
 
 .v-card {
