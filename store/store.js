@@ -327,9 +327,14 @@ export default new Vuex.Store({
       }else{return true}
     },
 
+    TOGGLE_AUTHENTICATED(state) {
+      // Changes the status of the Customer to the Authenticated
+      state.authenticated = true
+    },
+
     TOGGLE_NOT_AUTHENTICATED(state) {
       // Changes status of the Customer to not Authenticated 
-      state.authenticated = !state.authenticated
+      state.authenticated = false
     },
 
     // Toggle Methods

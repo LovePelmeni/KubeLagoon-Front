@@ -90,11 +90,11 @@
         margin-left: 150px;
         white-space: normal;
         word-wrap: normal;">
-                <code>
-                    <ol>
-                        <li data-prefix="~">
+        <code>
+            <ol>
+                <li data-prefix="~">
                         ssh   
-                        <span class="token builtin class-name" style="
+                <span class="token builtin class-name" style="
                         color: #ff4084;
                         background: none;
                         border-radius: 0;
@@ -103,13 +103,11 @@
                         margin: 0;
                         padding: 0;"> {{VirtualMachine?.Ssh.RootUsername}}@{{ VirtualMachine?.Ssh.IpAddress}} </span> 
                          -p {{ VirtualMachine?.Ssh.RootPassword }}
-                        </li>
-                    </ol>
-                </code>
-            </pre>
-        </div>
-
-
+                </li>
+            </ol>
+        </code>
+    </pre>
+    </div>
 
          <div v-if="VirtualMachine?.Ssh.byRootCertificate === true && VirtualMachine?.Running === true" class="code-toolbar">
              <pre class="prefixed command language-bash" style="    

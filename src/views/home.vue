@@ -29,22 +29,42 @@
             <div data-version="v1" style="--flex:1;--justify-content:flex-start;--align-items:stretch"
              class="jsx-499702677 geist-container">
 
-             <div class="hero_gradient-button-wrapper__bi4sF" @click="redirectVirtualMachineSetup">
+             <div class="hero_gradient-button-wrapper__bi4sF">
                  <span aria-hidden="true" class="hero_button-bg__seSDp hero_bg-1__Idwnm">
                 </span>
                 <span aria-hidden="true" class="hero_button-bg__seSDp hero_bg-2__OnKew">
                     </span><span aria-hidden="true" class="hero_button-bg__seSDp hero_bg-3__Ik39k">
-                        </span><a role="button" tabindex="0"
-                        @click="redirectToAboutPage"
-                        target="_blank" type="submit" rel="noopener" data-testid="landing-page/hero/get-demo-cta"
+                        </span>
+                    <a v-if="Authenticated === false" role="button" tabindex="0"
+                        disabled target="_blank" type="submit" rel="noopener" data-testid="landing-page/hero/get-demo-cta"
                         class="button_base__AOyi_ reset_reset__90FTf button_button__dmey4 reset_reset__90FTf hero_gradient-button__kkwJu button_large__FQLqa button_ghost__sBWMh"
-                        data-geist-button="" data-version="v1"><span class="button_content__9hWh7" style="
+                        data-geist-button="" data-version="v1">
+
+                        <v-icon style="color: white; margin-right: 10px; overflow: hidden;">mdi-lock</v-icon>
+                        <span class="button_content__9hWh7" style="
                         text-overflow: ellipsis;
                         white-space: nowrap;
                         overflow: hidden;
                         display: inline-block;
+                        margin-right: 20px;
+                        overflow: hidden;
                         }">Create Server</span>
-                        </a>
+                    </a>
+                    <a v-else role="button" tabindex="0"
+                        @click="redirectToVirtualMachineSetup"
+                        target="_blank" type="submit" rel="noopener" data-testid="landing-page/hero/get-demo-cta"
+                        class="button_base__AOyi_ reset_reset__90FTf button_button__dmey4 reset_reset__90FTf hero_gradient-button__kkwJu button_large__FQLqa button_ghost__sBWMh"
+                        data-geist-button="" data-version="v1">
+
+                        <span class="button_content__9hWh7" style="
+                        text-overflow: ellipsis;
+                        white-space: nowrap;
+                        overflow: hidden;
+                        display: inline-block;
+                        margin-right: 20px;
+                        overflow: hidden;
+                        }">Create Server</span>
+                    </a>
                     </div>
                 </div
             ></div>
@@ -239,7 +259,10 @@ export default {
             // Redirects To Virtual Machine Setup Page
             this.$router.push({name: "virtual_machine_setup"})
         }
-    } 
+    },
+    computed: {
+        Authenticated() {return this.$store.state.authenticated }
+    }
 }
 
 </script>

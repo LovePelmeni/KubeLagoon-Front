@@ -47,6 +47,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 
 
 import * as bill from "../../cost/virtualMachineCost.js"
@@ -55,6 +56,7 @@ export default {
     name: "BillPage",
     data() {
         return {
+            authenticated: false,
             // Stock Prices 
             cpuStockPrice: bill.CPU_STOCK_PRICE, 
             memoryStockPrice: bill.MEMORY_STOCK_PRICE, 
@@ -111,8 +113,12 @@ export default {
             this.storagePerDay = Math.round(bill.STORAGE_STOCK_PRICE * 1 * 24)
         },
     },
+    computed: {
+        ...mapState([
+            "authenticated"
+        ])
+    }
 }
-
 </script>
 
 <style lang="scss">

@@ -20,7 +20,7 @@
 
 <script>
 
-import { mapState } from "vuex"
+import { mapState, mapMutations } from "vuex"
 import navigationPage from "./components/NavigationPage.vue"
 import modalPage from "./components/ModalWindow.vue"
 import loadingPage from "./components/LoadingPage.vue"
@@ -55,9 +55,21 @@ export default {
   created() {
     this.checkScreen();
     window.addEventListener("resize", this.checkScreen);
+    this.checkAuthorized()
   },
 
   methods: {
+    ...mapMutations([
+      "TOGGLE_NOT_AUTHENTICATED"
+    ]),
+    checkAuthorized() {
+      // This Method Checks if the Customer is Authorized, while the Page is getting Updated, 
+      // If not, it is going to change the state `authenticated` to false 
+      let jwtAuthCookie = this.cookies.get("jwt-token") || ''
+      if (jwtAuthCookie.length == 0 || jwtAuthCookie == null) {
+        this.TOGGLE_NOT_AUTHENTICATED()
+      }
+    },
 
     fetchCustomerProfile() {
       // Fetches Customer Profile by the Jwt Token
