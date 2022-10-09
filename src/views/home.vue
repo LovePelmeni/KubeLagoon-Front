@@ -106,7 +106,7 @@
 
 
         <h4 class="section-title_title__VEDfK" style="color: #fff; margin-top: 100px;">Start with the Best Solutions</h4>
-        <p class="hero_description__EwadB" style="margin-top: 30px; margin-bottom: 50px;">Get the most lucrative solution for yourself<!-- --><br class="geist-hide-on-mobile"><!-- --></p>
+        <p class="hero_description__EwadB" style="margin-top: 30px; margin-bottom: 50px;">Get the most lucrative plan for yourself<!-- --><br class="geist-hide-on-mobile"><!-- --></p>
 
         <!-- Subscription Cards Goes there -->
 

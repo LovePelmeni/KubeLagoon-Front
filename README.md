@@ -67,6 +67,15 @@ It will let you know, if the server is being updated / deployed and you cannot p
 </p>
 
 
+
+Provides the ability for you to choose some basic plan that if you want, instead of spending your time on finding the best configuration you want 
+
+<p align="center">
+  <a><img src="./extra_photos/payment_cards.png" style="width: 100%; height: 100%" alt="Infrastructure"><a>
+</p>
+
+
+
 Also provides some basic Login / Registration / Reset Password Pages as well
 
 
