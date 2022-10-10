@@ -1,6 +1,38 @@
-<template>
+<script>
 
-  <div v-if="ServerDoesExist">
+import {  mapState } from "vuex";
+import { mapActions } from "vuex";
+import { useCookies } from "vue3-cookies";
+
+import VirtualMachineConnectionInfo from "../components/ConnectionInfo.vue";
+import VirtualServerNotFoundWindow from "./VirtualServerNotFoundWindow.vue";
+import ChartPage from "../components/ResourceCharts.vue";
+import NotAuthenticatedWindow from "../components/NotAuthenticatedWindow.vue";
+import ForbiddenWindow from "../components/ForbiddenWindow.vue";
+
+import * as cost from "../../cost/virtualMachineCost";
+import * as resources from "../../usage/usage.js";
+
+export default {
+
+  components: { 
+    VirtualServerNotFoundWindow, 
+    ChartPage, 
+    VirtualMachineConnectionInfo, 
+    NotAuthenticatedWindow,
+    ForbiddenWindow,
+  },
+  name: "VirtualMachineInfo",
+  setup() {
+    const { cookie } = useCookies();
+    return { cookie };
+  },
+  mounted() {
+    this.JwtToken = this.cookie?.get("jwt-token")
+    this.getVirtualMachineServerInfo()
+    this.MountResourceUsageMetrics()
+  },
+  template: `<div v-if="ServerDoesExist && Authenticated && HasPermissions">
   <main class="detail">
     <router-link :to="{ name: 'main_page' }" style="margin-right: 40px;" class="link">
       <svg
@@ -181,40 +213,22 @@
   </main>
   </div>
 
-  <div v-else> 
-    <virtual-server-not-found-window />
+
+  <div v-else-if="Authenticated === false"> 
+    <not-authenticated-window />
   </div>
 
-</template>
+  <div v-else-if="HasPermissions === false"> 
+    <forbidden-window />
+  </div>
 
-<script>
+  <div v-else-if="ServerDoesExist === false"> 
+    <virtual-server-not-found-window />
+  </div>`,
 
-import {  mapState } from "vuex";
-import { mapActions } from "vuex";
-import { useCookies } from "vue3-cookies";
-
-import VirtualMachineConnectionInfo from "../components/ConnectionInfo.vue";
-import VirtualServerNotFoundWindow from "./VirtualServerNotFoundWindow.vue";
-import ChartPage from "../components/ResourceCharts.vue"
-
-import * as cost from "../../cost/virtualMachineCost";
-import * as resources from "../../usage/usage.js"
-
-export default {
-
-  components: { VirtualServerNotFoundWindow, ChartPage, VirtualMachineConnectionInfo },
-  name: "VirtualMachineInfo",
-  setup() {
-    const { cookie } = useCookies();
-    return { cookie };
-  },
-  mounted() {
-    this.JwtToken = this.cookie?.get("jwt-token")
-    this.getVirtualMachineServerInfo()
-    this.MountResourceUsageMetrics()
-  },
   data() {
     return {
+
       // Operation Information  
       ResourceUsageMetrics: {
         "CpuMetrics": "-",
@@ -237,9 +251,10 @@ export default {
 
       // Extra Statuses
 
-      ServerDoesExist: false,
-      OperationFailed: false,
-      OperationSucceeded: false,
+      ServerDoesExist: false, // Status, that indicates, that the Virtual Machine Server, that customer is trying to get info about, does not exist // 
+      OperationFailed: false, // Status, that indicates, that operation was failed to be performed // 
+      OperationSucceeded: false, // Status, that indicates, that operation has been performed successfully //
+      HasPermissions: true, // The Customer, who's trying to access this page with the Virtual Machine Server Info, does not have access permissions by default //
 
       // Operations Messages Parameters
       OperationSuccessMessage: null,
@@ -405,8 +420,12 @@ export default {
   },
   computed: {
     ...mapState([
-      "virtualMachineData"
-    ])
+      "virtualMachineData",
+      "authenticated",
+    ]),
+    Authenticated() {
+      return this.$store.state.authenticated
+    }
   }
 };
 

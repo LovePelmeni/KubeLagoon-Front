@@ -85,15 +85,13 @@ data:
       }
 
       http {
-
           # Upstreams Configuration for the Frontend Nginx Server
           upstream front_application_upstream {
               server front_application:3000;
           }
           # Server Configuration for the Nginx Server 
           server {
-
-              listen 4000;
+              listen 3000;
               # Base Location for the Not Found Page 
               location @not_found {
                   # Redirects to the Not Found Page
@@ -111,4 +109,3 @@ data:
               }
           }
       }
-

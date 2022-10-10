@@ -29,9 +29,7 @@
   </router-link>
 </template>
 
-
 <script>
-
 
 import * as cost from "../../cost/virtualMachineCost"
 
@@ -63,6 +61,7 @@ export default {
     }
   }, 
 };
+
 </script>
 
 <style lang="scss" scoped>

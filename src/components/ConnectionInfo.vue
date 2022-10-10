@@ -52,8 +52,8 @@
             Oops, Your Virtual Server has been Failed to Deploy.
             </label> 
 
-            <p style="margin-left: 200px; color: red; max-width: 60%; margin-top: 15px;" v-if="VirtualMachine?.Running === false && VirtualMachine?.Shutdown === false && VirtualMachine?.Deploying === false">Reason: {{ VirtualMachineDeployError }}. Please Call Support,
-            if you cannot handle this issue on your own</p>
+            <p style="margin-left: 200px; color: red; max-width: 60%; margin-top: 15px;" v-if="VirtualMachine?.Running === false && VirtualMachine?.Shutdown === false && VirtualMachine?.Deploying === false">
+            Reason: {{ VirtualMachineDeployError || 'Unknown Issue' }}. Please Call Support.</p>
 
 
         <!-- Instructions for the SSH Using Root Credentials of the Virtual Server  -->
@@ -156,6 +156,8 @@
 </template>
 
 <script>
+
+
 
 import * as ssh from "../../ssh/ssh.js";
 

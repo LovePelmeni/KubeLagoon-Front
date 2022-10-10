@@ -60,7 +60,8 @@
         <div class="modalField flex flex-column" style="width: 800px; max-width: 100%; overflow: hidden; margin-left: auto !important; margin-right: auto !important ">
 
           <label for="paymentTerms">Payment Terms</label>
-          <select @change="ProcessPaymentTermsChangeEvent" style="max-width: 100%; overflow: hidden;" type="text" id="paymentTerms" v-model="paymentTerms">
+          <select @change="ProcessPaymentTermsChangeEvent" style="max-width: 100%; overflow: hidden;"
+          type="text" id="paymentTerms" v-model="paymentTerms" aria-placeholder="Select Bill Terms">
             <option value="30">Net 30 Days</option>
             <option value="60">Net 60 Days</option>
           </select>
@@ -114,7 +115,6 @@ import hardwareConfiguration from "../components/hardwareConfiguration.vue";
 import resourceConfiguration from "../components/resourceConfiguration.vue";
 import sshConfiguration from  "../components/sshConfiguration.vue";
 import { VirtualMachineCostCalculator } from "../../cost/virtualMachineCost.js";
-
 
 
 export default {

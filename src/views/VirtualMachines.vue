@@ -1,6 +1,6 @@
 <template>
 
-  <div class="homeWrapper">
+  <div class="homeWrapper" v-if="Authenticated">
 
     <router-link :to="{ name: 'login_page'}"></router-link>
     <router-link :to="{ name: 'register_page'}"></router-link>
@@ -45,6 +45,10 @@
 
     </div>
 
+    <div v-else>
+      <not-authenticated-window />
+    </div>
+
     <body>
       <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
       <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css" rel="stylesheet">
@@ -57,6 +61,8 @@
 
 import { mapMutations, mapActions, mapState } from "vuex";
 import VirtualMachineBannerInfo from "../components/VirtualMachineBannerInfo.vue";
+import NotAuthenticatedWindow from "../components/NotAuthenticatedWindow.vue";
+
 export default {
   name: "VirtualMachinesPage",
   data() {
@@ -93,8 +99,12 @@ export default {
   },
   components: {
     VirtualMachineBannerInfo,
+    NotAuthenticatedWindow,
   },
   computed: {
+    Authenticated() {
+      return this.$store.state.authenticated
+    },
     ...mapState(["virtualMachineData", "virtualMachinesLoaded"]),
     filteredData() {
       return this.virtualMachineData.filter((virtualMachine) => {

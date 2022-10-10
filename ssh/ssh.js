@@ -17,5 +17,4 @@ class VirtualMachineSshManager {
 }
 
 
-
 export {VirtualMachineSshManager};

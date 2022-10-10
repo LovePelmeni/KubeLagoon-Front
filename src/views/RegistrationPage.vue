@@ -122,6 +122,8 @@
 <script>
 
 import SoftButton from "../components/SoftButton.vue";
+import * as fields_rest from "../../rest/fields.js";
+
 const body = document.getElementsByTagName("body")[0];
 
 import { mapMutations } from "vuex";
@@ -155,12 +157,14 @@ export default {
     UsernameValidationRules: [
       username => !!username || 'Password is required',
       username => (username && username.length >= 10) || 'Invalid Password',
+      username => new UniqueFieldValidator().ValidateUsername(username) || 'This Username is already taken',
     ],
 
     Email: '',
     EmailValidationRules: [
       email => !!email || 'Email is required',
       email => (email && email.length >= 8) || 'Invalid Email',
+      email => new UniqueFieldValidator().ValidateEmail(email) || 'This Email is already taken',
     ],
 
     Password: '',
@@ -227,6 +231,22 @@ export default {
       }
     },
   }
+}
+
+class UniqueFieldValidator {
+    // Class, Validates the Unique Fields for the Registration Form 
+
+    ValidateUsername(Username) {
+        // Validates the Username (checks, if there is no user with the same username)
+        let valid = fields_rest.ValidateUsernameRestController(Username)
+        return valid 
+    } 
+
+    ValidateEmail(Email) {
+        // Validates the Email (checks, if there is no user with the same email)
+        let valid = fields_rest.ValidateEmailRestController(Email)
+        return valid
+    }
 }
 
 </script>

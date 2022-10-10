@@ -7,8 +7,8 @@
           <modalPage v-if="modalActive" />
           <customer-profile  v-if="showCustomerProfile" :Customer="fetchCustomerProfile()" />
         <router-view />
+      </div> 
 
-      </div>
       <div v-else class="mobile-message flex flex-column">
         <h2>Sorry, this app is not supported on Mobile Devices</h2>
         <p>To use this app, please use a Laptop or Another Device</p>
@@ -63,6 +63,7 @@ export default {
     checkAuthorized() {
       // This Method Checks if the Customer is Authorized, while the Page is getting Updated, 
       // If not, it is going to change the state `authenticated` to false 
+
       let jwtAuthCookie = this.cookies.get("jwt-token") || ''
       if (jwtAuthCookie.length == 0 || jwtAuthCookie == null) {
         this.TOGGLE_NOT_AUTHENTICATED()
