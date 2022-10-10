@@ -33,6 +33,7 @@ export default {
     ...mapState(["updateVirtualMachine"]),
   },
 };
+
 </script>
 
 <style lang="scss" scoped>

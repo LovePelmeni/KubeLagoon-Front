@@ -53,6 +53,7 @@
   </div>
 </template>
 <script>
+
 import Chart from "chart.js/auto";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 export default {

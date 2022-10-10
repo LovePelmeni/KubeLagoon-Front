@@ -309,7 +309,7 @@ export default {
       ]
       this.PreInstalledTools = PreInstalledTools
     },
-    
+
     GetDatacenterObject(DatacenterName) {
       // Converts Datacenter to the JSON Object 
       let Datacenter = this.Datacenters.filter((dc) => {
@@ -368,7 +368,6 @@ export default {
   -webkit-hyphens: auto;
   hyphens: auto;
   transition-duration: 150ms;
-  // color: #344767 !important;
 }
 }
 

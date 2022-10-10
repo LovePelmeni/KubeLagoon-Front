@@ -1,208 +1,77 @@
 <template>
-    <div class="homePageWrapper">
+           <div class="pricing_plan-card__8Q2Iu pricing_plan-card-personal__FBJhu">
+           <div class="pricing_plan-card-header__g8BK_ pricing_plan-card-header-personal__All8V">
 
-        <div class="home_logo" style="align-items: center; margin-top: 30px; margin-left: 10px;">
-        <img :src="require('../../logo/crown_logo.svg')" style="color: red" height="500" width="500" />
-        </div>
-        <h4 class="section-title_title__VEDfK" style="color: #fff; margin-top: 30px;">KubeLagoon</h4>
-        
-        <h2 class="hero_description__IXY_z">
-            <span class="hero_description-break__u_niN" style="color:#DE1D8D">KubeLagoon Cloud Platform </span> offers great developer experience and reliability.
-            <br aria-hidden="true" class="hero_description-break__u_niN text-link_link__OUsK1" style="color: #DE1D8D">Get Started right now, and obtain 3 month's 
-            <br aria-hidden="true" class="hero_description-break__u_niN text-link_link__OUsK1" style="color: #DE1D8D">Premium Subscription for free.</h2>
+            <p class="text_wrapper__aJlSM text_s-32__lPhW6 text_w-700__BJEFg text_lh-32__iP9gT" data-version="v1" style="--color:var(--geist-foreground);">
+            <span class="pricing_plan-card-header-text__xEN2p">{{ BannerName }}</span></p>
 
-        <div class="buttonsBlock" style="justify-content: space-between; display: flex; margin-right: 20%; margin-left: 20%;">
+           <span aria-hidden="true" class="geist-spacer" data-version="v1" style="margin-top: 5px;">
+           </span>
+           <p class="text_wrapper__aJlSM text_s-16__wD_tc text_w-600__hi7Y9 text_lh-24___qKPu" data-version="v1" style="--color: inherit;"><span class="pricing_plan-card-header-description__mdnYK" style="margin-top: 30px; margin-bottom: 10px;">{{ BannerPrice }}$ / month</span>
+           </p><span aria-hidden="true" class="geist-spacer" data-version="v1" style="margin-top: 5px;"></span>
 
-        <div class="
-        list_geistListItem__82_ac" style="
-        padding: 12px;;
-        -webkit-box-flex: 0;
-        -webkit-flex-grow: 0;
-        -moz-box-flex: 0;
-        -ms-flex-positive: 0;
-        flex-grow: 0;
-        -webkit-flex-basis: 50%;
-        -ms-flex-preferred-size: 50%;
-        flex-basis: 50%;
-        max-width: 400px; 
-        border-radius: 5px 5px 5px 5px;">
-            <div data-version="v1" style="--flex:1;--justify-content:flex-start;--align-items:stretch"
-             class="jsx-499702677 geist-container">
+            <!-- Pricing Card Headers -->
+            <div class="pricing_plan-card-header-description__mdnYK pricing_plan-card-header-description-personal__iKbGC" style="margin-top: 15px;">
+                <p class="text_wrapper__aJlSM text_s-16__wD_tc text_w-600__hi7Y9 text_lh-24___qKPu" data-version="v1" 
+                style="--color: inherit;">{{ BannerDescription }}</p>
+            </div>
+            </div>
+           <div class="pricing_plan-card-body__tIAYe">
 
-             <div class="hero_gradient-button-wrapper__bi4sF">
-                 <span aria-hidden="true" class="hero_button-bg__seSDp hero_bg-1__Idwnm">
-                </span>
-                <span aria-hidden="true" class="hero_button-bg__seSDp hero_bg-2__OnKew">
-                    </span><span aria-hidden="true" class="hero_button-bg__seSDp hero_bg-3__Ik39k">
-                        </span>
-                    <a v-if="Authenticated === false" role="button" tabindex="0"
-                        disabled target="_blank" type="submit" rel="noopener" data-testid="landing-page/hero/get-demo-cta"
-                        class="button_base__AOyi_ reset_reset__90FTf button_button__dmey4 reset_reset__90FTf hero_gradient-button__kkwJu button_large__FQLqa button_ghost__sBWMh"
-                        data-geist-button="" data-version="v1">
+           <div data-version="v1" class="container jsx-917344996 stack_stack__A16oG stack" style="--flex: initial; --direction:column; --align:stretch; --justify:flex-start;">
+               
+            
+                <div data-version="v1" v-for="Option in BannerOptions" :key="Option" class="jsx-1558625419 stack_stack__A16oG stack" style="margin-top: 30px; --flex: initial; --direction:row; --align:stretch; --justify:flex-end;">
 
-                        <v-icon style="color: white; margin-right: 10px; overflow: hidden;">mdi-lock</v-icon>
-                        <span class="button_content__9hWh7" style="
-                        text-overflow: ellipsis;
-                        white-space: nowrap;
-                        overflow: hidden;
-                        display: inline-block;
-                        margin-right: 20px;
-                        overflow: hidden;
-                        }">Create Server</span>
-                    </a>
-                    <a v-else role="button" tabindex="0"
-                        @click="redirectToVirtualMachineSetup"
-                        target="_blank" type="submit" rel="noopener" data-testid="landing-page/hero/get-demo-cta"
-                        class="button_base__AOyi_ reset_reset__90FTf button_button__dmey4 reset_reset__90FTf hero_gradient-button__kkwJu button_large__FQLqa button_ghost__sBWMh"
-                        data-geist-button="" data-version="v1">
-
-                        <span class="button_content__9hWh7" style="
-                        text-overflow: ellipsis;
-                        white-space: nowrap;
-                        overflow: hidden;
-                        display: inline-block;
-                        margin-right: 20px;
-                        overflow: hidden;
-                        }">Create Server</span>
-                    </a>
+                    <div style="position: absolute;">
+                        <svg data-testid="geist-icon" height="24" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" width="24" style="color: green; --geist-fill:currentColor; --geist-stroke:var(--geist-background);">
+                        <path d="M12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2Z" fill="var(--geist-fill)" stroke="var(--geist-fill)"></path>
+                        <path d="M8 11.8571L10.5 14.3572L15.8572 9" fill="none" stroke="var(--geist-stroke)">
+                        </path>
+                        </svg>
                     </div>
-                </div
-            ></div>
+                    <p class="text_wrapper__aJlSM text_s-14__COjdp text_w-400__XA97_ text_lh-24___qKPu" data-version="v1" style="--color:var(--accents-6);">{{ Option }}</p>
+                </div>
 
-        <div class="list_geistListItem__82_ac" style="
-        padding: var(--geist-gap-half);
-        -webkit-box-flex: 0;
-        -webkit-flex-grow: 0;
-        -moz-box-flex: 0;
-        -ms-flex-positive: 0;
-        flex-grow: 0;
-        -webkit-flex-basis: 50%;
-        -ms-flex-preferred-size: 50%;
-        flex-basis: 50%;
-        max-width: 400px;">
-            <div data-version="v1" style="--flex:1;--justify-content:flex-start;--align-items:stretch"
-             class="jsx-499702677 geist-container">
-
-             <div class="hero_gradient-button-wrapper__bi4sF">
-                 <span aria-hidden="true" class="hero_button-bg__seSDp hero_bg-1__Idwnm">
-                </span>
-                <span aria-hidden="true" class="hero_button-bg__seSDp hero_bg-2__OnKew">
-                    </span><span aria-hidden="true" class="hero_button-bg__seSDp hero_bg-3__Ik39k">
-                        </span><a role="button" tabindex="0" 
-                        @click="redirectToBillPage"
-                        target="_blank" type="submit" rel="noopener" data-testid="landing-page/hero/get-demo-cta"
-                        class="button_base__AOyi_ reset_reset__90FTf button_button__dmey4 reset_reset__90FTf hero_gradient-button__kkwJu button_large__FQLqa button_ghost__sBWMh"
-                        data-geist-button="" data-version="v1"><span class="button_content__9hWh7">Billing Info</span>
-                        </a>
-                    </div>
-                </div
-            ></div>
+            </div>
         </div>
-
-        <div class="tiny-heading_heading__4Znu5" style="margin-top: 50px;"><small style="
-        margin-top: 30px; font-size: 1rem;
-        text-align: center; margin-bottom: 30px; font-size:0.75rem;letter-spacing:0.2rem;margin-top:0;padding-left:0.2rem;color: #fff;"
-        class="jsx-3907808361 text_text__tVl7E text_small__ke4_O geist-themed geist-secondary geist-text-no-margin text_noMargin__uy__0 text_center__uKEGZ text_themed__eHOst">Explore the KubeLagoon<!-- --></small></div>
-
-
-        <h4 class="section-title_title__VEDfK" style="color: #fff; margin-top: 100px;">Start with the Best Solutions</h4>
-        <p class="hero_description__EwadB" style="margin-top: 30px; margin-bottom: 50px;">Get the most lucrative plan for yourself<!-- --><br class="geist-hide-on-mobile"><!-- --></p>
-
-        <!-- Subscription Cards Goes there -->
-
-
-        <div class="subscriptionCards" style="justify-content: space-between; display: flex;">
-
-        <payment-banner
-            :BannerName="
-            'Basic Tier' // Name of the Basic Tier Banner
-            "
-            :BannerDescription="
-            'For Non-Commercial or small projects' // Description of the Basic Tier
-            "
-            :BannerPrice="
-            '0' // Price for the Basic Tier
-            "
-            :BannerOptions="[ // Options for the Basic Tier 
-                '2-full CPUs', // Provides 
-                '10GB Storage Disk',
-                '500MB MAX RAM Daily Usage',
-                'Base Email Support'
-            ]"
-         />
-
-         <payment-banner 
-            :BannerName="
-            'Basic Tier' // Name of the Basic Tier Banner
-            "
-            :BannerDescription="
-            'For Commercial or small projects' // Description of the Basic Tier
-            "
-            :BannerPrice="
-            '5' // Price for the Basic Tier
-            "
-            :BannerOptions="[ // Options for the Basic Tier 
-                '10-full CPUs', // Provides 
-                '500GB Storage Disk',
-                '10GB MAX RAM Daily Usage',
-                'Base Email Support'
-            ]"/>
-
-         <payment-banner 
-            :BannerName="
-            'Advanced Tier' // Name of the Basic Tier Banner
-            "
-            :BannerDescription="
-            'For Commercial and Heavy Projects' // Description of the Basic Tier
-            "
-            :BannerPrice="
-            '20' // Price for the Basic Tier
-            "
-            :BannerOptions="[ // Options for the Basic Tier 
-                '20-full CPUs', // Provides 
-                '1500GB Storage Disk',
-                '20GB MAX RAM Daily Usage',
-                'Personal Dedicated Support Channel'
-            ]"/>
-    </div>
-    </div>
+            <div class="pricing_plan-card-footer__iC0uW">
+            <a role="button" tabindex="0" @click="redirectVirtualMachineSetup()" type="submit" class="button_base_class button_base__AOyi_ reset_reset__90FTf button_button__dmey4 reset_reset__90FTf geist-themed geist-default geist-default-fill button_large__FQLqa button_invert__ESQI6" data-geist-button="" data-version="v1">
+            <span class="button_content__9hWh7 button_start___N8dd">Deploy Server</span>
+            <span class="button_suffix__i0gL_"><svg data-testid="geist-icon" fill="none" height="24" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" width="24" style="color: currentcolor;">
+            <path d="M5 12h14"></path><path d="M12 5l7 7-7 7">
+                            </path>
+                        </svg>
+                    </span>
+                </a>
+            </div>
+        </div>
 </template>
+
+
 
 <script>
 
-import paymentBanner from "@/components/paymentBanner.vue";
-import { useCookies } from "vue3-cookies";
 
 export default {
-  components: { paymentBanner },
-    name: "HomePage",
-    setup() {
-        const jwtToken = useCookies();
-        return jwtToken
-    },
-    mounted() {
-        this.JwtToken = this.jwtToken?.cookies.get("jwt-token")
-    },
+    name: "paymentBanner",
+    props: [
+        "BannerName",
+        "BannerDescription",
+        "BannerOptions",
+        "BannerPrice",
+    ],
     methods: {
-        redirectToBillPage() {
-            // Redirects to the Bill Page
-            this.$router.push({name: "bill_page"})
-        },
-        redirectToAboutPage() {
-            // Redirects to the Bill Page
-            this.$router.push({name: "bill_page"})
-        },
         redirectVirtualMachineSetup() {
-            // Redirects To Virtual Machine Setup Page
-            this.$router.push({name: "virtual_machine_setup"})
+            // Redirects to the Virtual Machine Setup Page, with already prepared (inserted) parameters 
+            // According to the Banner Suggestion
+            return this.$router.push({name: "virtual_machine_setup"})
         }
-    },
-    computed: {
-        Authenticated() {return this.$store.state.authenticated }
     }
 }
-
 </script>
+
+
 
 
 <style lang="scss">
