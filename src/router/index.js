@@ -7,7 +7,9 @@ import EditCustomerProfile from "../views/EditCustomerProfile.vue";
 import LoginPage from "../views/LoginPage.vue";
 import RegistrationPage from "../views/RegistrationPage.vue";
 
-import initializationModal from "../views/InitializationModal.vue";
+import InitializationModalPage from "../views/InitializationModalPage.vue";
+import EditInitializationModalPage from "../views/EditVirtualMachinePage.vue";
+
 import deployErrorDescription from "../components/deployError.vue";
 import ResetPassword from "../views/ResetPassword.vue";
 import NotFoundPage from "../components/NotFoundWindow.vue";
@@ -16,7 +18,6 @@ import HomePage from "../views/home.vue";
 import BillPage from "../views/BillPage.vue";
 
 const routes = [
-
   {
     path: "/",
     name: "main_page",
@@ -55,7 +56,12 @@ const routes = [
   {
     path: "/virtual/machine/setup/",
     name: "virtual_machine_setup",
-    component: initializationModal,
+    component: InitializationModalPage,
+  },
+  {
+    path: "/edit/virtual/machine/:VirtualMachineId",
+    name: "edit_virtual_machine",
+    component: EditInitializationModalPage,
   },
   {
     path: "/virtual/machine/error/",

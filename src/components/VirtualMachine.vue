@@ -335,6 +335,12 @@ export default {
       if (this.VirtualMachine != null) {this.ServerDoesExist = true}
     },
 
+    UpdateVirtualMachine() {
+      // Redirects to the Virtual Machine Edit Configuration Page
+      this.$router.push({name: "edit_virtual_machine", 
+      params: {"VirtualMachineId": this.VirtualMachineId}})
+    },
+
     DeleteVirtualMachine() {
       // Deletes the Virtual Machine Server by calling Rest API on the Backend
       let VirtualMachineId = this.$route.query.VirtualMachineId 

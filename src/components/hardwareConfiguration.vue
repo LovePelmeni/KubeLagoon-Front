@@ -104,6 +104,9 @@ export default {
     this.AddedPreInstalledTools = []
     this.CheckIsDraft()
   },
+  props: [
+    "hardwareConfiguration"
+  ],
   data() {
     return {
       // hardware Configuration Validation Rules
@@ -197,9 +200,18 @@ export default {
       //   }
       // ], // array of the Objects with attrs { 'ToolName', 'IconImageUrl' }
 
-      AddedDatacenter: null,
-      AddedOperationalSystem: null,
-      AddedPreInstalledTools: [],
+      AddedDatacenter: function(object) {
+        let hardwareConfiguration = object.$props.hardwareConfiguration || {}
+        return hardwareConfiguration["Datacenter"]
+      }(this),
+      AddedOperationalSystem: function(object) {
+        let hardwareConfiguration = object.$props.hardwareConfiguration || {}
+        return hardwareConfiguration["OperationalSystem"]
+      }(this),
+      AddedPreInstalledTools: function(object) {
+        let hardwareConfiguration = object.$props.hardwareConfiguration || {} 
+        return hardwareConfiguration["PreInstalledTools"]
+      }(this),
     }
   },
 

@@ -102,6 +102,9 @@ import { mapState } from "vuex";
 export default {
 
   name: "sshConfiguration",
+  props: [
+    "sshConfiguration"
+  ],
   data() {
     return {  
 
@@ -112,8 +115,13 @@ export default {
 
       // Configuration of the SSH for the Virtual Machine Server
       
-      useRootCredentials: false,
-      useRootCertificate: false,
+      useRootCredentials: function(object) {
+        let sshConfiguration = object.$props.sshConfiguration || {};
+        return sshConfiguration.useRootCredentials || false}(this),
+        
+      useRootCertificate: function(object) {
+        let sshConfiguration = object.$props.sshConfiguration || {};
+        return sshConfiguration?.useRootCertificate || false}(this),
     }
   },
   mounted() {
@@ -136,6 +144,7 @@ export default {
       this.useRootCertificate = true
       this.useRootCredentials = false
     },
+    
     toRootCredentials() {
       this.useRootCredentials = true
       this.useRootCertificate = false

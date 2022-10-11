@@ -143,32 +143,43 @@
 
 import { mapState } from "vuex";
 
-
 export default {
 
   name: "resourceConfiguration",
   mounted() {
     this.CheckIsDraft()
   },
+  props: [
+    "resourceConfiguration"
+  ],
   data() {
     return {
-
-      // Error Context
-      errors: {
-        Resources: {},
-      },
-
       // CPU Resources
-      CpuNum: null, // CPU Number
-      MaxCpu: null, // Max Full Cpu Power Usage (for example: 5 full CPU's usage) means 500 % where each has 100 %
+      CpuNum: function(object) {
+        let resourceConfiguration = object.$props.resourceConfiguration || {};
+        return resourceConfiguration?.CpuNum || null}(this), // CPU Number
+        
+      MaxCpu: function(object) {
+        let resourceConfiguration = object.$props.resourceConfiguration || {};
+        return resourceConfiguration?.MaxCpu || null}(this), // Max Full Cpu Power Usage (for example: 5 full CPU's usage) means 500 % where each has 100 %
 
       // Memory Resources
-      MaxMemory: null, // In Megabytes  !
-      Memory: null, // In Megabytes !
+      MaxMemory: function(object) {
+      let resourceConfiguration = object.$props.resourceConfiguration || {};
+      return resourceConfiguration?.MaxMemory || null}(this), // In Megabytes  !
+
+      Memory: function(object) {
+      let resourceConfiguration = object.$props.resourceConfiguration || {};
+      return resourceConfiguration?.Memory|| null}(this),// In Megabytes !
 
       // Disk Resources
-      StorageCapacity: null, // In Kilabytes !
-      MaxStorageCapacity: null, // In Kilabytes as well !
+      StorageCapacity: function(object) {
+        let resourceConfiguration = object.$props.resourceConfiguration || {};
+        return resourceConfiguration?.StorageCapacity || null
+      }(this), // In Kilabytes !
+      MaxStorageCapacity: function(object) {
+        let resourceConfiguration = object.$props.resourceConfiguration || {};
+        return resourceConfiguration?.MaxStorageCapacity || null}(this), // In Kilabytes as well !
 
       // Validation Rules
 

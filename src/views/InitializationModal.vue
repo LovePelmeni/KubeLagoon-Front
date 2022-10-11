@@ -30,18 +30,25 @@
         transition-duration: 150ms;
         color: #344767 !important;
       }">
+
         <!-- Hardware Configuration  -->
-          <hardwareConfiguration ref="hardwareConfiguration" />
+
+          <hardwareConfiguration ref="hardwareConfiguration" :hardwareConfiguration="VirtualMachineSetupConfiguration['hardwareConfiguration']" />
+
         </div>
 
         <div class="resourceConfigBlock" style="width: 800px; max-width: 100%; overflow: hidden; margin-left: auto !important; margin-right: auto !important">
           <!-- resource Configuration -->
-          <resourceConfiguration  ref="resourceConfiguration"/>
+    
+          <resourceConfiguration ref="resourceConfiguration" :resourceConfiguration="VirtualMachineSetupConfiguration['resourceConfiguration']" />
+
         </div>
 
         <div class="resourceConfigBlock" style="width: 800px; max-width: 100%; overflow: hidden; margin-left: auto !important; margin-right: auto !important">
           <!-- SSH Configuration -->
-          <sshConfiguration ref="sshConfiguration" />
+
+          <sshConfiguration ref="sshConfiguration" :sshConfiguration="VirtualMachineSetupConfiguration['sshConfiguration']" />
+
         </div>
 
         <div class="payment flex" style="width: 800px; max-width: 100%; overflow: hidden; margin-left: auto !important; margin-right: auto !important ">
@@ -78,9 +85,10 @@
               <div class="save flex">
 
                   <div class="buttonBlock flex" style="width: 800px; max-width: 100%; overflow: hidden;">
-                    <v-btn type="submit" @click="closeVirtualMachineSettings" id="" style="background-color: #ec5757" :loading="CancelLoading"> Cancel Setup</v-btn>
-                    <v-btn v-if="!updateVirtualMachine" style="background-color: #252945;" :loading="Saveloading" type="submit" @submit="saveVirtualMachineDraft">Save Setup</v-btn>
-                    <v-btn v-if="!updateVirtualMachine" style="background-color: #7c5dfa;" :loading="Createloading" type="submit" @submit="CreateNewVirtualMachine">Create Server</v-btn>
+                    <v-btn type="submit" @click="closeVirtualMachineSettings" id="" style="background-color: #ec5757" :loading="CancelLoading">Cancel Setup</v-btn>
+                    <v-btn style="background-color: #252945;" :loading="Saveloading" type="submit" @submit="saveVirtualMachineDraft">Save Setup</v-btn>
+                    <v-btn v-if="!updateVirtualMachineServer" style="background-color: #7c5dfa;" :loading="Createloading" type="submit" @submit="CreateNewVirtualMachine">Create Server</v-btn>
+                    <v-btn v-if="updateVirtualMachineServer" type="submit" @click="UpdateVirtualMachine" id="updateVirtualMachineServer" style="background-color: #252945;">Apply</v-btn>
                   </div>
               </div>
           </v-form>
@@ -113,9 +121,9 @@ import { useCookies } from "vue3-cookies";
 
 import hardwareConfiguration from "../components/hardwareConfiguration.vue";
 import resourceConfiguration from "../components/resourceConfiguration.vue";
+
 import sshConfiguration from  "../components/sshConfiguration.vue";
 import { VirtualMachineCostCalculator } from "../../cost/virtualMachineCost.js";
-
 
 export default {
 
@@ -124,16 +132,24 @@ export default {
     const { cookie } = useCookies();
     return { cookie };
   },
+  props: [
+    "updateVirtualMachine",
+    "virtualMachine",
+  ],
   mounted() {
     this.JwtToken = this.cookie?.get("jwt-token")
-    this.CheckIsDraft()
+    this.CheckIsDraft() 
   },
   data() {
     return {
       // Loading Statuses
       Createloading: null, 
       Saveloading: null, 
-      CancelLoading: null,
+      CancelLoading: null, 
+
+      // Edit Configuration View 
+
+      VirtualMachineSetupConfiguration: this.$props.virtualMachine || {}, // Property, that is not null, once the customer decided to update the Virtual Server 
 
       // Operation Types specification 
       Operated: false,
@@ -149,7 +165,8 @@ export default {
       paymentDueDate: null,
       paymentTerms: null,
 
-      updateVirtualMachine: false,
+
+      updateVirtualMachineServer: this.$props.updateVirtualMachine || false,
 
       VirtualMachineRunning: null,
       VirtualMachineDeploying: null,
@@ -169,19 +186,9 @@ export default {
 
     // get current date for invoice date field
     this.GetCustomerVirtualMachines()
-
-    if (!this.updateVirtualMachine) {
-      this.virtualMachineDateUnix = Date.now();
-      this.virtualMachineCreationDate = new Date(this.virtualMachineDateUnix).toLocaleDateString("en-us", this.dateOptions);
-      this.paymentDueDate = new Date(this.virtualMachineDateUnix).toLocaleDateString("en-us", this.dateOptions);
-    }
-    if (this.updateVirtualMachine) {
-      const currentVirtualMachine = this.currentVirtualMachineArray[0];
-      this.VirtualMachineCreationDate = currentVirtualMachine.VirtualMachineCreationDate;
-      this.VirtualMachinePending = currentVirtualMachine.VirtualMachinePending;
-      this.VirtualMachineDraft = currentVirtualMachine.VirtualMachineDraft;
-      this.VirtualMachineItemList = currentVirtualMachine.VirtualMachineItemList;
-    }
+    this.virtualMachineDateUnix = Date.now();
+    this.virtualMachineCreationDate = new Date(this.virtualMachineDateUnix).toLocaleDateString("en-us", this.dateOptions);
+    this.paymentDueDate = new Date(this.virtualMachineDateUnix).toLocaleDateString("en-us", this.dateOptions);
   },
   computed: {
     ...mapState([
@@ -296,6 +303,10 @@ export default {
         this.OperationFailed = true
       }
       this.Createloading = false
+    },
+
+    UpdateVirtualMachine() {
+      // Updates the Virtual Machine Servers 
     },
 
     getVirtualMachineCostTotal(PricePerDay, SelectedDays) {
