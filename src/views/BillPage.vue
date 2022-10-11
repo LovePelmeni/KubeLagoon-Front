@@ -10,12 +10,11 @@
         ">
             <thead>
                 <tr aria-roledescription="row" class="row" style="margin-left: 100px;">
-                <th class="head-cell"><div style="color: white; font-family: 'Poppins', sans-serif; font-size: 1rem; font-weight: 1000;"></div></th>
-                <th class="head-cell"><div style="color: white; font-family: 'Poppins', sans-serif; font-size: 1rem; font-weight: 1000;">Stock Price</div></th>
-                <th class="head-cell"><div style="color: white; font-family: 'Poppins', sans-serif; font-size: 1rem; font-weight: 1000;">Day</div></th>
-                <th class="head-cell" style="border-right: 1px solid #eaeaea; border-radius: 0px 4px 4px 0px; font-family: 'Poppins', sans-serif; font-size: 1rem; font-weight: 1000;"><div style="color: white;">Month</div>
-
-                </th>
+                    <th class="head-cell"><div style="color: white; font-family: 'Poppins', sans-serif; font-size: 1rem; font-weight: 1000;"></div></th>
+                    <th class="head-cell"><div style="color: white; font-family: 'Poppins', sans-serif; font-size: 1rem; font-weight: 1000;">Stock Price</div></th>
+                    <th class="head-cell"><div style="color: white; font-family: 'Poppins', sans-serif; font-size: 1rem; font-weight: 1000;">Day</div></th>
+                    <th class="head-cell" style="border-right: 1px solid #eaeaea; border-radius: 0px 4px 4px 0px; font-family: 'Poppins', sans-serif; font-size: 1rem; font-weight: 1000;"><div style="color: white;">Month</div>
+                    </th>
                 </tr>
             </thead>
             <tbody class="jsx-64c13424ca1bc52" style="background-color: #1e2139; border-radius: 8px 8px 8px 8px;">
@@ -49,9 +48,8 @@
 <script>
 
 import { mapState } from 'vuex'
-
-
 import * as bill from "../../cost/virtualMachineCost.js"
+
 
 export default {
     name: "BillPage",

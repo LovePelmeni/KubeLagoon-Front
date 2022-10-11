@@ -51,7 +51,7 @@
                         }">Create Server</span>
                     </a>
                     <a v-else role="button" tabindex="0"
-                        @click="redirectToVirtualMachineSetup"
+                        @click="redirectVirtualMachineSetup"
                         target="_blank" type="submit" rel="noopener" data-testid="landing-page/hero/get-demo-cta"
                         class="button_base__AOyi_ reset_reset__90FTf button_button__dmey4 reset_reset__90FTf hero_gradient-button__kkwJu button_large__FQLqa button_ghost__sBWMh"
                         data-geist-button="" data-version="v1">

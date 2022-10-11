@@ -195,6 +195,7 @@ export default {
       EditProfile: false,
       EditError: null, 
       activeError: false,
+      customer: {},
 
       // Customer Profile Form Fields
   

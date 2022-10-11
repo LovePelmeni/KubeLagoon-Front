@@ -10,7 +10,7 @@ import { mapMutations } from "vuex";
   <v-card class="mx-auto" width="256" tile style="background-color: #1e2139;">
     <v-navigation-drawer permanent>
       <v-system-bar @click="TOGGLE_HIDE_CUSTOMER_PROFILE()">
-        <v-icon style="color: black;">mdi-close-thick<v-icon>
+        <v-icon style="color: black;">mdi-close-thick</v-icon>
         </v-system-bar>
       <v-list>
 
@@ -67,8 +67,8 @@ import { mapMutations } from "vuex";
         "Password": {"icon": "mdi-lock", "value": "*".repeat(selfInstance.Customer.Password.length) || '-'},
         "Country": {"icon": "mdi-city-variant", "value": selfInstance.Customer.Country || '-'},
         "City": {"icon": "mdi-city-variant", "value": selfInstance.Customer.City || '-'},
-        "ZipCode": {"icon": "mdi-account-lock-open", "value": selfInstance.Customer.ZipCode || '-'},
-        "Street": {"icon": "mdi-account-lock-open", "value": selfInstance.Customer.Street || '-'},
+        "ZipCode": {"icon": "mdi-lock", "value": selfInstance.Customer.ZipCode || '-'},
+        "Street": {"icon": "mdi-lock", "value": selfInstance.Customer.Street || '-'},
       },
     }),
     methods: {

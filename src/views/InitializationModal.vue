@@ -134,7 +134,7 @@ export default {
   },
   props: [
     "updateVirtualMachine",
-    "virtualMachine",
+    "VirtualMachine",
   ],
   mounted() {
     this.JwtToken = this.cookie?.get("jwt-token")
@@ -186,6 +186,7 @@ export default {
   created() {
 
     // get current date for invoice date field
+    console.log(this.VirtualMachine)
     this.GetCustomerVirtualMachines()
     this.virtualMachineDateUnix = Date.now();
     this.virtualMachineCreationDate = new Date(this.virtualMachineDateUnix).toLocaleDateString("en-us", this.dateOptions);
@@ -217,7 +218,6 @@ export default {
         this.TOGGLE_MODAL();
       }
     },
-    
     InitializePaymentTerms() {
       // Initializing the Payment Terms Initial Event
       const futureDate = new Date();

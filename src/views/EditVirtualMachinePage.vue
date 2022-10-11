@@ -17,12 +17,6 @@ export default {
     },
     data() {
         return {
-            VirtualMachine: {
-                "hardware": {},
-                "Capacities": {},
-                "Resources": {},
-                "Ssh": {},
-            },
             ServerNotFound: false,
             HasPermissions: true,
         }
@@ -50,48 +44,47 @@ export default {
             return this.$store.state.authenticated
         }
     },
-    mounted() {
-        this.GetVirtualMachineServerInfo(this.$route.params.VirtualMachineId)
-    },
     methods: {
-
+        // All of the Methods Goes There
         GetVirtualMachineServerInfo(VirtualMachineId) {
             // Returns data about the Virtual Machine Server 
-            let VirtualMachine = this.$store.state.virtualMachineData.filter((VirtualMachine) => {
+            let VirtualMachineServer = this.$store.state.virtualMachineData.filter((VirtualMachine) => {
                 return VirtualMachine.VirtualMachineId === VirtualMachineId;
             }) || {}
-            this.VirtualMachine = VirtualMachine[0] || {"hardware": {}, "Capacities": {}, "Resources": {}, "Ssh": {}};
-            if (Object.keys(this.VirtualMachine).length === 0) {this.ServerNotFound = true}
+            let VirtualMachine = VirtualMachineServer[0] || {"hardware": {}, "Capacities": {}, "Resources": {}, "Ssh": {}};
+            if (Object.keys(VirtualMachine).length === 0) {this.ServerNotFound = true}
+            return VirtualMachine
         },
 
         GetVirtualMachineServerConfiguration() {
             // Preparing Virtual Machine Server Configuration 
 
+            let VirtualMachine = this.GetVirtualMachineServerInfo(this.$route.params.VirtualMachineId)
             let VirtualMachineConfiguration = {
                 
                 "resourceConfiguration": {
 
-                    "CpuNum": this.VirtualMachine["Resources"]["CpuNum"], 
-                    "MaxCpu": this.VirtualMachine.Capacities["MaxCpuNum"], 
+                    "CpuNum": VirtualMachine["Resources"]["CpuNum"], 
+                    "MaxCpu": VirtualMachine.Capacities["MaxCpuNum"], 
 
-                    "Memory": this.VirtualMachine["Resources"]["Memory"], 
-                    "MaxMemory": this.VirtualMachine["Capacities"]["MaxMemory"],
+                    "Memory": VirtualMachine["Resources"]["Memory"], 
+                    "MaxMemory": VirtualMachine["Capacities"]["MaxMemory"],
 
-                    "StorageCapacity": this.VirtualMachine["Resources"]["StorageCapacity"], 
-                    "MaxStorageCapacity": this.VirtualMachine["Capacities"]["MaxStorageCapacity"],
+                    "StorageCapacity": VirtualMachine["Resources"]["StorageCapacity"], 
+                    "MaxStorageCapacity": VirtualMachine["Capacities"]["MaxStorageCapacity"],
 
                 },
                 "hardwareConfiguration": {
 
-                    "AddedDatacenter": this.VirtualMachine["hardware"]["Datacenter"], 
-                    "AddedOperationalSystem": this.VirtualMachine["hardware"]["OperationalSystem"], 
-                    "PreInstalledTools": this.VirtualMachine["hardware"]["PreInstalledTools"],
+                    "AddedDatacenter": VirtualMachine["hardware"]["Datacenter"], 
+                    "AddedOperationalSystem": VirtualMachine["hardware"]["OperationalSystem"], 
+                    "PreInstalledTools": VirtualMachine["hardware"]["PreInstalledTools"],
 
                 },
                 "sshConfiguration": {
 
-                    "useRootCertificate": this.VirtualMachine["Ssh"]["byRootCertificate"], 
-                    "useRootCredentials": this.VirtualMachine["Ssh"]["byRootCredentials"],
+                    "useRootCertificate": VirtualMachine["Ssh"]["byRootCertificate"], 
+                    "useRootCredentials": VirtualMachine["Ssh"]["byRootCredentials"],
 
                 },
             }
