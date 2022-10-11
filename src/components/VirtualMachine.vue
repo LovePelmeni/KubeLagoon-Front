@@ -109,11 +109,10 @@ export default {
           Shutdown
         </button>
 
-        <button
-          class="btn btn-reboot"
-          v-if="VirtualMachine.Running == true || VirtualMachine.Shutdown == true"
-          @click="RebootVirtualMachine"
-        >
+        <button class="btn btn-mark" @click="UpdateVirtualMachine">Edit</button>
+
+        <button class="btn btn-reboot"  v-if="VirtualMachine.Running == true || VirtualMachine.Shutdown == true"
+        @click="RebootVirtualMachine">
           Reboot
         </button>
 

@@ -139,6 +139,7 @@ export default {
   mounted() {
     this.JwtToken = this.cookie?.get("jwt-token")
     this.CheckIsDraft() 
+    this.InitializePaymentTerms()
   },
   data() {
     return {
@@ -215,6 +216,13 @@ export default {
       if (e.target === this.$refs.virtualMachineWrap) {
         this.TOGGLE_MODAL();
       }
+    },
+    
+    InitializePaymentTerms() {
+      // Initializing the Payment Terms Initial Event
+      const futureDate = new Date();
+      this.paymentDueDateUnix = futureDate.setDate(futureDate.getDate() + 30);
+      this.paymentDueDate = new Date(this.paymentDueDateUnix).toLocaleDateString("en-us", this.dateOptions);
     },
 
     ProcessPaymentTermsChangeEvent() {

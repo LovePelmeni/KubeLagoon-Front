@@ -47,6 +47,11 @@ export default new Vuex.Store({
         "Shutdown": false, 
         "paymentDueDate": "2020-20-02",         
         "CreatedAt": "1/2/2020",
+        "hardware": {
+          "Datacenter": "",
+          "OperationalSystem": "",
+          "PreInstalledTools": [],
+        },
         "Ssh": {
           "byRootCredentials": false,
           "byRootCertificate": true,
@@ -90,6 +95,11 @@ export default new Vuex.Store({
           "Street": "Smith's Street, 4",
           "ZipCode": "125167",
         },
+        "hardware": {
+          "Datacenter": "",
+          "OperationalSystem": "",
+          "PreInstalledTools": [],
+        },
         "Ssh": {
           "byRootCredentials": true,
           "byRootCertificate": false,
@@ -124,6 +134,11 @@ export default new Vuex.Store({
           "Street": "Smith's Street, 4",
           "ZipCode": "125167",
         },
+        "hardware": {
+          "Datacenter": "",
+          "OperationalSystem": "",
+          "PreInstalledTools": [],
+        },
         "Ssh": {
           "byRootCredentials": false,
           "byRootCertificate": true,
@@ -157,6 +172,12 @@ export default new Vuex.Store({
           "IpAddress": "127.235.11.28",
           "RootUsername": "root",
           "RootPassword": "root_password",
+        },
+
+        "hardware": {
+          "Datacenter": "",
+          "OperationalSystem": "",
+          "PreInstalledTools": [],
         },
 
         "Owner": {
@@ -196,6 +217,11 @@ export default new Vuex.Store({
           "City": "Vancouver",
           "Street": "Smith's Street, 4",
           "ZipCode": "125167",
+        },
+        "hardware": {
+          "Datacenter": "",
+          "OperationalSystem": "",
+          "PreInstalledTools": [],
         },
         "Ssh": {
           "byRootCredentials": false,
@@ -278,6 +304,12 @@ export default new Vuex.Store({
           "City": "Toronto",
           "Street": "Smith's Street, 4",
           "ZipCode": "125167",
+        },
+
+        "hardware": {
+          "Datacenter": "",
+          "OperationalSystem": "",
+          "PreInstalledTools": [],
         },
 
         "Capacities": { // Capacities, specified by the Customer 
