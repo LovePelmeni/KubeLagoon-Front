@@ -85,8 +85,8 @@ export default {
                 // Hardware Configuration of the Virtual Server 
                 "hardwareConfiguration": {
 
-                    "AddedDatacenter": VirtualMachine["hardware"]["Datacenter"], 
-                    "AddedOperationalSystem": VirtualMachine["hardware"]["OperationalSystem"], 
+                    "Datacenter": VirtualMachine["hardware"]["Datacenter"], 
+                    "OperationalSystem": VirtualMachine["hardware"]["OperationalSystem"], 
                     "PreInstalledTools": VirtualMachine["hardware"]["PreInstalledTools"],
 
                 },
