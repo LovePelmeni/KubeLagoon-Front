@@ -203,18 +203,25 @@ export default {
       //   }
       // ], // array of the Objects with attrs { 'ToolName', 'IconImageUrl' }
 
+      // Datacenter Field 
       AddedDatacenter: function(object) {
         let hardwareConfiguration = object.$props.hardwareConfiguration || {}
-        return hardwareConfiguration["Datacenter"]
+        return {'datacenterName': hardwareConfiguration["Datacenter"]} || {'datacenterName': ''}
       }(this),
+      
+      // Operational System Field
       AddedOperationalSystem: function(object) {
         let hardwareConfiguration = object.$props.hardwareConfiguration || {}
-        return hardwareConfiguration["OperationalSystem"]
+        return {'osName': hardwareConfiguration["OperationalSystem"]} || {'osName': ''}
       }(this),
+
+      // Pre Installed Tools Field 
+
       AddedPreInstalledTools: function(object) {
         let hardwareConfiguration = object.$props.hardwareConfiguration || {} 
         return hardwareConfiguration["PreInstalledTools"]
       }(this),
+      
     }
   },
 

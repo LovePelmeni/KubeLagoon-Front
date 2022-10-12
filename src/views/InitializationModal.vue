@@ -196,7 +196,6 @@ export default {
   created() {
 
     // get current date for invoice date field
-    console.log(this.VirtualMachine)
     this.GetCustomerVirtualMachines()
     this.virtualMachineDateUnix = Date.now();
     this.virtualMachineCreationDate = new Date(this.virtualMachineDateUnix).toLocaleDateString("en-us", this.dateOptions);
@@ -250,7 +249,6 @@ export default {
       let PricePerDay = document.getElementById("paymentTerms").value;
       let BillManager = new VirtualMachineCostCalculator(CpuNum, Memory, StorageCapacity)
       let TotalPricePerDay = BillManager.CalculateCostPerDay()
-      console.log(TotalPricePerDay)
       this.getVirtualMachineCostTotal(TotalPricePerDay, Number(PricePerDay))
     },
 

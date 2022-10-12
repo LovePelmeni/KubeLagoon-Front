@@ -19,8 +19,8 @@ export default new Vuex.Store({
     virtualMachineSavedDraft: {
       // Hardware Configuration goes there...
 
-      "AddedDatacenter": "", // empty string with the datacenter name 
-      "AddedOperationalSystem": "",  // empty string with the OS system name in the specific format 
+      "AddedDatacenter": "US/Washington", // empty string with the datacenter name 
+      "AddedOperationalSystem": "Ubuntu",  // empty string with the OS system name in the specific format 
       "AddedPreInstalledTools": [],  // array of the names of the tools, going to be preinstalled on the customer's virtual server
 
       // Resource Configuration goes there...
@@ -49,8 +49,8 @@ export default new Vuex.Store({
         "paymentTerms": 30, 
         "CreatedAt": "1/2/2020",
         "hardware": {
-          "Datacenter": "",
-          "OperationalSystem": "",
+          "Datacenter": "US/Washington",
+          "OperationalSystem": "Ubuntu",
           "PreInstalledTools": [],
         },
         "Ssh": {
@@ -98,8 +98,8 @@ export default new Vuex.Store({
           "ZipCode": "125167",
         },
         "hardware": {
-          "Datacenter": "",
-          "OperationalSystem": "",
+          "Datacenter": "US/Washington",
+          "OperationalSystem": "Ubuntu",
           "PreInstalledTools": [],
         },
         "Ssh": {
@@ -138,8 +138,8 @@ export default new Vuex.Store({
           "ZipCode": "125167",
         },
         "hardware": {
-          "Datacenter": "",
-          "OperationalSystem": "",
+          "Datacenter": "US/Washington",
+          "OperationalSystem": "Ubuntu",
           "PreInstalledTools": [],
         },
         "Ssh": {
@@ -179,8 +179,8 @@ export default new Vuex.Store({
         },
 
         "hardware": {
-          "Datacenter": "",
-          "OperationalSystem": "",
+          "Datacenter": "US/Washington",
+          "OperationalSystem": "Ubuntu",
           "PreInstalledTools": [],
         },
 
@@ -224,8 +224,8 @@ export default new Vuex.Store({
           "ZipCode": "125167",
         },
         "hardware": {
-          "Datacenter": "",
-          "OperationalSystem": "",
+          "Datacenter": "US/Washington",
+          "OperationalSystem": "Ubuntu",
           "PreInstalledTools": [],
         },
         "Ssh": {
@@ -314,8 +314,8 @@ export default new Vuex.Store({
         },
 
         "hardware": {
-          "Datacenter": "",
-          "OperationalSystem": "",
+          "Datacenter": "US/Washington",
+          "OperationalSystem": "Ubuntu",
           "PreInstalledTools": [],
         },
 

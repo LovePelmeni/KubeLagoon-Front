@@ -84,7 +84,6 @@ import { mapMutations } from "vuex";
       }
     },
 }
-
 </script>
 
 
