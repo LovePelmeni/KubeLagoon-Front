@@ -53,7 +53,7 @@
 
         <div class="payment flex" style="width: 800px; max-width: 100%; overflow: hidden; margin-left: auto !important; margin-right: auto !important ">
 
-          <div class="modalField flex flex-column" style="margin-right: 20px;">
+          <div class="modalField flex flex-column" style="margin-right: 20px; margin-left: 0px !important;">
             <label for="virtualMachineCreationDate">Creation Date</label>
             <input disabled type="text" id="virtualMachineCreationDate" v-model="virtualMachineCreationDate" />
           </div>

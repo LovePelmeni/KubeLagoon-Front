@@ -51,7 +51,7 @@ export default new Vuex.Store({
         "hardware": {
           "Datacenter": "US/Washington",
           "OperationalSystem": "Ubuntu",
-          "PreInstalledTools": [],
+          "PreInstalledTools": ["Kubernetes", "Docker"],
         },
         "Ssh": {
           "byRootCredentials": false,

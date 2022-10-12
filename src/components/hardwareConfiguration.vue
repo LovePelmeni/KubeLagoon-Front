@@ -15,7 +15,8 @@
 
                   <v-select
                   ref="datacenter"
-                  item-value="datacenterName"
+                  item-value="datacenterValue"
+                  item-title="datacenterName"
                   v-model="AddedDatacenter"
                   :items="[
                     'Europe/Moscow',
@@ -42,14 +43,20 @@
 
                   <v-select
                     ref="operational_system"
-                    item-value="osName"
+                    item-value="osValue"
+                    item-title="osName"
                     v-model="AddedOperationalSystem"
-                    :items="[
-                      'CentOS',
-                      'Ubuntu',
-                      'Debian',
-                      'Windows'
-                    ]"
+                    :items='[
+                      "Centos 7 64-bit",
+                      "Centos 8 64-bit",
+                      "Centos 9 64-bit",
+                      "Ubuntu 9 64-bit",
+                      "Ubuntu 10 64-bit",
+                      "Ubuntu 11 64-bit",
+                      "Debian 10 64-bit",
+                      "Debian 10 64-bit",
+                      "Debian 10 64-bit",
+                    ]'
                     label="Select Operational System"
                     hint="* Select the OS for your Server *"
                     persistent-hint
@@ -67,8 +74,8 @@
                     class="mx-auto">
                   <v-select
                     ref="tools"
-                    v-model="AddedPreInstalledTools"
                     item-value="tools"
+                    v-model="AddedPreInstalledTools"
                     :items="[
                       'Docker',
                       'Docker-Compose',
@@ -98,13 +105,6 @@ export default {
 
   name: "hardwareConfiguration",
   mounted() {
-    this.GetSuggestedDatacenters()
-    this.GetSuggestedOperationalSystems()
-    this.GetSuggestedPreInstalledTools()
-
-    this.AddedDatacenter = null
-    this.AddedOperationalSystem = null
-    this.AddedPreInstalledTools = []
     this.CheckIsDraft()
   },
   props: [
@@ -206,20 +206,21 @@ export default {
       // Datacenter Field 
       AddedDatacenter: function(object) {
         let hardwareConfiguration = object.$props.hardwareConfiguration || {}
-        return {'datacenterName': hardwareConfiguration["Datacenter"]} || {'datacenterName': ''}
+        return {'datacenterName': hardwareConfiguration["Datacenter"] || '', 'datacenterValue': hardwareConfiguration || ''}
       }(this),
       
       // Operational System Field
       AddedOperationalSystem: function(object) {
         let hardwareConfiguration = object.$props.hardwareConfiguration || {}
-        return {'osName': hardwareConfiguration["OperationalSystem"]} || {'osName': ''}
+        return {'osName': hardwareConfiguration["OperationalSystem"] || '',
+        'osValue': hardwareConfiguration["OperationalSystem"] || ''}
       }(this),
 
       // Pre Installed Tools Field 
 
       AddedPreInstalledTools: function(object) {
         let hardwareConfiguration = object.$props.hardwareConfiguration || {} 
-        return hardwareConfiguration["PreInstalledTools"]
+        return {'tools': hardwareConfiguration["PreInstalledTools"] || []}
       }(this),
       
     }
@@ -375,6 +376,9 @@ export default {
 <style lang="scss">
 
 
+.v-select__selection-text {
+  color: white;
+}
 
 .resourceSelectors {
 
