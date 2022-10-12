@@ -150,7 +150,7 @@ export default {
 
       // Edit Configuration View 
 
-      VirtualMachineSetupConfiguration: this.$props.virtualMachine || {}, // Property, that is not null, once the customer decided to update the Virtual Server 
+      VirtualMachineSetupConfiguration: this.$props.VirtualMachine || {}, // Property, that is not null, once the customer decided to update the Virtual Server 
 
       // Operation Types specification 
       Operated: false,

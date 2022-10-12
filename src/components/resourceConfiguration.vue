@@ -154,9 +154,10 @@ export default {
   ],
   data() {
     return {
-      // CPU Resources
+      // CPU Resources 
       CpuNum: function(object) {
         let resourceConfiguration = object.$props.resourceConfiguration || {};
+        console.log(resourceConfiguration)
         return resourceConfiguration?.CpuNum || null}(this), // CPU Number
         
       MaxCpu: function(object) {
@@ -170,7 +171,7 @@ export default {
 
       Memory: function(object) {
       let resourceConfiguration = object.$props.resourceConfiguration || {};
-      return resourceConfiguration?.Memory|| null}(this),// In Megabytes !
+      return resourceConfiguration?.Memory || null}(this),// In Megabytes !
 
       // Disk Resources
       StorageCapacity: function(object) {
