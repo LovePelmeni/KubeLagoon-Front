@@ -45,7 +45,8 @@ export default new Vuex.Store({
         "Running": true, 
         "Deploying": false, 
         "Shutdown": false, 
-        "paymentDueDate": "2020-20-02",         
+        "paymentDueDate": "2020-20-02", 
+        "paymentTerms": 30, 
         "CreatedAt": "1/2/2020",
         "hardware": {
           "Datacenter": "",
@@ -84,7 +85,8 @@ export default new Vuex.Store({
         "Running": false, 
         "Deploying": true, 
         "Shutdown": false, 
-        "paymentDueDate": "2020-20-02",         
+        "paymentDueDate": "2020-20-02", 
+        "paymentTerms": 60,
         "CreatedAt": "1/2/2019",
 
         "Owner": {
@@ -124,7 +126,8 @@ export default new Vuex.Store({
         "Running": true, 
         "Deploying": false, 
         "Shutdown": false, 
-        "paymentDueDate": "2020-20-02",         
+        "paymentDueDate": "2020-20-02", 
+        "paymentTerms": 60, 
         "CreatedAt": "1/2/2020",
         "Owner": {
           "Username": "some-user",
@@ -164,6 +167,7 @@ export default new Vuex.Store({
         "Deploying": true, 
         "Shutdown": false, 
         "paymentDueDate": "2020-20-02",
+        "paymentTerms": 30,
         "CreatedAt": "1/2/2021",
         
         "Ssh": {
@@ -208,7 +212,8 @@ export default new Vuex.Store({
         "Running": true, 
         "Deploying": false, 
         "Shutdown": false, 
-        "paymentDueDate": "2020-20-02",         
+        "paymentDueDate": "2020-20-02",     
+        "paymentTerms": 30,
         "CreatedAt": "1/2/2020",
         "Owner": {
           "Username": "some-user",
@@ -248,6 +253,7 @@ export default new Vuex.Store({
         "Deploying": false, 
         "Shutdown": false, 
         "paymentDueDate": "2020-20-02",
+        "paymentTerms": 60,
         "CreatedAt": "1/2/2021",
         
         "Ssh": {
@@ -287,6 +293,7 @@ export default new Vuex.Store({
         "Deploying": false, 
         "Shutdown": true, 
         "paymentDueDate": "2020-20-02",
+        "paymentTerms": 30,
         "CreatedAt": "10/5/2021",
 
         "Ssh": {

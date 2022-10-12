@@ -69,8 +69,8 @@
           <label for="paymentTerms">Payment Terms</label>
           <select @change="ProcessPaymentTermsChangeEvent" style="max-width: 100%; overflow: hidden;"
           type="text" id="paymentTerms" v-model="paymentTerms" aria-placeholder="Select Bill Terms">
-            <option value="30">Net 30 Days</option>
-            <option value="60">Net 60 Days</option>
+            <option value="30">30 Days</option>
+            <option value="60">60 Days</option>
           </select>
           
         </div>
@@ -114,6 +114,7 @@
 </template>
 
 <script>
+
 
 import { mapMutations, mapActions, mapState } from "vuex";
 import * as vm from "../../vm/vm.js";
@@ -163,8 +164,17 @@ export default {
 
       virtualMachineCreationDate: null,
       virtualMachineDateUnix: null,
-      paymentDueDate: null,
-      paymentTerms: null,
+
+      // Payment Due Date Configuration 
+      paymentDueDate: function(object) {
+        let Configuration = object.$props.VirtualMachine["paymentConfiguration"] || {};
+        return Configuration["paymentDueDate"]
+      }(this),
+      
+      // Payment Terms Configuration 
+      paymentTerms: function(object) {
+      let Configuration = object.$props.VirtualMachine["paymentConfiguration"] || {};
+      return Configuration["paymentTerms"]}(this),
 
 
       updateVirtualMachineServer: this.$props.updateVirtualMachine || false,

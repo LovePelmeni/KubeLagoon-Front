@@ -15,6 +15,7 @@
 
                   <v-select
                   ref="datacenter"
+                  item-value="datacenterName"
                   v-model="AddedDatacenter"
                   :items="[
                     'Europe/Moscow',
@@ -41,6 +42,7 @@
 
                   <v-select
                     ref="operational_system"
+                    item-value="osName"
                     v-model="AddedOperationalSystem"
                     :items="[
                       'CentOS',
@@ -66,6 +68,7 @@
                   <v-select
                     ref="tools"
                     v-model="AddedPreInstalledTools"
+                    item-value="tools"
                     :items="[
                       'Docker',
                       'Docker-Compose',

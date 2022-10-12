@@ -157,7 +157,6 @@ export default {
       // CPU Resources 
       CpuNum: function(object) {
         let resourceConfiguration = object.$props.resourceConfiguration || {};
-        console.log(resourceConfiguration)
         return resourceConfiguration?.CpuNum || null}(this), // CPU Number
         
       MaxCpu: function(object) {

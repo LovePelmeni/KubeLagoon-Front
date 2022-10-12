@@ -61,7 +61,15 @@ export default {
 
             let VirtualMachine = this.GetVirtualMachineServerInfo(this.$route.params.VirtualMachineId)
             let VirtualMachineConfiguration = {
-                
+
+                // Payment Configuration Info of the Virtual Server 
+
+                "paymentConfiguration": {
+                    "paymentTerms": VirtualMachine["paymentTerms"],
+                    "paymentDueDate": VirtualMachine["paymentDueDate"],
+                },
+
+                //  Resource Configuration of the Virtual Server 
                 "resourceConfiguration": {
 
                     "CpuNum": VirtualMachine["Resources"]["CpuNum"], 
@@ -74,6 +82,7 @@ export default {
                     "MaxStorageCapacity": VirtualMachine["Capacities"]["MaxStorageCapacity"],
 
                 },
+                // Hardware Configuration of the Virtual Server 
                 "hardwareConfiguration": {
 
                     "AddedDatacenter": VirtualMachine["hardware"]["Datacenter"], 
@@ -81,6 +90,7 @@ export default {
                     "PreInstalledTools": VirtualMachine["hardware"]["PreInstalledTools"],
 
                 },
+                // SSH Configuration of the Virtual Server 
                 "sshConfiguration": {
 
                     "useRootCertificate": VirtualMachine["Ssh"]["byRootCertificate"], 

@@ -168,6 +168,7 @@
     </div>
 </template>
 
+
 <script>
 
 import paymentBanner from "@/components/paymentBanner.vue";
