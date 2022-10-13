@@ -45,7 +45,6 @@
                     ref="operational_system"
                     item-value="osValue"
                     item-title="osName"
-                    @select="AddEvent"
                     v-model="AddedOperationalSystem"
                     :items='[
                       "Centos 7 64-bit",

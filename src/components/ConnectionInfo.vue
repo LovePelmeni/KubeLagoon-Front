@@ -144,10 +144,17 @@
 
         <p v-if="DownloadFailure === true" style="margin-top: 20px; margin-bottom: 30px; color: red; ">{{ DownloadFailureError }}</p>
         <p v-if="RegenerationFailure === true" style="margin-top: 20px; margin-bottom: 30px; color: red; ">{{ RegenerationError }}</p>
-        <button  @click="DownloadSshCertificateFile()"  class="btn btn-upload-certificate" style="margin-top: 20px; color: #fff; !important" v-if="VirtualMachine.Running === true">
-        <a download v-if="VirtualMachine?.Ssh.byRootCertificate === true "><label id="downloadLabel" style="color: #fff !important;" v-if="VirtualMachine.Running === true">Download Public Key</label></a>
+
+        <div class="apiButtons">
+        <button  @click="DownloadSshCertificateFile()"  class="btn btn-upload-certificate" style="margin-top: 20px; margin-left: 30px; color: #fff; !important" v-if="VirtualMachine.Running === true">
+        <a download v-if="VirtualMachine?.Ssh.byRootCertificate === true "><label id="downloadLabel" style="color: #fff !important; margin-bottom: 1px !important;" v-if="VirtualMachine.Running === true">Download Public Key</label></a>
         </button>
 
+        <button  @click="RegenerateSshCertificate()"  class="btn btn-upload-certificate" style="margin-top: 20px; color: #fff; !important; background-color: orange; margin-left: 30px;" v-if="VirtualMachine.Running === true">
+        <a v-if="VirtualMachine?.Ssh.byRootCertificate === true"><label id="downloadLabel" style="color: #fff !important; margin-bottom: 1px !important;" v-if="VirtualMachine.Running === true">Regenerate Certificate</label></a>
+        </button>
+
+        </div>
         </v-card-text>
 
         </div>

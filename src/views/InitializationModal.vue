@@ -75,7 +75,9 @@
           
         </div>
 
-        <div class="TotalCost flex" style="width: 800px; max-width: 100%; overflow: hidden; margin-left: auto !important; margin-right: auto !important ">
+        <div class="TotalCost flex" 
+        style="width: 800px; max-width: 100%; overflow: hidden; 
+        margin-left: auto !important; margin-right: auto !important ">
           <p>In Total Per Day</p>
           <p>${{ TotalCost }}</p>
         </div>
@@ -83,7 +85,6 @@
       <!-- Save/Exit -->
 
               <div class="save flex">
-
                   <div class="buttonBlock flex" style="width: 800px; max-width: 100%; overflow: hidden;">
                     <v-btn type="submit" @click="closeVirtualMachineSettings" id="" style="background-color: #ec5757" :loading="CancelLoading">Cancel Setup</v-btn>
                     <v-btn style="background-color: #252945;" :loading="Saveloading" type="submit" @submit="saveVirtualMachineDraft">Save Setup</v-btn>
@@ -167,14 +168,16 @@ export default {
 
       // Payment Due Date Configuration 
       paymentDueDate: function(object) {
-        let Configuration = object.$props.VirtualMachine["paymentConfiguration"] || {};
-        return Configuration["paymentDueDate"]
+        let Configuration = object.$props.VirtualMachine || {}; 
+        if (Object.keys(Configuration).length === 0) {return null}
+        return Configuration["paymentConfiguration"]["paymentDueDate"] || null
       }(this),
       
       // Payment Terms Configuration 
       paymentTerms: function(object) {
-      let Configuration = object.$props.VirtualMachine["paymentConfiguration"] || {};
-      return Configuration["paymentTerms"]}(this),
+      let Configuration = object.$props.VirtualMachine || {};
+      if (Object.keys(Configuration).length === 0) {return null}
+      return Configuration["paymentConfiguration"]["paymentTerms"] || null}(this),
 
 
       updateVirtualMachineServer: this.$props.updateVirtualMachine || false,
