@@ -222,11 +222,7 @@ export default {
       }(this),
 
       // Pre Installed Tools Field 
-
-      AddedPreInstalledTools: function(object) {
-        let hardwareConfiguration = object.$props.hardwareConfiguration || {} 
-        return hardwareConfiguration["PreInstalledTools"] || []
-      }(this),
+      AddedPreInstalledTools: [],
     }
   },
 
@@ -249,8 +245,12 @@ export default {
 
     AddPreSelectedValues() {
       // Adding the Pre Selected Values to the Initialization Modal Configuration, this 
-      for (let Tool in this.$props.hardwareConfiguration["PreInstalledTools"]) {
-          this.AddedPreInstalledTools.push({'toolName': Tool, 'toolValue': Tool})
+      let PreInstalledTools = this.$props.hardwareConfiguration["PreInstalledTools"]
+      for (let ToolIndex in PreInstalledTools) {
+          this.AddedPreInstalledTools.push(
+          {'toolName': PreInstalledTools[ToolIndex], 
+          'toolValue': PreInstalledTools[ToolIndex]}
+        )
       }
     },
     CheckIsDraft() {
