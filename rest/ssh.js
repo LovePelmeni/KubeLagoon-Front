@@ -29,4 +29,26 @@ function DownloadSshKeyRestController(JwtToken, SshKeyPath, VirtualMachineId) {
   return Response, ResponseError
 }
 
-export {DownloadSshKeyRestController}
+
+function RegenerateSshCertificateRestController(JwtToken, VirtualMachineId) {
+  // Rest Controller, for regenerating the SSH Certificate for the Virtual Machine Server 
+  let APIUrl = new URL(`http://${BACKEND_APPLICATION_HOST}:${BACKEND_APPLICATION_PORT}/regenerate/ssh/certificate`)
+  let Response, ResponseError = global.jQuery.ajax({
+    url: APIUrl.toString(),
+    type: "POST",
+    success: function(response) {
+      // Checking for the Success Response 
+      if ('Error' in Object.keys(response.responseJSON) || response.StatusCode !== 200 || response.StatusCode !== 201) {
+        let newError = new Error("Failed to regenerate SSH Certificate, UnknownError")
+        return false, response.responseJSON["Error"] || newError 
+      }
+    },
+    error: function(error) {
+      // Checking for the Bad Response Errors 
+      return false, error
+    }
+  })
+  return Response, ResponseError
+}
+
+export {DownloadSshKeyRestController, RegenerateSshCertificateRestController}

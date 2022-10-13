@@ -33,7 +33,7 @@
 
         <!-- Hardware Configuration  -->
 
-          <hardwareConfiguration ref="hardwareConfiguration" :hardwareConfiguration="VirtualMachineSetupConfiguration['hardwareConfiguration']" />
+          <hardwareConfiguration ref="hardwareConfiguration" :updateVirtualMachine="updateVirtualMachine" :hardwareConfiguration="VirtualMachineSetupConfiguration['hardwareConfiguration']" />
 
         </div>
 

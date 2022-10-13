@@ -142,7 +142,8 @@
              </pre>
         </div>
 
-        <p v-if="DownloadFailure == true" style="margin-top: 20px; margin-bottom: 30px; color: red; ">{{ DownloadFailureError }}</p>
+        <p v-if="DownloadFailure === true" style="margin-top: 20px; margin-bottom: 30px; color: red; ">{{ DownloadFailureError }}</p>
+        <p v-if="RegenerationFailure === true" style="margin-top: 20px; margin-bottom: 30px; color: red; ">{{ RegenerationError }}</p>
         <button  @click="DownloadSshCertificateFile()"  class="btn btn-upload-certificate" style="margin-top: 20px; color: #fff; !important" v-if="VirtualMachine.Running === true">
         <a download v-if="VirtualMachine?.Ssh.byRootCertificate === true "><label id="downloadLabel" style="color: #fff !important;" v-if="VirtualMachine.Running === true">Download Public Key</label></a>
         </button>
@@ -157,9 +158,8 @@
 
 <script>
 
-
-
 import * as ssh from "../../ssh/ssh.js";
+import * as ssh_rest from "../../rest/ssh.js";
 
 export default {
     name: "VirtualMachineConnectionInfo",
@@ -170,6 +170,8 @@ export default {
             DownloadFailure: false,
             DownloadFailureError: null, 
             showConnectionInfoDocs: false,
+            RegenerationFailure: false, 
+            RegenerationError: null,
         }
     },
     methods: {
@@ -196,6 +198,16 @@ export default {
 
             }
        },
+       regenerateSshCertificate() {
+           // Regenerates the SSH Certificate for the Virtual Machine Server 
+           let Regenerated, RegenerateError = ssh_rest.RegenerateSshCertificateRestController(
+            this.JwtToken, this.$route.params.VirtualMachineId)
+            // Checking if the Certificate Has been Eventually Regenerated 
+            if (Regenerated === false || RegenerateError != null ) {
+                this.RegenerationError = RegenerateError 
+                this.RegenerationFailure = true 
+            }
+       }
     }
 }
 

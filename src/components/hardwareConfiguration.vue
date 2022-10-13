@@ -45,6 +45,7 @@
                     ref="operational_system"
                     item-value="osValue"
                     item-title="osName"
+                    @select="AddEvent"
                     v-model="AddedOperationalSystem"
                     :items='[
                       "Centos 7 64-bit",
@@ -72,23 +73,25 @@
                     cols="10"
                     lg="4"
                     class="mx-auto">
-                  <v-select
-                    ref="tools"
-                    item-value="tools"
-                    v-model="AddedPreInstalledTools"
-                    :items="[
-                      'Docker',
-                      'Docker-Compose',
-                      'VirtualBox',
-                      'Kubernetes',
-                    ]"
-                    label="Select Tools"
-                    multiple
-                    chips
-                    hint="* Select some Optional Tools for your Server *"
-                    persistent-hint>
-                  </v-select>
 
+                    <v-select
+                      ref="tools"
+                      item-value="toolValue"
+                      item-title="toolName"
+                      v-model="AddedPreInstalledTools"
+                      :items="[
+                        'Docker',
+                        'Docker-Compose',
+                        'VirtualBox',
+                        'Kubernetes',
+                      ]"
+                      label="Select Tools"
+                      multiple
+                      chips
+                      hint="* Select some Optional Tools for your Server *"
+                      persistent-hint>
+                    </v-select>
+                    
                 </v-col>
           </v-col>
     </div>
@@ -99,6 +102,7 @@
 
 import { mapState } from "vuex";
 
+
 /* eslint-disable */
 
 export default {
@@ -108,7 +112,8 @@ export default {
     this.CheckIsDraft()
   },
   props: [
-    "hardwareConfiguration"
+    "hardwareConfiguration",
+    "updateVirtualMachine",
   ],
   data() {
     return {
@@ -220,16 +225,20 @@ export default {
 
       AddedPreInstalledTools: function(object) {
         let hardwareConfiguration = object.$props.hardwareConfiguration || {} 
-        return {'tools': hardwareConfiguration["PreInstalledTools"] || []}
+        return hardwareConfiguration["PreInstalledTools"] || []
       }(this),
-      
     }
   },
 
   created() {
+    
     this.GetSuggestedDatacenters()
     this.GetSuggestedOperationalSystems()
     this.GetSuggestedPreInstalledTools()
+
+    if (this.$props.updateVirtualMachine === true) {
+      this.AddPreSelectedValues()
+    }
   },
 
   methods: {
@@ -238,6 +247,12 @@ export default {
       "virtualMachineSavedDraft",
     ]),
 
+    AddPreSelectedValues() {
+      // Adding the Pre Selected Values to the Initialization Modal Configuration, this 
+      for (let Tool in this.$props.hardwareConfiguration["PreInstalledTools"]) {
+          this.AddedPreInstalledTools.push({'toolName': Tool, 'toolValue': Tool})
+      }
+    },
     CheckIsDraft() {
       // Checks if there is some saved drafts before initializing a new one 
       if (this.virtualMachineSavedDraft != null) {
