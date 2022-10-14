@@ -68,7 +68,7 @@
 
           <label for="paymentTerms">Payment Terms</label>
           <select @change="ProcessPaymentTermsChangeEvent" style="max-width: 100%; overflow: hidden;"
-          type="text" id="paymentTerms" v-model="paymentTerms" aria-placeholder="Select Bill Terms">
+          type="text" id="paymentTermsField" v-model="paymentTerms" aria-placeholder="Select Bill Terms">
             <option id="30" value="30">30 Days</option>
             <option id="60" value="60">60 Days</option>
           </select>
@@ -76,10 +76,12 @@
         </div>
 
         <div class="TotalCost flex" 
+
         style="width: 800px; max-width: 100%; overflow: hidden; 
         margin-left: auto !important; margin-right: auto !important ">
           <p>In Total Per Day</p>
           <p>${{ TotalCost }}</p>
+
         </div>
 
       <!-- Save/Exit -->
@@ -116,7 +118,6 @@
 
 <script>
 
-
 import { mapMutations, mapActions, mapState } from "vuex";
 import * as vm from "../../vm/vm.js";
 import { useCookies } from "vue3-cookies";
@@ -142,6 +143,7 @@ export default {
     this.JwtToken = this.cookie?.get("jwt-token")
     this.CheckIsDraft() 
     this.InitializePaymentTerms()
+    if (this.updateVirtualMachine === true) {this.ApplyPaymentTerms()}
   },
   data() {
     return {
@@ -167,6 +169,7 @@ export default {
       virtualMachineDateUnix: null,
 
       // Payment Due Date Configuration 
+
       paymentDueDate: function(object) {
         let Configuration = object.$props.VirtualMachine || {}; 
         if (Object.keys(Configuration).length === 0) {return null}
@@ -174,11 +177,8 @@ export default {
       }(this),
       
       // Payment Terms Configuration 
-      paymentTerms: function(object) {
-      let Configuration = object.$props.VirtualMachine || {};
-      if (Object.keys(Configuration).length === 0) {return null}
-      return Configuration["paymentConfiguration"]["paymentTerms"] || null}(this),
 
+      paymentTerms: null,
 
       updateVirtualMachineServer: this.$props.updateVirtualMachine || false,
 
@@ -199,8 +199,8 @@ export default {
   created() {
 
     // get current date for invoice date field
-    this.ApplyPaymentTerms()
     this.GetCustomerVirtualMachines()
+
     this.virtualMachineDateUnix = Date.now();
     this.virtualMachineCreationDate = new Date(this.virtualMachineDateUnix).toLocaleDateString("en-us", this.dateOptions);
     this.paymentDueDate = new Date(this.virtualMachineDateUnix).toLocaleDateString("en-us", this.dateOptions);
@@ -226,14 +226,33 @@ export default {
       "DELETE_VIRTUAL_MACHINE",
     ]),
 
-
     ApplyPaymentTerms() {
       // Applying the Payment Terms to the Edit Virtual Machine Page 
+
       let Configuration = this.$props.VirtualMachine || {}
-      for (let Option in ["30", "60"]) {
-        if (Option.toLowerCase() === Configuration["paymentConfiguration"]["paymentTerms"])
-        document.getElementById("paymentTerms").options[Option].selected = 'selected';
+      this.paymentTerms = Configuration["paymentConfiguration"]["paymentTerms"]
+
+      let FirstSelected = ""
+      let SecondSelected = ""
+
+      let PaymentTermsValue = String(
+      Configuration["paymentConfiguration"]["paymentTerms"])
+
+      let FirstOption = "<option value='"
+      + String(30) + "'" + FirstSelected + ">" + String(30) + " days" + "</option>"
+
+      let SecondOption = "<option value='"
+      + String(60) + SecondSelected + "'>" + String(60) + " days" + "</option>"
+
+
+      if (String(PaymentTermsValue).toLowerCase() === "30") {
+          FirstSelected = ":" + "selected"
       }
+
+      if (String(PaymentTermsValue).toLowerCase() === "60") {
+         SecondSelected = ":" + "selected"
+      }
+      document.getElementById("paymentTermsField").innerHTML = FirstOption + " \n " + SecondOption
     },
 
     checkClick(e) {
@@ -241,6 +260,7 @@ export default {
         this.TOGGLE_MODAL();
       }
     },
+    
     InitializePaymentTerms() {
       // Initializing the Payment Terms Initial Event
       const futureDate = new Date();
