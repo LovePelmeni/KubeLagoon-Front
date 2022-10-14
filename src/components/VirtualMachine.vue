@@ -6,6 +6,7 @@ import { useCookies } from "vue3-cookies";
 
 import VirtualMachineConnectionInfo from "../components/ConnectionInfo.vue";
 import VirtualServerNotFoundWindow from "./VirtualServerNotFoundWindow.vue";
+
 import ChartPage from "../components/ResourceCharts.vue";
 import NotAuthenticatedWindow from "../components/NotAuthenticatedWindow.vue";
 import ForbiddenWindow from "../components/ForbiddenWindow.vue";
@@ -352,7 +353,6 @@ export default {
         this.toggleSuccess("Server Deleted Successfully")
       }
     },
-
 
     StartVirtualMachine() {
       // Starts the Virtual Machine Server by calling Rest API on the Backend

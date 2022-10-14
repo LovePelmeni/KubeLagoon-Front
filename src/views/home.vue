@@ -30,11 +30,11 @@
              class="jsx-499702677 geist-container">
 
              <div class="hero_gradient-button-wrapper__bi4sF">
-                 <span aria-hidden="true" class="hero_button-bg__seSDp hero_bg-1__Idwnm">
-                </span>
-                <span aria-hidden="true" class="hero_button-bg__seSDp hero_bg-2__OnKew">
-                    </span><span aria-hidden="true" class="hero_button-bg__seSDp hero_bg-3__Ik39k">
-                        </span>
+                 
+                    <span aria-hidden="true" class="hero_button-bg__seSDp hero_bg-1__Idwnm"></span>
+                    <span aria-hidden="true" class="hero_button-bg__seSDp hero_bg-2__OnKew"></span>
+                    <span aria-hidden="true" class="hero_button-bg__seSDp hero_bg-3__Ik39k"></span>
+
                     <a v-if="Authenticated === false" role="button" tabindex="0"
                         disabled target="_blank" type="submit" rel="noopener" data-testid="landing-page/hero/get-demo-cta"
                         class="button_base__AOyi_ reset_reset__90FTf button_button__dmey4 reset_reset__90FTf hero_gradient-button__kkwJu button_large__FQLqa button_ghost__sBWMh"

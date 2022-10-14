@@ -267,50 +267,6 @@ export default new Vuex.Store({
         }
       },
       {
-        "VirtualMachineId": "124356723523121",
-        "VirtualMachineName": "Virtual Server v1",
-        "Running": false, 
-        "Deploying": false, 
-        "Shutdown": false, 
-        "paymentDueDate": "2020-20-02",
-        "paymentTerms": 60,
-        "CreatedAt": "1/2/2021",
-        
-        "Ssh": {
-          "byRootCredentials": true,
-          "byRootCertificate": false,
-          "IpAddress": "127.235.11.28",
-          "RootUsername": "root",
-          "RootPassword": "root_password",
-        },
-
-        "Owner": {
-          "Username": "some-user",
-          "Email": "email@gmail.com",
-          "Country": "Canada",
-          "City": "Toronto",
-          "Street": "Smith's Street, 4",
-          "ZipCode": "125167",
-        },
-
-        "Capacities": { // Capacities, specified by the Customer 
-          "MaxMemory": 1000,
-          "MaxCpuNum": 1000,
-          "MaxStorageCapacity": 1000,
-        },
-
-        "Resources": {
-          "CpuNum": 5,
-          "Memory": 100,
-          "StorageCapacity": 100,
-        },
-
-        "paymentConfiguration": {
-          "paymentDueDate": "01-01-2020",
-          "paymentTerms": "30"
-        }
-      },
-      {
         "VirtualMachineId": "124423223512346",
         "VirtualMachineName": "Third Server",
         "Running": false, 

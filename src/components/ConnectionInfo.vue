@@ -183,13 +183,18 @@ export default {
     },
     methods: {
        DownloadSshCertificateFile() {
+
            // Obtaining the Content of the SSH Certificate for the Virtual Machine Server
-            // Initializing SSH Manager For the Virtual Server 
+           // Initializing SSH Manager For the Virtual Server 
+
             let sshContentManager = new ssh.VirtualMachineSshManager()
             let CertificateContent, CertificateKeyName = sshContentManager.GetSshCertificate(this.JwtToken, this.VirtualMachine.VirtualMachineId)
             if (CertificateContent == null) {
             this.DownloadFailure = true; this.DownloadFailureError = "Failed To Download SSL Certificate, please try again later";
             document.getElementById("downloadLabel").innerHTML = "Download Failed"}else{
+
+            this.DownloadFailure = false 
+            this.DownloadFailureError = null 
 
             // Downloading the File with SSH Content from the Browser 
 
@@ -202,7 +207,6 @@ export default {
             // Imittating the Clicking and downloading the file 
             element.click();
             document.body.removeChild(element);
-
             }
        },
        RegenerateSshCertificate() {

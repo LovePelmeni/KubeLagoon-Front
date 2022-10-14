@@ -98,9 +98,9 @@ export default {
 
                 },
             }
-            console.log(VirtualMachineConfiguration)
             return VirtualMachineConfiguration
         }
     },
 }
+
 </script>
