@@ -126,7 +126,7 @@
                 <code>
                     <ol>
                         <li data-prefix="~">
-                        ssh 
+                        ssh
                         <span class="token builtin class-name" style="
                         color: #ff4084;
                         background: none;
@@ -151,7 +151,7 @@
         </button>
 
         <button  @click="RegenerateSshCertificate()"  class="btn btn-upload-certificate" style="margin-top: 20px; color: #fff; !important; background-color: orange; margin-left: 30px;" v-if="VirtualMachine.Running === true">
-        <a v-if="VirtualMachine?.Ssh.byRootCertificate === true"><label id="downloadLabel" style="color: #fff !important; margin-bottom: 1px !important;" v-if="VirtualMachine.Running === true">Regenerate Certificate</label></a>
+        <a v-if="VirtualMachine?.Ssh.byRootCertificate === true"><label id="regenerationLabel" style="color: #fff !important; margin-bottom: 1px !important;" v-if="VirtualMachine.Running === true">Regenerate Certificate</label></a>
         </button>
 
         </div>
@@ -189,7 +189,7 @@ export default {
             let CertificateContent, CertificateKeyName = sshContentManager.GetSshCertificate(this.JwtToken, this.VirtualMachine.VirtualMachineId)
             if (CertificateContent == null) {
             this.DownloadFailure = true; this.DownloadFailureError = "Failed To Download SSL Certificate, please try again later";
-            document.getElementById("downloadLabel").innerHTML = "Failed"}else{
+            document.getElementById("downloadLabel").innerHTML = "Download Failed"}else{
 
             // Downloading the File with SSH Content from the Browser 
 
@@ -205,16 +205,19 @@ export default {
 
             }
        },
-       regenerateSshCertificate() {
+       RegenerateSshCertificate() {
            // Regenerates the SSH Certificate for the Virtual Machine Server 
            let Regenerated, RegenerateError = ssh_rest.RegenerateSshCertificateRestController(
-            this.JwtToken, this.$route.params.VirtualMachineId)
+           this.JwtToken, this.$route.params.VirtualMachineId)
+
             // Checking if the Certificate Has been Eventually Regenerated 
             if (Regenerated === false || RegenerateError != null ) {
-                this.RegenerationError = RegenerateError 
-                this.RegenerationFailure = true 
+                this.RegenerationError = RegenerateError["statusText"] || 
+                "Unknown Error: Failed to Regenerate SSH Certificate, Write Support" // adding regeneration error 
+                this.RegenerationFailure = true
+                document.getElementById("regenerationLabel").innerHTML = "Regenerate Failed"
             }
-       }
+        }
     }
 }
 

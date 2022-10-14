@@ -69,8 +69,8 @@
           <label for="paymentTerms">Payment Terms</label>
           <select @change="ProcessPaymentTermsChangeEvent" style="max-width: 100%; overflow: hidden;"
           type="text" id="paymentTerms" v-model="paymentTerms" aria-placeholder="Select Bill Terms">
-            <option value="30">30 Days</option>
-            <option value="60">60 Days</option>
+            <option id="30" value="30">30 Days</option>
+            <option id="60" value="60">60 Days</option>
           </select>
           
         </div>
@@ -199,6 +199,7 @@ export default {
   created() {
 
     // get current date for invoice date field
+    this.ApplyPaymentTerms()
     this.GetCustomerVirtualMachines()
     this.virtualMachineDateUnix = Date.now();
     this.virtualMachineCreationDate = new Date(this.virtualMachineDateUnix).toLocaleDateString("en-us", this.dateOptions);
@@ -225,6 +226,16 @@ export default {
       "DELETE_VIRTUAL_MACHINE",
     ]),
 
+
+    ApplyPaymentTerms() {
+      // Applying the Payment Terms to the Edit Virtual Machine Page 
+      let Configuration = this.$props.VirtualMachine || {}
+      for (let Option in ["30", "60"]) {
+        if (Option.toLowerCase() === Configuration["paymentConfiguration"]["paymentTerms"])
+        document.getElementById("paymentTerms").options[Option].selected = 'selected';
+      }
+    },
+
     checkClick(e) {
       if (e.target === this.$refs.virtualMachineWrap) {
         this.TOGGLE_MODAL();
@@ -246,8 +257,6 @@ export default {
       let CpuNum = this.$refs.resourceConfiguration.CpuNum || 0
       let Memory = this.$refs.resourceConfiguration.Memory || 0
       let StorageCapacity = this.$refs.resourceConfiguration.StorageCapacity || 0
-
-      console.log(CpuNum, Memory, StorageCapacity)
 
       let PricePerDay = document.getElementById("paymentTerms").value;
       let BillManager = new VirtualMachineCostCalculator(CpuNum, Memory, StorageCapacity)

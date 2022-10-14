@@ -78,6 +78,10 @@ export default new Vuex.Store({
           "Memory": 100,
           "StorageCapacity": 100,
         },
+        "paymentConfiguration": {
+          "paymentTerms": "60",
+          "paymentDueDate": "05.07.2021",
+        }
       },
       {
         "VirtualMachineId": "12578392923",
@@ -119,6 +123,10 @@ export default new Vuex.Store({
           "Memory": 1000,
           "StorageCapacity": 100,
         },
+        "paymentConfiguration": {
+          "paymentDueDate": "03.02.2021",
+          "paymentTerms": "30"
+        }
       },
       {
         "VirtualMachineId": "1256632234",
@@ -159,6 +167,10 @@ export default new Vuex.Store({
           "Memory": 100,
           "StorageCapacity": 100,
         },
+        "paymentConfiguration": {
+          "paymentDueDate": "04.03.2021",
+          "paymentTerms": "30"
+        }
       },
       {
         "VirtualMachineId": "124356732412",
@@ -205,6 +217,10 @@ export default new Vuex.Store({
           "StorageCapacity": 100,
         },
 
+        "paymentConfiguration": {
+          "paymentDueDate": "01.03.2020",
+          "paymentTerms": "30"
+        }
       },
       {
         "VirtualMachineId": "12566323255231",
@@ -245,6 +261,10 @@ export default new Vuex.Store({
           "Memory": 100,
           "StorageCapacity": 100,
         },
+        "paymentConfiguration": {
+          "paymentDueDate": "01-02-2020",
+          "paymentTerms": "30"
+        }
       },
       {
         "VirtualMachineId": "124356723523121",
@@ -285,6 +305,10 @@ export default new Vuex.Store({
           "StorageCapacity": 100,
         },
 
+        "paymentConfiguration": {
+          "paymentDueDate": "01-01-2020",
+          "paymentTerms": "30"
+        }
       },
       {
         "VirtualMachineId": "124423223512346",
@@ -330,6 +354,10 @@ export default new Vuex.Store({
           "Memory": 10,
           "StorageCapacity": 1000,
         },
+        "paymentConfiguration": {
+          "paymentDueDate": "2020-01-01",
+          "paymentTerms": "30"
+        }
       }
     ],
     initializationModal: null,

@@ -353,6 +353,7 @@ export default {
       }
     },
 
+
     StartVirtualMachine() {
       // Starts the Virtual Machine Server by calling Rest API on the Backend
       let VirtualMachineId = this.$route.query.VirtualMachineId 
