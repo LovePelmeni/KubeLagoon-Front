@@ -16,7 +16,7 @@
       </div>
     </div>
       <!-- Checking if the Customer Profile has been Obtained, otherwise, it is going to be not found page -->
-      <v-col v-if="JwtToken != null" cols="10" lg="6" class="mx-auto"> 
+      <v-col v-if="JwtToken != null && ProfileFetchFailure === false" cols="10" lg="6" class="mx-auto"> 
 
         <v-card class="pa-4" style="background-color: #141625;">
           <v-form id="CustomerProfileForm" ref="form">
@@ -81,6 +81,8 @@
               
               <v-select
               style="background-color: #1e2139; margin-top: 20px;"
+              item-title="countryTitle"
+              item-value="countryValue"
               v-model="Country"
               type="country"
               label="Country"
@@ -209,20 +211,30 @@ export default {
       username => (username && username.length >= 10) || 'Username should be 10 characters or more!',
     ],
 
-    Email: function(object) {return object.$props.customer.Email || object.MarkAsFetchFailure()}(this) || null,
+    Email: function(object) {if(object.$props.customer.Email == null) {
+    object.MarkAsFetchFailure(); return object.$props.customer.Email}else{
+    return object.$props.customer.Email}}(this) || null,
+
     EmailRules: [
       email => !!email || 'Please Enter Valid E-mail',
       email => /.+@.+\..+/.test(email) || 'E-mail must be valid',
       email => (email && email.length >= 11) || 'E-mail must be at least 11 characters'
     ],
 
-    Password: function(object) {return object.$props.customer.Password || object.MarkAsFetchFailure()}(this) || null,
+    Password: function(object) {if (
+    object.$props.customer.Password == null) {object.MarkAsFetchFailure();
+    return object.$props.customer.Password}else{return object.$props.customer.Password}}(this) || null,
+
     PasswordRules: [
       password => !!password || 'Please enter the Valid Password',
       password => (password && password.length >= 10) || 'Password must be 10 characters or more!',
     ],
 
-    Country: function(object) {return object.$props.customer.Country || object.MarkAsFetchFailure()}(this) || null,
+    Country: {
+      'countryTitle': function(object) {return object.$props.customer["Country"]}(this),
+      'countryValue': function(object) {return object.$props.customer["Country"]}(this),
+    },
+
     CountryRules: [
       country => !!country || 'Please select the Country',
     ],
@@ -251,7 +263,7 @@ export default {
     CheckProfileFetched() {
       // Checks if the customer Profile Data has been fetched successfully, otherwise 
       // this method blocks any actions, to prevent bad consuqences with accident updates
-      if (this.customer === {} || this.customer === null) {
+      if (this.$props.customer === {} || this.$props.customer === null) {
         this.EditProfileDisabled = true
       }
     },
@@ -279,13 +291,13 @@ export default {
       this.EditProfile = false 
 
       let EditForm = customers.CustomerEditForm(
-        function(){if (this.Username.length > 0) {return this.Username} else{return null} }() || this.customer.Username,
-        function(){if (this.Email.length > 0) {return this.Email} else{return null} }() || this.customer.Email,
-        function(){if (this.Password.length > 0) {return this.Password} else{return null} }() || this.customer.Password,
-        function(){if (this.Country.length > 0) {return this.Country} else{return null} }() || this.customer.Country,
-        function(){if (this.City.length > 0) {return this.City} else{return null} }() || this.customer.City,
-        function(){if (this.ZipCode.length > 0) {return this.ZipCode} else{return null} }() || this.customer.ZipCode,
-        function(){if (this.Street.length > 0) {return this.Street} else{return null} }() || this.customer.Street,
+        function(){if (this.Username.length > 0) {return this.Username} else{return null} }() || this.$props.customer.Username,
+        function(){if (this.Email.length > 0) {return this.Email} else{return null} }() || this.$props.customer.Email,
+        function(){if (this.Password.length > 0) {return this.Password} else{return null} }() || this.$props.customer.Password,
+        function(){if (this.Country.length > 0) {return this.Country} else{return null} }() || this.$props.customer.Country,
+        function(){if (this.City.length > 0) {return this.City} else{return null} }() || this.$props.customer.City,
+        function(){if (this.ZipCode.length > 0) {return this.ZipCode} else{return null} }() || this.$props.customer.ZipCode,
+        function(){if (this.Street.length > 0) {return this.Street} else{return null} }() || this.$props.customer.Street,
       )
 
       let customerManager = new customers.CustomerManager()

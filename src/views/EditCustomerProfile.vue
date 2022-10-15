@@ -25,6 +25,7 @@ export default {
         ])
     },
     methods: {
+
         GetCustomerProfile() {
             // Obtaining the Customer Profile from the Store 
             this.customerProfile = this.customer
