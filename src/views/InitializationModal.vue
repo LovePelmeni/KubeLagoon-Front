@@ -144,6 +144,7 @@ export default {
     this.CheckIsDraft() 
     this.InitializePaymentTerms()
     if (this.updateVirtualMachine === true) {this.ApplyPaymentTerms()}
+    if (this.updateVirtualMachine === false) {this.ApplyDefaultPaymentTermsPeriod()}
   },
   data() {
     return {
@@ -249,9 +250,25 @@ export default {
           FirstSelected = ":" + "selected"
       }
 
-      if (String(PaymentTermsValue).toLowerCase() === "60") {
+      else if (String(PaymentTermsValue).toLowerCase() === "60") {
          SecondSelected = ":" + "selected"
       }
+      document.getElementById("paymentTermsField").innerHTML = FirstOption + " \n " + SecondOption
+    },
+
+    ApplyDefaultPaymentTermsPeriod() {
+      // Applying the Default Period for the Payment Terms Field 
+      
+      let FirstSelected = ""
+      let SecondSelected = ""
+
+      let FirstOption = "<option value='"
+      + String(30) + "'" + FirstSelected + ">" + String(30) + " days" + "</option>"
+
+      let SecondOption = "<option value='"
+      + String(60) + SecondSelected + "'>" + String(60) + " days" + "</option>"
+
+      FirstSelected = ":" + "selected"
       document.getElementById("paymentTermsField").innerHTML = FirstOption + " \n " + SecondOption
     },
 
@@ -278,7 +295,7 @@ export default {
       let Memory = this.$refs.resourceConfiguration.Memory || 0
       let StorageCapacity = this.$refs.resourceConfiguration.StorageCapacity || 0
 
-      let PricePerDay = document.getElementById("paymentTerms").value;
+      let PricePerDay = document.getElementById("paymentTermsField").value;
       let BillManager = new VirtualMachineCostCalculator(CpuNum, Memory, StorageCapacity)
       let TotalPricePerDay = BillManager.CalculateCostPerDay()
       this.getVirtualMachineCostTotal(TotalPricePerDay, Number(PricePerDay))

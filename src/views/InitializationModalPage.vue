@@ -11,5 +11,4 @@ export default {
         <initialization-modal :updateVirtualMachine="false"/>
     `,
 }
-
 </script>
