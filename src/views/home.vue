@@ -164,10 +164,10 @@
                 '20GB MAX RAM Daily Usage',
                 'Personal Dedicated Support Channel'
             ]"/>
+        </div>
     </div>
-    </div>
-</template>
 
+</template>
 
 <script>
 

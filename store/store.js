@@ -331,6 +331,12 @@ export default new Vuex.Store({
 
     // Handles Customer's Statuses
 
+
+    TOGGLE_EDIT_CUSTOMER_AT_STORE(state, NewData) {
+      // Updates the Customer Profile at Store
+      state.customer = NewData
+    },
+
     TOGGLE_SHOW_CUSTOMER_PROFILE(state) {
       // Triggers event to show the Customer's Profile
       state.showCustomerProfile = true
