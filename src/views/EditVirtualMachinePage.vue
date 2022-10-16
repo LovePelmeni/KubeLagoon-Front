@@ -8,6 +8,7 @@ import ForbiddenWindow from "../components/ForbiddenWindow.vue";
 import NotAuthenticatedWindow from "../components/NotAuthenticatedWindow.vue";
 
 export default {
+    // Component of the Edit Virtual Machine Page 
     name: "EditInitializationModalPage",
     components: {
         InitializationModal,

@@ -1,5 +1,5 @@
-import * as vm from "../vm/vm.js"
-import * as preparer from "../configuration_preparer/preparer.js"
+import * as vm from "../vm/vm.js";
+import * as preparer from "../configuration_preparer/preparer.js";
 import Vuex from "vuex";
 import { useCookies } from "vue3-cookies";
 
@@ -15,6 +15,26 @@ export default new Vuex.Store({
       "Street": "National Street, 6",
       "ZipCode": "125189",
     },
+    suggestionCardOfferings: [ // Suggestion Subscription Offers  
+      {
+        "id": "1",
+        "Configuration": {
+
+        }
+      },
+      {
+        "id": "2",
+        "Configuration": {
+
+        }
+      },
+      { 
+        "id": "3",
+        "Configuration": {
+
+        }
+      }
+    ],
     showCustomerProfile: false,
     virtualMachineSavedDraft: {
       // Hardware Configuration goes there...
