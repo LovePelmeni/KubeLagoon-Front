@@ -16,6 +16,8 @@ import NotFoundPage from "../components/NotFoundWindow.vue";
 
 import HomePage from "../views/home.vue";
 import BillPage from "../views/BillPage.vue";
+import ApplySubscriptionComponent from "../components/SubscriptionApplyComponent.vue";
+
 
 const routes = [
   {
@@ -77,6 +79,11 @@ const routes = [
     path: "/not/found/",
     name: "not_found_page",
     component: NotFoundPage,
+  },
+  {
+    path: "/subscription/apply/:SubscriptionId",
+    name: "apply_subscription_page",
+    component: ApplySubscriptionComponent,
   }
 ]
 

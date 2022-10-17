@@ -113,6 +113,7 @@ export default {
   props: [
     "hardwareConfiguration",
     "updateVirtualMachine",
+    "suggestionCard",
   ],
   data() {
     return {
@@ -234,6 +235,9 @@ export default {
     if (this.$props.updateVirtualMachine === true) {
       this.AddPreSelectedValues()
     }
+    if (this.$props.suggestionCard === true) {
+      this.AddPreSelectedValues()
+    }
   },
 
   methods: {
@@ -246,6 +250,7 @@ export default {
       // Adding the Pre Selected Values to the Initialization Modal Configuration, this 
       let PreInstalledTools = this.$props.hardwareConfiguration["PreInstalledTools"]
       for (let ToolIndex in PreInstalledTools) {
+          console.log(PreInstalledTools[ToolIndex])
           this.AddedPreInstalledTools.push(
           {'toolName': PreInstalledTools[ToolIndex], 
           'toolValue': PreInstalledTools[ToolIndex]}

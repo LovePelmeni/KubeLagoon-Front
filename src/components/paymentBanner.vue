@@ -2,25 +2,24 @@
            <div class="pricing_plan-card__8Q2Iu pricing_plan-card-personal__FBJhu">
            <div class="pricing_plan-card-header__g8BK_ pricing_plan-card-header-personal__All8V">
 
-            <p class="text_wrapper__aJlSM text_s-32__lPhW6 text_w-700__BJEFg text_lh-32__iP9gT" data-version="v1" style="--color:var(--geist-foreground);">
-            <span class="pricing_plan-card-header-text__xEN2p">{{ BannerName }}</span></p>
+           <p class="text_wrapper__aJlSM text_s-32__lPhW6 text_w-700__BJEFg text_lh-32__iP9gT" data-version="v1" style="--color:var(--geist-foreground);">
+           <span class="pricing_plan-card-header-text__xEN2p">{{ BannerName }}</span>
+           </p>
 
-           <span aria-hidden="true" class="geist-spacer" data-version="v1" style="margin-top: 5px;">
-           </span>
-           <p class="text_wrapper__aJlSM text_s-16__wD_tc text_w-600__hi7Y9 text_lh-24___qKPu" data-version="v1" style="--color: inherit;"><span class="pricing_plan-card-header-description__mdnYK" style="margin-top: 30px; margin-bottom: 10px;">{{ BannerPrice }}$ / month</span>
-           </p><span aria-hidden="true" class="geist-spacer" data-version="v1" style="margin-top: 5px;"></span>
+           <span aria-hidden="true" class="geist-spacer" data-version="v1" style="margin-top: 5px;"></span>
+           <p class="text_wrapper__aJlSM text_s-16__wD_tc text_w-600__hi7Y9 text_lh-24___qKPu" data-version="v1" style="--color: inherit;"><span class="pricing_plan-card-header-description__mdnYK" style="margin-top: 30px; margin-bottom: 10px;">{{ BannerPrice }}$ / month</span></p>
+           <span aria-hidden="true" class="geist-spacer" data-version="v1" style="margin-top: 5px;"></span>
 
-            <!-- Pricing Card Headers -->
-            <div class="pricing_plan-card-header-description__mdnYK pricing_plan-card-header-description-personal__iKbGC" style="margin-top: 15px;">
-                <p class="text_wrapper__aJlSM text_s-16__wD_tc text_w-600__hi7Y9 text_lh-24___qKPu" data-version="v1" 
-                style="--color: inherit;">{{ BannerDescription }}</p>
-            </div>
+                <!-- Pricing Card Headers -->
+                <div class="pricing_plan-card-header-description__mdnYK pricing_plan-card-header-description-personal__iKbGC" style="margin-top: 15px;">
+                    <p class="text_wrapper__aJlSM text_s-16__wD_tc text_w-600__hi7Y9 text_lh-24___qKPu" data-version="v1" 
+                    style="--color: inherit;">{{ BannerDescription }}</p>
+                </div>
             </div>
            <div class="pricing_plan-card-body__tIAYe">
 
            <div data-version="v1" class="container jsx-917344996 stack_stack__A16oG stack" style="--flex: initial; --direction:column; --align:stretch; --justify:flex-start;">
                
-            
                 <div data-version="v1" v-for="Option in BannerOptions" :key="Option" class="jsx-1558625419 stack_stack__A16oG stack" style="margin-top: 30px; --flex: initial; --direction:row; --align:stretch; --justify:flex-end;">
 
                     <div style="position: absolute;">
@@ -37,7 +36,7 @@
         </div>
             <div class="pricing_plan-card-footer__iC0uW">
             <a role="button" tabindex="0" @click="redirectVirtualMachineSetup()" type="submit" class="button_base_class button_base__AOyi_ reset_reset__90FTf button_button__dmey4 reset_reset__90FTf geist-themed geist-default geist-default-fill button_large__FQLqa button_invert__ESQI6" data-geist-button="" data-version="v1">
-            <span class="button_content__9hWh7 button_start___N8dd">Deploy Server</span>
+            <span class="button_content__9hWh7 button_start___N8dd" ref="subscriptionButton">Deploy Server</span>
             <span class="button_suffix__i0gL_"><svg data-testid="geist-icon" fill="none" height="24" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" width="24" style="color: currentcolor;">
             <path d="M5 12h14"></path><path d="M12 5l7 7-7 7">
                             </path>
@@ -47,8 +46,6 @@
             </div>
         </div>
 </template>
-
-
 
 <script>
 
@@ -60,19 +57,21 @@ export default {
         "BannerDescription",
         "BannerOptions",
         "BannerPrice",
+        "SubscriptionId",
     ],
     methods: {
         redirectVirtualMachineSetup() {
             // Redirects to the Virtual Machine Setup Page, with already prepared (inserted) parameters 
             // According to the Banner Suggestion
-            return this.$router.push({name: "virtual_machine_setup"})
-        }
+            let SubscriptionId = this.$props.SubscriptionId 
+            console.log(SubscriptionId)
+            this.$router.push({name: "apply_subscription_page",
+            params: {'SubscriptionId': SubscriptionId}})
+        },
     }
 }
+
 </script>
-
-
-
 
 <style lang="scss">
 

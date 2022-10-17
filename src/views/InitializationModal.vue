@@ -33,7 +33,7 @@
 
         <!-- Hardware Configuration  -->
 
-          <hardwareConfiguration ref="hardwareConfiguration" :updateVirtualMachine="updateVirtualMachine" :hardwareConfiguration="VirtualMachineSetupConfiguration['hardwareConfiguration']" />
+          <hardwareConfiguration ref="hardwareConfiguration" :updateVirtualMachine="updateVirtualMachine" :suggestionCard="IsSuggestionCard" :hardwareConfiguration="VirtualMachineSetupConfiguration['hardwareConfiguration']" />
 
         </div>
 
@@ -90,7 +90,7 @@
                   <div class="buttonBlock flex" style="width: 800px; max-width: 100%; overflow: hidden;">
                     <v-btn type="submit" @click="closeVirtualMachineSettings" id="" style="background-color: #ec5757" :loading="CancelLoading">Cancel Setup</v-btn>
                     <v-btn style="background-color: #252945;" :loading="Saveloading" type="submit" @submit="saveVirtualMachineDraft">Save Setup</v-btn>
-                    <v-btn v-if="!updateVirtualMachineServer" style="background-color: #7c5dfa;" :loading="Createloading" type="submit" @submit="CreateNewVirtualMachine">Create Server</v-btn>
+                    <v-btn v-if="!updateVirtualMachineServer || IsSuggestionCard" style="background-color: #7c5dfa;" :loading="Createloading" type="submit" @submit="CreateNewVirtualMachine">Create Server</v-btn>
                     <v-btn v-if="updateVirtualMachineServer" type="submit" @click="UpdateVirtualMachine" id="updateVirtualMachineServer" style="background-color: green;">Apply Configuration</v-btn>
                   </div>
               </div>
@@ -136,6 +136,7 @@ export default {
     return { cookie };
   },
   props: [
+    "suggestionCard",
     "updateVirtualMachine",
     "VirtualMachine",
   ],
@@ -143,8 +144,9 @@ export default {
     this.JwtToken = this.cookie?.get("jwt-token")
     this.CheckIsDraft() 
     this.InitializePaymentTerms()
-    if (this.updateVirtualMachine === true) {this.ApplyPaymentTerms()}
-    if (this.updateVirtualMachine === false) {this.ApplyDefaultPaymentTermsPeriod()}
+    if (this.suggestionCard === true) {this.IsSuggestionCard = true}
+    if (this.updateVirtualMachine === true || this.IsSuggestionCard === true) {this.ApplyPaymentTerms()}
+    if (this.updateVirtualMachine === false && this.IsSuggestionCard === false) {this.ApplyDefaultPaymentTermsPeriod()}
   },
   data() {
     return {
@@ -182,6 +184,8 @@ export default {
       paymentTerms: null,
 
       updateVirtualMachineServer: this.$props.updateVirtualMachine || false,
+      IsSuggestionCard: this.$props.suggestionCard || false, // Field that is going to be filled with true, once customer 
+      // decided to follow subscription (base tier, middle tier or advanced tier) with the prepared Virtual Server Configuration.
 
       VirtualMachineRunning: null,
       VirtualMachineDeploying: null,
@@ -201,7 +205,6 @@ export default {
 
     // get current date for invoice date field
     this.GetCustomerVirtualMachines()
-
     this.virtualMachineDateUnix = Date.now();
     this.virtualMachineCreationDate = new Date(this.virtualMachineDateUnix).toLocaleDateString("en-us", this.dateOptions);
     this.paymentDueDate = new Date(this.virtualMachineDateUnix).toLocaleDateString("en-us", this.dateOptions);
@@ -231,7 +234,9 @@ export default {
       // Applying the Payment Terms to the Edit Virtual Machine Page 
 
       let Configuration = this.$props.VirtualMachine || {}
+      console.log(Configuration)
       this.paymentTerms = Configuration["paymentConfiguration"]["paymentTerms"]
+
 
       let FirstSelected = ""
       let SecondSelected = ""

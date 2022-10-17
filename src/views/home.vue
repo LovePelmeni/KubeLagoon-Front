@@ -110,60 +110,30 @@
 
         <!-- Subscription Cards Goes there -->
 
-
         <div class="subscriptionCards" style="justify-content: space-between; display: flex;">
 
-        <payment-banner
-            :BannerName="
-            'Basic Tier' // Name of the Basic Tier Banner
-            "
-            :BannerDescription="
-            'For Non-Commercial or small projects' // Description of the Basic Tier
-            "
-            :BannerPrice="
-            '0' // Price for the Basic Tier
-            "
-            :BannerOptions="[ // Options for the Basic Tier 
-                '2-full CPUs', // Provides 
-                '10GB Storage Disk',
-                '500MB MAX RAM Daily Usage',
-                'Base Email Support'
-            ]"
-         />
-
-         <payment-banner 
-            :BannerName="
-            'Basic Tier' // Name of the Basic Tier Banner
-            "
-            :BannerDescription="
-            'For Commercial or small projects' // Description of the Basic Tier
-            "
-            :BannerPrice="
-            '5' // Price for the Basic Tier
-            "
-            :BannerOptions="[ // Options for the Basic Tier 
-                '10-full CPUs', // Provides 
-                '500GB Storage Disk',
-                '10GB MAX RAM Daily Usage',
-                'Base Email Support'
-            ]"/>
-
-         <payment-banner 
-            :BannerName="
-            'Advanced Tier' // Name of the Basic Tier Banner
-            "
-            :BannerDescription="
-            'For Commercial and Heavy Projects' // Description of the Basic Tier
-            "
-            :BannerPrice="
-            '20' // Price for the Basic Tier
-            "
-            :BannerOptions="[ // Options for the Basic Tier 
-                '20-full CPUs', // Provides 
-                '1500GB Storage Disk',
-                '20GB MAX RAM Daily Usage',
-                'Personal Dedicated Support Channel'
-            ]"/>
+            <div class="paymentSubscriptionsBlock" 
+            style="
+            display: flex;
+            justify-content: center;
+            width: 90%;
+            margin: auto;">
+                <payment-banner 
+                    v-for="Subscription in getPaymentSubscriptions()" :key="Subscription" 
+                    :ref="Subscription.Reference"
+                    :BannerName="
+                    Subscription.BannerName // Name of the Basic Tier Banner
+                    "
+                    :BannerDescription="
+                    Subscription.BannerDescription // Description of the Basic Tier
+                    "
+                    :BannerPrice="
+                    Subscription.BannerPrice // Price for the Basic Tier
+                    "
+                    :BannerOptions="Subscription.BannerOptions"
+                    :SubscriptionId="Subscription.id"
+                />
+            </div>
         </div>
     </div>
 
@@ -171,8 +141,10 @@
 
 <script>
 
+
 import paymentBanner from "@/components/paymentBanner.vue";
 import { useCookies } from "vue3-cookies";
+import { mapState } from "vuex";
 
 export default {
   components: { paymentBanner },
@@ -185,6 +157,10 @@ export default {
         this.JwtToken = this.jwtToken?.cookies.get("jwt-token")
     },
     methods: {
+        getPaymentSubscriptions() {
+            // Returns the Array of the Payment Subscriptions 
+            return this.paymentSubscriptions
+        },
         redirectToBillPage() {
             // Redirects to the Bill Page
             this.$router.push({name: "bill_page"})
@@ -199,6 +175,9 @@ export default {
         }
     },
     computed: {
+          ...mapState([
+            "paymentSubscriptions"
+        ]),
         Authenticated() {return this.$store.state.authenticated }
     }
 }

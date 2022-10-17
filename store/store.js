@@ -15,25 +15,83 @@ export default new Vuex.Store({
       "Street": "National Street, 6",
       "ZipCode": "125189",
     },
-    suggestionCardOfferings: [ // Suggestion Subscription Offers  
+    paymentSubscriptions: [ // Suggestion Subscription Offers  
       {
         "id": "1",
+        "Reference": "basicTier",
+        "BannerName": "Basic Tier",
+        "BannerDescription": "For non-commercial and small projects",
+
+        "BannerOptions": [
+        '20-full CPUs', // Provides 
+        '1500GB Storage Disk',
+        '20GB MAX RAM Daily Usage',
+        'Personal Dedicated Support Channel'],
+
+        "BannerPrice": "5",
         "Configuration": {
 
-        }
+              "paymentConfiguration": {
+                  "paymentTerms": 30,
+                  "paymentDueDate": "10 Dec, 2021",
+              },
+
+              //  Resource Configuration of the Virtual Server 
+              "resourceConfiguration": {
+
+                  "CpuNum": 100, 
+                  "MaxCpu": 100, 
+
+                  "Memory": 100, 
+                  "MaxMemory": 100,
+
+                  "StorageCapacity": 200, 
+                  "MaxStorageCapacity": 1000,
+
+              },
+              // Hardware Configuration of the Virtual Server 
+              "hardwareConfiguration": {
+                  "Datacenter": "US/Washington", 
+                  "OperationalSystem": "Ubuntu 9", 
+                  "PreInstalledTools": ["Docker", "Kubernetes"],
+              },
+              // SSH Configuration of the Virtual Server 
+              "sshConfiguration": {
+
+                  "useRootCertificate": true, 
+                  "useRootCredentials": false,
+
+              },
+          }
       },
       {
         "id": "2",
-        "Configuration": {
-
-        }
+        "Reference": "middleTier",
+        "BannerName": "Middle Tier",
+        "BannerDescription": "for commercial or average projects",
+        "BannerOptions": [
+          '20-full CPUs', // Provides 
+          '1500GB Storage Disk',
+          '20GB MAX RAM Daily Usage',
+          'Personal Dedicated Support Channel'
+        ],
+        "BannerPrice": "5",
+        "Configuration": {}
       },
-      { 
+      {
         "id": "3",
-        "Configuration": {
-
-        }
-      }
+        "Reference": "advancedTier",
+        "BannerName": "Advanced Tier",
+        "BannerDescription": "for commercial and huge projects",
+        "BannerOptions": [
+          '20-full CPUs', // Provides 
+          '1500GB Storage Disk',
+          '20GB MAX RAM Daily Usage',
+          'Personal Dedicated Support Channel'
+        ],
+        "BannerPrice": "5",
+        "Configuration": {}
+      },
     ],
     showCustomerProfile: false,
     virtualMachineSavedDraft: {
@@ -620,7 +678,7 @@ export default new Vuex.Store({
       if (ResultError != null) {commit("TOGGLE_ERROR", state, ResultError)}
 
       for (let virtualMachine in results){
-        if (!state.VirtualMachineData.some((virtualMachine) => virtualMachine.VirtualMachineId === virtualMachine.VirtualMachineId)) {
+        if (!state.virtualMachineData.some((virtualMachine) => virtualMachine.VirtualMachineId === virtualMachine.VirtualMachineId)) {
           const newVirtualMachine = {
 
             // General Information about the Customer's Virtual Machine
