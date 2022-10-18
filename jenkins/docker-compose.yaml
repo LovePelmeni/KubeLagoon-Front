@@ -1,0 +1,34 @@
+# Docker Compose CI / CD Server Infrastcture for the KubeLagoon Project 
+
+version: "3.8"
+services:
+
+  jenkins_ci_server:
+    container_name: jenkins_ci_server 
+    image: jenkins/jdk  
+    ports:
+      - containerPort: 50000 
+    networks:
+       - cloud-ci-network 
+    healthcheck:
+      test: ["curl", "-f", "http://localhost:50000/login/"]
+      retries: 5 
+      timeout: 5 
+
+  jenkins_cd_server:
+    container_name: jenkins_cd_server 
+    image: jenkins/jdk 
+    ports:
+      - containerPort: 60000 
+    networks:
+       - cloud-ci-network 
+    healthcheck:  
+      test: ["curl", "-f", "http://localhost:60000/login/"]
+      retries: 5 
+      timeout: 5 
+
+networks:
+  cloud-ci-network:
+    external: true 
+    name: kubelagoon-private-network 
+
