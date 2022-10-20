@@ -33,7 +33,8 @@ export default {
     this.getVirtualMachineServerInfo()
     this.MountResourceUsageMetrics()
   },
-  template: `<div v-if="ServerDoesExist && Authenticated && HasPermissions">
+  template: `
+  <div v-if="ServerDoesExist && Authenticated && HasPermissions">
   <main class="detail">
     <router-link :to="{ name: 'main_page' }" style="margin-right: 40px;" class="link">
       <svg
@@ -44,12 +45,17 @@ export default {
       >
         <path d="M730.6 18.4l-505.4 505.2 505.4 505.4 144.8-144.8-360.6-360.6 360.6-360.4z"></path>
       </svg>
-      <span class="back-text" @click="redirectToPreviousPage">Go Back</span>
+      <span class="back-text" @click="RedirectToPreviousPage">Go Back</span>
     </router-link>
 
     <!-- Virtual Machine Server Connection Info  -->
 
-    <virtual-machine-connection-info :VirtualMachine="VirtualMachine"/>
+    <div class="virtualMachineConnectionInfo">
+
+    <virtual-machine-connection-info :VirtualMachine="VirtualMachine" ref="VirtualMachineConnectionInfo" />
+
+    </div>
+
 
     <!-- Charts with the Resource Usage  -->
 
@@ -69,7 +75,7 @@ export default {
         }"
         > <a v-if="VirtualMachine.Running === true">Running</a>
           <a v-if="VirtualMachine.Deploying === true">Deploying</a>
-          <a v-if="VirtualMachine.Shutdown === true">Shutdown</a>
+          <a v-if="VirtualMachine.Shutdown === true" style="color: #fff !important;">Shutdown</a>
           <a v-if="VirtualMachine.Running === false && VirtualMachine.Deploying === false && VirtualMachine.Shutdown === false">Unknown</a>
             
         <span class="status-circle" style="margin-right: 5px" v-if="VirtualMachine.Running" />
@@ -104,6 +110,7 @@ export default {
         </button>
         <button
           class="btn btn-mark"
+          style="color: rgb(131, 127, 127)"
           v-else
           disabled
         >
@@ -262,7 +269,8 @@ export default {
       OperationSuccessMessage: null,
       VirtualMachineServerError: null, 
       VirtualMachine: null,
-      VirtualMachineId: this.$route.params.VirtualMachineId
+      VirtualMachineId: this.$route.params.VirtualMachineId,
+
     }
   },
   methods: { 
@@ -434,6 +442,9 @@ export default {
     Authenticated() {
       return this.$store.state.authenticated
     }
+  },
+  watch: {
+    
   }
 };
 
@@ -457,9 +468,11 @@ export default {
   padding: 50px 150px 50px 220px;
   color: white;
 }
+
 .link {
   text-decoration: none;
 }
+
 .back-icon {
   width: 10px;
   height: 10px;
@@ -481,6 +494,7 @@ export default {
   color: hsl(231, 75%, 93%);
   flex-basis: 60px;
 }
+
 .status-body {
   width: 105px;
   padding: 13px 0 13px 13px;
@@ -496,6 +510,7 @@ export default {
   left: 15px;
   top: -14px;
 }
+
 .shutdown {
   background-color: #292c45;
   color: rgb(224, 228, 251);
@@ -515,6 +530,7 @@ export default {
   background-color: rgba(51, 215, 160, 0.06);
   color: rgb(252, 2, 2);
 }
+
 
 .btn-container {
   margin-left: auto;

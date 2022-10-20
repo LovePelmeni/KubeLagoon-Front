@@ -80,6 +80,7 @@ metadata:
   namespace: app-namespace 
 data:
   nginx.conf: | 
+  
       events {
           worker_connections 1024;
       }
@@ -100,12 +101,16 @@ data:
               # Base Location for All Routes
               location / {
                   proxy_pass http://front_application_upstream;
+                  
                   proxy_set_header Host    $http_host;
                   proxy_set_header Upgrade $http_upgrade;
+
                   add_header Access-Control-Allow-Origin "*";
                   add_header Access-Control-Allow-Credentials: "true";
                   add_header Access-Control-Allow-Methods "GET,POST,PUT,OPTIONS,DELETE";
+
                   error_page 404 @not_found;
               }
           }
       }
+

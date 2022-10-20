@@ -6,6 +6,18 @@ import { useCookies } from "vue3-cookies";
 export default new Vuex.Store({
 
   state: {
+
+    // Banner Window States 
+    ErrorBannerWindowClosed: false,
+
+    // Virtual Server Connection Instructions Page Error's
+
+    DownloadFailed: false, 
+    RegenerationFailed: false, 
+
+    RegenerationError: null, 
+    DownloadError: null,
+
     customer: {
       "Username": "John Pandey",
       "Email": "some_email@gmail.com",
@@ -409,6 +421,43 @@ export default new Vuex.Store({
 
     // Handles Customer's Statuses
 
+    TOGGLE_FAILED_DOWNLOAD_CERTIFICATE_ERROR(state, DownloadError) {
+      state.DownloadError = DownloadError
+      state.DownloadFailed = true
+    },
+
+    CLOSE_FAILED_DOWNLOAD_CERTIFICATE_ERROR(state) {
+      state.DownloadError = null 
+      state.DownloadFailed = false
+    },
+
+
+    TOGGLE_FAILED_REGENERATE_CERTIFICATE_ERROR(state, RegenerationError) {
+      state.RegenerationError = RegenerationError
+      state.RegenerationFailed = true
+    },
+
+    CLOSE_FAILED_REGENERATE_CERTIFICATE_ERROR(state) {
+      state.RegenerationError = null
+      state.RegenerationFailed = false
+    },
+
+    TOGGLE_UPDATE_VIRTUAL_SERVER_CONFIGURATION(state, VirtualMachineId, NewConfiguration) {
+      let VirtualServer = state.virtualMachineData.filter((VirtualMachine) => {
+        return VirtualMachine.id === VirtualMachineId
+      }) || {}
+      VirtualServer.Configuration = NewConfiguration
+    },
+
+    TOGGLE_ACTIVATE_ERROR_BANNER_WINDOW(state) {
+        // Activates the Error Banner Window 
+        state.ErrorBannerWindowClosed = true
+    },
+
+    TOGGLE_DISACTIVATE_ERROR_BANNER_WINDOW(state) {
+        // Disactivates Error Banner Window 
+        state.ErrorBannerWindowClosed = false 
+    },
 
     TOGGLE_EDIT_CUSTOMER_AT_STORE(state, NewData) {
       // Updates the Customer Profile at Store

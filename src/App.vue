@@ -1,18 +1,27 @@
 <template>
     <div>
       <div v-if="!mobile" class="app flex flex-column">
+
           <navigationPage />
+
           <logoutPage v-if="logout" />
           <loadingPage v-if="loading" />
+
           <modalPage v-if="modalActive" />
           <customer-profile  v-if="showCustomerProfile" :Customer="fetchCustomerProfile()" />
-        <router-view />
+
+          <error-banner v-if="DownloadFailed" :Download="true" :ReasonError="DownloadError" />
+          <error-banner v-if="RegenerationFailed" :Regenerate="true" :ReasonError="RegenerationError" />
+
+          <router-view /> 
+
       </div> 
 
       <div v-else class="mobile-message flex flex-column">
         <h2>Sorry, this app is not supported on Mobile Devices</h2>
         <p>To use this app, please use a Laptop or Another Device</p>
       </div>
+
   </div>
 </template>
 
@@ -24,6 +33,8 @@ import modalPage from "./components/ModalWindow.vue"
 import loadingPage from "./components/LoadingPage.vue"
 import logoutPage from "./components/LogoutPage.vue"
 import CustomerProfile from './components/CustomerProfileNavBar.vue'
+import ErrorBanner from "./components/ErrorBanner.vue"
+
 // import * as customers from "../customers/customers.js";
 import { useCookies } from "vue3-cookies";
 
@@ -48,6 +59,7 @@ export default {
     modalPage,
     logoutPage,
     CustomerProfile,
+    ErrorBanner,
   },
 
   created() {
@@ -98,7 +110,9 @@ export default {
 
   computed: {
     ...mapState(["loading", "modalActive", "virtualMachinesLoaded", "showCustomerProfile",
-    "notification", "error", "activeError", "activeNotification", "logout", "customer"]),
+    "notification", "error", "activeError", "activeNotification", 
+    "logout", "customer", "DownloadFailed",
+    "RegenerationFailed", "RegenerationError", "DownloadError"]),
   },
 };
 

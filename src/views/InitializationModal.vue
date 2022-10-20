@@ -118,6 +118,7 @@
 
 <script>
 
+
 import { mapMutations, mapActions, mapState } from "vuex";
 import * as vm from "../../vm/vm.js";
 import { useCookies } from "vue3-cookies";
@@ -218,6 +219,7 @@ export default {
   methods: {
 
     ...mapMutations([
+      "TOGGLE_UPDATE_VIRTUAL_SERVER_CONFIGURATION",
       "TOGGLE_INITIALIZATION_MODAL",
       "TOGGLE_UPDATE_VIRTUAL_MACHINE",
       "TOGGLE_ERROR",
@@ -346,6 +348,7 @@ export default {
       this.VirtualMachineItemList = VirtualMachinesQueryset
     },
 
+
     // Virtual Machine Functions Goes There
     CreateNewVirtualMachine() {
 
@@ -377,6 +380,44 @@ export default {
 
     UpdateVirtualMachine() {
       // Updates the Virtual Machine Servers
+      let NewConfiguration = {
+
+                "paymentConfiguration": {
+                    "paymentTerms": this.paymentTerms,
+                    "paymentDueDate": this.paymentDueDate,
+                },
+
+                //  Resource Configuration of the Virtual Server 
+                "resourceConfiguration": {
+
+                    "CpuNum": this.$refs.resourceConfiguration.cpuNum, 
+                    "MaxCpu": this.$refs.resourceConfiguration.MaxCpu, 
+
+                    "Memory": this.$refs.resourceConfiguration.Memory, 
+                    "MaxMemory": this.$refs.resourceConfiguration.MaxMemory,
+
+                    "StorageCapacity": this.$refs.resourceConfiguration.StorageCapacity, 
+                    "MaxStorageCapacity": this.$refs.resourceConfiguration.MaxStorageCapacity,
+
+                },
+                // Hardware Configuration of the Virtual Server 
+                "hardwareConfiguration": {
+
+                    "Datacenter": this.$refs.hardwareConfiguration.AddedDatacenter, 
+                    "OperationalSystem": this.$refs.hardwareConfiguration.AddedOperationalSystem, 
+                    "PreInstalledTools": this.$refs.hardwareConfiguration.AddedPreInstalledTools,
+
+                },
+                // SSH Configuration of the Virtual Server 
+                "sshConfiguration": {
+
+                    "useRootCertificate": this.$refs.sshConfiguration.useRootCertificate, 
+                    "useRootCredentials": this.$refs.sshConfiguration.useRootCredentials,
+
+                },
+      }
+      let VirtualMachineId = this.$params.VirtualMachineId
+      this.TOGGLE_UPDATE_VIRTUAL_SERVER_CONFIGURATION(VirtualMachineId, NewConfiguration)
     },
 
     getVirtualMachineCostTotal(PricePerDay, SelectedDays) {
@@ -400,7 +441,6 @@ export default {
       this.Saveloading = false
     },
   },
-
   watch: {
     paymentTerms() {
       const futureDate = new Date();

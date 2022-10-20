@@ -1,5 +1,6 @@
 <template>
 
+
     <div class="container connectionInfo fluid" style="position: relative">
 
         <v-card-actions
@@ -142,9 +143,6 @@
              </pre>
         </div>
 
-        <p v-if="DownloadFailure === true" style="margin-top: 20px; margin-bottom: 30px; color: red; ">{{ DownloadFailureError }}</p>
-        <p v-if="RegenerationFailure === true" style="margin-top: 20px; margin-bottom: 30px; color: red; ">{{ RegenerationError }}</p>
-
         <div class="apiButtons">
         <button  @click="DownloadSshCertificateFile()"  class="btn btn-upload-certificate" style="margin-top: 20px; margin-left: 30px; color: #fff; !important" v-if="VirtualMachine.Running === true">
         <a download v-if="VirtualMachine?.Ssh.byRootCertificate === true "><label id="downloadLabel" style="color: #fff !important; margin-bottom: 1px !important;" v-if="VirtualMachine.Running === true">Download Public Key</label></a>
@@ -158,15 +156,18 @@
         </v-card-text>
 
         </div>
+
     </v-expand-transition>
 
 </div>
+
 </template>
 
 <script>
 
 import * as ssh from "../../ssh/ssh.js";
 import * as ssh_rest from "../../rest/ssh.js";
+import { mapMutations } from "vuex";
 
 export default {
     name: "VirtualMachineConnectionInfo",
@@ -174,14 +175,15 @@ export default {
     data() {
         return {
             VirtualMachineDeployError: null || 'Unknown Issue',
-            DownloadFailure: false,
-            DownloadFailureError: null, 
             showConnectionInfoDocs: false,
-            RegenerationFailure: false, 
-            RegenerationError: null,
         }
     },
     methods: {
+
+        ...mapMutations([
+        "TOGGLE_FAILED_DOWNLOAD_CERTIFICATE_ERROR",
+        "TOGGLE_FAILED_REGENERATE_CERTIFICATE_ERROR"]),
+
        DownloadSshCertificateFile() {
 
            // Obtaining the Content of the SSH Certificate for the Virtual Machine Server
@@ -190,11 +192,8 @@ export default {
             let sshContentManager = new ssh.VirtualMachineSshManager()
             let CertificateContent, CertificateKeyName = sshContentManager.GetSshCertificate(this.JwtToken, this.VirtualMachine.VirtualMachineId)
             if (CertificateContent == null) {
-            this.DownloadFailure = true; this.DownloadFailureError = "Failed To Download SSL Certificate, please try again later";
-            document.getElementById("downloadLabel").innerHTML = "Download Failed"}else{
-
-            this.DownloadFailure = false 
-            this.DownloadFailureError = null 
+            let DownloadFailureError = "Failed To Download SSL Certificate, please try again later";
+            this.TOGGLE_FAILED_DOWNLOAD_CERTIFICATE_ERROR(DownloadFailureError)}else{
 
             // Downloading the File with SSH Content from the Browser 
 
@@ -209,21 +208,22 @@ export default {
             document.body.removeChild(element);
             }
        },
+
        RegenerateSshCertificate() {
            // Regenerates the SSH Certificate for the Virtual Machine Server 
            let Regenerated, RegenerateError = ssh_rest.RegenerateSshCertificateRestController(
            this.JwtToken, this.$route.params.VirtualMachineId)
 
             // Checking if the Certificate Has been Eventually Regenerated 
-            if (Regenerated === false || RegenerateError != null ) {
-                this.RegenerationError = RegenerateError["statusText"] || 
+            if (Regenerated === false || RegenerateError != null) {
+                let RegenerationError = RegenerateError["statusText"] || 
                 "Unknown Error: Failed to Regenerate SSH Certificate, Write Support" // adding regeneration error 
-                this.RegenerationFailure = true
-                document.getElementById("regenerationLabel").innerHTML = "Regenerate Failed"
+                this.TOGGLE_FAILED_REGENERATE_CERTIFICATE_ERROR(RegenerationError)
             }
         }
-    }
+    },
 }
+
 
 </script>
 

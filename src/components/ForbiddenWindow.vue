@@ -10,6 +10,7 @@ export default {
     </div>
     `
 }
+
 </script>
 
 <style lang="scss">

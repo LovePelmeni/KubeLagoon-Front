@@ -6,56 +6,56 @@ import { mapMutations } from "vuex";
     name: "CustomerProfile",
     props: ["Customer"],
     template: `
-  <v-app>
-  <v-card class="mx-auto" width="256" tile style="background-color: #1e2139;">
-    <v-navigation-drawer permanent>
-      <v-system-bar @click="TOGGLE_HIDE_CUSTOMER_PROFILE()">
-        <v-icon style="color: black;">mdi-close-thick</v-icon>
-        </v-system-bar>
-      <v-list>
+      <v-app>
+      <v-card class="mx-auto" width="256" tile style="background-color: #1e2139;">
+        <v-navigation-drawer permanent>
+          <v-system-bar @click="TOGGLE_HIDE_CUSTOMER_PROFILE()">
+            <v-icon style="color: black;">mdi-close-thick</v-icon>
+            </v-system-bar>
+          <v-list>
 
-        <v-list-item>
-          <v-avatar size="150">
-            <v-img src="${require('@/assets/customer_avatar.png')}"></v-img>
-          </v-avatar>
-        </v-list-item>
+            <v-list-item>
+              <v-avatar size="150">
+                <v-img src="${require('@/assets/customer_avatar.png')}"></v-img>
+              </v-avatar>
+            </v-list-item>
 
-        <v-list-item link>
+            <v-list-item link>
 
-            <v-list-item-title class="text-h6">
-              {{ CustomerData.Username.value }}
-            </v-list-item-title>
+                <v-list-item-title class="text-h6">
+                  {{ CustomerData.Username.value }}
+                </v-list-item-title>
 
-            <v-list-item-subtitle>{{ CustomerData.Email.value }}</v-list-item-subtitle>
+                <v-list-item-subtitle>{{ CustomerData.Email.value }}</v-list-item-subtitle>
 
-        </v-list-item>
-      </v-list>
+            </v-list-item>
+          </v-list>
 
-      <v-divider></v-divider>
-      <v-list
-        nav
-        dense
-      >
-        <v-list-item-group
-          v-model="selectedItem"
-          color="primary"
-        >
-
-          <v-list-item
-            v-for="(CustomerProperty, index) in ['Password', 'Country', 'City', 'ZipCode', 'Street']"
-            :key="index"
+          <v-divider></v-divider>
+          <v-list
+            nav
+            dense
           >
-            <v-icon style="position: absolute; bottom: 30%; left: 0">{{ CustomerData[CustomerProperty].icon }}</v-icon> 
-            <v-list-item-title style="font-family: ont-family: 'Poppins', sans-serif; font-size: 0.75em;">{{ CustomerData[CustomerProperty].value }}</v-list-item-title>
+          <v-list-item-group
+            v-model="selectedItem"
+            color="primary"
+          >
 
-          </v-list-item>
+            <v-list-item
+              v-for="(CustomerProperty, index) in ['Password', 'Country', 'City', 'ZipCode', 'Street']"
+              :key="index"
+            >
+              <v-icon style="position: absolute; bottom: 30%; left: 0">{{ CustomerData[CustomerProperty].icon }}</v-icon> 
+              <v-list-item-title style="font-family: ont-family: 'Poppins', sans-serif; font-size: 0.75em;">{{ CustomerData[CustomerProperty].value }}</v-list-item-title>
 
-        </v-list-item-group>
-      </v-list>
-          <v-btn type="submit" style="margin-top: 20px;background-color: #ec5757" @click="redirectEditPage" :loading="EditLoading">Edit Profile</v-btn>
-    </v-navigation-drawer>
-  </v-card>
-  </v-app>
+            </v-list-item>
+
+          </v-list-item-group>
+        </v-list>
+            <v-btn type="submit" style="margin-top: 20px;background-color: #ec5757" @click="redirectEditPage" :loading="EditLoading">Edit Profile</v-btn>
+      </v-navigation-drawer>
+    </v-card>
+    </v-app>
 
     `,
     data: (selfInstance) => ({
@@ -84,9 +84,8 @@ import { mapMutations } from "vuex";
       }
     },
 }
+
 </script>
-
-
 
 <style lang="scss">
 
