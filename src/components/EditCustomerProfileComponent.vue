@@ -1,20 +1,23 @@
 <template>
   <v-app>
+
     <div class="profile-content" style="background-color: #141625">
-    <div style="margin-top: 5px;">
-      <div class="left flex flex-column" style="margin-bottom: 5px; justify-content: center;">
+      <img :src="require('../assets/customer_avatar.png')" style="height: 500px; width: 500px;">
+      <div style="margin-top: 5px;">
+          <div class="left flex flex-column" style="margin-bottom: 5px; justify-content: center;">
 
-        <div v-if="JwtToken != null && ProfileFetchFailure === false">
-        <h1 style="color: white; align-text: center;">Hello, {{ Username }}!</h1>
-        </div>
+          <div v-if="JwtToken != null && ProfileFetchFailure === false">
+          <h1 style="color: white; align-text: center;">Hello, {{ Username }}!</h1>
+          </div>
 
-        <div v-else class="mobile-message flex flex-column">
-        <h2>Oops, You Profile Not Found :(</h2>
-        <p>Please make sure you are authenticated and retry again</p>
-        </div>
+          <div v-else class="mobile-message flex flex-column">
+          <h2>Oops, You Profile Not Found :(</h2>
+          <p>Please make sure you are authenticated and retry again</p>
+          </div>
 
       </div>
     </div>
+
       <!-- Checking if the Customer Profile has been Obtained, otherwise, it is going to be not found page -->
       <v-col v-if="JwtToken != null && ProfileFetchFailure === false" cols="10" lg="6" class="mx-auto"> 
 

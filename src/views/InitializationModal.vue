@@ -79,6 +79,7 @@
 
         style="width: 800px; max-width: 100%; overflow: hidden; 
         margin-left: auto !important; margin-right: auto !important ">
+        
           <p>In Total Per Day</p>
           <p>${{ TotalCost }}</p>
 
@@ -146,8 +147,8 @@ export default {
     this.CheckIsDraft() 
     this.InitializePaymentTerms()
     if (this.suggestionCard === true) {this.IsSuggestionCard = true}
-    if (this.updateVirtualMachine === true || this.IsSuggestionCard === true) {this.ApplyPaymentTerms()}
-    if (this.updateVirtualMachine === false && this.IsSuggestionCard === false) {this.ApplyDefaultPaymentTermsPeriod()}
+    if (this.updateVirtualMachine === true || this.suggestionCard === true) {
+    this.ApplyPaymentTerms()}else{this.ApplyDefaultPaymentTermsPeriod()}
   },
   data() {
     return {
@@ -236,9 +237,7 @@ export default {
       // Applying the Payment Terms to the Edit Virtual Machine Page 
 
       let Configuration = this.$props.VirtualMachine || {}
-      console.log(Configuration)
       this.paymentTerms = Configuration["paymentConfiguration"]["paymentTerms"]
-
 
       let FirstSelected = ""
       let SecondSelected = ""
@@ -250,8 +249,7 @@ export default {
       + String(30) + "'" + FirstSelected + ">" + String(30) + " days" + "</option>"
 
       let SecondOption = "<option value='"
-      + String(60) + SecondSelected + "'>" + String(60) + " days" + "</option>"
-
+      + String(60) + "'" + SecondSelected + ">" + String(60) + " days" + "</option>"
 
       if (String(PaymentTermsValue).toLowerCase() === "30") {
           FirstSelected = ":" + "selected"
@@ -265,7 +263,7 @@ export default {
 
     ApplyDefaultPaymentTermsPeriod() {
       // Applying the Default Period for the Payment Terms Field 
-      
+
       let FirstSelected = ""
       let SecondSelected = ""
 
@@ -273,7 +271,7 @@ export default {
       + String(30) + "'" + FirstSelected + ">" + String(30) + " days" + "</option>"
 
       let SecondOption = "<option value='"
-      + String(60) + SecondSelected + "'>" + String(60) + " days" + "</option>"
+      + String(60) + "'" + SecondSelected + ">" + String(60) + " days" + "</option>"
 
       FirstSelected = ":" + "selected"
       document.getElementById("paymentTermsField").innerHTML = FirstOption + " \n " + SecondOption
@@ -413,7 +411,6 @@ export default {
 
                     "useRootCertificate": this.$refs.sshConfiguration.useRootCertificate, 
                     "useRootCredentials": this.$refs.sshConfiguration.useRootCredentials,
-
                 },
       }
       let VirtualMachineId = this.$params.VirtualMachineId

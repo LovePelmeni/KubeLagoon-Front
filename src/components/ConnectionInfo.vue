@@ -1,10 +1,8 @@
 <template>
 
-
     <div class="container connectionInfo fluid" style="position: relative">
 
-        <v-card-actions
-        style="
+        <v-card-actions style="
             align-items: flex-end;
             flex: 0 0 auto;
 

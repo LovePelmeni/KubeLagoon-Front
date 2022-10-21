@@ -8,7 +8,8 @@ export default {
         InitializationModal
     },
     template: `
-        <initialization-modal :updateVirtualMachine="false"/>
+        <initialization-modal :updateVirtualMachine="false" :suggestionCard="false" />
     `,
 }
+
 </script>

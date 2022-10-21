@@ -165,10 +165,6 @@ export default {
             // Redirects to the Bill Page
             this.$router.push({name: "bill_page"})
         },
-        redirectToAboutPage() {
-            // Redirects to the Bill Page
-            this.$router.push({name: "bill_page"})
-        },
         redirectVirtualMachineSetup() {
             // Redirects To Virtual Machine Setup Page
             this.$router.push({name: "virtual_machine_setup"})
@@ -181,6 +177,7 @@ export default {
         Authenticated() {return this.$store.state.authenticated }
     }
 }
+
 
 </script>
 

@@ -28,6 +28,7 @@
 
 <script lang="javascript">
 
+
 import { CustomerManager } from "../../customers/customers.js"
 import { mapMutations } from "vuex";
 
@@ -42,9 +43,10 @@ export default {
     },
     methods: {
         ...mapMutations(["TOGGLE_ERROR"]),
-        ValidateNewPassword(event) {
+
+        ValidateNewPassword(Password) {
             // Validating new Password
-            if (event.value.length < 0 || event.value.length > 10) {
+            if (Password.length < 10 || Password === null) {
                 this.error = "Invalid Password, please type new one"
             }else{
                 let Reset, error = this.ResetPassword(event.value)
@@ -57,6 +59,11 @@ export default {
             let Reset, error = newCustomerManager.ResetPassword(newPassword)
             if (error != null || Reset != true) {this.TOGGLE_ERROR(error)}
         },
+    },
+    watch: {
+      NewPassword: function() {
+        this.ValidateNewPassword(this.NewPassword)
+      }
     }
 }
 </script>

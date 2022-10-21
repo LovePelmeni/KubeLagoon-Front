@@ -10,7 +10,6 @@ import RegistrationPage from "../views/RegistrationPage.vue";
 import InitializationModalPage from "../views/InitializationModalPage.vue";
 import EditInitializationModalPage from "../views/EditVirtualMachinePage.vue";
 
-import deployErrorDescription from "../components/deployError.vue";
 import ResetPassword from "../views/ResetPassword.vue";
 import NotFoundPage from "../components/NotFoundWindow.vue";
 
@@ -66,11 +65,6 @@ const routes = [
     component: EditInitializationModalPage,
   },
   {
-    path: "/virtual/machine/error/",
-    name: "virtual_machine_errors",
-    component: deployErrorDescription,
-  },
-  {
     path: "/edit/customer/profile/",
     name: "edit_customer_profile",
     component: EditCustomerProfile,
@@ -91,5 +85,6 @@ const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes
 })
+
 
 export { router };

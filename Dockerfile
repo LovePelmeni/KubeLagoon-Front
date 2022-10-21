@@ -19,3 +19,5 @@ RUN npm run build
 
 # Running Http Server
 ENTRYPOINT ["npm", "run", "serve"]
+
+

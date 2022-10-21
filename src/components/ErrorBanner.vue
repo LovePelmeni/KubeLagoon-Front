@@ -1,6 +1,6 @@
 <template>
   <div class="modal flex">
-    <div class="modal-content" style="width: 500px !important;">
+    <div class="modal-content" style="width: 500px !important; margin-left: 20px;">
       <v-icon style="color: red; margin-bottom: 30px;" size="50">mdi-alert</v-icon>
       <p style="color: red;">{{ ReasonError }}</p>
       <div class="actions flex">
@@ -24,8 +24,10 @@ export default {
   },
   methods: {
     ...mapMutations(
-    ["CLOSE_FAILED_DOWNLOAD_CERTIFICATE_ERROR",
-     "CLOSE_FAILED_REGENERATE_CERTIFICATE_ERROR"]
+    [
+      "CLOSE_FAILED_DOWNLOAD_CERTIFICATE_ERROR",
+     "CLOSE_FAILED_REGENERATE_CERTIFICATE_ERROR"
+    ]
     ),
     
     closeErrorBannerWindow() {
@@ -36,7 +38,6 @@ export default {
       if (this.$props.Regenerate === true) {
         this.CLOSE_FAILED_REGENERATE_CERTIFICATE_ERROR()
       }
-      console.log(this.DownloadFailed, this.RegenerationFailed)
     },
   },
   computed: {
