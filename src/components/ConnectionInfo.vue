@@ -1,7 +1,6 @@
 <template>
 
     <div class="container connectionInfo fluid" style="position: relative">
-
         <v-card-actions style="
             align-items: flex-end;
             flex: 0 0 auto;
@@ -33,7 +32,6 @@
             <v-icon v-if="VirtualMachine?.Shutdown === true" style="color: red; margin-right: 10px; margin-bottom: 3px;">mdi-close</v-icon>
             <v-icon v-if="VirtualMachine?.Deploying === true" style="color: yellow; margin-right: 10px; margin-bottom: 3px;">mdi-clock-outline</v-icon>
             <v-icon v-if="VirtualMachine?.Deploying === false && VirtualMachine?.Running === false && VirtualMachine?.Shutdown === false" style="color: red; margin-right: 10px; margin-bottom: 3px;">mdi-emoticon-dead</v-icon>
-            <!-- <v-icon v-if="VirtualMachine?.Running === false && VirtualMachine?.Shutdown === false && VirtualMachine?.Deploying === false" style="color: red; margin-bottom: 165px;">mdi-emoticon-dead</v-icon> -->
 
             <label style="color: #fff; max-width: 60%; margin-top: 10px; margin-bottom: 20px; font-size: 1rem;" v-if="VirtualMachine?.Running === true">
             Congrats! Your Virtual Server is Running, you can connect to it using instructions down below

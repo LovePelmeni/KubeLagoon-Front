@@ -1,11 +1,11 @@
 <template>
   <v-app>
 
-    <div class="profile-content container" style="position: relative; background-color: #141625; space-between;">
+    <div class="profile-content container fluid" style="position: relative; background-color: #141625; justify-content: space-between; display: flex;">
 
-      <div class="customerProfileImage">
+      <div class="customerProfileImage" style="position: relative; height: 500px; width: 500px;">
       <img :src="require('../assets/customer_avatar.png')" 
-      style="height: 500px; width: 500px; left: 0; top: 50px; position: absolute; margin-left: 40px;" >
+      style="height: 500px; width: 500px; left: 0; top: 50px; margin-left: 40px;" >
       </div>
 
       <!-- Checking if the Customer Profile has been Obtained, otherwise, it is going to be not found page -->
@@ -59,8 +59,8 @@
               v-model="Email"
               :rules="EmailRules"
               type="email"
-              label="Email"
-              placeholder="Email"
+              label="Username"
+              placeholder="Username"
               prepend-inner-icon="mdi-account"
               />
 
@@ -73,7 +73,10 @@
               />
               
               <v-select
-              style="background-color: #1e2139; margin-top: 20px;"
+              style="background-color: #1e2139; margin-top: 20px; 
+              .v-input__details{
+                  background-color: #141625 !important; 
+              }"
               item-title="countryTitle"
               item-value="countryValue"
               v-model="Country"
@@ -359,4 +362,9 @@ export default {
     margin-top: 16px;
   }
 }
+
+.v-input__details{
+    background-color: #141625 !important; 
+}
+
 </style>
