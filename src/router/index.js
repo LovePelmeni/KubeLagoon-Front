@@ -17,7 +17,6 @@ import HomePage from "../views/home.vue";
 import BillPage from "../views/BillPage.vue";
 import ApplySubscriptionComponent from "../components/SubscriptionApplyComponent.vue";
 
-
 const routes = [
   {
     path: "/",

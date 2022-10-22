@@ -29,7 +29,6 @@ export default {
         GetCustomerProfile() {
             // Obtaining the Customer Profile from the Store 
             this.customerProfile = this.customer
-            console.log(this.customerProfile, "customer profile")
         }
     }
 }

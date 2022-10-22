@@ -10,12 +10,12 @@
       <h2 v-else style="color: #fff; align-text: center; display: flex; justify-content: center; margin-left: 180px;">Unknown</h2>
       <p v-if="Email" style="color: gray; align-text: center; margin-left: 180px;">{{ Email }}</p>
       <p v-else style="color: gray; align-text: center; margin-left: 180px;">Unknown</p>
-      <v-btn v-if="EditProfile == false" style="background-color: #7c5dfa; margin-top: 30px; margin-left: 180px; width: 180px;" type="submit" @click="EditProfileController">Edit Profile</v-btn>
-      <v-btn type="submit" v-if="EditProfile == true" @click="CancelEditProfileController" id="CancelSetup" style="background-color: #ec5757; margin-top: 30px; margin-left: 180px; width: 180px;" :loading="CancelLoading">Cancel Setup</v-btn>
+      <v-btn v-if="EditProfile == false" style="background-color: #7c5dfa; margin-top: 60px; margin-left: 180px; width: 180px;" type="submit" @click="EditProfileController">Edit Profile</v-btn>
+      <v-btn type="submit" v-if="EditProfile == true" @click="CancelEditProfileController" id="CancelSetup" style="background-color: #ec5757; margin-top: 60px; margin-left: 180px; width: 180px;" :loading="CancelLoading">Cancel Setup</v-btn>
       </div>
 
       <!-- Checking if the Customer Profile has been Obtained, otherwise, it is going to be not found page -->
-      <v-col v-if="JwtToken != null && ProfileFetchFailure === false" cols="10" lg="6" class="mx-auto"> 
+      <v-col v-if="ProfileFetchFailure === false" cols="10" lg="6" class="mx-auto"> 
 
         <v-card class="pa-4" style="background-color: #141625;">
           <v-form id="CustomerProfileForm" ref="form">
@@ -92,11 +92,7 @@
               type="country"
               placeholder="select Country"
               prepend-inner-icon="mdi-account"
-              :items="[
-              'Russia', 'USA', 
-              'England', 'Germany', 
-              'France', 'Italy', 
-              'Norway', 'Ukraine', 'Canada']">
+              :items="Countries">
               </v-select>
 
 
@@ -204,7 +200,7 @@ export default {
     return { cookie };
   },
   mounted() {
-    this.JwtToken = this.cookie?.get("jwt-token") || "jwt-token"
+    this.JwtToken = this.cookie?.get("jwt-token") || ""
     this.CheckProfileFetched()
   },
   data() {
@@ -230,6 +226,7 @@ export default {
     UsernameRules: [
       username => !!username || 'Please enter Valid Username',
       username => (username && username.length >= 10) || 'Username should be 10 characters or more!',
+      username => username.length > 18 || 'Username should be less than 18 characters!',
     ],
 
     Email: function(object) {if(object.$props.customer.Email == null) {
@@ -252,13 +249,50 @@ export default {
     ],
 
     Country: {
-      'countryTitle': function(object) {return object.$props.customer["Country"]}(this),
-      'countryValue': function(object) {return object.$props.customer["Country"]}(this),
+      'countryTitle': function(object) {return object.$props.customer["Country"] || 'Unknown'}(this),
+      'countryValue': function(object) {return object.$props.customer["Country"] || 'Unknown'}(this),
     },
+    
+    Countries: [
+      {
+        "countryTitle": "Russia",
+        "countryValue": "Russia",
+      },
+      {
+        "countryTitle": "England",
+        "countryValue": "England",
+      },
+      {
+        "countryTitle": "Germany",
+        "countryValue": "Germany",
+      },
+      {
+        "countryTitle": "USA",
+        "countryValue": "USA",
+      },
+      {
+        "countryTitle": "France",
+        "countryValue": "France",
+      },
+      {
+        "countryTitle": "Poland",
+        "countryValue": "Poland",
+      },
+      {
+        "countryTitle": "Norway",
+        "countryValue": "Norway",
+      },
+      {
+        "countryTitle": "Canada",
+        "countryValue": "Canada",
+      },
+    ],
+
 
     CountryRules: [
       country => !!country || 'Please select the Country',
     ],
+
 
     ZipCode: function(object) {return object.$props.customer.ZipCode || object.MarkAsFetchFailure()}(this) || null,
     ZipCodeRules: [
@@ -396,5 +430,11 @@ export default {
 .v-input__details{
     background-color: #141625 !important; 
 }
+
+
+.v-input--disabled .v-input__details, .v-input--disabled .v-input__prepend, .v-input--disabled .v-input__append {
+  opacity: unset !important; 
+}
+
 
 </style>
