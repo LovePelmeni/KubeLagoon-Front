@@ -3,7 +3,7 @@
 
     <div class="profile-content container fluid" style="position: relative; background-color: #141625; justify-content: space-between; display: flex;">
 
-      <div class="customerProfileImage" style="position: relative; height: 500px; width: 500px;">
+      <div class="customerProfileImage" style="position: relative; height: 400px; width: 400px;">
       <img :src="require('../assets/customer_avatar.png')" 
       style="height: 500px; width: 500px; left: 0; top: 50px; margin-left: 40px;" >
       </div>
@@ -21,17 +21,20 @@
                 v-model="Username"
                 :rules="UsernameRules"
                 type="username"
-                label="Username"
                 placeholder="Username"
                 prepend-inner-icon="mdi-account"
               />
 
               <v-text-field
-                style="background-color: #1e2139; border-radius: 2px; 2px; 2px; 2px; margin-top: 20px;"
-                v-else
+                class="disabledTextField"
                 disabled
-                label="Username"
+                style="background-color: #1e2139; border-radius: 2px; 2px; 2px; 2px;"
+                v-else
+                v-model="Username"
+                :rules="UsernameRules"
+                type="username"
                 placeholder="Username"
+                prepend-inner-icon="mdi-account"
               />
               
               <v-text-field
@@ -40,16 +43,17 @@
                 v-model="Password"
                 :rules="PasswordRules"
                 :type="passwordShow?'text':'password'"
-                label="Password"
+                prepend-inner-icon="mdi-lock"
                 placeholder="Password"
               />
 
               <v-text-field
+                class="disabledTextField"
                 style="background-color: #1e2139; margin-top: 20px;"
                 v-else
                 disabled
-                label="Password"
                 placeholder="Password"
+                prepend-inner-icon="mdi-lock"
               />
               
 
@@ -59,29 +63,45 @@
               v-model="Email"
               :rules="EmailRules"
               type="email"
-              label="Username"
-              placeholder="Username"
+              placeholder="Email"
               prepend-inner-icon="mdi-account"
               />
 
               <v-text-field
+                class="disabledTextField"
                 style="background-color: #1e2139; margin-top: 20px;"
                 v-else
                 disabled
-                label="Email"
                 placeholder="Email"
+                type="email"
+                prepend-inner-icon="mdi-account"
               />
               
               <v-select
-              style="background-color: #1e2139; margin-top: 20px; 
-              .v-input__details{
-                  background-color: #141625 !important; 
-              }"
+              v-if="EditProfile === true && EditProfileDisabled === false"
+              style="background-color: #1e2139; margin-top: 20px;"
               item-title="countryTitle"
               item-value="countryValue"
               v-model="Country"
               type="country"
-              label="Country"
+              placeholder="select Country"
+              prepend-inner-icon="mdi-account"
+              :items="[
+              'Russia', 'USA', 
+              'England', 'Germany', 
+              'France', 'Italy', 
+              'Norway', 'Ukraine', 'Canada']">
+              </v-select>
+
+
+              <v-select
+              v-else
+              disabled
+              style="background-color: #1e2139; margin-top: 20px;"
+              item-title="countryTitle"
+              item-value="countryValue"
+              v-model="Country"
+              type="country"
               placeholder="select Country"
               prepend-inner-icon="mdi-account"
               :items="[
@@ -97,17 +117,18 @@
                 v-model="ZipCode"
                 :rules="ZipCodeRules"
                 type="zipCode"
-                label="ZipCode"
                 placeholder="Zip code"
-                prepend-inner-icon="mdi-account"
+                prepend-inner-icon="mdi-lock"
                 />
 
                 <v-text-field
+                  class="disabledTextField"
                 style="background-color: #1e2139; margin-top: 20px;"
                 v-else
                 disabled
-                label="ZipCode"
                 placeholder="ZipCode"
+                type="zipCode" 
+                prepend-inner-icon="mdi-lock"
                 />
               
 
@@ -117,17 +138,17 @@
                   v-model="Street"
                   :rules="StreetRules"
                   type="street"
-                  label="Street"
                   placeholder="Street"
-                  prepend-inner-icon="mdi-account"
+                  prepend-inner-icon="mdi-lock"
                 />
 
                 <v-text-field
+                  class="disabledTextField"
                   style="background-color: #1e2139; margin-top: 20px;"
                   v-else
                   disabled
-                  label="Street"
                   placeholder="Street"
+                  prepend-inner-icon="mdi-lock"
                 />
 
               </v-card-text>
@@ -247,6 +268,7 @@ export default {
     ],
     };
   },
+
   methods: {
     ...mapMutations(["TOGGLE_EDIT_CUSTOMER_AT_STORE"]),
 
@@ -311,7 +333,11 @@ export default {
 
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
+
+.v-input__details {
+    background-color: #141625 !important;
+}
 
 .profile-content {
 
