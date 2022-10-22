@@ -6,6 +6,12 @@
       <div class="customerProfileImage" style="position: relative; height: 400px; width: 400px;">
       <img :src="require('../assets/customer_avatar.png')" 
       style="height: 500px; width: 500px; left: 0; top: 50px; margin-left: 40px;" >
+      <h2 v-if="Username" style="color: #fff; align-text: center; margin-left: 180px;">{{ Username }}</h2>
+      <h2 v-else style="color: #fff; align-text: center; display: flex; justify-content: center; margin-left: 180px;">Unknown</h2>
+      <p v-if="Email" style="color: gray; align-text: center; margin-left: 180px;">{{ Email }}</p>
+      <p v-else style="color: gray; align-text: center; margin-left: 180px;">Unknown</p>
+      <v-btn v-if="EditProfile == false" style="background-color: #7c5dfa; margin-top: 30px; margin-left: 180px; width: 180px;" type="submit" @click="EditProfileController">Edit Profile</v-btn>
+      <v-btn type="submit" v-if="EditProfile == true" @click="CancelEditProfileController" id="CancelSetup" style="background-color: #ec5757; margin-top: 30px; margin-left: 180px; width: 180px;" :loading="CancelLoading">Cancel Setup</v-btn>
       </div>
 
       <!-- Checking if the Customer Profile has been Obtained, otherwise, it is going to be not found page -->
@@ -156,10 +162,8 @@
 
               <div class="save flex">
 
-                  <div class="buttonBlock flex" style="width: 800px">
-                    <v-btn type="submit" v-if="EditProfile == true" @click="CancelEditProfileController" id="CancelSetup" style="background-color: #ec5757" :loading="CancelLoading">Cancel Setup</v-btn>
-                    <v-btn v-if="EditProfile == true" style="background-color: green;" :loading="ApplyChangesloading" type="submit" @click="ApplyChangesProfileController">Save</v-btn>
-                    <v-btn v-if="EditProfile == false" style="background-color: #7c5dfa;" type="submit" @click="EditProfileController">Edit Profile</v-btn>
+                  <div class="buttonBlock flex" style="width: 800px; display: flex; justify-content: center;">
+                    <v-btn v-if="EditProfile == true" style="background-color: green; width: 180px;" :loading="ApplyChangesloading" type="submit" @click="ApplyChangesProfileController">Save</v-btn>
                   </div>
               </div>
               
@@ -258,7 +262,7 @@ export default {
 
     ZipCode: function(object) {return object.$props.customer.ZipCode || object.MarkAsFetchFailure()}(this) || null,
     ZipCodeRules: [
-      zipcode => zipcode.length > 0 || 'Please Enter the Valid ZIP Code',
+      zipcode => zipcode.length > 3 || 'Please Enter the Valid ZIP Code',
       zipcode => isNaN(zipcode) == false || 'Invalid Zip Code',
     ],
 
