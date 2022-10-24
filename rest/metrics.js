@@ -65,4 +65,5 @@ function GetVirtualMachineResourceMetricsRestController(JwtToken, VirtualMachine
     return ResponseMetrics, ResponseError
 }
 
+
 export { GetVirtualMachineResourceMetricsRestController, GetVirtualMachineWeekResourceMetricsRestController}

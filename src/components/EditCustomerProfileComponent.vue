@@ -227,6 +227,7 @@ export default {
       username => !!username || 'Please enter Valid Username',
       username => (username && username.length >= 10) || 'Username should be 10 characters or more!',
       username => username.length > 18 || 'Username should be less than 18 characters!',
+      username => username.split(" ").length <= 1 || 'Invalid Username, it can be only one-single word!'
     ],
 
     Email: function(object) {if(object.$props.customer.Email == null) {
@@ -236,7 +237,8 @@ export default {
     EmailRules: [
       email => !!email || 'Please Enter Valid E-mail',
       email => /.+@.+\..+/.test(email) || 'E-mail must be valid',
-      email => (email && email.length >= 11) || 'E-mail must be at least 11 characters'
+      email => (email && email.length >= 11) || 'E-mail must be at least 11 characters',
+      email => email.split(" ").length <= 1 || 'Invalid Email, can be only one-single word!'
     ],
 
     Password: function(object) {if (
@@ -246,6 +248,7 @@ export default {
     PasswordRules: [
       password => !!password || 'Please enter the Valid Password',
       password => (password && password.length >= 10) || 'Password must be 10 characters or more!',
+      password => password.split(" ").length <= 1 || 'Invalid Password, should be a one-single word!'
     ],
 
     Country: {
