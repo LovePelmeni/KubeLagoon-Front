@@ -16,13 +16,18 @@ import NotFoundPage from "../components/NotFoundWindow.vue";
 import HomePage from "../views/home.vue";
 import BillPage from "../views/BillPage.vue";
 import ApplySubscriptionComponent from "../components/SubscriptionApplyComponent.vue";
-
+import BankSelectionView from "../views/BankSelector.vue";
 
 const routes = [
   {
     path: "/",
     name: "main_page",
     component: HomePage,
+  },
+  {
+    path: "/bank/select/",
+    name: "select_bank",
+    component: BankSelectionView,
   },
   {
     path: "/virtual/machines/",
