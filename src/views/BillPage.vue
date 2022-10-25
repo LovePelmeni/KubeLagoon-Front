@@ -43,12 +43,13 @@
         </table>
         </div>
     </div>
+
 </template>
 
 <script>
 
 import { mapState } from 'vuex'
-import * as bill from "../../cost/virtualMachineCost.js"
+import * as bill from "../../cost/virtualMachineCost.js";
 
 
 export default {
@@ -118,6 +119,7 @@ export default {
         ])
     }
 }
+
 </script>
 
 <style lang="scss">

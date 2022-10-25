@@ -421,6 +421,11 @@ export default new Vuex.Store({
 
     // Handles Customer's Statuses
 
+    SELECT_BANK(state, bankObject) {
+      // Selecting the Bank for taking the Payment from the Customer
+      state.selectedPaymentBank = bankObject
+    },
+
     TOGGLE_FAILED_DOWNLOAD_CERTIFICATE_ERROR(state, DownloadError) {
       state.DownloadError = DownloadError
       state.DownloadFailed = true
