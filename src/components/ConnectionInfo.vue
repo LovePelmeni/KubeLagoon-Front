@@ -99,7 +99,7 @@
                         font-weight: 400;
                         margin: 0;
                         padding: 0;"> {{VirtualMachine?.Ssh.RootUsername}}@{{ VirtualMachine?.Ssh.IpAddress}} </span> 
-                         -p {{ VirtualMachine?.Ssh.RootPassword }}
+                        -p {{ VirtualMachine?.Ssh.RootPassword }}
                 </li>
             </ol>
         </code>
@@ -160,7 +160,6 @@
 </template>
 
 <script>
-
 
 import * as ssh from "../../ssh/ssh.js";
 import * as ssh_rest from "../../rest/ssh.js";
