@@ -7,7 +7,6 @@
 
                     <div class="p-3 pb-0 card-header">
                         <h6 style="color: #fff; font-family: 'Segoe UI','Roboto','Oxygen','Ubuntu','Cantarell', 'Fira Sans','Droid Sans','Helvetica Neue',sans-serif;">{{ Bank.bankTitle }}</h6></div>
-                        
                         <!-- eslint-disable vue/no-v-html -->
 
                         <div class="p-2 card-body" style="background-color: #1e2238; border-radius: 0px 0px 10px 10px; height: 190px;">
@@ -85,13 +84,6 @@ export default {
             this.bank = Bank
             this.SELECT_BANK(Bank)
         },
-        CreatePaymentMethodRequest() {
-            // Initializes the Payment Request, based on the Total Amount, and selected Bank
-        }, 
-        ApproveSubmittion() {
-            // Approve the Submittion of the Bank Selection Form 
-            this.CreatePaymentMethodRequest()
-        }
     },
 }
 
