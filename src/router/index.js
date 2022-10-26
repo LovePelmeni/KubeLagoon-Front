@@ -17,12 +17,19 @@ import HomePage from "../views/home.vue";
 import BillPage from "../views/BillPage.vue";
 import ApplySubscriptionComponent from "../components/SubscriptionApplyComponent.vue";
 import BankSelectionView from "../views/BankSelector.vue";
+import CheckoutView from "../views/CheckoutView.vue";
+
 
 const routes = [
   {
     path: "/",
     name: "main_page",
     component: HomePage,
+  },
+  {
+    path: "/checkout/",
+    name: "bill_checkout",
+    component: CheckoutView,
   },
   {
     path: "/bank/select/",
