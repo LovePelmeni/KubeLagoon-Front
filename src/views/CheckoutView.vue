@@ -1,5 +1,4 @@
 <script>
-
 import BankSelectionComponent from "../components/BankSelectionComponent.vue";
 
 export default {
@@ -9,17 +8,16 @@ export default {
         <!--- Bank Selection Component, that customer picking up, before making any Payments ---!>
         <div class="bankSelection" style="align-items: center;">
         <bank-selection-component />
+        <button id="checkoutPaymentButton" @click="SubmitPaymentForm">Pay</button>
         </div>
     </div>`,
     components: {
         BankSelectionComponent,
     },
-    data() {
-        return {
-
-        }
-    },
     methods: {
+        SubmitPaymentForm() {
+            // Submitting Payment Form and Creating new Payment Request 
+        },
         RedirectToPaymentRequestController() {
             // Redirecting to the Payment Window Component, once the Info for checkout has been specified
             this.$router.push({name: "payment_page"})
