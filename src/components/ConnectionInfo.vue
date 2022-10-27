@@ -13,7 +13,7 @@
 
             right: 0;
             top: 0;
-            top: 70px;
+            top: 0px;
         ">
         <v-btn icon @click="showConnectionInfoDocs = !showConnectionInfoDocs">
             <v-icon>{{ showConnectionInfoDocs ? 'mdi-cast-connected' : 'mdi-cast-connected' }}</v-icon>
