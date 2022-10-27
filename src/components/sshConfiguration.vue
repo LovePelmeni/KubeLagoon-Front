@@ -24,7 +24,7 @@
             position: absolute;
             right: 0;
             top: 0;
-            top: 70px;
+            top: 0px !important;
               ">
 
                 <v-btn icon @click="showRootCertificateDescription = !showRootCertificateDescription">
@@ -72,7 +72,7 @@
             position: absolute;
             right: 0;
             top: 0;
-            top: 70px;">
+            top: 0px; !important">
 
                 <v-btn icon @click="showRootCredentialsDescription = !showRootCredentialsDescription">
                   <v-icon>{{ showRootCredentialsDescription ? 'mdi-chevron-up' : 'mdi-chevron-down' }}</v-icon>

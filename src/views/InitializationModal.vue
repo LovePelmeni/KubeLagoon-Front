@@ -452,6 +452,11 @@ export default {
 <style lang="scss" scoped>
 
 
+.v-card-actions {
+  top: 0px !important;
+}
+
+
 .v-card[data-v-8b415dba] {
     margin-top: 50px;
     overflow: initial;
