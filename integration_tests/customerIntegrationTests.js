@@ -1,8 +1,8 @@
 import * as customers_rest from "../rest/customers.js"
 
 const CustomerSchemeData = {}
-
 const GeneratedJwtToken = jwt.generateToken(CustomerSchemeData)
+
 
 function TestCreateCustomer() {
     // Testing the Customer Creation Rest Controller 
@@ -45,5 +45,6 @@ function TestResetCustomerPassword() {
 
 TestCreateCustomer()
 TestDeleteCustomer() 
-TestEditCustomer() 
+TestEditCustomer()
 TestResetCustomerPassword()
+TestLoginCustomer()

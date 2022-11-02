@@ -1,5 +1,6 @@
 import * as ssh_rest from "../rest/ssh.js"
 
+
 class VirtualMachineSshManager {
   // Manager Class, for managing the SSH of the Virtual Machine Server 
   GetSshCertificate(JwtToken, VirtualMachineId) {

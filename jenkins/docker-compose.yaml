@@ -1,5 +1,4 @@
 # Docker Compose CI / CD Server Infrastcture for the KubeLagoon Project 
-
 version: "3.8"
 services:
 
