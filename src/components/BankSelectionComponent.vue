@@ -84,6 +84,7 @@ export default {
                 "bankTitle": "SberBank",
                 "bankValue": "SberBank",
                 "bankLogo": "../assets/sberbank.svg",
+                "selected": false,
             }
         }
     },
@@ -96,8 +97,8 @@ export default {
             let Bank = function() { 
                 for (let BankGroup in this.banks) {
                     for (let Bank in BankGroup) {
-                        if (Bank.bankTitle.toLowerCase() === BankTitle) {
-                            Bank.selected = true
+                        if (Bank["bankTitle"].toLowerCase() === BankTitle.toLowerCase()) {
+                            Bank["selected"] = true
                         }
                     }
                 }

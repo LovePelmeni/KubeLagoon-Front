@@ -6,6 +6,7 @@ import { useCookies } from "vue3-cookies";
 export default new Vuex.Store({
 
   state: {
+
     PaymentState: {
       // Payment State 
       SessionId: null, 
@@ -426,6 +427,11 @@ export default new Vuex.Store({
 
     // Handles Customer's Statuses
 
+    UNSELECT_BANK(state) {
+      // Unselecting the bank...
+      state.selectedPaymentBank = {}
+    },
+    
     SELECT_BANK(state, bankObject) {
       // Selecting the Bank for taking the Payment from the Customer
       state.selectedPaymentBank = bankObject
