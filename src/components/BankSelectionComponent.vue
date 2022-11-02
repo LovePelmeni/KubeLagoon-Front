@@ -1,30 +1,31 @@
 <template>
         <div class="banks" style="display: flex; min-width: 60%; max-width: 40%; justify-content: space-between; margin-left: 20%;">
-                <div v-for="(bankGroup, index) in banks" :key="index" class="container" style="justify-content: flex-end; max-width: 100%;">
-                <div v-for="(Bank, bankIndex) in bankGroup" :key="bankIndex" @click="SelectBank"
-                class="p-3 card-body container"
-                style="min-width: 250px; height: 250px; max-width: 60%; overflow: hidden;" >
-                <input id="bankTitle" hidden :value="Bank.bankTitle" />
+            <div v-for="(bankGroup, index) in banks" :key="index" class="container" style="justify-content: flex-end; max-width: 100%;">
+            <div v-for="(Bank, bankIndex) in bankGroup" :key="bankIndex" @click="SelectBank"
+            class="p-3 card-body container"
+            style="min-width: 250px; height: 250px; max-width: 60%; overflow: hidden;" >
+            <input id="bankTitle" hidden :value="Bank.bankTitle" />
 
-                    <div class="p-3 pb-0 card-header" style="border-radius: 10px 10px 0px 0px">
-                        <h6 style="color: #fff; font-family: 'Segoe UI','Roboto','Oxygen','Ubuntu','Cantarell', 'Fira Sans','Droid Sans','Helvetica Neue',sans-serif;">{{ Bank.bankTitle }}</h6></div>
-                        <!-- eslint-disable vue/no-v-html -->
+                <div class="p-3 pb-0 card-header" style="border-radius: 10px 10px 0px 0px">
+                    <h6 style="color: #fff; font-family: 'Segoe UI','Roboto','Oxygen','Ubuntu','Cantarell', 'Fira Sans','Droid Sans','Helvetica Neue',sans-serif;">{{ Bank.bankTitle }}</h6></div>
+                    <!-- eslint-disable vue/no-v-html -->
 
-                        <div :class="
-                        {   // Based on the Current Status of the Widget, it is going to have additional classes.
-                            'p-2 card-body selected': Bank.selected === true,
-                            'p-2 card-body': Bank.selected === false,
-                        }"
-                        style="background-color: #1e2238; border-radius: 0px 0px 10px 10px; height: 190px;">
-                        <button v-if="Bank.selected === true" class="btn btn-unselect">Unselect</button>
-                        <v-avatar size="150" v-if="Bank.selected === false">
-                            <v-img :src="require(`@/assets/banks/${Bank.bankLogo.split('/').at(-1)}`)"></v-img>
-                        </v-avatar>
+                    <div :class="
+                    {   // Based on the Current Status of the Widget, it is going to have additional classes.
+                        'p-2 card-body selected': Bank.selected === true,
+                        'p-2 card-body': Bank.selected === false,
+                    }"
+                    style="background-color: #1e2238; border-radius: 0px 0px 10px 10px; height: 190px;">
+                    <button v-if="Bank.selected === true" class="btn btn-unselect">Unselect</button>
+                    <v-avatar size="150" v-if="Bank.selected === false">
+                         <v-img :src="require(`@/assets/banks/${Bank.bankLogo.split('/').at(-1)}`)"></v-img>
+                    </v-avatar>
                         
-                    </div>
                 </div>
             </div>
         </div>
+    </div>
+
 </template>
 
 <script>
@@ -50,7 +51,8 @@ export default {
                     "selected": false,
                 },
                 ],
-                [{   
+                [
+                {   
                     "bankTitle": "TinkoffBank",
                     "bankValue": "", // unique identifier for the bank, that will be potentially used for making payment transaction
                     "bankLogo": "../assets/banks/sofcombank.svg",
@@ -103,8 +105,9 @@ export default {
             this.bank = Bank
             this.SELECT_BANK(Bank)
         },
-    },
+    }, 
 }
+
 
 </script>
 
@@ -119,6 +122,7 @@ export default {
 .selected {
     background-color: black !important;
 }
+
 .btn-unselect {
     background-color: #fff;
 }

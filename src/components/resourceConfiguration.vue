@@ -1,5 +1,4 @@
 <template>
-
       <div class="resourceConfigurationBlock" style="justify-content: space-around;">
 
       <h1 style="margin-top: 20px;">Resource Configuration</h1>
@@ -31,7 +30,6 @@
         v-if="!MaxCpu"
         :rules="MaxCpuRules"
         required
-
         id="MaxCpu" 
         v-model="MaxCpu" />
 
@@ -64,7 +62,6 @@
         id="MemoryInMegabytes"
         v-model="Memory"
         />
-
       </div>
 
       <div class="resources-details flex">
@@ -273,6 +270,8 @@ export default {
     },
   }
 };
+
+
 
 </script>
 

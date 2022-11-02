@@ -6,6 +6,11 @@ import { useCookies } from "vue3-cookies";
 export default new Vuex.Store({
 
   state: {
+    PaymentState: {
+      // Payment State 
+      SessionId: null, 
+      PaymentIntentId: null,
+    },
 
     // Banner Window States 
     ErrorBannerWindowClosed: false,

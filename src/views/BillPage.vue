@@ -51,7 +51,6 @@
 import { mapState } from 'vuex'
 import * as bill from "../../cost/virtualMachineCost.js";
 
-
 export default {
     name: "BillPage",
     data() {

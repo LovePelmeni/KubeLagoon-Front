@@ -22,9 +22,15 @@ export default {
         <bank-selection-component />
         <button class="btn btn-pay" style="width: 200px;"id="checkoutPaymentButton" @click="SubmitPaymentForm">Pay</button>
         </div>
-    </div>`,
+    </div>
+    `,
     components: {
         BankSelectionComponent,
+    },
+    data() {
+        return {
+            PaymentLoading: false,
+        }
     },
     methods: {
         SubmitPaymentForm() {

@@ -1,4 +1,5 @@
 <template>
+
   <div class="py-3 mb-3 border-radius-lg pe-1" :class="`bg-gradient-${color}`">
     <div class="chart">
       <canvas style="height: 170px; width: 400px; max-width: 1000px; display: block; box-sizing: border-box;" :id="id" class="chart-canvas" height="150"></canvas>
@@ -51,11 +52,14 @@
       </div>
     </div>
   </div>
+
 </template>
+
 <script>
 
 import Chart from "chart.js/auto";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+
 export default {
   name: "CapacityChart",
   components: {
@@ -95,6 +99,7 @@ export default {
       },
     },
   },
+
   mounted() {
     var ctx = document.getElementById(this.id).getContext("2d");
     let chartStatus = Chart.getChart(this.id);

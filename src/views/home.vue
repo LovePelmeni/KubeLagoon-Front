@@ -141,7 +141,6 @@
 
 <script>
 
-
 import paymentBanner from "@/components/paymentBanner.vue";
 import { useCookies } from "vue3-cookies";
 import { mapState } from "vuex";
@@ -177,7 +176,6 @@ export default {
         Authenticated() {return this.$store.state.authenticated }
     }
 }
-
 
 </script>
 
