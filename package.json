@@ -23,6 +23,7 @@
     "roboto-fontface": "*",
     "sass": "^1.54.8",
     "scss-loader": "^0.0.1",
+    "stripe": "^10.15.0",
     "tiny-cookie": "^2.3.2",
     "ts-loader": "^9.4.1",
     "uid": "^2.0.0",

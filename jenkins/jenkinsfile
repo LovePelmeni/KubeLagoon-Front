@@ -39,8 +39,9 @@ pipeline {
                 post {
                   emailext body: "Pipeline has been Executed, Go check for Results",
                   subject: "Front App CI Pipeline", to: env.ORGANIZATION_EMAIL
+                  success "echo 'Pipeline Completed, Notification has been Sent to the Organization Management Email'"
                 }
             }
-        }
+        } 
     }
 }

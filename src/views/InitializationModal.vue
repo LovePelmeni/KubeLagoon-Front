@@ -158,6 +158,7 @@ export default {
   },
   data() {
     return {
+
       // Loading Statuses
       Createloading: null, 
       Saveloading: null, 
@@ -352,7 +353,6 @@ export default {
       if (GetError != null) {this.TOGGLE_ERROR(GetError.error)}
       this.VirtualMachineItemList = VirtualMachinesQueryset
     },
-
 
     // Virtual Machine Functions Goes There
     CreateNewVirtualMachine() {

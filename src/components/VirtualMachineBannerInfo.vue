@@ -60,7 +60,7 @@ export default {
       return DaysAgo
     }
   }, 
-};
+}
 
 </script>
 
