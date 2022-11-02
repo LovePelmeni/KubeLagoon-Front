@@ -58,7 +58,6 @@
 
 <script>
 
-
 import { mapMutations, mapActions, mapState } from "vuex";
 import VirtualMachineBannerInfo from "../components/VirtualMachineBannerInfo.vue";
 import NotAuthenticatedWindow from "../components/NotAuthenticatedWindow.vue";

@@ -802,12 +802,12 @@ export default new Vuex.Store({
       )
 
       // Initializing Empty Virtual Machine Server Instance
-      let initialized, initializationError = vmManager.InitializeVirtualMachine(JwtToken, HardwareConfiguration)
-        if (initialized && initializationError == null) {
+      let initialized, initializationErrorCode = vmManager.InitializeVirtualMachine(JwtToken, HardwareConfiguration)
+        if (initialized && initializationErrorCode == null) {
           // Applying Customized Configuration
 
-          let appliedInfo, applyError = vmManager.ApplyVirtualMachineConfiguration(JwtToken, CustomizedConfiguration, initialized["VirtualMachineId"])
-          if (applyError != null && appliedInfo != null) {
+          let appliedInfo, applyErrorCode = vmManager.ApplyVirtualMachineConfiguration(JwtToken, CustomizedConfiguration, initialized["VirtualMachineId"])
+          if (applyErrorCode === null && appliedInfo !== null) {
 
             let virtualMachine = vmManager.GetVirtualMachine(JwtToken, appliedInfo["VirtualMachineId"])
             virtualMachine["Running"] = true
@@ -815,14 +815,18 @@ export default new Vuex.Store({
             virtualMachine["Deploying"] = false
 
             commit('INSERT_NEW_VIRTUAL_MACHINE', state.VirtualMachineData, virtualMachine)
-            return appliedInfo, applyError
+            return appliedInfo, applyErrorCode
           }else{
             commit('TOGGLE_ERROR', "Failed to Apply Configuration")
-            return;
+            if (String(applyErrorCode) === "300") {return null, 300} // Error Code, that is being returned, once the Customer did not paid for the Previous Usage Session
+            if (String(applyErrorCode) === "400") {return null, 400} // Error Code, that is being returned, because of the invalid configuration parameters / invalid data
+            if (String(applyErrorCode) === "500") {return null, 500} // Error Code, that is being returned, once there is some unknown error has occurred
           }
         }else{
           commit('TOGGLE_ERROR', "Failed to Initialize Virtual Machine")
-          return;
+          if (String(initializationErrorCode) === "300") {return null, 300} // Bill Required Error
+          if (String(initializationErrorCode) === "400") {return null, 400} // Invalid Configuration
+          if (String(initializationErrorCode) === "500") {return null, 500} // Server Error
         }
     },
 

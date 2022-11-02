@@ -108,6 +108,11 @@
       </v-snackbar>
     </div>
 
+
+    <error-banner  v-if="ServerErrorCode === 500" :ReasonError="'Failed To Initialize New Server, Unknown Error'" />
+    <error-banner  v-if="ServerErrorCode === 400" :ReasonError="'Failed To Initialize New Server, Invalid Parameters Specified'" />
+    <error-banner  v-if="ServerErrorCode === 300" :ReasonError="'Failed To Initialize New Server, You havent paid for the previous session'" />
+    
     <body>
         <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
         <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css" rel="stylesheet">
@@ -129,6 +134,7 @@ import resourceConfiguration from "../components/resourceConfiguration.vue";
 
 import sshConfiguration from  "../components/sshConfiguration.vue";
 import { VirtualMachineCostCalculator } from "../../cost/virtualMachineCost.js";
+import ErrorBanner from "../components/ErrorBanner.vue";
 
 export default {
 
@@ -164,7 +170,7 @@ export default {
       // Operation Types specification 
       Operated: false,
       OperationFailed: false,
-      VirtualServerInitializationError: null,
+      ServerErrorCode: 0,
 
       // General Extra Attributes
       dateOptions: { year: "numeric", month: "short", day: "numeric" },
@@ -202,6 +208,7 @@ export default {
     hardwareConfiguration,
     resourceConfiguration,
     sshConfiguration,
+    ErrorBanner,
   },
   created() {
 
@@ -359,19 +366,18 @@ export default {
       let customizedConfigurationData = this.GetResourceConfigurationSubmittedFormData()
 
       this.loading = true
-      let VirtualMachineInfo, CreationError = this.CREATE_VIRTUAL_MACHINE(
+      let VirtualMachineInfo, CreationErrorCode = this.CREATE_VIRTUAL_MACHINE(
       this.JwtToken, customizedConfigurationData, hardwareConfigurationData)
 
       // If the Virtual Machine Has been Successfully Initialized and Created
       // Adding it to the Customer's Virtual Machine Item List
 
-      if (CreationError == null) {
+      if (CreationErrorCode === null) {
         let VmManager = new vm.VirtualMachineManager()
         let VirtualMachine = VmManager.GetVirtualMachine(this.JwtToken, VirtualMachineInfo["VirtualMachineId"])
         this.addVirtualMachineToList(VirtualMachine)
       }else{
-        this.VirtualServerInitializationError = CreationError 
-        this.OperationFailed = true
+        this.ServerErrorCode = CreationErrorCode
       }
       this.Createloading = false
     },
