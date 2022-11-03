@@ -3,7 +3,25 @@
 import * as stripe from "stripe";
 import PaymentBehaviourBanner from "../components/PaymentBehaviourBanner.vue";
 import * as crypto from "crypto";
-import * as jwt from "jose";
+
+class CheckoutBillCalculator {
+    // Calculating Price for the Payment Checkout Bill 
+    constructor(Currency, BillInformation) {
+        this.currency = Currency
+        this.BillInformation = BillInformation 
+    }
+    CalculateTotal() {
+        // Calculating Total Checkout Price 
+        let TotalPrice = 0
+        for (let Server in this.BillInformation.Metadata.Servers) {
+            TotalPrice += Number(Server.TotalCost)
+        }
+        return {
+            "Quantity": this.BillInformation.Metadata.Servers.length(),
+            "TotalCost": TotalPrice,
+        }
+    }
+}
 
 class PaymentIntentControllerManager {
     // Cotnroller for Managing the Payment Intent Requests 
@@ -39,52 +57,40 @@ class PaymentIntentControllerManager {
     }
 }
 
-class PaymentMethodControllerManager {
+class PaymentSessionControllerManager {
 
     // Controller for Managing the Payment Session Requests
 
-    constructor(self, PaymentMethodInformation, JwtToken)  {
+    constructor(self, PaymentMethodInformation)  {
         this.self = self 
         this.PaymentMethodInformation = PaymentMethodInformation
-        this.JwtToken = JwtToken
-    }
-    getCustomerCredentials() {
-        // Getting the Information from the Jwt Token 
-        return jwt.decodeJwt(this.JwtToken)
     }
     InitializePaymentMethodRequest() {
-        // Initializing New Payment Method Request  
-        let CustomerInformation = this.getCustomerCredentials()
-        let PaymentMethod = stripe.createPaymentMethod({
-            type: "card",
-            card: "",   
-            billing_details: {
-                name: CustomerInformation["Username"],
-                email: CustomerInformation["Email"]
-            }
+        // Initializing New Payment Method Request 
+        try {
+        let BillCostInformation = new CheckoutBillCalculator("usd", this.PaymentMethodInformation).CalculateTotal()
+        let PaymentMethodSession = stripe.checkout.sessions.create({
+            payment_method_types: ["card"],
+                line_items: [{
+                    price_data: {
+                        currency: "USD",
+                        product_data: {
+                            servers: this.PaymentMethodInformation["Metadata"]["Servers"],
+                        },
+                        unit_amount: BillCostInformation.TotalCost, // setting up the total cost
+                    },
+            quantity: BillCostInformation.Quantity,
+        }],
+        mode: "payment",
+        success_url: `http://${env.BACKEND_APPLICATION_HOST}:${env.BACKEND_APPLICATION_PORT}/payment/success/page/`,
+        cancel_url: `http://${env.BACKEND_APPLICATION_HOST}:${env.BACKEND_APPLICATION_PORT}/payment/cancel/page/`,
         })
-        return PaymentMethod["method_id"]
-    }
-}
-
-class RefundControllerManager {
-    // Controller for managing the Refund Requests
-    constructor(self, paymentId) {
-        this.self = self
-        this.paymentId = paymentId
-    }
-    InitializeRefundRequest() {
-        // Initializing the Refund Request 
-        let Refund = new stripe.createRefund(this.paymentId, null, null)
-        Refund.on('failure', function() {
-            // Checking the Failure events for the Refund 
-        }) 
-        Refund.on('success', function() {
-            // Checking the Success events for the Refund 
-        })
-        Refund.on('cancel', function() {
-            // checking the Cancel event for the Refund 
-        })
+        return PaymentMethodSession.id
+        } catch(Exception) {
+            this.self.paymentFailed = true 
+            this.self.paymentError = "Failed to Perform Payment"
+            return null 
+        }
     }
 }
 
@@ -114,8 +120,26 @@ export default {
     methods: {
         Pay() {
             // Method is being called, once the Payment has been Initialized Successfully
+            // * Initializing Payment Session 
+            let PaymentSessionManager = new PaymentSessionControllerManager(this, {
+                "Metadata": {
+                    "ServerName": Bill.Metadata.ServerName,
+                    "ServerType": Bill.Metadata.ServerType,
+                }
+            })
+            let PaymentSessionId = PaymentSessionManager.InitializePaymentMethodRequest()  // Receiving the Payment Session Id 
+            stripe.redirectToCheckout({session_id: PaymentSessionId}) // Redirecting to the Form 
+            .then(function(sessionResponse) {
+                if (sessionResponse.error != null) {
+                this.paymentError = sessionResponse.error; this.paymentFailed = true}
+            }) 
+            this.paymentFailed = false 
+            this.paymentError = null
         },
     },
+    computed: {
+        ...mapState(["Bill"]),
+    }
 }
 </script>
 

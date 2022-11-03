@@ -83,7 +83,6 @@ import { mapMutations } from "vuex";
     }
   },
 }
-
 </script>
 
 <style lang="scss">

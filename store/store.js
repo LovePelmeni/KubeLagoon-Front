@@ -13,6 +13,32 @@ export default new Vuex.Store({
       PaymentIntentId: null,
     },
 
+    Bill: {
+      // Bill Information about the Current Resource Usage 
+      Metadata: {
+        Servers: [
+        {
+          ServerName: "VirtualMachine-3",
+          ServerType: "VirtualMachine",
+          TotalUsageCost: 1000,
+          currency: "usd",
+        },
+        {
+          ServerName: "VirtualMachine-4",
+          ServerType: "VirtualMachine",
+          TotalUsageCost: 2000,
+          currency: "usd",
+        },
+        {
+          ServerName: "VirtualMachine-5",
+          ServerType: "VirtualMachine",
+          TotalUsageCost: 3000,
+          currency: "usd",
+        }
+      ]
+      }
+    },
+
     // Banner Window States 
     ErrorBannerWindowClosed: false,
 
