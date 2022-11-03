@@ -2,6 +2,8 @@
 
 import * as stripe from "stripe";
 import PaymentBehaviourBanner from "../components/PaymentBehaviourBanner.vue";
+import * as crypto from "crypto";
+import * as jwt from "jose";
 
 class PaymentIntentControllerManager {
     // Cotnroller for Managing the Payment Intent Requests 
@@ -10,10 +12,11 @@ class PaymentIntentControllerManager {
     }
     GeneratePaymentIntentCode() {
         // Generates payment Intent Random code, for payment request identification 
+        return crypto.randomUUID()
     }
-    InitializePaymentRequest() {
+    SendFinalPaymentRequest() {
         // Initializing Payment Request 
-        newPayment = new stripe.PaymentRequest({
+        let newPayment = new stripe.PaymentRequest({
             country: this.PaymentInformation["country"],
             currency: this.PaymentInformation["currency"],
             total: {
@@ -29,18 +32,60 @@ class PaymentIntentControllerManager {
         newPayment.on('success', function() {
             this.self.paymentSucceeded = true
         })
-        newPayment.on('failure', function() {
+        newPayment.on('failure', function(event) {
             this.self.paymentFailed = true
+            this.self.paymentError = event
         })
     }
 }
 
 class PaymentMethodControllerManager {
-    // Controller for Managing the Payment Session Requests 
+
+    // Controller for Managing the Payment Session Requests
+
+    constructor(self, PaymentMethodInformation, JwtToken)  {
+        this.self = self 
+        this.PaymentMethodInformation = PaymentMethodInformation
+        this.JwtToken = JwtToken
+    }
+    getCustomerCredentials() {
+        // Getting the Information from the Jwt Token 
+        return jwt.decodeJwt(this.JwtToken)
+    }
+    InitializePaymentMethodRequest() {
+        // Initializing New Payment Method Request  
+        let CustomerInformation = this.getCustomerCredentials()
+        let PaymentMethod = stripe.createPaymentMethod({
+            type: "card",
+            card: "",   
+            billing_details: {
+                name: CustomerInformation["Username"],
+                email: CustomerInformation["Email"]
+            }
+        })
+        return PaymentMethod["method_id"]
+    }
 }
 
 class RefundControllerManager {
     // Controller for managing the Refund Requests
+    constructor(self, paymentId) {
+        this.self = self
+        this.paymentId = paymentId
+    }
+    InitializeRefundRequest() {
+        // Initializing the Refund Request 
+        let Refund = new stripe.createRefund(this.paymentId, null, null)
+        Refund.on('failure', function() {
+            // Checking the Failure events for the Refund 
+        }) 
+        Refund.on('success', function() {
+            // Checking the Success events for the Refund 
+        })
+        Refund.on('cancel', function() {
+            // checking the Cancel event for the Refund 
+        })
+    }
 }
 
 export default {
