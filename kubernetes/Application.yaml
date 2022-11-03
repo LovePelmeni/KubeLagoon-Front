@@ -59,7 +59,6 @@ spec:
             - configMapRef:
                 - name: front-app-config-map
           imagePullPolicy: Always
-
 ---
 
 apiVersion: v1
@@ -113,3 +112,4 @@ data:
               }
           }
       }
+      

@@ -1,6 +1,5 @@
 <script>
 
-// import { mdiCloseThick } from '@mdi/js';
 import { mapMutations } from "vuex";
   export default {
     name: "CustomerProfile",
@@ -81,8 +80,8 @@ import { mapMutations } from "vuex";
         this.TOGGLE_HIDE_CUSTOMER_PROFILE()
         this.$router.push({name: "edit_customer_profile"})
         this.EditLoading = false
-      }
-    },
+    }
+  },
 }
 
 </script>

@@ -216,7 +216,7 @@ export default {
                 "Unknown Error: Failed to Regenerate SSH Certificate, Write Support" // adding regeneration error 
                 this.TOGGLE_FAILED_REGENERATE_CERTIFICATE_ERROR(RegenerationError)
             }
-        }
+        },
     },
 }
 
@@ -225,6 +225,7 @@ export default {
 <style lang="scss">
 
 .btn-upload-certificate {
+    // Upload Certificate Button 
     background-color: #ec5555;
     color: #fff !important;
 }

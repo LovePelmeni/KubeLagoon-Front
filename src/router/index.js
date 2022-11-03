@@ -18,6 +18,9 @@ import BillPage from "../views/BillPage.vue";
 import ApplySubscriptionComponent from "../components/SubscriptionApplyComponent.vue";
 import CheckoutView from "../views/CheckoutView.vue";
 
+import SuccessPage from "../components/payments/successPage.vue";
+import CancelPage from "../components/payments/cancelPage.vue";
+
 
 const routes = [
   {
@@ -84,6 +87,16 @@ const routes = [
     path: "/subscription/apply/:SubscriptionId",
     name: "apply_subscription_page",
     component: ApplySubscriptionComponent,
+  },
+  {
+    name: "success_page",
+    path: "/payment/success/page/",
+    component: SuccessPage,
+  },
+  {
+    name: "cancel_page",
+    path: "/payment/cancel/page/",
+    component: CancelPage,
   }
 ]
 

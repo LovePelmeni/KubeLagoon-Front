@@ -8,12 +8,6 @@
     </ion-header>
 
     <ion-content :fullscreen="true">
-      <ion-header collapse="condense">
-        <ion-toolbar>
-          <ion-title size="medium">Stripe Payment Gateway</ion-title>
-        </ion-toolbar>
-      </ion-header>
-
       <div id="container">
         <ion-grid>
           <ion-row>
@@ -50,7 +44,7 @@
 <script>
 
 export default {
-    name: "cancelPaymentPage",
+    name: "CancelPage",
     methods: {
         redirectBackToPayment() {
             this.$router.push({name: "payment_page", recoverSession: true})

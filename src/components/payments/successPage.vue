@@ -7,11 +7,6 @@
     </ion-header>
 
     <ion-content :fullscreen="true">
-      <ion-header collapse="condense">
-        <ion-toolbar>
-          <ion-title size="medium">Stripe Payment Gateway</ion-title>
-        </ion-toolbar>
-      </ion-header>
 
       <div id="container">
         <ion-grid>
@@ -41,7 +36,7 @@
 
 <script>
 export default {
-    name: "successPaymentPage",
+    name: "SuccessPage",
     methods: { 
         processSuccessPaymentRedirect() {
             this.$router.push({name: "main_page"})
