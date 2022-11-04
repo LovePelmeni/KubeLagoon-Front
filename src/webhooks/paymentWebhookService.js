@@ -7,8 +7,8 @@ let crossOriginResourceSharingLib = require("cors")
 let ApplicationWebhookServicePort = process.env.APPLICATION_WEBHOOK_SERVICE_PORT
 let webhookStripeSecret = process.env.WEBHOOK_STRIPE_SECRET
 
-import * as stripe from "stripe";
-
+var stripeModule = require("stripe").Stripe
+var stripe = stripeModule(webhookStripeSecret)
 
 class CheckoutUploaderManager {
     // Class, responsible for saving the Checkout Documents to the Database 
@@ -34,7 +34,9 @@ class CheckoutUploaderManager {
                 return httpError
             }
         })
-        if (HttpResponse) {}
+        if (HttpResponse.statusCode.toString().startsWith("2")) {
+        Logger.debug(`Payment Checkout #${this.PaymentIntentDocument["paymentId"]} has been Saved to the Storage`)}else{
+        Logger.error(`Failed to Save the Payment Checkout to the Storage, Error: ` + HttpResponse.responseJSON["Error"])}
         return this.OperationTimeout()
     }
 }
@@ -63,6 +65,7 @@ class PaymentWebhookManager {
 
 applicationService.post("/payment/webhook/", express.raw({type: "application/json"}),
  function(request, response) {
+     // Processing the Payment Webhook Http Request
     let approvementSignatureHeader = request.headers["stripe-signature"]
     try {
         let event = stripe.webhooks.constructEvent(
@@ -72,12 +75,16 @@ applicationService.post("/payment/webhook/", express.raw({type: "application/jso
         )
         if (event != null) {
             let WebhookManager = new PaymentWebhookManager() 
-            WebhookManager.ProcessWebhookPaymentState(event)
+            let CheckedWebhook = WebhookManager.ProcessWebhookPaymentState(event)
+            if (CheckedWebhook != null) {async () => {
+                let manager = new CheckoutUploaderManager(CheckedWebhook) 
+                return manager.UploadCheckout()
+            }}
         }
         response.setHeader("Cache-Control", "max_age=3600")
         response.status(201).send(`Payment has been Proceeded Successfully`)
     } catch(error) {
-        Logger.Info("Attempted to Fake the Webhook Payment Event")
+        Logger.info("Attempted to Fake the Webhook Payment Event")
         response.status(400).send(JSON.stringify({"Error": "Invalid Event: " + error}))
     }
 })
