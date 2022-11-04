@@ -2,7 +2,6 @@
 
 import * as stripe from "stripe";
 import PaymentBehaviourBanner from "../components/PaymentBehaviourBanner.vue";
-import * as crypto from "crypto";
 
 class CheckoutBillCalculator {
     // Calculating Price for the Payment Checkout Bill 
@@ -22,41 +21,6 @@ class CheckoutBillCalculator {
         }
     }
 }
-
-class PaymentIntentControllerManager {
-    // Cotnroller for Managing the Payment Intent Requests 
-    constructor(PaymentInformation) {
-        this.PaymentInformation = PaymentInformation
-    }
-    GeneratePaymentIntentCode() {
-        // Generates payment Intent Random code, for payment request identification 
-        return crypto.randomUUID()
-    }
-    SendFinalPaymentRequest() {
-        // Initializing Payment Request 
-        let newPayment = new stripe.PaymentRequest({
-            country: this.PaymentInformation["country"],
-            currency: this.PaymentInformation["currency"],
-            total: {
-                label: `payment_bill_${this.GeneratePaymentIntentCode()}`,
-                amount: this.PaymentInformation["amount"]
-            },
-            requestPayerName: true,
-            requestPayerEmail: true
-        })
-        newPayment.on('cancel', function(){
-            this.self.paymentCanceled = true
-        })
-        newPayment.on('success', function() {
-            this.self.paymentSucceeded = true
-        })
-        newPayment.on('failure', function(event) {
-            this.self.paymentFailed = true
-            this.self.paymentError = event
-        })
-    }
-}
-
 class PaymentSessionControllerManager {
 
     // Controller for Managing the Payment Session Requests
@@ -94,6 +58,30 @@ class PaymentSessionControllerManager {
     }
 }
 
+class PaymentIntentManager {
+    // Class, responsible for implementing the payment intent 
+    constructor(PaymentSession) {
+        this.PaymentSession = PaymentSession
+    }
+    CreatePaymentIntent() {
+        // Creating the Payment Intent, returns the Id of the Stripe Payment Intent Object 
+    }
+}
+
+class PaymentSessionConfirmationManager {
+    // Class, responsible for confirming the Payment Session Requests 
+    ConfirmPaymentRequest(PaymentIntentId) {
+        // Confirming the Payment Session Request 
+        stripe.confirmPayment(PaymentIntentId).then(function(resultEvent){
+            switch (resultEvent) {
+                case resultEvent.error: 
+                    pass 
+                case resultEvent.paymentIntent:
+                    pass 
+            }
+        })
+    }
+}
 import { loadStripe } from "stripe";
 
 export default {
@@ -126,7 +114,7 @@ export default {
         }
     },
     methods: {
-        Pay() {
+        CreatePaymentSession() {
             // Method is being called, once the Payment has been Initialized Successfully
             // * Initializing Payment Session 
             let PaymentSessionManager = new PaymentSessionControllerManager(this, {
@@ -143,6 +131,12 @@ export default {
             }) 
             this.paymentFailed = false 
             this.paymentError = null
+        },
+        CreatePaymentIntent() {
+            // Method is being called, once the Payment Session is being Initialized Successfully 
+        },
+        ConfirmPayment() {
+            // Confirming the Payment, once the Customer has filled out the Payment Form, and submitted it up
         },
     },
     computed: {
