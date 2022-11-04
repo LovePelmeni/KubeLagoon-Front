@@ -11,13 +11,10 @@ COPY package*.json ./
 # Copying Source...
 COPY . .
 
-# Installing Dependencies
-RUN npm install
+COPY ./ci_script.sh ./
+RUN chmod +x ./ci_script.sh 
 
-# Bulding App
-RUN npm run build
-
-# Running Http Server
-ENTRYPOINT ["npm", "run", "serve"]
+# Running Shell Script 
+ENTRYPOINT ["sh", "./ci_script.sh"]
 
 

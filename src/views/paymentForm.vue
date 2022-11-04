@@ -94,6 +94,8 @@ class PaymentSessionControllerManager {
     }
 }
 
+import { loadStripe } from "stripe";
+
 export default {
     name: "PaymentWindowView",
     template: `
@@ -106,6 +108,12 @@ export default {
         <payment-behaviour-banner v-if="paymentFailed" :ReasonError="paymentError" /> 
     </template>
     `,
+    setup() {
+        stripe = null; 
+        onMounted(async () => {
+            stripe = await loadStripe()
+        })
+    },
     components: {
         PaymentBehaviourBanner,
     },

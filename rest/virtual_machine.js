@@ -256,7 +256,6 @@ function RebootVirtualMachineRestController(JwtToken, VirtualMachineId) {
   return Response, ResponseError
 }
 
-
 function StartVmOsRestController(JwtToken, VirtualMachineId) {
   // Rest Controller, that Starts Virtual Machine Os HostSystem
   var APIUrl = new URL(`http://${BACKEND_APPLICATION_HOST}:${BACKEND_APPLICATION_PORT}/os/start/`);
