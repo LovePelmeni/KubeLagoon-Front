@@ -88,6 +88,7 @@ applicationService.post("/payment/webhook/", express.raw({type: "application/jso
         response.status(400).send(JSON.stringify({"Error": "Invalid Event: " + error}))
     }
 })
+
 // Initializing CORS Policy for the webhooks 
 
 applicationService.use(

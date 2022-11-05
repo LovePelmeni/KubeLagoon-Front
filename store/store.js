@@ -7,10 +7,9 @@ export default new Vuex.Store({
 
   state: {
 
-    PaymentState: {
-      // Payment State 
-      SessionId: null, 
-      PaymentIntentId: null,
+    checkoutData: {
+      checkoutId: null,
+      paymentInformation: {},
     },
 
     Bill: {

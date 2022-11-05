@@ -1,5 +1,6 @@
 <script>
 
+let Logger = require("pino")()
 import * as stripe from "stripe";
 import PaymentBehaviourBanner from "../components/PaymentBehaviourBanner.vue";
 
@@ -10,7 +11,7 @@ class CheckoutBillCalculator {
         this.BillInformation = BillInformation 
     }
     CalculateTotal() {
-        // Calculating Total Checkout Price 
+        // Calculating Total Checkout Price (in Cents)
         let TotalPrice = 0
         for (let Server in this.BillInformation.Metadata.Servers) {
             TotalPrice += Number(Server.TotalCost)
@@ -41,7 +42,7 @@ class PaymentSessionControllerManager {
                         product_data: {
                             servers: this.PaymentMethodInformation["Metadata"]["Servers"],
                         },
-                        unit_amount: BillCostInformation.TotalCost, // setting up the total cost
+                        unit_amount: BillCostInformation.TotalCost, // setting up the total cost in cents
                     },
             quantity: BillCostInformation.Quantity,
         }],
@@ -58,30 +59,6 @@ class PaymentSessionControllerManager {
     }
 }
 
-class PaymentIntentManager {
-    // Class, responsible for implementing the payment intent 
-    constructor(PaymentSession) {
-        this.PaymentSession = PaymentSession
-    }
-    CreatePaymentIntent() {
-        // Creating the Payment Intent, returns the Id of the Stripe Payment Intent Object 
-    }
-}
-
-class PaymentSessionConfirmationManager {
-    // Class, responsible for confirming the Payment Session Requests 
-    ConfirmPaymentRequest(PaymentIntentId) {
-        // Confirming the Payment Session Request 
-        stripe.confirmPayment(PaymentIntentId).then(function(resultEvent){
-            switch (resultEvent) {
-                case resultEvent.error: 
-                    pass 
-                case resultEvent.paymentIntent:
-                    pass 
-            }
-        })
-    }
-}
 import { loadStripe } from "stripe";
 
 export default {
@@ -114,6 +91,7 @@ export default {
         }
     },
     methods: {
+        ...mapMutations(["SAVE_PAYMENT_INTENT_CHECKOUT"]),
         CreatePaymentSession() {
             // Method is being called, once the Payment has been Initialized Successfully
             // * Initializing Payment Session 
@@ -126,17 +104,17 @@ export default {
             let PaymentSessionId = PaymentSessionManager.InitializePaymentMethodRequest()  // Receiving the Payment Session Id 
             stripe.redirectToCheckout({session_id: PaymentSessionId}) // Redirecting to the Form 
             .then(function(sessionResponse) {
-                if (sessionResponse.error != null) {
-                this.paymentError = sessionResponse.error; this.paymentFailed = true}
+                // Processing the Payment Session Response 
+                switch(sessionResponse) {
+                    case sessionResponse.error:
+                        Logger.error(`Failed to Confirm Payment Session, Error Has Occurred.
+                        ${sessionResponse.error}`)
+
+                    case sessionResponse.paymentIntent:
+                        Logger.debug(`Payment Session has been confirmed successfully`)
+                        this.SAVE_PAYMENT_INTENT_CHECKOUT(sessionResponse.paymentIntent) // saving the payment intent info to the vuex store 
+                }
             }) 
-            this.paymentFailed = false 
-            this.paymentError = null
-        },
-        CreatePaymentIntent() {
-            // Method is being called, once the Payment Session is being Initialized Successfully 
-        },
-        ConfirmPayment() {
-            // Confirming the Payment, once the Customer has filled out the Payment Form, and submitted it up
         },
     },
     computed: {
