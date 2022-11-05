@@ -452,6 +452,11 @@ export default new Vuex.Store({
 
     // Handles Customer's Statuses
 
+    SAVE_PAYMENT_INTENT_CHECKOUT(state, checkoutData) {
+      // Saving the Payment Intent Checkout to the Storage
+      state.checkoutData = checkoutData
+    },
+
     UNSELECT_BANK(state) {
       // Unselecting the bank...
       state.selectedPaymentBank = {}
