@@ -11,9 +11,9 @@
     <div class="paymentItemsDescription" v-show="Show">
         <!-- Describing the Full Information about the Virtual Server -->
     </div>
-    <v-expand-devision>
+    </v-expand-devision>
 
-<div>
+</div>
     
 </template>
 
@@ -24,8 +24,8 @@ export default {
     name: "CheckoutItemInfo",
     props: ["Show"],
     mounted() {
-        if (!this.Show) {
-            this.Show = false
+        if (!this.$props.Show) {
+            this.$props.Show = false
         }
     }
 }

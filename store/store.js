@@ -7,11 +7,6 @@ export default new Vuex.Store({
 
   state: {
 
-    checkoutData: {
-      checkoutId: null,
-      paymentInformation: {},
-    },
-
     Bill: {
       // Bill Information about the Current Resource Usage 
       Metadata: {
@@ -34,7 +29,7 @@ export default new Vuex.Store({
           TotalUsageCost: 3000,
           currency: "usd",
         }
-      ]
+      ],
       }
     },
 

@@ -16,11 +16,10 @@ import NotFoundPage from "../components/NotFoundWindow.vue";
 import HomePage from "../views/home.vue";
 import BillPage from "../views/BillPage.vue";
 import ApplySubscriptionComponent from "../components/SubscriptionApplyComponent.vue";
-import CheckoutView from "../views/CheckoutView.vue";
 
 import SuccessPage from "../components/payments/successPage.vue";
 import CancelPage from "../components/payments/cancelPage.vue";
-import NftPaymentView from "../views/NftPaymentView.vue";
+import NftPaymentView from "../views/NftPayment.vue";
 
 
 const routes = [
@@ -28,11 +27,6 @@ const routes = [
     path: "/",
     name: "main_page",
     component: HomePage,
-  },
-  {
-    path: "/checkout/",
-    name: "bill_checkout",
-    component: CheckoutView,
   },
   {
     path: "/virtual/machines/",
