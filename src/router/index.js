@@ -20,6 +20,7 @@ import CheckoutView from "../views/CheckoutView.vue";
 
 import SuccessPage from "../components/payments/successPage.vue";
 import CancelPage from "../components/payments/cancelPage.vue";
+import NftPaymentView from "../views/NftPaymentView.vue";
 
 
 const routes = [
@@ -97,6 +98,11 @@ const routes = [
     name: "cancel_page",
     path: "/payment/cancel/page/",
     component: CancelPage,
+  },
+  {
+    name: "nft_payment_page",
+    component: NftPaymentView,
+    path: "/nft/payment/",
   }
 ]
 

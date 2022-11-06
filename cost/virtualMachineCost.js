@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 
-
+let Logger = require('pino')()
 // THERE YOU CAN DEFINE THE STOCK PRICE FOR ANY RESOURCES OF THE VIRTUAL MACHINE SERVER 
 // CPU, MEMORY, STORAGE DISK, RUNTIME USAGE etc... 
 
@@ -19,6 +19,35 @@ export {
   MEMORY_STOCK_PRICE,
 }
 
+class VirtualMachineCostManager {
+  // Class, responsible for parsing current Virtual Machine Server Payout Amount
+  GetVirtualMachineCurrentCost(VirtualMachineId, JwtToken) {
+    // Returns the Current Cost in the (United State Dollars), within the current day 
+    let APIUrl = new URL(`http://${process.env.BACKEND_APPLICATION_HOST}:${process.env.BACKEND_APPLICATION_PORT}/get/virtual/machine/cost/`);
+    APIUrl.searchParams.append("VirtualMachineId", VirtualMachineId)
+    let HttpResponse = global.jQuery.ajax({
+      url: APIUrl.toString(),
+      async: false,
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Credentials": "true",
+        "Access-Control-Allow-Methods": "GET,POST,PUT,OPTIONS,DELETE",
+        "Authorization": JwtToken,
+      },
+      type: "GET",
+      success: function(response) {
+        // Processing Http Response
+        let TotalCostAmount = Number(response.responseJSON["TotalCost"]);
+        return TotalCostAmount
+      },
+      error: function(error){
+        Logger.info('Failed to Parse Virtual Machine Server Total Cost Parameters' + 'Error: ' + error)
+        return 0
+      }
+    })
+    return HttpResponse
+  }
+}
 
 class BillCalculator {
   // Default Bill Calculator Class for the Virtual Machine Server Resources 
@@ -105,5 +134,6 @@ export {
 VirtualMachineCostCalculator,
 CpuUsageBillCalculator, MemoryUsageBillCalculator,
 StorageUsageBillCalculator,
+VirtualMachineCostManager,
 };
 

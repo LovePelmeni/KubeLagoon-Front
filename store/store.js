@@ -452,6 +452,10 @@ export default new Vuex.Store({
 
     // Handles Customer's Statuses
 
+    SET_BILL_VALUES(state, bill) {
+      state.Bill = bill
+    },
+
     SAVE_PAYMENT_INTENT_CHECKOUT(state, checkoutData) {
       // Saving the Payment Intent Checkout to the Storage
       state.checkoutData = checkoutData

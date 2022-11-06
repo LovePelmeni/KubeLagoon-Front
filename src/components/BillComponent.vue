@@ -42,7 +42,7 @@
 
 <script>
 
-import BankSelectionComponent from "../components/BankSelectionComponent.vue";
+import BankSelectionComponent from "./PaymentSelectionComponent.vue";
 
 export default {
     name: "BillComponent",

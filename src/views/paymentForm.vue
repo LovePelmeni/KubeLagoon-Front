@@ -18,7 +18,7 @@ class CheckoutBillCalculator {
         }
         return {
             "Quantity": this.BillInformation.Metadata.Servers.length(),
-            "TotalCost": TotalPrice,
+            "TotalCost": TotalPrice * 100,
         }
     }
 }
@@ -58,21 +58,11 @@ class PaymentSessionControllerManager {
         }
     }
 }
-
+// When the Customer get's Redirected to this Page
 import { loadStripe } from "stripe";
 
 export default {
     name: "PaymentWindowView",
-    template: `
-    <template>
-        <div class="paymentForm"> 
-            <!-- Payment Window -->
-        </div>
-        <button class="btn btn-pay" @click="Pay">
-        <payment-behaviour-banner v-if="paymentCanceled" :ReasonError="You Canceled the Payment, Want to repeat?" /> 
-        <payment-behaviour-banner v-if="paymentFailed" :ReasonError="paymentError" /> 
-    </template>
-    `,
     setup() {
         stripe = null; 
         onMounted(async () => {
@@ -81,6 +71,9 @@ export default {
     },
     components: {
         PaymentBehaviourBanner,
+    },
+    mounted() {
+        this.CreatePaymentSession()
     },
     data() {
         return {
@@ -97,8 +90,7 @@ export default {
             // * Initializing Payment Session 
             let PaymentSessionManager = new PaymentSessionControllerManager(this, {
                 "Metadata": {
-                    "ServerName": Bill.Metadata.ServerName,
-                    "ServerType": Bill.Metadata.ServerType,
+                    "Servers": this.Bill.Metadata.Servers
                 }
             })
             let PaymentSessionId = PaymentSessionManager.InitializePaymentMethodRequest()  // Receiving the Payment Session Id 
