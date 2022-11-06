@@ -7,6 +7,7 @@ contract VirtualServerPaymentContract {
 
     address constant private ORGANIZATION_NFT_ADDRESS = "";
     VirtualMachineInformation private VirtualMachineInformation; 
+    VirtualMachineOwnerInformation private VirtualMachineOwnerInformation;
     PaymentSessionInformation private PaymentSessionInformation;
 
     struct VirtualMachineServerOwnerInformation {
@@ -50,9 +51,20 @@ contract VirtualServerPaymentContract {
         string CreatedAt; // Creation Date 
     }
 
-    function GetPaymentInformation() private returns (PaymentSessionInformation); // Method for Getting / Receving Payment Information
+    function SetPaymentSessionInformation(mapping (string => string) PaymentSession) private returns (bool);
+        // Setting up the Payment Session Information Structure
+    
+    function SetVirtualMachineInformation(mapping(string => string)) private returns (bool);
+        // Setting up the Virtual Machine Information Structure
+    
+    function SetVirtualMachineOwnerInformation(mapping(string => string)) private returns (bool);
+        // Setting up the Virtual Machine Owner Information Structure
 
-    function CreatePayment() public returns (CheckoutInformation); // Method for Creating Payment 
+    function GetPaymentInformation() private returns (PaymentSessionInformation); 
+    // Method for Getting / Receving Payment Information
+
+    function CreatePayment() public returns (CheckoutInformation); 
+    // Method for Creating Payment 
 }
 
 
@@ -61,9 +73,12 @@ contract VirtualMachineServerSmartContractPayment is VirtualServerPaymentContrac
     /// @author Klimushin Kirill (kirklimushin@gmail.com) 
     /// @notice Contract is implementing the Payment for the Virtual Server Subscription (Resources Usage)
 
-    function IsPayableAccount(address CustomerAccount) private returns (bool) {
+    event PaymentApprovement (address _sender, uint _value); // event, that has been sended, once the payment has been approvement, and successfully executed
+    event PaymentFailed (string _reason); // event, that has been sended, once the payment has been failed to perform 
+
+    function IsPayableAccount(string CustomerAccount) private returns (bool) {
         // Checking if the Account Is Payable or not 
-        if(payable(CustomerAccount).send(0)) {
+        if( CustomerAccount.send(0)) {
             return true;
         }
         return false;
@@ -78,14 +93,17 @@ contract VirtualMachineServerSmartContractPayment is VirtualServerPaymentContrac
 
     function TransferETH(address CustomerAccount) private {
         // Transfering ETH from Smart Contract, to the Organization's Crypto Wallet 
-        this.ORGANIZATION_NFT_ADDRESS.send(this.PaymentSessionInformation["TotalAmount"]); // in WEI 
+        bool sended = this.ORGANIZATION_NFT_ADDRESS.send(this.PaymentSessionInformation["TotalAmount"]); // in WEI 
+        if (sended) {
+            emit PaymentApprovement(msg.sender, msg.value);
+        }else{
+            emit PaymentFailed(sended.msg);
+        }
     }
 
-    function GetPaymentInformation() private returns (mapping (string => string)) {
+    function GetPaymentInformation() private returns (PaymentSessionInformation) {
         // Returns the Information about the Payment in the JSON Format 
-        this.PaymentSessionInformation storage PaymentSession = new PaymentSession();
-        this.PaymentSessionInformation["VirtualMachineInfo"] = new VirtualMachineInformation();
-        this.PaymentSessionInformation["TotalAmount"] = 100;
+        return this.PaymentSessionInformation
     }
 }
 

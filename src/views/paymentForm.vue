@@ -104,7 +104,7 @@ export default {
 
                     case sessionResponse.paymentIntent:
                         Logger.debug(`Payment Session has been confirmed successfully`)
-                        this.SAVE_PAYMENT_INTENT_CHECKOUT(sessionResponse.paymentIntent) // saving the payment intent info to the vuex store 
+                        this.SAVE_PAYMENT_INTENT_CHECKOUT(sessionResponse.paymentIntent) // saving the payment intent info to the vuex store
                 }
             }) 
         },
