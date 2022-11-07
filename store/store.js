@@ -7,6 +7,7 @@ export default new Vuex.Store({
 
   state: {
 
+    PaymentSucceeded: false, // This state is being 
     Bill: {
       // Bill Information about the Current Resource Usage 
       Metadata: {
@@ -161,6 +162,7 @@ export default new Vuex.Store({
         "Running": true, 
         "Deploying": false, 
         "Shutdown": false, 
+        "paid": true,
         "paymentDueDate": "2020-20-02", 
         "paymentTerms": 30, 
         "CreatedAt": "1/2/2020",
@@ -205,6 +207,7 @@ export default new Vuex.Store({
         "Running": false, 
         "Deploying": true, 
         "Shutdown": false, 
+        "paid": false,
         "paymentDueDate": "2020-20-02", 
         "paymentTerms": 60,
         "CreatedAt": "1/2/2019",
@@ -250,6 +253,7 @@ export default new Vuex.Store({
         "Running": true, 
         "Deploying": false, 
         "Shutdown": false, 
+        "paid": false,
         "paymentDueDate": "2020-20-02", 
         "paymentTerms": 60, 
         "CreatedAt": "1/2/2020",
@@ -294,6 +298,7 @@ export default new Vuex.Store({
         "Running": false, 
         "Deploying": true, 
         "Shutdown": false, 
+        "paid": true,
         "paymentDueDate": "2020-20-02",
         "paymentTerms": 30,
         "CreatedAt": "1/2/2021",
@@ -344,6 +349,7 @@ export default new Vuex.Store({
         "Running": true, 
         "Deploying": false, 
         "Shutdown": false, 
+        "paid": false,
         "paymentDueDate": "2020-20-02",     
         "paymentTerms": 30,
         "CreatedAt": "1/2/2020",
@@ -388,6 +394,7 @@ export default new Vuex.Store({
         "Running": false, 
         "Deploying": false, 
         "Shutdown": true, 
+        "paid": false,
         "paymentDueDate": "2020-20-02",
         "paymentTerms": 30,
         "CreatedAt": "10/5/2021",
@@ -446,6 +453,16 @@ export default new Vuex.Store({
   mutations: {
 
     // Handles Customer's Statuses
+
+    TOGGLE_PAYMENT_STATUS_UNPAID(state) {
+      // Marks Payment Status as Paid
+      state.PaymentSucceeded = false
+    },
+    
+    TOGGLE_PAYMENT_STATUS_PAID(state) {
+      // Marks Payment Status As Unpaid
+      state.PaymentSucceeded = true
+    },
 
     SET_BILL_VALUES(state, bill) {
       state.Bill = bill

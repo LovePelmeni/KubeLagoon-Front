@@ -10,6 +10,7 @@ import VirtualServerNotFoundWindow from "./VirtualServerNotFoundWindow.vue";
 import ChartPage from "../components/ResourceCharts.vue";
 import NotAuthenticatedWindow from "../components/NotAuthenticatedWindow.vue";
 import ForbiddenWindow from "../components/ForbiddenWindow.vue";
+import PaymentRequiredBanner from "../components/PaymentRequiredBanner.vue";
 
 import * as cost from "../../cost/virtualMachineCost";
 import * as resources from "../../usage/usage.js";
@@ -22,6 +23,7 @@ export default {
     VirtualMachineConnectionInfo, 
     NotAuthenticatedWindow,
     ForbiddenWindow,
+    PaymentRequiredBanner,
   },
   name: "VirtualMachineInfo",
   setup() {
@@ -36,21 +38,14 @@ export default {
   template: `
   <div v-if="ServerDoesExist && Authenticated && HasPermissions">
   <main class="detail">
-    <router-link :to="{ name: 'main_page' }" style="margin-right: 40px;" class="link">
-      <svg
-        class="back-icon"
-        color="hsl(252, 94%, 67%)"
-        viewBox="0 0 1024 1024"
-        style="stroke: currentcolor; fill: currentcolor"
-      >
-        <path d="M730.6 18.4l-505.4 505.2 505.4 505.4 144.8-144.8-360.6-360.6 360.6-360.4z"></path>
-      </svg>
-      <span class="back-text" @click="RedirectToPreviousPage">Go Back</span>
-    </router-link>
 
     <!-- Virtual Machine Server Connection Info  -->
 
-    <div class="virtualMachineConnectionInfo">
+    <div class="paymentRequiredBannerBlock">
+      <payment-required-banner v-if="VirtualMachine.paid === false" />
+    </div>
+
+    <div class="virtualMachineConnectionInfo" v-if="VirtualMachine.paid === true">
 
     <virtual-machine-connection-info :VirtualMachine="VirtualMachine" ref="VirtualMachineConnectionInfo" />
 
@@ -268,7 +263,7 @@ export default {
       // Operations Messages Parameters
       OperationSuccessMessage: null,
       VirtualMachineServerError: null, 
-      VirtualMachine: null,
+      VirtualMachine: {},
       VirtualMachineId: this.$route.params.VirtualMachineId,
 
     }

@@ -49,7 +49,7 @@
 
 <script>
 
-import { mapState } from "vuex";
+import { mapState, mapMutations } from "vuex";
 
 import CheckoutItemInfo from './CheckoutItemInfo.vue';
 import ServerErrorBanner from "../ServerErrorBanner.vue";
@@ -60,6 +60,7 @@ export default {
         return {
             NftPaymentFailed: false, 
             NftPaymentError: null,
+            TransactionStatus: "",
         }
     },
     components: {
@@ -67,14 +68,29 @@ export default {
         CheckoutItemInfo,
     },
     methods: {
+        ...mapMutations(["TOGGLE_PAYMENT_STATUS_UNPAID", "TOGGLE_PAYMENT_STATUS_PAID"]),
         SubmitNftForm() {
             // Submitting the Nft Form and Sending the Smart Contract 
+        },
+        CancelNftForm() {
+            // Canceling the Transaction using NFT (only works while the transaction is not pending)
         }
     },
     computed: {
-        ...mapState(["Bill"]),
+        ...mapState(["Bill", "PaymentSucceeded"]),
+    },
+    watch: {
+        PaymentSucceeded: function() { // Checking when the data is being changed after the 
+            if (this.$state.PaymentSucceeded === true) {
+                this.$router.push({name: "success_page"})
+                async() => {
+                    this.TOGGLE_PAYMENT_STATUS_UNPAID()
+                }
+            }
+        }
     }
 }
+
 </script>
 
 

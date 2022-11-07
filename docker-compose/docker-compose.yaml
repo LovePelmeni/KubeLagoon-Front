@@ -22,31 +22,24 @@ services:
       - cloud-infrastructure-network 
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8080/ping"]
-      interval: 10s
-      timeout: 5s
-      start_period: 10s
-      retries: 5
 
   stripe_payment_service:
-    - container_name: stripe-application-service 
-      build: ../webhooks/.
-      ports:
-        - "8001:8001"
-      healthcheck:
-        test: ["curl", "-f", "http://localhost:8001"]
-        retries: 5 
-        timeout: 10 
-        start_period: 10
-      networks:
-        - cloud-infrastructure-network
+    container_name: stripe-application-service 
+    build: ../src/webhooks/.
+    ports:
+      - "8001:8001"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8001"]
+    networks:
+      - cloud-infrastructure-network
 
   crypto_smart_contract_deployer: 
-    - container_name: smart-contract-deployer 
-      image: ethereum/sol 
-      ports:
-        - "4000:4000"
-      networks:
-        - cloud-infrastructure-network 
+    container_name: smart-contract-deployer 
+    image: ethereum/sol 
+    ports:
+      - "4000:4000"
+    networks:
+      - cloud-infrastructure-network 
 
 networks:
   cloud-infrastructure-network:

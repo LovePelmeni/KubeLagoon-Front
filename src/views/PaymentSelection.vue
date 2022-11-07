@@ -1,26 +1,26 @@
-<template>
+<script lang="javascript">
 
-    <div class='selectionBlock' style="justify-content: space-between; margin-left: 20%; margin-right: 20%; margin-top: 10%;">
-        <!-- Selection Options to Choose -->
-        <payment-selection-component :PaymentMethodIcon="'mdi-bitcoin'" :PaymentMethodName="'Crypto'" />
-        <payment-selection-component :PaymentMethodIcon="'mdi-dollar'" :PaymentMethodName="'Credit Card'" />
-        <v-btn class="btn btn-payment-selection" style="background-color: green;"><label>Select</label></v-btn>
-    </div>
-    
-</template>
-
-<script>
-
-import VirtualMachineCostManager from "../../cost/virtualMachineCost.js"
+import * as cost from "../../cost/virtualMachineCost.js"
 import { useCookies } from "vue3-cookies";
+import { mapState } from "vuex";
 
 export default {
     name: "PaymentSelectionView",
     setup() {
         const { cookies } = useCookies();
-        this.JwtToken = cookies.get("jwt-token");
+        const { JwtToken } = cookies.get("jwt-token");
         return JwtToken
     },
+    template: `
+
+        <div class='selectionBlock' style="justify-content: space-between; margin-left: 20%; margin-right: 20%; margin-top: 10%;">
+            <!-- Selection Options to Choose -->
+            <payment-selection-component :PaymentMethodIcon="'mdi-bitcoin'" :PaymentMethodName="'Crypto'" />
+            <payment-selection-component :PaymentMethodIcon="'mdi-dollar'" :PaymentMethodName="'Credit Card'" />
+            <v-btn class="btn btn-payment-selection" style="background-color: green;"><label>Select</label></v-btn>
+        </div>
+        
+    `,
     data() {
         return {
             PaymentSelectionLoading: false,
@@ -56,7 +56,7 @@ export default {
                                 "ServerName": VirtualMachineServer.ServerName, 
                                 "ServerType": VirtualMachineServer.ServerType,
                                 "TotalUsageCost": function() {
-                                    let Manager = new VirtualMachineCostManager()
+                                    let Manager = new cost.VirtualMachineCostManager()
                                     Manager.GetVirtualMachineCost(VirtualMachineServer.VirtualMachineId, this.JwtToken)
                                 }() || 0
                             })

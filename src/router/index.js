@@ -20,13 +20,18 @@ import ApplySubscriptionComponent from "../components/SubscriptionApplyComponent
 import SuccessPage from "../components/payments/successPage.vue";
 import CancelPage from "../components/payments/cancelPage.vue";
 import NftPaymentView from "../views/NftPayment.vue";
-
+import PaymentSelectionView from "../views/PaymentSelection.vue";
 
 const routes = [
   {
     path: "/",
     name: "main_page",
     component: HomePage,
+  },
+  {
+    path: "/select/payment/method/",
+    component: PaymentSelectionView, 
+    name: "select_payment_method",
   },
   {
     path: "/virtual/machines/",
