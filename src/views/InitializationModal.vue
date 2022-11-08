@@ -124,7 +124,6 @@
 
 <script>
 
-
 import { mapMutations, mapActions, mapState } from "vuex";
 import * as vm from "../../vm/vm.js";
 import { useCookies } from "vue3-cookies";

@@ -1,6 +1,7 @@
 pragma solidity ^ 0.8.8;
 
 contract VirtualServerPaymentContract {
+    
     /// @title Base Abstraction Class, implementing the Payment Contract for the Virtual Machine Server
     /// @author Klimushin Kirill (kirklimushin@gmail.com) 
     /// @notice Base Contract Class for Implementing Payments for Virtual Server Resource Usage

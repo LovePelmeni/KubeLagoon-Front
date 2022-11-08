@@ -8,6 +8,11 @@ export default new Vuex.Store({
   state: {
 
     PaymentSucceeded: false, // This state is being 
+    selectedPaymentOption: {
+      PaymentMethodId: "",
+      PaymentMethodType: "",
+      PaymentMethodName: "",
+    },
     Bill: {
       // Bill Information about the Current Resource Usage 
       Metadata: {
@@ -454,6 +459,28 @@ export default new Vuex.Store({
 
     // Handles Customer's Statuses
 
+    GET_CURRENT_PAYMENT_OPTION(state) {
+      return state.selectedPaymentOption
+    },
+
+    SELECT_PAYMENT_METHOD(state, paymentMethodObject) {
+      // Selecting the Payment Method Object 
+      state.selectedPaymentOption = {
+        "PaymentMethodName": paymentMethodObject.PaymentMethodName,
+        "PaymentMethodType": paymentMethodObject.PaymentMethodType,
+        "PaymentMethodId": paymentMethodObject.PaymentMethodId,
+      }
+    },
+    
+    UNSELECT_PAYMENT_METHOD(state) {
+      // Unselecting the Payment Method Object Option 
+      state.selectedPaymentOption = {
+        "PaymentMethodName": "",
+        "PaymentMethodType": "",
+        "PaymentMethodId": "",
+      };
+    },
+ 
     TOGGLE_PAYMENT_STATUS_UNPAID(state) {
       // Marks Payment Status as Paid
       state.PaymentSucceeded = false
@@ -471,16 +498,6 @@ export default new Vuex.Store({
     SAVE_PAYMENT_INTENT_CHECKOUT(state, checkoutData) {
       // Saving the Payment Intent Checkout to the Storage
       state.checkoutData = checkoutData
-    },
-
-    UNSELECT_BANK(state) {
-      // Unselecting the bank...
-      state.selectedPaymentBank = {}
-    },
-    
-    SELECT_BANK(state, bankObject) {
-      // Selecting the Bank for taking the Payment from the Customer
-      state.selectedPaymentBank = bankObject
     },
 
     TOGGLE_FAILED_DOWNLOAD_CERTIFICATE_ERROR(state, DownloadError) {

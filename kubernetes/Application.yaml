@@ -89,10 +89,24 @@ data:
           upstream front_application_upstream {
               server front_application:3000;
           }
+          # Stripe Payment Application Upstream 
+          upstream stripe_webhook_application {
+            server stripe_payment_application:8001;
+          }
           # Server Configuration for the Nginx Server 
           server {
               listen 3000;
               # Base Location for the Not Found Page 
+              location /payment/webhooks/ {
+                
+                proxy_pass http://stripe_webhook_application;
+                proxy_set_header Host $http_host;
+                proxy_set_header Upgrade $http_upgrade; 
+
+                add_header Access-Control-Allow-Origin "*";
+                add_header Access-Control-Allow-Methods "POST";
+                add_header Access-Control-Allow-Credentials "true";
+              }
               location @not_found {
                   # Redirects to the Not Found Page
                   rewrite ^/not/found(.*)$ https://${applicationHost}:${applicationPort}/$1 redirect;
