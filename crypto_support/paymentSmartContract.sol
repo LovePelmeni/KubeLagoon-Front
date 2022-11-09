@@ -6,7 +6,26 @@ contract VirtualServerPaymentContract {
     /// @author Klimushin Kirill (kirklimushin@gmail.com) 
     /// @notice Base Contract Class for Implementing Payments for Virtual Server Resource Usage
 
+
+    // Payment Status Events 
+
+    event PaymentApprovement (address _sender, uint _value); // event, that has been sended, once the payment has been approvement, and successfully executed
+    event PaymentFailed (string _reason); // event, that has been sended, once the payment has been failed to perform 
+
+
+    // Contract Constructor 
+    constructor(
+        bytes32 PaymentSessionJsonData, 
+        bytes32  VirtualMachineData, 
+        bytes32 VirtualMachineJsonOwnerData) {
+        // Compiling the Constructor Input to the Native Private Solidity Structures 
+        VirtualMachineInformation = this.GetVirtualMachineInformation(VirtualMachineData);
+        VirtualMachineOwnerInformation = this.GetVirtualMachineOwnerInformation(VirtualMachineJsonOwnerData);
+        PaymentSessionInformation = this.GetPaymentSessionInformation(PaymentSessionJsonData);
+    }
+
     address constant private ORGANIZATION_NFT_ADDRESS = "";
+
     VirtualMachineInformation private VirtualMachineInformation; 
     VirtualMachineOwnerInformation private VirtualMachineOwnerInformation;
     PaymentSessionInformation private PaymentSessionInformation;
@@ -52,14 +71,28 @@ contract VirtualServerPaymentContract {
         string CreatedAt; // Creation Date 
     }
 
-    function SetPaymentSessionInformation(mapping (string => string) PaymentSession) private returns (bool);
+    function GetPaymentSessionInformation(bytes32 PaymentSession) private returns (PaymentSessionInformation) {
         // Setting up the Payment Session Information Structure
+        PaymentSessionInformation storage PaymentSessionInfo = new PaymentSessionInformation(
+        );
+        return PaymentSessionInfo;
+    }
     
-    function SetVirtualMachineInformation(mapping(string => string)) private returns (bool);
+    function GetVirtualMachineInformation(mapping(string => string)) private returns (VirtualMachineInformation) {
         // Setting up the Virtual Machine Information Structure
+        VirtualMachineInformation storage VirtualMachineInfo = new VirtualMachineInformation(
+
+        );
+        return VirtualMachineInfo;
+    }
     
-    function SetVirtualMachineOwnerInformation(mapping(string => string)) private returns (bool);
+    function GetVirtualMachineOwnerInformation(mapping(string => string)) private returns (VirtualMachineOwnerInformation) {
         // Setting up the Virtual Machine Owner Information Structure
+        VirtualMachineOwnerInformation storage VirtualMachineOwnerInfo = new VirtualMachineOwnerInformation(
+
+        );
+        return VirtualMachineOwnerInformation;
+    }
 
     function GetPaymentInformation() private returns (PaymentSessionInformation); 
     // Method for Getting / Receving Payment Information
@@ -68,8 +101,8 @@ contract VirtualServerPaymentContract {
     // Method for Creating Payment 
 }
 
-
 contract VirtualMachineServerSmartContractPayment is VirtualServerPaymentContract {
+    
     /// @title Contract for making Payments for the Virtual Machine Server Resource Usage (Basic Subscription Payments)
     /// @author Klimushin Kirill (kirklimushin@gmail.com) 
     /// @notice Contract is implementing the Payment for the Virtual Server Subscription (Resources Usage)
@@ -104,7 +137,7 @@ contract VirtualMachineServerSmartContractPayment is VirtualServerPaymentContrac
 
     function GetPaymentInformation() private returns (PaymentSessionInformation) {
         // Returns the Information about the Payment in the JSON Format 
-        return this.PaymentSessionInformation
+        return this.PaymentSessionInformation;
     }
 }
 
