@@ -60,6 +60,7 @@ export default {
         ...mapMutations(["SET_BANK_VALUES", "GET_CURRENT_PAYMENT_OPTION"]),
 
         GetCurrentPaymentOption() {
+            console.log(this.GET_CURRENT_PAYMENT_OPTION())
             return this.GET_CURRENT_PAYMENT_OPTION()
         },
 

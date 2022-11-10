@@ -1,5 +1,7 @@
 let ethers = require('ethers')
+let jsonDecoder = require('fs')
 
+const SmartContractFilePath = "./paymentSmartContract.sol";
 
 class SmartContractPaymentSessionManager {
     // Defines the Payment Session Argument for the Smart Contract 
@@ -57,7 +59,8 @@ class SmartContractProviderManager {
 
 class DeploymentSmartContractManager {
     // Management Class for Deploying Smart Contracts onto ethereum platform 
-    constructor(SmartContractForm, SelectedProvider, SenderAddress) {
+    constructor(self, SmartContractForm, SelectedProvider, SenderAddress) {
+        this.self = self
         this.SmartContractForm = SmartContractForm  // Smart Contract Form 
         this.SenderAddress = SenderAddress // NFT Address of the Sender (Customer)
         this.OrganizationNftAddress = process.env.ORGANIZATION_NFT_ADDRESS // NFT Address of the Organization
@@ -72,7 +75,7 @@ class DeploymentSmartContractManager {
     async GetSmartContractAbi() {
         // Returns the Binary output for the Smart Contract, converts the JSON Data to the Data, which 
         // will be valid for the Smart Contract to be processed 
-        return []
+        return jsonDecoder.readFileSync(SmartContractFilePath).toString()
     }
     async DeploySmartContract() {
         // Deploying the Smart Contract to the Network 
@@ -110,15 +113,16 @@ class DeploymentSmartContractManager {
             // Checking if the Smart Contract has been purchased successfully 
             if (sender.toLowerCase() === CustomerNftAddress.toLowerCase()) {
                 // Marking the Payment as paid 
-                this.NftPaymentCheckoutInformation = {
-
-                }
+                this.self.TOGGLE_PAYMENT_STATUS_PAID()
+                this.self.TOGGLE_PAYMENT_STATUS_UNPAID()
             }
         })}
         async() => {newSmartContract.on("paymentFailed", function(sender, event) {
             // Checking if the smart Contract has been Failed 
             if (sender.toLowerCase() === CustomerNftAddress.toLowerCase()) {
                 // Marking the Payment as Failed
+                this.self.TOGGLE_PAYMENT_STATUS_UNPAID()
+                this.self.TOGGLE_PAYMENT_FAILED()
             }
         })}
 

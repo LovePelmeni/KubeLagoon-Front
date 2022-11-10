@@ -7,7 +7,8 @@ export default new Vuex.Store({
 
   state: {
 
-    PaymentSucceeded: false, // This state is being 
+    PaymentSucceeded: false, // 
+    PaymentFailed: false, //  
     selectedPaymentOption: {
       PaymentMethodId: "",
       PaymentMethodType: "",
@@ -460,6 +461,7 @@ export default new Vuex.Store({
     // Handles Customer's Statuses
 
     GET_CURRENT_PAYMENT_OPTION(state) {
+      // Returns the Current Payment Available Option 
       return state.selectedPaymentOption
     },
 
@@ -480,6 +482,11 @@ export default new Vuex.Store({
         "PaymentMethodId": "",
       };
     },
+
+    TOGGLE_PAYMENT_FAILED(state) {
+      // Marking Payment as Failed 
+      state.PaymentFailed = !state.PaymentFailed 
+    },
  
     TOGGLE_PAYMENT_STATUS_UNPAID(state) {
       // Marks Payment Status as Paid
@@ -496,7 +503,7 @@ export default new Vuex.Store({
     },
 
     SAVE_PAYMENT_INTENT_CHECKOUT(state, checkoutData) {
-      // Saving the Payment Intent Checkout to the Storage
+      // Saving the Payment Intent Checkout
       state.checkoutData = checkoutData
     },
 
