@@ -36,7 +36,7 @@ class SuggestionCardOfferingManager {
 
         }
     }
-
+    
 export default {
     name: "ApplySuggestionComponent",
     data() {

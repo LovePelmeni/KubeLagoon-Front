@@ -1,5 +1,5 @@
-let ethers = require('ethers')
-let jsonDecoder = require('fs')
+let ethers = require('ethers');
+let jsonDecoder = require('fs');
 
 const SmartContractFilePath = "./paymentSmartContract.sol";
 
@@ -50,10 +50,23 @@ class SmartContractProviderManager {
     }
     GetProvider() {
         // Returns the Appropriate Provider Based on the Customer Preference 
-        // Raise the 
+        // Raise the exception if not appropriate network provider has been found 
     }
     GetInfuraProvider() {
         // Returns the Infura Provider Abstraction for the Customer Wallet 
+    }
+}
+
+class EtherBalanceManager {
+    // Class, for managing the Customer's Crypto Balance, Connects, via ReadOnly 
+    constructor(CustomerNftAddress) {
+        this.CustomerNftAddress = CustomerNftAddress 
+    }
+    ConnectToWallet() {
+        // Connects to the Wallet, and parses the necessary information about the wallet
+    }
+    GetCustomerBalanceValue() {
+        // Returns the Balance of the Customer's Crypto Balance 
     }
 }
 
@@ -130,8 +143,7 @@ class DeploymentSmartContractManager {
 }
 
 export { 
+NftPaymentCheckoutInformation,
 DeploymentSmartContractManager, 
 SmartContractPurchaserManager, 
-PaymentSessionSmartContractInformationManager, 
-VirtualMachineServerSmartContractInformationManager,
-CustomerInformationSmartContractInformationManager}
+SmartContractPaymentSessionManager}

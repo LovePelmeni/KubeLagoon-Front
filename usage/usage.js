@@ -1,6 +1,5 @@
 import * as metrics_rest from "../rest/metrics.js"
 
-
 class WeekResourceUsageManager {
 
     // Manages the Virtual Machine Server Metrics within the Week

@@ -31,11 +31,6 @@ function TestPaymentRequiredErrorBanner() {
         () => expect(PaymentRequiredBannerComponent.text()).not.toBeNull())
     })
 }
-
-function TestConnectionInfoBanner() {
-    //
-}
-
 TestErrorBanner()
 TestPaymentRequiredErrorBanner()
 TestConnectionInfoBanner()

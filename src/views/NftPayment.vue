@@ -1,10 +1,10 @@
 <script>
 import * as crypto_blockchain_view from "../../crypto_support/deployer.js";
 import { NftPaymentForm } from "../components/payments/NftPaymentForm.vue";
-import  { mapMutations } from "vuex";
+import  { mapMutations, mapState } from "vuex";
 
 export default {
-    components: {NftPaymentForm},
+    components: { NftPaymentForm },
     data() {
         return {
             ActivatePaymentFailedBanner: false
@@ -12,6 +12,7 @@ export default {
     },
     template: `
         <nft-payment-form />
+        <v-show></v-show>
     `,
     name: "NftPaymentView",
     methods: {
@@ -43,7 +44,12 @@ export default {
         },
     },
     computed: {
-    ...mapState(["customer", "Bill", "PaymentSucceeded", "PaymentFailed"]),
+    ...mapState([
+        "customer", 
+        "Bill", 
+        "PaymentSucceeded", 
+        "PaymentFailed"
+    ]),
     },
     watch: {
         PaymentSucceeded: function() {

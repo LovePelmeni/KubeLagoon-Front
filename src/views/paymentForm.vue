@@ -4,8 +4,10 @@ let Logger = require("pino")()
 import * as stripe from "stripe";
 import PaymentBehaviourBanner from "../components/PaymentBehaviourBanner.vue";
 
+
 class CheckoutBillCalculator {
     // Calculating Price for the Payment Checkout Bill 
+
     constructor(Currency, BillInformation) {
         this.currency = Currency
         this.BillInformation = BillInformation 
@@ -21,7 +23,8 @@ class CheckoutBillCalculator {
             "TotalCost": TotalPrice * 100,
         }
     }
-}
+} 
+
 class PaymentSessionControllerManager {
 
     // Controller for Managing the Payment Session Requests
@@ -105,7 +108,7 @@ export default {
                     case sessionResponse.paymentIntent:
                         Logger.debug(`Payment Session has been confirmed successfully`)
                         this.SAVE_PAYMENT_INTENT_CHECKOUT(sessionResponse.paymentIntent) // saving the payment intent info to the vuex store
-                }
+                }   
             }) 
         },
     },
