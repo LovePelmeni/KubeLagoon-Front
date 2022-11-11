@@ -1,7 +1,7 @@
-
 let Logger = require("pino")();
 let ethers = require('ethers');
-let jsonDecoder = require('fs');
+const jsonDecoder = require('fs');
+
 
 const SmartContractFilePath = "./paymentSmartContract.sol";
 
