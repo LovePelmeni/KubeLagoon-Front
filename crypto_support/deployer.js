@@ -1,8 +1,5 @@
 let Logger = require("pino")();
 let ethers = require('ethers');
-const jsonDecoder = require('fs');
-
-
 const SmartContractFilePath = "./paymentSmartContract.sol";
 
 class SmartContractPaymentSessionManager {
@@ -14,7 +11,6 @@ class SmartContractPaymentSessionManager {
         // Returns the JSON Data Structure, that is capable of with the Smart Contract Constructor Input 
     }
 }
-
 
 class SmartContractVirtualMachineManager {
     // Class, for managing the Virtual Machine Information at the Smart Contract Form 
@@ -106,20 +102,18 @@ class DeploymentSmartContractManager {
         let PurchaserManager = new SmartContractPurchaserManager() 
         await PurchaserManager.PurchaseSmartContract() 
     }
-    async GetSmartContractAbi() {
-        // Returns the Binary output for the Smart Contract, converts the JSON Data to the Data, which 
-        // will be valid for the Smart Contract to be processed 
-        return jsonDecoder.readFileSync(SmartContractFilePath).toString()
+    GetContractByteCode() {
+        // Returns the ByteCode of the Formed Smart Contract 
+        return ethers.providers.getCode(SmartContractFilePath)
     }
     async DeploySmartContract() {
         // Deploying the Smart Contract to the Network 
 
         let Provider = new SmartContractProviderManager(this.selectedProvider).GetProvider() // connecting to the provider network 
         let CustomerNftAddressWallet = new ethers.Wallet(this.SenderAddress, Provider) // Sender Address 
-        let AbiBinaryData = await this.GetSmartContractAbi() // Receiving the Smart Contract ABI
         let ContractByteCode = await this.GetSmartContractByteCode() // Receving the Smart Contract Bytecode 
 
-        let newSmartContract = new ethers.ContractFactory(AbiBinaryData, ContractByteCode, CustomerNftAddressWallet) // Constructing the Smart Contract 
+        let newSmartContract = new ethers.ContractFactory(null, ContractByteCode, CustomerNftAddressWallet) // Constructing the Smart Contract 
         let InitialEtherBalance = new EtherBalanceManager().CalculateEtherBalance(this.SmartContractForm["Amount"])
 
         // Defining the Data for the Smart Contract, which directly goes to the Input Arguments 
@@ -160,7 +154,6 @@ class DeploymentSmartContractManager {
                 this.self.TOGGLE_PAYMENT_FAILED()
             }
         })}
-
     }
 }
 

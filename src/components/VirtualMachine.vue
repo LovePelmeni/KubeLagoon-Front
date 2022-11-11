@@ -265,7 +265,6 @@ export default {
       VirtualMachineServerError: null, 
       VirtualMachine: {},
       VirtualMachineId: this.$route.params.VirtualMachineId,
-
     }
   },
   methods: { 

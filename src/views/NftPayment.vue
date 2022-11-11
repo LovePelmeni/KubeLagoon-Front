@@ -47,8 +47,6 @@ export default {
     },
     computed: {
         ...mapState([
-        "customer",
-        "Bill", 
         "PaymentSucceeded", 
         "PaymentFailed"
         ]),

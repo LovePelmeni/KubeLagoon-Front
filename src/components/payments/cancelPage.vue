@@ -47,7 +47,8 @@ export default {
     name: "CancelPage",
     methods: {
         redirectBackToPayment() {
-            this.$router.push({name: "payment_page", recoverSession: true})
+          // Redirecting to the Payment Page back to the Session 
+            this.$router.push({name: "payment_page"});
         },
     } 
 }
