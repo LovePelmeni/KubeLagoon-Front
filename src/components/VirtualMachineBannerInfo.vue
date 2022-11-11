@@ -30,6 +30,7 @@
 </template>
 
 <script>
+
 import * as cost from "../../cost/virtualMachineCost"
 
 export default {

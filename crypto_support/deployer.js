@@ -1,3 +1,5 @@
+
+let Logger = require("pino")();
 let ethers = require('ethers');
 let jsonDecoder = require('fs');
 
@@ -12,6 +14,28 @@ class SmartContractPaymentSessionManager {
         // Returns the JSON Data Structure, that is capable of with the Smart Contract Constructor Input 
     }
 }
+
+
+class SmartContractVirtualMachineManager {
+    // Class, for managing the Virtual Machine Information at the Smart Contract Form 
+    constructor(SmartContractForm) {
+        this.SmartContractForm = SmartContractForm
+    }
+    GetVirtualMachineData() {
+        // Returns the Virtual Machine Information from the Smart Contract 
+    }
+}
+
+class SmartContractVirtualMachineOwnerManager {
+    // Class, for Managing the Server's Owner Information at the Smart Contract Form 
+    constructor(SmartContractForm) {
+        this.SmartContractForm = SmartContractForm
+    }
+    GetVirtualMachineOwnerData() {
+        // Returns the Virtual Machine Owner Data from the Smart Contract 
+    }
+}
+
 class SmartContractPurchaserManager {
     // Smart Contract Purchaser 
     constructor(SmartContractAddress) {
@@ -52,9 +76,6 @@ class SmartContractProviderManager {
         // Returns the Appropriate Provider Based on the Customer Preference 
         // Raise the exception if not appropriate network provider has been found 
     }
-    GetInfuraProvider() {
-        // Returns the Infura Provider Abstraction for the Customer Wallet 
-    }
 }
 
 class EtherBalanceManager {
@@ -93,19 +114,18 @@ class DeploymentSmartContractManager {
     async DeploySmartContract() {
         // Deploying the Smart Contract to the Network 
 
-        let Provider = new SmartContractProviderManager(this.selectedProvider).GetInfuraProvider() // connecting to the provider network 
+        let Provider = new SmartContractProviderManager(this.selectedProvider).GetProvider() // connecting to the provider network 
         let CustomerNftAddressWallet = new ethers.Wallet(this.SenderAddress, Provider) // Sender Address 
         let AbiBinaryData = await this.GetSmartContractAbi() // Receiving the Smart Contract ABI
         let ContractByteCode = await this.GetSmartContractByteCode() // Receving the Smart Contract Bytecode 
 
         let newSmartContract = new ethers.ContractFactory(AbiBinaryData, ContractByteCode, CustomerNftAddressWallet) // Constructing the Smart Contract 
         let InitialEtherBalance = new EtherBalanceManager().CalculateEtherBalance(this.SmartContractForm["Amount"])
-        
 
         // Defining the Data for the Smart Contract, which directly goes to the Input Arguments 
         // * Checkout the Smart Contract's Schema at `./paymentSmartContract.sol` to get the point, what is going on there 
         let PaymentSessionData = new SmartContractPaymentSessionManager(this.SmartContractForm).GetPaymentSessionData()
-        let VirtualMachineInformation = new SmartContractVirtualMachineManger(this.SmartContractForm).GetVirtualMachineData() 
+        let VirtualMachineInformation = new SmartContractVirtualMachineManager(this.SmartContractForm).GetVirtualMachineData() 
         let VirtualMachineOwnerInformation = new SmartContractVirtualMachineOwnerManager(this.SmartContractForm).GetVirtualMachineOwnerData() 
 
         // Deploying the Smart Contract 
@@ -122,17 +142,19 @@ class DeploymentSmartContractManager {
             await this.TriggerSmartContractPurchaser() 
         }
 
-        async() => {newSmartContract.on("paymentSucceeded", function(sender, event) {
+        async() => {newSmartContract.on("paymentSucceeded", function(sender, eventData) {
             // Checking if the Smart Contract has been purchased successfully 
-            if (sender.toLowerCase() === CustomerNftAddress.toLowerCase()) {
+            Logger.debug("Payment Success Event: ", eventData)
+            if (sender.toLowerCase() === this.SenderAddress.toLowerCase()) {
                 // Marking the Payment as paid 
                 this.self.TOGGLE_PAYMENT_STATUS_PAID()
                 this.self.TOGGLE_PAYMENT_STATUS_UNPAID()
             }
         })}
-        async() => {newSmartContract.on("paymentFailed", function(sender, event) {
+        async() => {newSmartContract.on("paymentFailed", function(sender, eventData) {
             // Checking if the smart Contract has been Failed 
-            if (sender.toLowerCase() === CustomerNftAddress.toLowerCase()) {
+            Logger.debug("Payment Failed Event: ", eventData)
+            if (sender.toLowerCase() === this.SenderAddress.toLowerCase()) {
                 // Marking the Payment as Failed
                 this.self.TOGGLE_PAYMENT_STATUS_UNPAID()
                 this.self.TOGGLE_PAYMENT_FAILED()
@@ -141,6 +163,7 @@ class DeploymentSmartContractManager {
 
     }
 }
+
 
 export { 
 NftPaymentCheckoutInformation,

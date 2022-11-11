@@ -105,7 +105,6 @@
         </code>
     </pre>
     </div>
-
          <div v-if="VirtualMachine?.Ssh.byRootCertificate === true && VirtualMachine?.Running === true" class="code-toolbar">
              <pre class="prefixed command language-bash" style="    
             background: #081b4b;

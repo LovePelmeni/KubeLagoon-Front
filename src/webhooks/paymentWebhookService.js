@@ -10,6 +10,7 @@ let webhookStripeSecret = process.env.WEBHOOK_STRIPE_SECRET
 var stripeModule = require("stripe").Stripe
 var stripe = stripeModule(webhookStripeSecret)
 
+
 class CheckoutUploaderManager {
     // Class, responsible for saving the Checkout Documents to the Database 
 
@@ -22,7 +23,7 @@ class CheckoutUploaderManager {
     async UploadCheckout() {
         // Uploading the Checkout Document to the Backend Server's Database 
         let APIUrl = new URL(`http://${process.env.BACKEND_APPLICATION_HOST}:${process.env.BACKEND_APPLICATION_HOST}/upload/payment/checkout/`)
-        let HttpResponse = $.ajax({
+        let HttpResponse = global.jQuery.ajax({
             url: APIUrl.toString(),
             data: JSON.stringify({"CheckoutDocument": this.PaymentIntentDocument}),
             type: "POST",
@@ -96,7 +97,7 @@ applicationService.use(
     {
         origin: `http://${process.env.BACKEND_APPLICATION_HOST}:${process.env.BACKEND_APPLICATION_PORT}`, 
         methods: "POST,PUT,DELETE,OPTIONS", 
-        exposedHeaders: "Keep-Alive,Connection,"
+        exposedHeaders: "Keep-Alive,Connection",
     }
 ))
 

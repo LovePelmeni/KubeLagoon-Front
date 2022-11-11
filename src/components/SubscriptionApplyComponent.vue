@@ -61,6 +61,6 @@ export default {
             let Configuration = SuggestionManager.GetSuggestionCardOfferingConfigurationById(suggestionCardOfferingId)
             return Configuration
         }
-    }
+    },
 }
 </script>

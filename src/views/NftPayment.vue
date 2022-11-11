@@ -12,7 +12,9 @@ export default {
     },
     template: `
         <nft-payment-form />
-        <v-show></v-show>
+        <v-snackbar v-if="ActivatePaymentFailedBanner" top color="red">
+            Failed to Perform Transaction
+        </v-snackbar>
     `,
     name: "NftPaymentView",
     methods: {
@@ -44,12 +46,12 @@ export default {
         },
     },
     computed: {
-    ...mapState([
-        "customer", 
+        ...mapState([
+        "customer",
         "Bill", 
         "PaymentSucceeded", 
         "PaymentFailed"
-    ]),
+        ]),
     },
     watch: {
         PaymentSucceeded: function() {
