@@ -34,6 +34,9 @@ export default {
     this.JwtToken = this.cookie?.get("jwt-token")
     this.getVirtualMachineServerInfo()
     this.MountResourceUsageMetrics()
+    if (this.VirtualMachine.paid === false) {
+      this.BlockOperationButtons()
+    }
   },
   template: `
   <div v-if="ServerDoesExist && Authenticated && HasPermissions">
@@ -81,48 +84,62 @@ export default {
       </div>
       <div class="btn-container">
         <button
+          id="RunButton"
           class="btn btn-edit"
           v-if="VirtualMachine.Running === false" 
           @click="StartVirtualMachine"
         >
           Run
         </button>
+        
         <button
+          id="RunButton"
           class="btn btn-edit"
           disabled
-          v-else-if="VirtualMachine.paid === false"
+          v-else
         >
           Run
         </button>
 
-        <button class="btn btn-delete" @click="DeleteVirtualMachine">Delete</button>
+        <button 
+          id="DeleteButton" 
+          class="btn btn-delete" 
+          @click="DeleteVirtualMachine"
+        >
+          Delete
+        </button>
+
         <button
+          id="ShutdownButton"
           class="btn btn-mark"
           v-if="VirtualMachine.Shutdown === false"
           @click="ShutdownVirtualMachine"
         >
           Shutdown
         </button>
+
         <button
+          id="ShutdownButton"
           class="btn btn-mark"
           style="color: rgb(131, 127, 127)"
-          v-else-if="VirtualMachine.paid === false"
+          v-else
           disabled
         >
           Shutdown
         </button>
 
-        <button class="btn" @click="UpdateVirtualMachine" style="
+        <button id="EditButton" class="btn" @click="UpdateVirtualMachine" style="
         background-color: #DE1D8D;
         margin-left: 10px;">Edit</button>
 
-        <button class="btn btn-reboot"  v-if="VirtualMachine.Running == true || VirtualMachine.Shutdown == true"
+        <button id="RebootButton" class="btn btn-reboot"  v-if="VirtualMachine.Running == true || VirtualMachine.Shutdown == true"
         @click="RebootVirtualMachine">
           Reboot
         </button>
 
         <button
-          v-else-if="VirtualMachine.paid === false"
+          id="RebootButton"
+          v-else
           class="btn btn-reboot"
           disabled
           >
@@ -235,6 +252,24 @@ export default {
     return {
 
       // Operation Information  
+
+      OperationButtons: [
+        {
+          "id": "RunButton",
+        },
+        {
+          "id": "DeleteButton",
+        },
+        { 
+          "id": "EditButton",
+        },
+        {
+          "id": "ShutdownButton",
+        },
+        {
+          "id": "RebootButton",
+        }
+      ],
       ResourceUsageMetrics: {
         "CpuMetrics": "-",
         "MemoryMetrics": "-",
@@ -276,6 +311,14 @@ export default {
       "REBOOT_VIRTUAL_MACHINE",
       "GET_VIRTUAL_MACHINE",
     ]),
+
+    BlockOperationButtons() {
+      // Blocks the Operational Buttons, if the payment is required to continue Virtual Server Usage 
+      for (let Button in this.OperationButtons) {
+        let button = document.getElementById(Button["id"]);
+        button.classList.add("BlockedOperationalButton");
+      }
+    },
 
     toggleError(ErrorMessage) {
       // Shows up Banner with an Exception
@@ -444,6 +487,11 @@ export default {
 
 <style lang="scss">
 
+
+.BlockedOperationalButton {
+  // Blocked Operational Button 
+  pointer-events: none;
+}
 
 .download-ssh-key-button {
   // Button for downloading ssh key of the Virtual Machine Server
