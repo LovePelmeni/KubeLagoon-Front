@@ -74,6 +74,7 @@ export default {
         },
         CancelNftForm() {
             // Canceling the Transaction using NFT (only works while the transaction is not pending)
+            this.$router.push({name: "cancel_page"})
         }
     },
     computed: {

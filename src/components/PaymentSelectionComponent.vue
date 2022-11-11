@@ -1,29 +1,24 @@
 <template>
-        <div :class="{
-         'container': selected === false && selectedOtherOption === false, // if this option is not selected, and others are not selected
-         'container disabled-selected': selected === false && selectedOtherOption === true, // if this option is not selected, but selected the other one 
-         'container selected': selected === true && selectedOtherOption === false, // if this option is selected
-         }" @click="selected = true" style="max-width: 100%; max-height: 100%;">
-            <div
-            class="p-3 card-body container"
-            style="min-width: 350px; height: 350px; max-width: 60%; overflow: hidden;" >
+        <div class="container" @click="selected = true" style="max-width: 100%; max-height: 100%;">
+            <div class="p-3 card-body container" style="min-width: 350px; height: 300px; max-width: 60%; overflow: hidden;" >
+                <div :class="{
+                    'p-3 pb-0 card-header unselected': selected === false, 
+                    'p-3 pb-0 card-header selected': selected === true}" 
+                    style="border-radius: 10px 10px 0px 0px">
 
-                <div class="p-3 pb-0 card-header" style="border-radius: 10px 10px 0px 0px">
                     <h6 style="color: #fff; font-family: 'Segoe UI','Roboto','Oxygen','Ubuntu','Cantarell', 'Fira Sans','Droid Sans','Helvetica Neue',sans-serif;">{{ PaymentMethodName }}</h6></div>
                     <!-- eslint-disable vue/no-v-html -->
 
                     <div :class="
                     {   // Based on the Current Status of the Widget, it is going to have additional classes.
-                        'p-2 card-body selected': selected === true && selectedOtherOption === false,
-                        'p-2 card-body': selected === false && selectedOtherOption === false,
-                        'p-2 card-body disabled': selected === false && selectedOtherOption === true,
+                        'p-2 card-body selected': selected === true,
+                        'p-2 card-body unselected': selected === false,
                     }"
-                    style="background-color: #1e2238; border-radius: 0px 0px 10px 10px; height: 350px;">
-                    <button v-if="selected === true && selectedOtherOption === false" @click="UnselectPaymentMethod()" class="btn btn-unselect"><label>Unselect</label></button>
-                    <v-avatar size="150" v-if="selected === false">
+                    style="border-radius: 0px 0px 10px 10px; height: 250px; position: relative;">
+                    <button style="margin-top: 25%; width: 20%;" v-if="selected === true" @click="UnselectPaymentMethod()" class="btn btn-unselect"><label>Unselect</label></button>
+                    <v-avatar size="200" v-if="selected === false">
                          <v-icon>{{ PaymentMethodIcon }}</v-icon>
                     </v-avatar>
-                        
                 </div>
             </div>
         </div>
@@ -78,6 +73,10 @@ export default {
     padding-top: 0px !important;
 }
 
+.unselected {
+    background-color: #1e2238; 
+}
+
 .selected {
     background-color: black !important;
 }
@@ -88,9 +87,10 @@ export default {
 .btn-unselect {
     background-color: #fff;
     color: black;
-    width: 100px; 
     justify-content: center; 
     align-content: center; 
     align-items: center;
+    opacity: 1; 
+    max-width: 35%;
 }
 </style>

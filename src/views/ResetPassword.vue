@@ -28,7 +28,6 @@
 
 <script lang="javascript">
 
-
 import { CustomerManager } from "../../customers/customers.js"
 import { mapMutations } from "vuex";
 
@@ -64,7 +63,7 @@ export default {
       NewPassword: function() {
         this.ValidateNewPassword(this.NewPassword)
       }
-    }
+   }
 }
 </script>
 

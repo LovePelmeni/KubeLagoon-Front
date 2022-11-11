@@ -3,6 +3,7 @@ import * as crypto_blockchain_view from "../../crypto_support/deployer.js";
 import { NftPaymentForm } from "../components/payments/NftPaymentForm.vue";
 import  { mapMutations, mapState } from "vuex";
 
+
 export default {
     components: { NftPaymentForm },
     data() {
@@ -11,14 +12,21 @@ export default {
         }
     },
     template: `
-        <nft-payment-form />
-        <v-snackbar v-if="ActivatePaymentFailedBanner" top color="red">
-            Failed to Perform Transaction
-        </v-snackbar>
+        <div class="nftPaymentFormView">
+            <nft-payment-form />
+            <v-snackbar v-if="ActivatePaymentFailedBanner" top color="red">
+                Failed to Perform Transaction
+            </v-snackbar>
+        </div>
     `,
     name: "NftPaymentView",
     methods: {
-        ...mapMutations(["TOGGLE_PAYMENT_PAID", "TOGGLE_PAYMENT_UNPAID"]),
+        ...mapMutations([
+            "TOGGLE_PAYMENT_PAID", 
+            "TOGGLE_PAYMENT_UNPAID", 
+            "GET_BILL_DATA", 
+            "GET_CUSTOMER_DATA"
+        ]),
         ProcessPaymentFailed() {
             // Processing Payment Failed via Crypto Contract 
             this.ActivatePaymentFailedBanner = true
@@ -32,13 +40,17 @@ export default {
 
             // * Setting up Payment Session And Deploying the Contract
             let PaymentSessionCredentials = {}
-            PaymentSessionCredentials.Servers = Bill.Metadata.Servers 
-            PaymentSessionCredentials.Owner = customer
+
+            let Bill = this.GET_BILL_DATA()  // Getting the Bill Data 
+            let customer = this.GET_CUSTOMER_DATA() // Getting the Customer Data 
+
+            PaymentSessionCredentials.Servers = Bill.Metadata.Servers // Inserting the Servers to the Payment Session 
+            PaymentSessionCredentials.Owner = customer // Inserting the Owner to the Payment Session 
 
             let BlockchainTransactionManager = new crypto_blockchain_view.DeploymentSmartContractManager(
-                this, PaymentSessionCredentials
+                this, PaymentSessionCredentials // Payment Session Credentials 
             ) 
-            BlockchainTransactionManager.DeploySmartContract() 
+            BlockchainTransactionManager.DeploySmartContract()  // Deploying the Smart Contract 
         },
         SubmitForm() {
             // Submitting the Blockchain Transaction Form 

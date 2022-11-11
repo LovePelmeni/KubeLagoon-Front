@@ -107,14 +107,11 @@
 
 <script>
 
-
-
 import SoftButton from "../components/SoftButton.vue";
 
 /* eslint-disable no-useless-escape */
 
 const body = document.getElementsByTagName("body")[0];
-
 import { mapMutations } from "vuex";
 import * as customers from "../../customers/customers.js";
 

@@ -278,7 +278,6 @@ export default {
 
         MountCurrentResourceCapacities() {
             // Mounts Current Resource Capacities to the Chart 
-
         },
 
         MountResourcePercentages() {

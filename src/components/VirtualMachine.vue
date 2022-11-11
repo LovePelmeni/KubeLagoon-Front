@@ -1,6 +1,6 @@
 <script>
 
-import {  mapState } from "vuex";
+import { mapState } from "vuex";
 import { mapActions } from "vuex";
 import { useCookies } from "vue3-cookies";
 
@@ -90,7 +90,7 @@ export default {
         <button
           class="btn btn-edit"
           disabled
-          v-else
+          v-else-if="VirtualMachine.paid === false"
         >
           Run
         </button>
@@ -106,7 +106,7 @@ export default {
         <button
           class="btn btn-mark"
           style="color: rgb(131, 127, 127)"
-          v-else
+          v-else-if="VirtualMachine.paid === false"
           disabled
         >
           Shutdown
@@ -122,12 +122,13 @@ export default {
         </button>
 
         <button
-          v-else
+          v-else-if="VirtualMachine.paid === false"
           class="btn btn-reboot"
           disabled
           >
           Reboot
         </button>
+
       </div>
     </div>
 

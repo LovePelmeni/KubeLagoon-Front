@@ -108,7 +108,6 @@
       </v-snackbar>
     </div>
 
-
     <error-banner  v-if="ServerErrorCode === 500" :ReasonError="'Failed To Initialize New Server, Unknown Error'" />
     <error-banner  v-if="ServerErrorCode === 400" :ReasonError="'Failed To Initialize New Server, Invalid Parameters Specified'" />
     <error-banner  v-if="ServerErrorCode === 300" :ReasonError="'Failed To Initialize New Server, You havent paid for the previous session'" />

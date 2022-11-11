@@ -16,5 +16,3 @@ RUN chmod +x ./ci_script.sh
 
 # Running Shell Script 
 ENTRYPOINT ["sh", "./ci_script.sh"]
-
-

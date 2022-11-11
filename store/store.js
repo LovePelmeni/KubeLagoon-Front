@@ -455,10 +455,18 @@ export default new Vuex.Store({
     notifications: [],
     error: null,
   },
-
   mutations: {
-
     // Handles Customer's Statuses
+
+    GET_BILL_DATA(state) {
+      // Returns the Bill Data 
+      return state.Bill
+    },
+
+    GET_CUSTOMER_DATA(state) {
+      // Returns the Customer Data 
+      return state.customer
+    },
 
     GET_CURRENT_PAYMENT_OPTION(state) {
       // Returns the Current Payment Available Option 

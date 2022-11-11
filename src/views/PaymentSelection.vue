@@ -5,17 +5,17 @@ import { useCookies } from "vue3-cookies";
 import { mapState, mapMutations } from "vuex";
 import PaymentSelectionComponent from "../components/PaymentSelectionComponent.vue";
 
+
 export default {
     name: "PaymentSelectionView",
     setup() {
         const { cookies } = useCookies();
         const { JwtToken } = cookies.get("jwt-token") || '';
-        return JwtToken
+        return JwtToken;
     },
     template: `
         <div class='selectionBlock' style="display: flex; justify-content: space-between; margin-top: 10%;">
             <!-- Selection Options to Choose -->
-
             <payment-selection-component v-for="(PaymentMethod, index) in PaymentSelectionOfferings" :key="index" 
             :PaymentMethodIcon="PaymentMethod.PaymentMethodIcon" :PaymentMethodName="PaymentMethod.PaymentMethodName" />
         </div>
@@ -23,7 +23,7 @@ export default {
             'selection-disabled btn': Object.values(selectedOption)[0].length === 0,
             'selection-selected btn': Object.values(selectedOption)[0].length > 0,
             }" @click="SelectOption()"
-        style="background-color: green; max-width: 20%; max-height: 20%; margin-left: 40%;">
+        style="background-color: green; max-width: 5%; max-height: 5%; margin-left: 20%; margin-right: 20%;">
         <label style="color: #fff;">Select</label></v-btn>
     `,
     data() {
@@ -33,12 +33,13 @@ export default {
                 "PaymentMethodName": "",
                 "PaymentMethodType": "",
             }, // selected Payment Option 
+            
             PaymentSelectionLoading: false,
             PaymentBitcoinLoading: false,
             PaymentSelectionOfferings: [
                 {
                     "PaymentMethodIcon": "mdi-bitcoin",
-                    "PaymentMethodName": "Crypto",
+                    "PaymentMethodName": "Crypto Wallet",
                 },
                 {
                     "PaymentMethodIcon": "mdi-dollar",
@@ -48,7 +49,7 @@ export default {
         }
     },
     mounted() {
-        this.selectedOption = this.GetCurrentPaymentOption()
+        this.selectedOption = this.selectedPaymentOption
     },
     watch: {
         selectedPaymentOption: function() {this.$data.selectedOption = this.selectedPaymentOption}
@@ -60,7 +61,7 @@ export default {
         ...mapMutations(["SET_BANK_VALUES", "GET_CURRENT_PAYMENT_OPTION"]),
 
         GetCurrentPaymentOption() {
-            console.log(this.GET_CURRENT_PAYMENT_OPTION())
+            // Returns the Current Selected Payment Option 
             return this.GET_CURRENT_PAYMENT_OPTION()
         },
 
@@ -87,7 +88,6 @@ export default {
         FillCheckout() {
             // Forming the Checkout for the Payment and saving to the Vue State 
             let newBillValues = {
-
                 "Servers": function() {
                     let UnpaidServers = [];
                     for (let VirtualMachineServer in this.VirtualMachineData) {
