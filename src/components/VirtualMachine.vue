@@ -32,8 +32,10 @@ export default {
   },
   mounted() {
     this.JwtToken = this.cookie?.get("jwt-token")
-    this.getVirtualMachineServerInfo()
     this.MountResourceUsageMetrics()
+  },
+  created() {
+    this.getVirtualMachineServerInfo()
     if (this.VirtualMachine.paid === false) {
       this.BlockOperationButtons()
     }
@@ -84,66 +86,105 @@ export default {
       </div>
       <div class="btn-container">
         <button
-          id="RunButton"
-          class="btn btn-edit"
+          :class="{
+            'btn btn-edit': paymentRequired === false, 
+            'btn btn-edit disabledOperationButton': paymentRequired === true,
+          }"
           v-if="VirtualMachine.Running === false" 
-          @click="StartVirtualMachine"
-        >
-          Run
+          @click="StartVirtualMachine">
+          <label 
+          style="
+            color: #fff;
+            opacity: 1;
+            align-content: center;
+            align-items: center; 
+          " v-if="paymentRequired === false">Run</label>
+          <v-icon style="color: red;" v-if="paymentRequired === true">mdi-close</v-icon>
         </button>
         
         <button
-          id="RunButton"
-          class="btn btn-edit"
+          :class="{
+            'btn btn-edit': paymentRequired === false, 
+            'btn btn-edit disabledOperationButton': paymentRequired === true,
+          }"
           disabled
-          v-else
-        >
-          Run
+          v-else>
+          <label style="
+          color: #fff;
+          opacity: 1;
+          align-content: center;
+          align-items: center; " v-if="paymentRequired === false">Run</label>
+          <v-icon style="color: red;" v-if="paymentRequired === true">mdi-close</v-icon>
         </button>
 
         <button 
-          id="DeleteButton" 
-          class="btn btn-delete" 
-          @click="DeleteVirtualMachine"
-        >
-          Delete
+          :class="{
+           'btn btn-delete': paymentRequired === false,
+           'btn btn-delete disabledOperationButton': paymentRequired === true
+          }" 
+          @click="DeleteVirtualMachine">
+          <label v-if="paymentRequired === false">Delete</label>
+          <v-icon style="color: red;" v-if="paymentRequired === true">mdi-close</v-icon>
         </button>
 
         <button
-          id="ShutdownButton"
-          class="btn btn-mark"
+          :class="{
+            'btn btn-mark': paymentRequired === false, 
+            'btn btn-mark disabledOperationButton': paymentRequired === true
+          }"
           v-if="VirtualMachine.Shutdown === false"
           @click="ShutdownVirtualMachine"
         >
-          Shutdown
+          <label v-if="paymentRequired === false">Shutdown</label>
+          <v-icon style="color: red;" v-if="paymentRequired === true">mdi-close</v-icon>
         </button>
 
         <button
-          id="ShutdownButton"
-          class="btn btn-mark"
+          :class="{
+            'btn btn-mark': paymentRequired === false,
+            'btn btn-mark disabledOperationButton': paymentRequired === true
+          }"
           style="color: rgb(131, 127, 127)"
           v-else
           disabled
         >
-          Shutdown
+          <label v-if="paymentRequired === false">Shutdown</label>
+          <v-icon style="color: red;" v-if="paymentRequired === true">mdi-close</v-icon>
         </button>
 
-        <button id="EditButton" class="btn" @click="UpdateVirtualMachine" style="
+        <button :class="{
+          'btn': paymentRequired === false,
+          'btn disabledOperationButton': paymentRequired === true,
+        }"
+        @click="UpdateVirtualMachine" style="
         background-color: #DE1D8D;
-        margin-left: 10px;">Edit</button>
+        margin-left: 10px;">
 
-        <button id="RebootButton" class="btn btn-reboot"  v-if="VirtualMachine.Running == true || VirtualMachine.Shutdown == true"
+        <label v-if="paymentRequired === false">Edit</label>
+        <v-icon style="color: red;" v-if="paymentRequired === true">mdi-close</v-icon>
+
+        </button>
+
+        <button :class="{
+          'btn btn-reboot': paymentRequired === false, 
+          'btn btn-reboot disabledOperationButton': paymentRequired === true,
+          }"  
+        v-if="VirtualMachine.Running == true || VirtualMachine.Shutdown == true"
         @click="RebootVirtualMachine">
-          Reboot
+          <label v-if="paymentRequired === false">Reboot</label>
+          <v-icon style="color: red;" v-if="paymentRequired === true">mdi-close</v-icon>
         </button>
 
         <button
-          id="RebootButton"
           v-else
-          class="btn btn-reboot"
+          :class="{
+            'btn btn-reboot': paymentRequired === false, 
+            'btn btn-reboot disabledOperationButton': paymentRequired === true,
+          }"
           disabled
           >
-          Reboot
+          <label v-if="paymentRequired === false">Reboot</label>
+          <v-icon style="color: red;" v-if="paymentRequired === true">mdi-close</v-icon>
         </button>
 
       </div>
@@ -251,25 +292,6 @@ export default {
   data() {
     return {
 
-      // Operation Information  
-
-      OperationButtons: [
-        {
-          "id": "RunButton",
-        },
-        {
-          "id": "DeleteButton",
-        },
-        { 
-          "id": "EditButton",
-        },
-        {
-          "id": "ShutdownButton",
-        },
-        {
-          "id": "RebootButton",
-        }
-      ],
       ResourceUsageMetrics: {
         "CpuMetrics": "-",
         "MemoryMetrics": "-",
@@ -301,6 +323,7 @@ export default {
       VirtualMachineServerError: null, 
       VirtualMachine: {},
       VirtualMachineId: this.$route.params.VirtualMachineId,
+      paymentRequired: false, // status of the payout for the resource usage 
     }
   },
   methods: { 
@@ -313,11 +336,8 @@ export default {
     ]),
 
     BlockOperationButtons() {
-      // Blocks the Operational Buttons, if the payment is required to continue Virtual Server Usage 
-      for (let Button in this.OperationButtons) {
-        let button = document.getElementById(Button["id"]);
-        button.classList.add("BlockedOperationalButton");
-      }
+      // Blocks the Operational Buttons, if the payment is required to continue Virtual Server Usage
+      this.paymentRequired = true
     },
 
     toggleError(ErrorMessage) {
@@ -488,8 +508,14 @@ export default {
 <style lang="scss">
 
 
-.BlockedOperationalButton {
-  // Blocked Operational Button 
+.label {
+  color: #fff;
+  opacity: 1;
+  align-content: center;
+  align-items: center; 
+}
+.disabledOperationButton {
+  // Button Class, that disables any interaction with the buttons 
   pointer-events: none;
 }
 
