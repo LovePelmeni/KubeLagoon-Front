@@ -123,7 +123,11 @@ export default {
            'btn btn-delete disabledOperationButton': paymentRequired === true
           }" 
           @click="DeleteVirtualMachine">
-          <label v-if="paymentRequired === false">Delete</label>
+          <label style="
+          color: #fff;
+          opacity: 1;
+          align-content: center;
+          align-items: center; " v-if="paymentRequired === false">Delete</label>
           <v-icon style="color: red;" v-if="paymentRequired === true">mdi-close</v-icon>
         </button>
 
@@ -135,7 +139,11 @@ export default {
           v-if="VirtualMachine.Shutdown === false"
           @click="ShutdownVirtualMachine"
         >
-          <label v-if="paymentRequired === false">Shutdown</label>
+          <label style="
+          color: #fff;
+          opacity: 1;
+          align-content: center;
+          align-items: center; " v-if="paymentRequired === false">Shutdown</label>
           <v-icon style="color: red;" v-if="paymentRequired === true">mdi-close</v-icon>
         </button>
 
@@ -148,7 +156,11 @@ export default {
           v-else
           disabled
         >
-          <label v-if="paymentRequired === false">Shutdown</label>
+          <label style="
+          color: #fff;
+          opacity: 1;
+          align-content: center;
+          align-items: center;" v-if="paymentRequired === false">Shutdown</label>
           <v-icon style="color: red;" v-if="paymentRequired === true">mdi-close</v-icon>
         </button>
 
@@ -160,7 +172,11 @@ export default {
         background-color: #DE1D8D;
         margin-left: 10px;">
 
-        <label v-if="paymentRequired === false">Edit</label>
+        <label style="
+          color: #fff;
+          opacity: 1;
+          align-content: center;
+          align-items: center; " v-if="paymentRequired === false">Edit</label>
         <v-icon style="color: red;" v-if="paymentRequired === true">mdi-close</v-icon>
 
         </button>
@@ -171,7 +187,11 @@ export default {
           }"  
         v-if="VirtualMachine.Running == true || VirtualMachine.Shutdown == true"
         @click="RebootVirtualMachine">
-          <label v-if="paymentRequired === false">Reboot</label>
+          <label style="
+          color: #fff;
+          opacity: 1;
+          align-content: center;
+          align-items: center; " v-if="paymentRequired === false">Reboot</label>
           <v-icon style="color: red;" v-if="paymentRequired === true">mdi-close</v-icon>
         </button>
 
@@ -183,7 +203,11 @@ export default {
           }"
           disabled
           >
-          <label v-if="paymentRequired === false">Reboot</label>
+          <label style="
+          color: #fff;
+          opacity: 1;
+          align-content: center;
+          align-items: center; " v-if="paymentRequired === false">Reboot</label>
           <v-icon style="color: red;" v-if="paymentRequired === true">mdi-close</v-icon>
         </button>
 
