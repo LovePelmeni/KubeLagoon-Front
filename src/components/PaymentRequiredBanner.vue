@@ -34,7 +34,7 @@ export default {
     methods: {
         RedirectPaymentSelection() {
             // Redirecting the Customer To The Bill Page
-            this.$router.push({name: "select_payment_method"})
+            this.$router.push({name: "payment_page"})
         },
 
     }

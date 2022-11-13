@@ -1,9 +1,6 @@
 <script>
 
 let Logger = require("pino")()
-import * as stripe from "stripe";
-import PaymentBehaviourBanner from "../components/PaymentBehaviourBanner.vue";
-
 
 class CheckoutBillCalculator {
     // Calculating Price for the Payment Checkout Bill 
@@ -37,7 +34,7 @@ class PaymentSessionControllerManager {
         // Initializing New Payment Method Request 
         try {
         let BillCostInformation = new CheckoutBillCalculator("usd", this.PaymentMethodInformation).CalculateTotal()
-        let PaymentMethodSession = stripe.checkout.sessions.create({
+        let PaymentMethodSession = this.stripe.checkout.sessions.create({
             payment_method_types: ["card"],
                 line_items: [{
                     price_data: {
@@ -50,8 +47,8 @@ class PaymentSessionControllerManager {
             quantity: BillCostInformation.Quantity,
         }],
         mode: "payment",
-        success_url: `http://${env.BACKEND_APPLICATION_HOST}:${env.BACKEND_APPLICATION_PORT}/payment/success/page/`,
-        cancel_url: `http://${env.BACKEND_APPLICATION_HOST}:${env.BACKEND_APPLICATION_PORT}/payment/cancel/page/`,
+        success_url: `http://${process.env.BACKEND_APPLICATION_HOST}:${process.env.BACKEND_APPLICATION_PORT}/payment/success/page/`,
+        cancel_url: `http://${process.env.BACKEND_APPLICATION_HOST}:${process.env.BACKEND_APPLICATION_PORT}/payment/cancel/page/`,
         })
         return PaymentMethodSession.id
         } catch(Exception) {
@@ -61,22 +58,18 @@ class PaymentSessionControllerManager {
         }
     }
 }
-// When the Customer get's Redirected to this Page
-import { loadStripe } from "stripe";
+
+import { mapMutations, mapState } from "vuex";
+import { loadStripe } from "@stripe/stripe-js";
 
 export default {
-    name: "PaymentWindowView",
-    setup() {
-        stripe = null; 
-        onMounted(async () => {
-            stripe = await loadStripe()
-        })
-    },
-    components: {
-        PaymentBehaviourBanner,
-    },
+    name: "PaymentFormView",
     mounted() {
         this.CreatePaymentSession()
+    },
+    created() {
+        var STRIPE_SECRET_KEY = String(process.env.STRIPE_SECRET_KEY) // parsing the stripe secret key from the environment variables
+        loadStripe(STRIPE_SECRET_KEY)
     },
     data() {
         return {
@@ -97,24 +90,31 @@ export default {
                 }
             })
             let PaymentSessionId = PaymentSessionManager.InitializePaymentMethodRequest()  // Receiving the Payment Session Id 
-            stripe.redirectToCheckout({session_id: PaymentSessionId}) // Redirecting to the Form 
+            this.stripe.redirectToCheckout({session_id: PaymentSessionId}) // Redirecting to the Form 
             .then(function(sessionResponse) {
                 // Processing the Payment Session Response 
                 switch(sessionResponse) {
                     case sessionResponse.error:
                         Logger.error(`Failed to Confirm Payment Session, Error Has Occurred.
                         ${sessionResponse.error}`)
+                        this.TOGGLE_PAYMENT_FAILED() // Toggling Payment To Be Marked As Failure, to trigger an event  
+                        this.TOGGLE_PAYMENT_FAILED() // Toggling it Back to False
+                        break;
 
                     case sessionResponse.paymentIntent:
                         Logger.debug(`Payment Session has been confirmed successfully`)
                         this.SAVE_PAYMENT_INTENT_CHECKOUT(sessionResponse.paymentIntent) // saving the payment intent info to the vuex store
+                        break; 
+                    default:
+                        Logger.debug("Unknown Payment Session Response") 
+                        break;
                 }   
             }) 
         },
     },
     computed: {
         ...mapState(["Bill"]),
-    }
+    },
 }
 </script>
 

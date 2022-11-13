@@ -19,8 +19,7 @@ import ApplySubscriptionComponent from "../components/SubscriptionApplyComponent
 
 import SuccessPage from "../components/payments/successPage.vue";
 import CancelPage from "../components/payments/cancelPage.vue";
-import NftPaymentView from "../views/NftPayment.vue";
-import PaymentSelectionView from "../views/PaymentSelection.vue";
+import PaymentFormView from "../views/paymentForm.vue";
 
 const routes = [
   {
@@ -29,9 +28,9 @@ const routes = [
     component: HomePage,
   },
   {
-    path: "/select/payment/method/",
-    component: PaymentSelectionView, 
-    name: "select_payment_method",
+    name: "payment_page",
+    path: "/pay/bill/",
+    component: PaymentFormView,
   },
   {
     path: "/virtual/machines/",
@@ -98,11 +97,6 @@ const routes = [
     path: "/payment/cancel/page/",
     component: CancelPage,
   },
-  {
-    name: "nft_payment_page",
-    component: NftPaymentView,
-    path: "/nft/payment/",
-  }
 ]
 
 
