@@ -102,7 +102,6 @@ export default {
   }
 }
 
-
 .failure {
   &::before {
     background-color: rgba(255, 0, 0, 0.838);

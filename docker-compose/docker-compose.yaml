@@ -34,15 +34,6 @@ services:
       test: ["CMD", "curl", "-f", "http://localhost:8001"]
     networks:
       - cloud-infrastructure-network
-
-  crypto_smart_contract_deployer: 
-    container_name: smart-contract-deployer 
-    image: ethereum/sol 
-    ports:
-      - "4000:4000"
-    networks:
-      - cloud-infrastructure-network 
-
 networks:
   cloud-infrastructure-network:
       external: true 

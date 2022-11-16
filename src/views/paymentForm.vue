@@ -1,4 +1,6 @@
 <script>
+import  { loadStripe } from "@stripe/stripe-js";
+import { h } from "vue";
 
 let Logger = require("pino")()
 
@@ -22,6 +24,7 @@ class CheckoutBillCalculator {
     }
 } 
 
+
 class PaymentSessionControllerManager {
 
     // Controller for Managing the Payment Session Requests
@@ -34,7 +37,7 @@ class PaymentSessionControllerManager {
         // Initializing New Payment Method Request 
         try {
         let BillCostInformation = new CheckoutBillCalculator("usd", this.PaymentMethodInformation).CalculateTotal()
-        let PaymentMethodSession = this.stripe.checkout.sessions.create({
+        let PaymentMethodSession = this.self.stripe.checkout.sessions.create({
             payment_method_types: ["card"],
                 line_items: [{
                     price_data: {
@@ -60,16 +63,20 @@ class PaymentSessionControllerManager {
 }
 
 import { mapMutations, mapState } from "vuex";
-import { loadStripe } from "@stripe/stripe-js";
+import { onMounted } from '@vue/runtime-core';
 
 export default {
     name: "PaymentFormView",
     mounted() {
         this.CreatePaymentSession()
     },
-    created() {
-        var STRIPE_SECRET_KEY = String(process.env.STRIPE_SECRET_KEY) // parsing the stripe secret key from the environment variables
-        loadStripe(STRIPE_SECRET_KEY)
+    setup() {
+        let stripe = null;  // Initializing the Stripe Module 
+        let SecretStripeAccessKey = process.env.STRIPE_SECRET_KEY // grabbing the Stripe Secret key from the Environment Variables
+        onMounted(async() => {
+            stripe = await loadStripe(String(SecretStripeAccessKey)) // loading the Stripe Module 
+        });
+        return stripe
     },
     data() {
         return {
@@ -78,6 +85,9 @@ export default {
             paymentFailed: false,
             paymentError: '',
         }
+    },
+    render(){
+        return h()
     },
     methods: {
         ...mapMutations(["SAVE_PAYMENT_INTENT_CHECKOUT"]),
@@ -103,7 +113,8 @@ export default {
 
                     case sessionResponse.paymentIntent:
                         Logger.debug(`Payment Session has been confirmed successfully`)
-                        this.SAVE_PAYMENT_INTENT_CHECKOUT(sessionResponse.paymentIntent) // saving the payment intent info to the vuex store
+                        this.SAVE_PAYMENT_INTENT_CHECKOUT(sessionResponse.paymentIntent) // saving the payment intent info to the vuex store 
+                        // Stripe going to automatically redirect the request to the Success Page, if the Payment have been done successfully
                         break; 
                     default:
                         Logger.debug("Unknown Payment Session Response") 
@@ -116,13 +127,5 @@ export default {
         ...mapState(["Bill"]),
     },
 }
+
 </script>
-
-
-<style lang="scss">
-
-.paymentForm {
-    background-color: #141414;
-}
-
-</style>

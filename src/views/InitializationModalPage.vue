@@ -11,4 +11,5 @@ export default {
         <initialization-modal :updateVirtualMachine="false" :suggestionCard="false" />
     `,
 }
+
 </script>

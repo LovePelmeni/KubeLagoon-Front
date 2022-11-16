@@ -154,8 +154,7 @@
                 />
 
               </v-card-text>
-
-
+              
               <div class="save flex">
 
                   <div class="buttonBlock flex" style="width: 800px; display: flex; justify-content: center;">

@@ -3,6 +3,7 @@ import * as preparer from "../configuration_preparer/preparer.js";
 import Vuex from "vuex";
 import { useCookies } from "vue3-cookies";
 
+
 export default new Vuex.Store({
 
   state: {
@@ -760,7 +761,6 @@ export default new Vuex.Store({
         "useRootCertificate": customizedConfiguration["useRootCertificate"],
       }
     },
-
 
     // Virtual Machine Status Methods
 

@@ -46,7 +46,7 @@ export default {
 
     <!-- Virtual Machine Server Connection Info  -->
 
-    <div class="paymentRequiredBannerBlock">
+    <div class="paymentRequiredBannerBlock" style="width: auto; min-width: 1010px;">
       <payment-required-banner v-if="VirtualMachine.paid === false" />
     </div>
 
