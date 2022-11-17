@@ -53,7 +53,6 @@ import { mapState, mapMutations } from "vuex";
 
 import CheckoutItemInfo from './CheckoutItemInfo.vue';
 import ServerErrorBanner from "../ServerErrorBanner.vue";
-
 export default {
     name: "NftPaymentForm",
     data() {
