@@ -1,23 +1,17 @@
 <template>
 
 <div class="items" style="background-color: #14639; justify-content: space-between; display: flex;">
-    <checkout-item class="checkoutItemField" 
-    :v-for="(Item, index) in CheckoutItemData" :key="index" />
+    <v-text-field class="checkoutItemField" 
+    :v-for="(Item, index) in CheckoutItemData" :key="index">{{ Item.VirtualServerName }}</v-text-field>
 </div>
     
 </template>
 
 <script>
 
-import CheckoutItem from "./CheckoutItem.vue";
-
 export default {
     name: "ControllerControllerView",
     props: ["CheckoutItemData"],
-    components: {CheckoutItem},
-    mounted() {
-        this.MountItems()
-    },
 }
 
 </script>
