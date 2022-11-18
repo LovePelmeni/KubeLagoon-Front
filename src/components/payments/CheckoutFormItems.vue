@@ -1,20 +1,20 @@
 <template>
 
 <div class="items" style="background-color: #14639; justify-content: space-between; display: flex;">
-    <checkout-item class="checkoutItemField" 
-    :v-for="(Item, index) in CheckoutItemData" :key="index" />
+    <checkout-item-info class="checkoutItemField" 
+    :v-for="(Item, index) in Items" :key="index" />
 </div>
     
 </template>
 
 <script>
 
-import CheckoutItem from "./CheckoutItem.vue";
+import CheckoutItemInfo from "./CheckoutItemInfo.vue";
 
 export default {
     name: "ControllerControllerView",
-    props: ["CheckoutItemData"],
-    components: {CheckoutItem},
+    props: ["Items"],
+    components: {CheckoutItemInfo},
     mounted() {
         this.MountItems()
     },

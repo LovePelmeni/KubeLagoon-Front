@@ -1,8 +1,51 @@
+<template>
+    
+<div class="paymentCardForm">
+    <div class="cardNumberReferenceField" ref="creditCardNumber">
+        <v-form> 
+            <v-text-field placeholder="Username" v-model="Username">
+                {{ CustomerUsername }}
+            </v-text-field>
+
+            <v-text-field placeholder="Email" v-model="Email">
+                {{ CustomerEmail }}
+            </v-text-field>
+
+            <v-text-field placeholder="Phone" v-model="PhoneNumber">
+                {{ PhoneNumber }}
+            </v-text-field>
+
+            <v-text-field placeholder="Total Amount" v-model="TotalAmount">
+                {{ CheckoutInfo.TotalAmount }}
+            </v-text-field>
+            
+            <!--  Divider between the blocks -->
+            <v-divider></v-divider> 
+
+            <div class="checkoutFormItems">
+                <checkout-form-items :Items="Bill.Metadata.Servers" />
+            </div>
+            <!-- Stripe Payment Element -->
+            <div class="payment-element">
+            </div>
+
+        </v-form>
+        <v-btn class="formSubmitButton btn">Pay</v-btn>
+    </div>
+
+</div>
+    
+</template>
+
 <script>
+
 import  { loadStripe } from "@stripe/stripe-js";
 import { h } from "vue";
 
 let Logger = require("pino")()
+
+let FRONTEND_APPLICATION_HOST = process.env.FRONTEND_APPLICATION_HOST
+let FRONTEND_APPLICATION_PORT = process.env.FRONTEND_APPLICATION_PORT
 
 class CheckoutBillCalculator {
     // Calculating Price for the Payment Checkout Bill 
@@ -11,7 +54,7 @@ class CheckoutBillCalculator {
         this.currency = Currency
         this.BillInformation = BillInformation 
     }
-    CalculateTotal() {
+    CalculateTotalInCents() {
         // Calculating Total Checkout Price (in Cents)
         let TotalPrice = 0
         for (let Server in this.BillInformation.Metadata.Servers) {
@@ -22,10 +65,10 @@ class CheckoutBillCalculator {
             "TotalCost": TotalPrice * 100,
         }
     }
-} 
+}
 
 
-class PaymentSessionControllerManager {
+class PaymentIntentManager {
 
     // Controller for Managing the Payment Session Requests
 
@@ -33,32 +76,24 @@ class PaymentSessionControllerManager {
         this.self = self 
         this.PaymentMethodInformation = PaymentMethodInformation
     }
-    InitializePaymentMethodRequest() {
+    InitializePaymentIntentRequest() {
         // Initializing New Payment Method Request 
         try {
-        let BillCostInformation = new CheckoutBillCalculator("usd", this.PaymentMethodInformation).CalculateTotal()
-        let PaymentMethodSession = this.self.stripe.checkout.sessions.create({
-            payment_method_types: ["card"],
-                line_items: [{
-                    price_data: {
-                        currency: "USD",
-                        product_data: {
-                            servers: this.PaymentMethodInformation["Metadata"]["Servers"],
-                        },
-                        unit_amount: BillCostInformation.TotalCost, // setting up the total cost in cents
-                    },
-            quantity: BillCostInformation.Quantity,
-        }],
-        mode: "payment",
-        success_url: `http://${process.env.BACKEND_APPLICATION_HOST}:${process.env.BACKEND_APPLICATION_PORT}/payment/success/page/`,
-        cancel_url: `http://${process.env.BACKEND_APPLICATION_HOST}:${process.env.BACKEND_APPLICATION_PORT}/payment/cancel/page/`,
-        })
-        return PaymentMethodSession.id
-        } catch(Exception) {
-            this.self.paymentFailed = true 
-            this.self.paymentError = "Failed to Perform Payment"
-            return null 
-        }
+            let Currency = "usd";
+            let BillCostInformation = new CheckoutBillCalculator("usd", 
+            this.PaymentMethodInformation).CalculateTotalInCents()
+            
+            let PaymentIntent = this.self.stripe.paymentIntents.create({
+                payment_method_types: ["card"],
+                amount: BillCostInformation.TotalCost,
+                currency: Currency,
+            })
+            return PaymentIntent.id
+            } catch(Exception) {
+                this.self.paymentFailed = true 
+                this.self.paymentError = "Failed to Perform Payment"
+                return null 
+            }
     }
 }
 
@@ -68,7 +103,7 @@ import { onMounted } from '@vue/runtime-core';
 export default {
     name: "PaymentFormView",
     mounted() {
-        this.CreatePaymentSession()
+        this.InitializePaymentElement()
     },
     setup() {
         let stripe = null;  // Initializing the Stripe Module 
@@ -80,47 +115,88 @@ export default {
     },
     data() {
         return {
+            paymentIntentSecret: null,
+            paymentElements: null,
             paymentSucceeded: false,
             paymentCanceled: false, 
             paymentFailed: false,
             paymentError: '',
         }
     },
+    created() {
+        this.InitializePaymentElement()
+    },
     render(){
         return h()
     },
     methods: {
         ...mapMutations(["SAVE_PAYMENT_INTENT_CHECKOUT"]),
-        CreatePaymentSession() {
-            // Method is being called, once the Payment has been Initialized Successfully
-            // * Initializing Payment Session 
-            let PaymentSessionManager = new PaymentSessionControllerManager(this, {
-                "Metadata": {
-                    "Servers": this.Bill.Metadata.Servers
+
+        ShowPaymentStatusMessage(Message, Type) {
+            // Processing the Payment Status Message
+            Logger.debug("Message Event has been Activated, " + JSON.stringify(
+            {message: Message, Type: Type}))
+        },
+
+        SubmitPaymentForm() {
+            // Submitting the Payment Form 
+            this.ConfirmPayment()
+        },
+        ConfirmPayment() {
+            // Confirming the Payment
+            let elements = this.$data.paymentElements
+            let ResponseError = this.stripe.confirmPaymentIntent({
+                elements,
+                confirm: {
+                    return_url: `http://${FRONTEND_APPLICATION_HOST}:${FRONTEND_APPLICATION_PORT}/payment/success/page/`
                 }
             })
-            let PaymentSessionId = PaymentSessionManager.InitializePaymentMethodRequest()  // Receiving the Payment Session Id 
-            this.stripe.redirectToCheckout({session_id: PaymentSessionId}) // Redirecting to the Form 
-            .then(function(sessionResponse) {
-                // Processing the Payment Session Response 
-                switch(sessionResponse) {
-                    case sessionResponse.error:
-                        Logger.error(`Failed to Confirm Payment Session, Error Has Occurred.
-                        ${sessionResponse.error}`)
-                        this.TOGGLE_PAYMENT_FAILED() // Toggling Payment To Be Marked As Failure, to trigger an event  
-                        this.TOGGLE_PAYMENT_FAILED() // Toggling it Back to False
-                        break;
+            let SuccessType = "success"
+            let ErrorType = "error"
+            let ProcessingType = "processing"
+            let UndefinedType = "undefined"
+            let paymentIntent = this.stripe.retrievePaymentIntent(this.$data.paymentIntentSecret)
 
-                    case sessionResponse.paymentIntent:
-                        Logger.debug(`Payment Session has been confirmed successfully`)
-                        this.SAVE_PAYMENT_INTENT_CHECKOUT(sessionResponse.paymentIntent) // saving the payment intent info to the vuex store 
-                        // Stripe going to automatically redirect the request to the Success Page, if the Payment have been done successfully
-                        break; 
-                    default:
-                        Logger.debug("Unknown Payment Session Response") 
-                        break;
-                }   
-            }) 
+            switch (ResponseError.type) {
+        
+                case "succeeded":
+                    // Processing the Response with Successful Payment 
+                    this.ShowPaymentStatusMessage("Your payment has been processed", SuccessType)
+                    Logger.debug("Payment with Credentials" + JSON.stringify(ResponseError), "has been succeeded")
+                    break
+
+                case "processing":
+                    // Processing the Response with the Payment
+                    this.ShowPaymentStatusMessage("", ProcessingType)
+                    Logger.debug("Payment with Credentials" + JSON.stringify(paymentIntent), "has been processing")
+                    break
+
+                case "requires_payment_method":
+                    // Processing the Response with Unsuccessful Response Type
+                    this.ShowPaymentStatusMessage("", ErrorType)
+                    Logger.debug("Payment with Credentials" + JSON.stringify(paymentIntent), "has been failed")
+                    break
+
+                default:
+                    // Processing the Other type of the Response Errors
+                    this.ShowPaymentStatusMessage("", UndefinedType)
+                    Logger.debug("Payment with Credentials" + JSON.stringify(paymentIntent), "has been in undefined state") 
+                    break
+            }
+        },
+
+        InitializePaymentElement() {
+            // Initializing Payment Element, based on the Component HTML Pattern 
+            let ElementTheme = {theme: "dark"}
+            let stripePaymentCardElement = "payment-element"; // ID of the Stripe Payment Card Element
+            let NewPaymentIntentId = new PaymentIntentManager(this, this.Bill).InitializePaymentIntentRequest()
+            let StripeFormElements = this.stripe.elements({ElementTheme, NewPaymentIntentId})
+            this.$data.paymentElements = StripeFormElements
+            this.$data.paymentIntentSecret = NewPaymentIntentId
+
+            // Mouting the Stripe Integration inside the Vue Template 
+            StripeFormElements.create('payment')
+            StripeFormElements.mount('#' + stripePaymentCardElement)
         },
     },
     computed: {
@@ -128,4 +204,13 @@ export default {
     },
 }
 
+
 </script>
+
+<style lang="scss">
+.formSubmitButton {
+    // Submitting the Form Button 
+    background-color: green;
+    border-radius: 10px 10px 10px 10px;
+}
+</style>

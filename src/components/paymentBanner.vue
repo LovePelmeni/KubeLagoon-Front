@@ -1,24 +1,24 @@
 <template>
-           <div class="pricing_plan-card__8Q2Iu pricing_plan-card-personal__FBJhu">
-           <div class="pricing_plan-card-header__g8BK_ pricing_plan-card-header-personal__All8V">
+        <div class="pricing_plan-card__8Q2Iu pricing_plan-card-personal__FBJhu">
+        <div class="pricing_plan-card-header__g8BK_ pricing_plan-card-header-personal__All8V">
 
-           <p class="text_wrapper__aJlSM text_s-32__lPhW6 text_w-700__BJEFg text_lh-32__iP9gT" data-version="v1" style="--color:var(--geist-foreground);">
-           <span class="pricing_plan-card-header-text__xEN2p">{{ BannerName }}</span>
-           </p>
+        <p class="text_wrapper__aJlSM text_s-32__lPhW6 text_w-700__BJEFg text_lh-32__iP9gT" data-version="v1" style="--color:var(--geist-foreground);">
+        <span class="pricing_plan-card-header-text__xEN2p">{{ BannerName }}</span>
+        </p>
 
-           <span aria-hidden="true" class="geist-spacer" data-version="v1" style="margin-top: 5px;"></span>
-           <p class="text_wrapper__aJlSM text_s-16__wD_tc text_w-600__hi7Y9 text_lh-24___qKPu" data-version="v1" style="--color: inherit;"><span class="pricing_plan-card-header-description__mdnYK" style="margin-top: 30px; margin-bottom: 10px;">{{ BannerPrice }}$ / month</span></p>
-           <span aria-hidden="true" class="geist-spacer" data-version="v1" style="margin-top: 5px;"></span>
+        <span aria-hidden="true" class="geist-spacer" data-version="v1" style="margin-top: 5px;"></span>
+        <p class="text_wrapper__aJlSM text_s-16__wD_tc text_w-600__hi7Y9 text_lh-24___qKPu" data-version="v1" style="--color: inherit;"><span class="pricing_plan-card-header-description__mdnYK" style="margin-top: 30px; margin-bottom: 10px;">{{ BannerPrice }}$ / month</span></p>
+        <span aria-hidden="true" class="geist-spacer" data-version="v1" style="margin-top: 5px;"></span>
 
                 <!-- Pricing Card Headers -->
-                <div class="pricing_plan-card-header-description__mdnYK pricing_plan-card-header-description-personal__iKbGC" style="margin-top: 15px;">
-                    <p class="text_wrapper__aJlSM text_s-16__wD_tc text_w-600__hi7Y9 text_lh-24___qKPu" data-version="v1" 
-                    style="--color: inherit;">{{ BannerDescription }}</p>
-                </div>
+            <div class="pricing_plan-card-header-description__mdnYK pricing_plan-card-header-description-personal__iKbGC" style="margin-top: 15px;">
+                <p class="text_wrapper__aJlSM text_s-16__wD_tc text_w-600__hi7Y9 text_lh-24___qKPu" data-version="v1" 
+                style="--color: inherit;">{{ BannerDescription }}</p>
             </div>
-           <div class="pricing_plan-card-body__tIAYe">
+        </div>
+        <div class="pricing_plan-card-body__tIAYe">
 
-           <div data-version="v1" class="container jsx-917344996 stack_stack__A16oG stack" style="--flex: initial; --direction:column; --align:stretch; --justify:flex-start;">
+        <div data-version="v1" class="container jsx-917344996 stack_stack__A16oG stack" style="--flex: initial; --direction:column; --align:stretch; --justify:flex-start;">
                
                 <div data-version="v1" v-for="Option in BannerOptions" :key="Option" class="jsx-1558625419 stack_stack__A16oG stack" style="margin-top: 30px; --flex: initial; --direction:row; --align:stretch; --justify:flex-end;">
 
