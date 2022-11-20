@@ -178,28 +178,17 @@ class PaymentIntentManager {
                 this.self.paymentError = "Failed to Perform Payment"
                 return null 
             }
-        }
-    }
+      }
+}
 
 import { mapMutations, mapState } from "vuex";
 import { loadStripe } from '@stripe/stripe-js';
 
 export default {
     name: "PaymentFormView",
-    mounted() {
-        this.InitializePaymentElement()
-    },
-    setup() {
-        let PublicStripeKey = process.env.STRIPE_PUBLIC_KEY // grabbing the Stripe Secret key from the Environment Variables
-        console.log(PublicStripeKey)
-        let stripe = loadStripe(String('pk_test_51KbRPhBlXqCTWmcHsFZwLrEBFIuQGGmDmXol9YMB66mSmoJM0OKsOcNQC4aPGxJ3xpRrfRMbDxF1GuFrsgUmX59Z006uU7xcuq'))
-        console.log(stripe)
-        return {
-          stripe
-        }
-    },
     data() {
         return {
+            stripe: null,
             paymentIntentSecret: null,
             paymentElements: null,
             paymentSucceeded: false,
@@ -211,8 +200,19 @@ export default {
     render(){
         return h()
     },
+    async mounted() {
+      await this.InitializePaymentElement()
+    },
     methods: {
         ...mapMutations(["SAVE_PAYMENT_INTENT_CHECKOUT"]),
+
+        async InitializeStripeModule() {
+          // Initializes Stripe Module 
+          let PublicStripeKey = process.env.STRIPE_PUBLIC_KEY // grabbing the Stripe Secret key from the Environment Variables
+          console.log(PublicStripeKey)
+          let stripe = await loadStripe(String('pk_test_51KbRPhBlXqCTWmcHsFZwLrEBFIuQGGmDmXol9YMB66mSmoJM0OKsOcNQC4aPGxJ3xpRrfRMbDxF1GuFrsgUmX59Z006uU7xcuq'))
+          this.$data.stripe = stripe
+        },  
         ShowPaymentStatusMessage(Message, Type) {
             // Processing the Payment Status Message
             Logger.debug("Message Event has been Activated, " + JSON.stringify(
@@ -226,7 +226,7 @@ export default {
         ConfirmPayment() {
             // Confirming the Payment
             let elements = this.$data.paymentElements
-            let ResponseError = this.stripe.confirmPaymentIntent({
+            let ResponseError = this.$data.stripe.confirmPaymentIntent({
                 elements,
                 confirm: {
                     return_url: `http://${FRONTEND_APPLICATION_HOST}:${FRONTEND_APPLICATION_PORT}/payment/success/page/`
@@ -236,7 +236,7 @@ export default {
             let ErrorType = "error"
             let ProcessingType = "processing"
             let UndefinedType = "undefined"
-            let paymentIntent = this.stripe.retrievePaymentIntent(this.$data.paymentIntentSecret)
+            let paymentIntent = this.$data.stripe.retrievePaymentIntent(this.$data.paymentIntentSecret)
 
             switch (ResponseError.type) {
         
@@ -266,19 +266,21 @@ export default {
             }
         },
 
-        InitializePaymentElement() {
+        async InitializePaymentElement() {
             // Initializing Payment Element, based on the Component HTML Pattern 
-            let ElementTheme = {theme: "dark"}
+            await this.InitializeStripeModule() // Initializing Stripe Module 
+
+            let ElementTheme = {theme: "dark"};
             let ElementType= "card";
             let stripePaymentCardElement = "stripe-element-mount-class"; // ID of the Stripe Payment Card Element
             let NewPaymentIntentId = new PaymentIntentManager(this, this.Bill).InitializePaymentIntentRequest()
-            let StripeFormElements = this.stripe.elements({ElementTheme, NewPaymentIntentId})
+            let StripeFormElements = this.$data.stripe.elements({ElementTheme, NewPaymentIntentId})
             this.$data.paymentElements = StripeFormElements
             this.$data.paymentIntentSecret = NewPaymentIntentId
 
             // Mouting the Stripe Integration inside the Vue Template 
-            StripeFormElements.create(ElementType, PaymentFormStyle)
-            StripeFormElements.mount('#' + stripePaymentCardElement)
+            let PaymentElement = StripeFormElements.create(ElementType, PaymentFormStyle)
+            PaymentElement.mount("#" + stripePaymentCardElement)
         },
     },
     computed: {
