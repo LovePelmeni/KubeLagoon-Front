@@ -1,27 +1,27 @@
 <template>
-<body>
-    <div class="paymentFormComponent" style="display: flex; justify-content: center; margin-top: 5%;">
-    <section>
-      <form class="payment-form" style="background-color: #1e2139;">
-        <input type="text" class="paymentFormField" id="email" placeholder="Username" v-model="customer.Username" />
-        <input type="text" class="paymentFormField" id="email" placeholder="Phone" v-model="customer.PhoneNumber" />
-        <input type="text" class="paymentFormField" id="email" placeholder="Email address" v-model="customer.Email" />
-        <div id="card-element" class="paymentFormField"><!--Stripe.js injects the Card Element--></div>
-        <button id="submit" class="btn btn-payment-form" style="margin-top: 40px;">
-          <div class="spinner hidden" id="spinner"></div>
-          <label id="button-text" style="color: #fff; opacity: 1; margin-left: 20px; margin-right: 20px; margin-top: 5px;">Pay</label>
-        </button>
-        <p id="card-error" role="alert"></p>
-        <p class="result-message hidden" v-if="paymentSucceeded">
-          Payment succeeded
-        </p>
-        <p class="error-result-message hidden result-message" v-if="paymentFailed">
-          Payment Failed, {{ paymentError }}
-        </p>
-      </form>
-    </section>
-    </div>
-</body>
+  <body>
+      <div class="paymentFormComponent" style="display: flex; justify-content: center; margin-top: 5%;">
+        <section>
+            <form class="payment-form" style="background-color: #1e2139;">
+                <input type="text" class="paymentFormField" id="email" placeholder="Username" v-model="customer.Username" />
+                <input type="text" class="paymentFormField" id="email" placeholder="Phone" v-model="customer.PhoneNumber" />
+                <input type="text" class="paymentFormField" id="email" placeholder="Email address" v-model="customer.Email" />
+                <div id="card-element" class="paymentFormField"><!--Stripe.js injects the Card Element--></div>
+                <button id="paymentButton" class="btn btn-payment-form" style="margin-top: 40px;" @click="SubmitPaymentForm">
+                  <div class="spinner hidden" id="spinner"></div>
+                  <label id="button-text" style="color: #fff; opacity: 1; margin-left: 20px; margin-right: 20px; margin-top: 5px;">Pay</label>
+                </button>
+                <p id="card-error" role="alert"></p>
+                <p class="result-message hidden" v-if="paymentSucceeded">
+                  Payment succeeded
+                </p>
+                <p class="error-result-message hidden result-message" v-if="paymentFailed">
+                  Payment Failed, {{ paymentError }}
+                </p>
+            </form>
+        </section>
+      </div>
+  </body>
 </template>
 
 <script>
@@ -206,10 +206,21 @@ export default {
             let PaymentElement = StripeFormElements.create(ElementType, {style: PaymentFormStyle})
             PaymentElement.mount("#" + stripePaymentCardElement)
 
-            // Disabling Payment Button on the Card Number Change Event 
+            // // Disabling Payment Button on the Card Number Change Event 
             PaymentElement.on('change', function(event){
-              console.log("card number change event", event);
-              document.querySelector("paymentButton").disabled = true;
+              // Changing the Submit Button availability, based on the status of the transaction data
+              switch(event.complete) {
+                
+                case true:
+                  Logger.debug("Payment Card element is ready for the Payment")
+                  document.getElementById("paymentButton").disabled = false 
+                  break;
+
+                case false:
+                  console.log('card change event', event);
+                  document.getElementById("paymentButton").disabled = true;
+                  break;
+              }
             })
         },
     },
@@ -316,4 +327,10 @@ export default {
   background: #141625;
 }
 /* Buttons and links */
+
+
+.paymentButton:disabled {
+  // Payment Submit Button State 
+  background-color: darkgreen;
+}
 </style>

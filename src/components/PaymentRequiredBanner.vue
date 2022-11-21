@@ -17,14 +17,13 @@
         </div>
 
         <div class="apiButtons" style="justify-content: space-between; display: block;">
-        <button  @click="RedirectPaymentSelection()"  class="btn btn-upload-certificate" style="margin-top: 20px; margin-left: 30px; color: #fff; !important">
+        <button  @click="RedirectPaymentSelection()"  class="btn btn-payout" style="margin-top: 20px; margin-left: 30px; color: #fff; !important">
             <label id="downloadLabel" style="color: #fff !important; margin-bottom: 1px !important;">Payout</label>
         </button>
 
-        <button  @click="RedirectPaymentSelection()"  class="btn btn-upload-certificate" style="margin-top: 20px; margin-left: 30px; color: #fff; !important">
-            <label id="downloadLabel" style="color: #fff !important; margin-bottom: 1px !important;">Payout</label>
+        <button  @click="RedirectPaymentCheck()"  class="btn btn-check" style="margin-top: 20px; margin-left: 30px; color: green; !important">
+            <label id="downloadLabel" style="color: #fff !important; margin-bottom: 1px !important;">Get Check</label>
         </button>
-
 
         </div>
         </v-card-text>
@@ -41,7 +40,21 @@ export default {
             // Redirecting the Customer To The Bill Page
             this.$router.push({name: "payment_page"})
         },
-
+        RedirectPaymentCheck() {
+            this.$router.push({name: "payment_check"})
+        }
     }
 }
 </script>
+
+
+<style lang="scss">
+
+.btn-check {
+    background-color: green;
+}
+
+.btn-payout {
+    background-color: red;
+}
+</style>
