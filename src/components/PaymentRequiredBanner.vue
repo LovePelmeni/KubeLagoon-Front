@@ -16,10 +16,15 @@
             <h2><label style="color: red;">Your Subscription is outdated and operations is freezed. Please pay out for the usage.</label></h2>
         </div>
 
-        <div class="apiButtons">
+        <div class="apiButtons" style="justify-content: space-between; display: block;">
         <button  @click="RedirectPaymentSelection()"  class="btn btn-upload-certificate" style="margin-top: 20px; margin-left: 30px; color: #fff; !important">
-        <label id="downloadLabel" style="color: #fff !important; margin-bottom: 1px !important;">Payout</label>
+            <label id="downloadLabel" style="color: #fff !important; margin-bottom: 1px !important;">Payout</label>
         </button>
+
+        <button  @click="RedirectPaymentSelection()"  class="btn btn-upload-certificate" style="margin-top: 20px; margin-left: 30px; color: #fff; !important">
+            <label id="downloadLabel" style="color: #fff !important; margin-bottom: 1px !important;">Payout</label>
+        </button>
+
 
         </div>
         </v-card-text>
