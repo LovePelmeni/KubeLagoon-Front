@@ -2,12 +2,12 @@
   <body>
       <div class="paymentFormComponent" style="display: flex; justify-content: center; margin-top: 5%;">
         <section>
-            <form class="payment-form" style="background-color: #1e2139;">
+            <form class="payment-form" style="background-color: #1e2139;" @submit.prevent="SubmitPaymentForm">
                 <input type="text" class="paymentFormField" id="email" placeholder="Username" v-model="customer.Username" />
                 <input type="text" class="paymentFormField" id="email" placeholder="Phone" v-model="customer.PhoneNumber" />
                 <input type="text" class="paymentFormField" id="email" placeholder="Email address" v-model="customer.Email" />
                 <div id="card-element" class="paymentFormField"><!--Stripe.js injects the Card Element--></div>
-                <button id="paymentButton" class="btn btn-payment-form" style="margin-top: 40px;" @click="SubmitPaymentForm">
+                <button id="paymentButton" class="btn btn-payment-form" style="margin-top: 40px;" type="submit">
                   <div class="spinner hidden" id="spinner"></div>
                   <label id="button-text" style="color: #fff; opacity: 1; margin-left: 20px; margin-right: 20px; margin-top: 5px;">Pay</label>
                 </button>
@@ -85,12 +85,13 @@ class PaymentIntentManager {
             let Currency = "usd";
             let BillCostInformation = new CheckoutBillCalculator("usd", 
             this.PaymentMethodInformation).CalculateTotalInCents()
-            
+
             let PaymentIntent = this.self.stripe.paymentIntents.create({
                 payment_method_types: ["card"],
                 amount: BillCostInformation.TotalCost,
                 currency: Currency,
             })
+            console.log(PaymentIntent)
             return PaymentIntent.id
             } catch(Exception) {
                 this.self.paymentFailed = true 
@@ -138,18 +139,31 @@ export default {
             {message: Message, Type: Type}))
         },
 
-        SubmitPaymentForm() {
+        async SubmitPaymentForm() {
             // Submitting the Payment Form 
-            this.ConfirmPayment()
+            await this.ConfirmPayment()
         },
-        ConfirmPayment() {
+        async ConfirmPayment() {
             // Confirming the Payment
-            let elements = this.$data.paymentElements
-            let ResponseError = this.$data.stripe.confirmPaymentIntent({
-                elements,
-                confirm: {
-                    return_url: `http://${FRONTEND_APPLICATION_HOST}:${FRONTEND_APPLICATION_PORT}/payment/success/page/`
+    
+            let cardElement = this.$data.paymentElements
+            let ResponseError = await this.$data.stripe.confirmPayment({
+              cardElement,
+              confirmParams: {
+                // return_url: project final route thankyou.vue
+                return_url: `http://${FRONTEND_APPLICATION_HOST}:${FRONTEND_APPLICATION_PORT}/payment/success/page/`,
+                shipping: {
+                  address: {
+                    city: this.customer.City,
+                    line1: this.customer.Street,
+                    postal_code: this.customer.ZipCode,
+                    country: this.customer.Country,
+                  },
+                  username: `${this.customer.Username}`,
+                  email: `${this.customer.Email}`,
+                  phone: this.customer.PhoneNumber,
                 }
+              }
             })
 
             let SuccessType = "success"
@@ -188,19 +202,18 @@ export default {
                     Logger.debug("Payment with Credentials" + JSON.stringify(paymentIntent), "has been in undefined state") 
                     this.paymentError = ResponseError.message
                     this.paymentFailed = true
-                    break
+                    break;
             }
         },
 
         async InitializePaymentElement() {
             // Initializing Payment Element, based on the Component HTML Pattern 
             await this.InitializeStripeModule() // Initializing Stripe Module 
-            let ElementType= "card";
+            let ElementType= "payment";
             let stripePaymentCardElement = "card-element"; // ID of the Stripe Payment Card Element
-            let NewPaymentIntentId = new PaymentIntentManager(this, this.Bill).InitializePaymentIntentRequest()
-            let StripeFormElements = this.$data.stripe.elements()
+            let PaymentIntentId = new PaymentIntentManager(this, this.Bill).InitializePaymentIntentRequest()
+            let StripeFormElements = this.$data.stripe.elements({clientSecret: PaymentIntentId})
             this.$data.paymentElements = StripeFormElements
-            this.$data.paymentIntentSecret = NewPaymentIntentId
 
             // Mouting the Stripe Integration inside the Vue Template 
             let PaymentElement = StripeFormElements.create(ElementType, {style: PaymentFormStyle})
@@ -226,9 +239,8 @@ export default {
     },
     computed: {
         ...mapState(["Bill", "customer"]),
-        }
+    }
   }
-
 </script>
 
 <style lang="scss">
