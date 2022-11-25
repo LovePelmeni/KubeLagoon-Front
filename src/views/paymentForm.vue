@@ -50,8 +50,8 @@ const PaymentFormStyle = {
 import { h } from "vue";
 let Logger = require("pino")()
 
-let FRONTEND_APPLICATION_HOST = process.env.FRONTEND_APPLICATION_HOST
-let FRONTEND_APPLICATION_PORT = process.env.FRONTEND_APPLICATION_PORT
+let FRONTEND_APPLICATION_HOST = process.env.FRONTEND_APPLICATION_HOST || 'localhost'
+let FRONTEND_APPLICATION_PORT = process.env.FRONTEND_APPLICATION_PORT || String(8080)
 
 class CheckoutBillCalculator {
     // Calculating Price for the Payment Checkout Bill 

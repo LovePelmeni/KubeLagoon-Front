@@ -12,8 +12,8 @@ const Logger = winston.createLogger({
     // - Write all logs with importance level of `error` or less to `error.log`
     // - Write all logs with importance level of `info` or less to `combined.log`
     //
-    new winston.transports.File({ filename: 'paymentErrorLogger.log', level: 'error' }),
-    new winston.transports.File({ filename: 'paymentCombinedLogger.log' }),
+    new winston.transports.File({ filename: path.resolve(__dirname, "./paymentIntentErrorLogger.log"), level: 'error' }),
+    new winston.transports.File({ filename: path.resolve(__dirname, './paymentCombinedLogger.log')}),
   ],
 });
 
@@ -21,14 +21,11 @@ const Logger = winston.createLogger({
 let crossOriginResourceSharingLib = require("cors");
 
 let STRIPE_SECRET_KEY = process.env.STRIPE_SECRET_KEY || 'sk_test_51KbRPhBlXqCTWmcH0ByNRrTQgKwsodAmpUfReugFtuxeAtMBe4ABVab2gaNvbDzGMAsnJcG1ANcZ8PcHnNI0c4Co00eRdg7s1O'
-
-let ApplicationWebhookServicePort = process.env.PAYMENT_APPLICATION_PORT 
 let stripeSecret = process.env.STRIPE_SECRET_KEY
 
 var stripeModule = require("stripe").Stripe;
 var stripe = stripeModule(stripeSecret)
 
-let PAYMENT_APPLICATION_HOST = process.env.PAYMENT_APPLICATION_HOST
 let PAYMENT_APPLICATION_PORT = process.env.PAYMENT_APPLICATION_PORT
 
 
@@ -85,14 +82,15 @@ class PaymentWebhookManager {
     }
 }
 
+
 applicationService.post("/create/payment/intent/", express.raw({type: "application/json"}), function(request, response){
     // Processing the payment Intent Creation, based on the Input Data 
 
     // Setting up the Cors Headers
 
     response.setHeader("Access-Control-Allow-Origin", request.headers["access-control-allow-origin"])
-    response.setHeader("Access-Control-Allow-Methods", request.headers["access-control-allow-methods"])
-    response.setHeader("Access-Control-Allow-Credentials", request.headers["access-control-allow-credentials"])
+    response.setHeader("Access-Control-Allow-Methods", "GET,POST,PUT,OPTIONS,DELETE");
+    response.setHeader("Access-Control-Allow-Credentials", true)
 
     try {
         let Amount = JSON.parse(request.body)["Amount"]
@@ -106,11 +104,13 @@ applicationService.post("/create/payment/intent/", express.raw({type: "applicati
         })
         console.log(NewPaymentIntent.client_secret);
         if (NewPaymentIntent.error != null) {
-        Logger.debug("Processing Successfuly Payment Intent")
-        return response.status(200).send({intentSecret: NewPaymentIntent.client_secret})}
-        Logger.debug("Processing Unsuccessful Payment Intent, [ERROR]", NewPaymentIntent.error)
-        return response.status(500).send({error: NewPaymentIntent.error})
+        Logger.debug("Processing Unsuccessful Payment Intent [ERROR]: " + NewPaymentIntent.error)
+        return response.status(500).send({intentSecret: NewPaymentIntent.client_secret})}
+        Logger.debug("Processing Successful Payment Intent")
+        return response.status(200).send({error: NewPaymentIntent.error})
+        
     }catch(responseError) {
+        console.log(responseError)
         Logger.debug("Failed to Initialize new Payment intent", responseError)
         return response.status(500).send({error: responseError})
     }
@@ -152,7 +152,7 @@ applicationService.use(
     }
 ))
 
-applicationService.listen(Number(ApplicationWebhookServicePort), function() {
-    Logger.debug("Webhook Service has been Successfully Started")
-    console.log("Webhook Service has been Successfully Started")
+applicationService.listen(Number(PAYMENT_APPLICATION_PORT), function() {
+    Logger.debug("Webhook Service has been Successfully Started");
+    console.log("Webhook Service has been Successfully Started");
 })
