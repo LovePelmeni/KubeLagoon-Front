@@ -115,7 +115,6 @@ export default {
     "RegenerationFailed", "RegenerationError", "DownloadError"]),
   },
 };
-
 </script>
 
 

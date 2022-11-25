@@ -20,12 +20,18 @@ import ApplySubscriptionComponent from "../components/SubscriptionApplyComponent
 import SuccessPage from "../components/payments/successPage.vue";
 import CancelPage from "../components/payments/cancelPage.vue";
 import PaymentFormView from "../views/paymentForm.vue";
+import PaymentCheckView from "../views/PaymentCheckView.vue";
 
 const routes = [
   {
     path: "/",
     name: "main_page",
     component: HomePage,
+  },
+  {
+    name: "payment_check",
+    path: "/get/payment/check/",
+    component: PaymentCheckView,
   },
   {
     name: "payment_page",

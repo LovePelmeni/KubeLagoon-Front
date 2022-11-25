@@ -3,9 +3,9 @@
       <div class="paymentFormComponent" style="display: flex; justify-content: center; margin-top: 5%;">
         <section>
             <form class="payment-form" style="background-color: #1e2139;" @submit.prevent="SubmitPaymentForm">
-                <input type="text" class="paymentFormField" id="email" placeholder="Username" v-model="customer.Username" />
-                <input type="text" class="paymentFormField" id="email" placeholder="Phone" v-model="customer.PhoneNumber" />
-                <input type="text" class="paymentFormField" id="email" placeholder="Email address" v-model="customer.Email" />
+                <input type="text" class="paymentFormField" id="customerUsername" placeholder="Username" v-model="customer.Username" />
+                <input type="text" class="paymentFormField" id="customerPhoneNumber" placeholder="Phone" v-model="customer.PhoneNumber" />
+                <input type="text" class="paymentFormField" id="customerEmail" placeholder="Email address" v-model="customer.Email" />
                 <div id="card-element" class="paymentFormField"><!--Stripe.js injects the Card Element--></div>
                 <button id="paymentButton" class="btn btn-payment-form" style="margin-top: 40px;" type="submit">
                   <div class="spinner hidden" id="spinner"></div>
@@ -26,6 +26,9 @@
 
 <script>
 
+let PAYMENT_APPLICATION_HOST = process.env.PAYMENT_APPLICATION_HOST || 'localhost'
+let PAYMENT_APPLICATION_PORT = process.env.PAYMENT_APPLICATION_PORT || 8009
+
 const PaymentFormStyle = {
       base: {
         backgroundColor: "#141625",
@@ -45,7 +48,6 @@ const PaymentFormStyle = {
 };
 
 import { h } from "vue";
-
 let Logger = require("pino")()
 
 let FRONTEND_APPLICATION_HOST = process.env.FRONTEND_APPLICATION_HOST
@@ -60,15 +62,22 @@ class CheckoutBillCalculator {
     }
     CalculateTotalInCents() {
         // Calculating Total Checkout Price (in Cents)
-        let TotalPrice = 0
-        for (let Server in this.BillInformation.Metadata.Servers) {
-            TotalPrice += Number(this.BillInformation.Metadata.Servers[Server].TotalUsageCost)
-        }
         return {
-            "Quantity": this.BillInformation.Metadata.Servers.length(),
-            "TotalCost": TotalPrice * 100,
+            "Quantity": 1,
+            "TotalCost": this.BillInformation.Metadata.Server.TotalUsageCost,
         }
     }
+}
+
+class PaymentIntentInitializationError extends Error {
+  constructor(ErrorObject) {
+    super(ErrorObject);
+    this.Error = ErrorObject;
+  }
+  GetReason() {
+    // Returns the Error Description 
+    return this.Error
+  }
 }
 
 class PaymentIntentManager {
@@ -85,18 +94,50 @@ class PaymentIntentManager {
             let Currency = "usd";
             let BillCostInformation = new CheckoutBillCalculator("usd", 
             this.PaymentMethodInformation).CalculateTotalInCents()
-
-            let PaymentIntent = this.self.stripe.paymentIntents.create({
-                payment_method_types: ["card"],
-                amount: BillCostInformation.TotalCost,
-                currency: Currency,
+            let APIUrl = new URL(`http://${PAYMENT_APPLICATION_HOST}:${PAYMENT_APPLICATION_PORT}/create/payment/intent/`)
+            let Response = global.jQuery.ajax({
+              url: APIUrl.toString(),
+              type: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                "Access-Control-Allow-Origin": `http://${FRONTEND_APPLICATION_HOST}:${FRONTEND_APPLICATION_PORT}`,
+                "Access-Control-Allow-Credentials": "true",
+                "Access-Control-Allow-Headers": "*",
+              },
+              data: JSON.stringify({
+                "Amount": BillCostInformation.TotalCost, 
+                "Currency": Currency,
+                "CustomerData": this.self.customer,
+              }), 
+              error: function(error) {
+                // Processing the Exception 
+                console.log(error);
+                throw new PaymentIntentInitializationError(
+                "Failed to Initialize New Payment Intent");
+              },
+              success: function(response) {
+                if (String(response.statusCode[0]) == "2") {
+                  // Processing the Successful Response 
+                  console.log(response.responseJSON['intentSecret'])
+                  return response.responseJSON["intentSecret"]
+                }else{
+                  let newError = 'undefined error'
+                  // Processing the Unsuccessful Respons
+                  console.log(response.responseJSON["exception"])
+                  if ('error' in Object.keys(response.responseJSON)) {
+                    newError = response.responseJSON["error"]
+                  }
+                 console.log("Error occurred", newError)
+                 throw new PaymentIntentInitializationError(newError)
+                }
+              }
             })
-            console.log(PaymentIntent)
-            return PaymentIntent.id
+            console.log(Response)
+            return Response
             } catch(Exception) {
-                this.self.paymentFailed = true 
-                this.self.paymentError = "Failed to Perform Payment"
-                return null 
+                console.log(Exception)
+                Logger.debug("Failed to Initialize New Payment Intent, [ERROR]: " + Exception)
+                throw Exception
             }
       }
 }
@@ -108,7 +149,12 @@ export default {
     name: "PaymentFormView",
     data() {
         return {
+            // Customer Data 
+            Username: null,
+            Email: null,
+            PhoneNumber: null,
 
+            // Component Local Properties Data 
             stripe: null,
             paymentIntentSecret: null,
             paymentElements: null,
@@ -143,12 +189,12 @@ export default {
             // Submitting the Payment Form 
             await this.ConfirmPayment()
         },
+
         async ConfirmPayment() {
-            // Confirming the Payment
+            // Confirming the Payment Intent
     
             let cardElement = this.$data.paymentElements
-            let ResponseError = await this.$data.stripe.confirmPayment({
-              cardElement,
+            let ResponseError = await this.$data.stripe.confirmPayment(cardElement, {
               confirmParams: {
                 // return_url: project final route thankyou.vue
                 return_url: `http://${FRONTEND_APPLICATION_HOST}:${FRONTEND_APPLICATION_PORT}/payment/success/page/`,
@@ -179,26 +225,26 @@ export default {
                     this.ShowPaymentStatusMessage("Your payment has been processed", SuccessType)
                     Logger.debug("Payment with Credentials" + JSON.stringify(ResponseError), "has been succeeded")
                     this.paymentSucceeded = true 
-                    break
+                    break;
 
                 case "processing":
                     // Processing the Response with the Payment
-                    this.ShowPaymentStatusMessage("", ProcessingType)
+                    this.ShowPaymentStatusMessage("Your payment is being processed", ProcessingType)
                     Logger.debug("Payment with Credentials" + JSON.stringify(paymentIntent), "has been processing")
                     this.paymentError = ResponseError.message
-                    break
+                    break;
 
                 case "requires_payment_method":
                     // Processing the Response with Unsuccessful Response Type
-                    this.ShowPaymentStatusMessage("", ErrorType)
+                    this.ShowPaymentStatusMessage("Your payment requires some additional actions", ErrorType)
                     Logger.debug("Payment with Credentials" + JSON.stringify(paymentIntent), "has been failed")
                     this.paymentError = ResponseError.message
                     this.paymentFailed = true 
-                    break
+                    break;
 
                 default:
                     // Processing the Other type of the Response Errors
-                    this.ShowPaymentStatusMessage("", UndefinedType)
+                    this.ShowPaymentStatusMessage("Unknown Error", UndefinedType)
                     Logger.debug("Payment with Credentials" + JSON.stringify(paymentIntent), "has been in undefined state") 
                     this.paymentError = ResponseError.message
                     this.paymentFailed = true
@@ -208,43 +254,54 @@ export default {
 
         async InitializePaymentElement() {
             // Initializing Payment Element, based on the Component HTML Pattern 
-            await this.InitializeStripeModule() // Initializing Stripe Module 
-            let ElementType= "payment";
-            let stripePaymentCardElement = "card-element"; // ID of the Stripe Payment Card Element
-            let PaymentIntentId = new PaymentIntentManager(this, this.Bill).InitializePaymentIntentRequest()
-            let StripeFormElements = this.$data.stripe.elements({clientSecret: PaymentIntentId})
-            this.$data.paymentElements = StripeFormElements
+            try {
+                await this.InitializeStripeModule() // Initializing Stripe Module 
+                let ElementType= "payment";
+                let stripePaymentCardElement = "card-element"; // ID of the Stripe Payment Card Element
+                let PaymentIntentId = new PaymentIntentManager(this, this.Bill).InitializePaymentIntentRequest()
+                let StripeFormElements = this.$data.stripe.elements({clientSecret: PaymentIntentId})
+                this.$data.paymentElements = StripeFormElements
 
-            // Mouting the Stripe Integration inside the Vue Template 
-            let PaymentElement = StripeFormElements.create(ElementType, {style: PaymentFormStyle})
-            PaymentElement.mount("#" + stripePaymentCardElement)
+                // Mouting the Stripe Integration inside the Vue Template 
+                let PaymentElement = StripeFormElements.create(ElementType, {style: PaymentFormStyle})
+                PaymentElement.mount("#" + stripePaymentCardElement)
 
-            // // Disabling Payment Button on the Card Number Change Event 
-            PaymentElement.on('change', function(event){
-              // Changing the Submit Button availability, based on the status of the transaction data
-              switch(event.complete) {
-                
-                case true:
-                  Logger.debug("Payment Card element is ready for the Payment")
-                  document.getElementById("paymentButton").disabled = false 
-                  break;
+                // // Disabling Payment Button on the Card Number Change Event 
+                PaymentElement.on('change', function(event){
+                  // Changing the Submit Button availability, based on the status of the transaction data
+                  switch(event.complete) {
+                    case true:
+                      Logger.debug("Payment Card element is ready for the Payment")
+                      document.getElementById("paymentButton").disabled = false 
+                      break;
 
-                case false:
-                  console.log('card change event', event);
-                  document.getElementById("paymentButton").disabled = true;
-                  break;
-              }
-            })
-        },
+                    case false:
+                      console.log('card change event', event);
+                      document.getElementById("paymentButton").disabled = true;
+                      break;
+                  }
+                })
+        } catch(Exception) {
+          // Processing the Exception 
+          if (typeof Exception == PaymentIntentInitializationError) {
+              Logger.debug('Exception has been raised', Exception.GetReason())
+              this.paymentError = Exception.GetReason()
+          }else{
+            Logger.debug("Undefined Exception at Payment Intent Initialization Has been catched.")
+            this.paymentError = Exception
+          }
+          this.paymentFailed = true
+        }
+    },
     },
     computed: {
         ...mapState(["Bill", "customer"]),
     }
-  }
+}
+
 </script>
 
 <style lang="scss">
-
 
 .paymentFormField {
   // Class, that describes style properties for the Payment Form Fields 

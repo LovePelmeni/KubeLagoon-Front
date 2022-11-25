@@ -69,6 +69,9 @@ data:
   BACKEND_APPLICATION_HOST: infrastructure.app-namespace.svc.cluster.local:8000
   BACKEND_APPLICATION_PORT: 8000
 
+  PAYMENT_APPLICATION_HOST: stripe_payment_service 
+  PAYMENT_APPLICATION_PORT: 8001 
+
 --- 
 
 apiVersion: v1

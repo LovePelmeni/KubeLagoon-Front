@@ -10,7 +10,6 @@
     </div>
 </template>
 
-
 <script>
 
 let Logger = require('pino')()
@@ -20,7 +19,7 @@ class VirtualServerConfigurationManager {
     GetConfigurations(CustomerJwtToken) {
         // Returns the Array of the Configurations, based on the Previous Customer Choice 
         let APIUrl = new URL(`http://${process.env.BACKEND_APPLICATION_HOST}:${process.env.BACKEND_APPLICATION_PORT}/get/filtered/configuraitons/`);
-        let Response = $.ajax({
+        let Response = global.jQuery.ajax({
             headers: {
                 "Access-Control-Allow-Origin": "*",
                 "Access-Control-Allow-Credentials": "true",

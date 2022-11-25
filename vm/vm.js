@@ -57,5 +57,6 @@ class VirtualMachineManager {
       // Receives all Virtual Machine Servers, belongs to the Customer
         return vm_rest.GetVirtualMachinesRestController(JwtToken)
     }
-}
+  }
+
 export {VirtualMachineManager};

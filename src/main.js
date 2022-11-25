@@ -22,10 +22,13 @@ globalCookiesConfig({
 const app = createApp(App).use(router)
 global.VuetifyModule = Vuetify
 
-app.use(require("vue3-cookies"))
-app.use(VueCookies)
-app.use(store)
-app.use(Vuex)
-app.use(Vuetify)
+const corsModule = require("cors");
+app.use(corsModule);
+
+app.use(require("vue3-cookies"));
+app.use(VueCookies);
+app.use(store);
+app.use(Vuex);
+app.use(Vuetify);
 
 app.mount('#app')
