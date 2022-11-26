@@ -298,7 +298,6 @@ export default {
         ...mapState(["Bill", "customer"]),
     }
 }
-
 </script>
 
 <style lang="scss">
