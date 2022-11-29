@@ -1,7 +1,10 @@
-const express = require("express");
+const express = require('express');
 const applicationService = express() 
 
-const path = require('path');
+let STRIPE_SECRET_KEY = String(process.env.STRIPE_SECRET_KEY || 'sk_test_51KbRPhBlXqCTWmcH0ByNRrTQgKwsodAmpUfReugFtuxeAtMBe4ABVab2gaNvbDzGMAsnJcG1ANcZ8PcHnNI0c4Co00eRdg7s1O')
+const Stripe = require('stripe').Stripe; 
+const stripe = new Stripe(STRIPE_SECRET_KEY)
+
 const winston = require('winston');
 
 const Logger = winston.createLogger({
@@ -13,20 +16,12 @@ const Logger = winston.createLogger({
     // - Write all logs with importance level of `error` or less to `error.log`
     // - Write all logs with importance level of `info` or less to `combined.log`
     //
-    new winston.transports.File({ filename: path.resolve(__dirname, "./paymentIntentErrorLogger.log"), level: 'error' }),
-    new winston.transports.File({ filename: path.resolve(__dirname, './paymentCombinedLogger.log')}),
+    new winston.transports.File({ filename: "./paymentIntentErrorLogger.log", level: 'error' }),
+    new winston.transports.File({ filename: './paymentCombinedLogger.log'}),
   ],
 });
 
-
-let crossOriginResourceSharingLib = require("cors");
-
-let STRIPE_SECRET_KEY = process.env.STRIPE_SECRET_KEY || 'sk_test_51KbRPhBlXqCTWmcH0ByNRrTQgKwsodAmpUfReugFtuxeAtMBe4ABVab2gaNvbDzGMAsnJcG1ANcZ8PcHnNI0c4Co00eRdg7s1O'
-let stripeSecret = process.env.STRIPE_SECRET_KEY
-
-var stripeModule = require("stripe").Stripe;
-var stripe = stripeModule(stripeSecret)
-
+let crossOriginResourceSharingLib = require('cors');
 let PAYMENT_APPLICATION_PORT = process.env.PAYMENT_APPLICATION_PORT
 
 
@@ -83,8 +78,8 @@ class PaymentWebhookManager {
     }
 }
 
-
-applicationService.post("/create/payment/intent/", express.raw({type: "application/json"}), function(request, response){
+applicationService.use(express.json())
+applicationService.post("/create/payment/intent/", express.raw({type: "application/json"}), async (request, response) => {
     // Processing the payment Intent Creation, based on the Input Data 
 
     // Setting up the Cors Headers
@@ -97,28 +92,28 @@ applicationService.post("/create/payment/intent/", express.raw({type: "applicati
         let Amount = JSON.parse(request.body)["Amount"]
         let Currency = JSON.parse(request.body)["Currency"]
         let CustomerData = JSON.parse(request.body)["CustomerData"]
-        let NewPaymentIntent = stripe.paymentIntents.create(STRIPE_SECRET_KEY, {
+
+        let NewPaymentIntent = await stripe.paymentIntents.create({
             amount: Amount, 
             currency: Currency, 
             payment_method_types: "card",
-            metadata: CustomerData + {CreatedAt: new Date.now()}
+            metadata: CustomerData + {CreatedAt: Date.now()}
         })
         console.log(NewPaymentIntent.client_secret);
         if (NewPaymentIntent.error != null) {
         Logger.debug("Processing Unsuccessful Payment Intent [ERROR]: " + NewPaymentIntent.error)
-        return response.status(500).send({intentSecret: NewPaymentIntent.client_secret})}
+        return response.status(200).send({intentSecret: NewPaymentIntent.client_secret})}
         Logger.debug("Processing Successful Payment Intent")
-        return response.status(200).send({error: NewPaymentIntent.error})
+        return response.status(400).send({error: NewPaymentIntent.error})
         
     }catch(responseError) {
-        console.log(responseError)
         Logger.debug("Failed to Initialize new Payment intent", responseError)
         return response.status(500).send({error: responseError})
     }
 })
 
 applicationService.post("/payment/webhook/", express.raw({type: "application/json"}),
- function(request, response) {
+ async (request, response) => {
      // Processing the Payment Webhook Http Request
     let approvementSignatureHeader = request.headers["stripe-signature"]
     try {
