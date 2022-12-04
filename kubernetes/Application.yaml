@@ -128,3 +128,35 @@ data:
               }
           }
       }
+---
+
+apiVersion: v1
+kind: Service 
+metadata:
+  name: controller-service 
+  namespace: controller-namespace 
+spec:
+  selector:
+    app: controller-app 
+  ports:
+    - name: http 
+      port: 8000
+--- 
+
+apiVersion: v1
+kind: Deployment 
+metadata:
+  name: controller-deployment 
+  namespace: controller-namespace 
+spec:
+  template:
+    metadata:
+      labels:
+        app: controller-app 
+    spec:
+      containers:
+        - name: controller-name-configuration 
+          image: controllerImage
+          ports:
+            - containerPort: 8000
+              protocol: TCP 

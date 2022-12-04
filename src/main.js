@@ -30,5 +30,4 @@ app.use(VueCookies);
 app.use(store);
 app.use(Vuex);
 app.use(Vuetify);
-
 app.mount('#app')

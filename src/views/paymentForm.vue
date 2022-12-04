@@ -26,8 +26,9 @@
 
 <script>
 
-let PAYMENT_APPLICATION_HOST = process.env.PAYMENT_APPLICATION_HOST || 'localhost'
-let PAYMENT_APPLICATION_PORT = process.env.PAYMENT_APPLICATION_PORT || 8009
+let STRIPE_SECRET_KEY = String(process.env.STRIPE_SECRET_KEY || 'sk_test_51KbRPhBlXqCTWmcH0ByNRrTQgKwsodAmpUfReugFtuxeAtMBe4ABVab2gaNvbDzGMAsnJcG1ANcZ8PcHnNI0c4Co00eRdg7s1O')
+const Stripe = require('stripe').Stripe; 
+const stripe = new Stripe(STRIPE_SECRET_KEY)
 
 const PaymentFormStyle = {
       base: {
@@ -88,52 +89,36 @@ class PaymentIntentManager {
         this.self = self 
         this.PaymentMethodInformation = PaymentMethodInformation
     }
-    InitializePaymentIntentRequest() {
+
+    async InitializePaymentIntentRequest() {
         // Initializing New Payment Method Request 
         try {
             let Currency = "usd";
             let BillCostInformation = new CheckoutBillCalculator("usd", 
             this.PaymentMethodInformation).CalculateTotalInCents()
-            let APIUrl = new URL(`http://${PAYMENT_APPLICATION_HOST}:${PAYMENT_APPLICATION_PORT}/create/payment/intent/`)
-            let Response = global.jQuery.ajax({
-              url: APIUrl.toString(),
-              type: "POST",
-              headers: {
-                "Content-Type": "application/json",
-                "Access-Control-Allow-Origin": `http://${FRONTEND_APPLICATION_HOST}:${FRONTEND_APPLICATION_PORT}`,
-                "Access-Control-Allow-Credentials": "true",
-                "Access-Control-Allow-Headers": "*",
-              },
-              data: JSON.stringify({
-                "Amount": BillCostInformation.TotalCost, 
-                "Currency": Currency,
-                "CustomerData": this.self.customer,
-              }), 
-              error: function(error) {
-                // Processing the Exception 
-                console.log(error);
-                throw new PaymentIntentInitializationError(
-                "Failed to Initialize New Payment Intent");
-              },
-              success: function(response) {
-                if (String(response.statusCode[0]) == "2") {
-                  // Processing the Successful Response 
-                  console.log(response.responseJSON['intentSecret'])
-                  return response.responseJSON["intentSecret"]
-                }else{
-                  let newError = 'undefined error'
-                  // Processing the Unsuccessful Respons
-                  console.log(response.responseJSON["exception"])
-                  if ('error' in Object.keys(response.responseJSON)) {
-                    newError = response.responseJSON["error"]
-                  }
-                 console.log("Error occurred", newError)
-                 throw new PaymentIntentInitializationError(newError)
-                }
-              }
+            let paymentIntent = await stripe.paymentIntents.create({
+              payment_method_types: "card",
+              amount: BillCostInformation.TotalCost, 
+              currency: Currency,
+              metadata: {Email: this.self.customer.Email, 
+              Username: this.self.customer.Username, 
+              PhoneNumber: this.self.customer.PhoneNumber, CreatedAt: Date.now()}
             })
-            console.log(Response)
-            return Response
+            console.log(paymentIntent, paymentIntent.client_secret)
+            switch (paymentIntent.last_payment_error === null) {
+            
+              case false:
+                Logger.error("[Payment Intent Error]: " + paymentIntent.error)
+                throw new PaymentIntentInitializationError("Failed to Initialize Payment")
+                
+              case true:
+                Logger.debug("Payment Intent has been successfully created")
+                return paymentIntent.client_secret // returns the client secret key 
+            
+              default: 
+                Logger.error("Undefined state, after creating the Payment Intent")
+                throw new PaymentIntentInitializationError()
+            }
             } catch(Exception) {
                 console.log(Exception)
                 Logger.debug("Failed to Initialize New Payment Intent, [ERROR]: " + Exception)
@@ -174,8 +159,6 @@ export default {
         ...mapMutations(["SAVE_PAYMENT_INTENT_CHECKOUT"]),
         async InitializeStripeModule() {
           // Initializes Stripe Module 
-          let PublicStripeKey = process.env.STRIPE_PUBLIC_KEY // grabbing the Stripe Secret key from the Environment Variables
-          console.log(PublicStripeKey)
           let stripe = await loadStripe(String('pk_test_51KbRPhBlXqCTWmcHsFZwLrEBFIuQGGmDmXol9YMB66mSmoJM0OKsOcNQC4aPGxJ3xpRrfRMbDxF1GuFrsgUmX59Z006uU7xcuq'))
           this.$data.stripe = stripe
         },  
@@ -251,14 +234,14 @@ export default {
                     break;
             }
         },
-
         async InitializePaymentElement() {
             // Initializing Payment Element, based on the Component HTML Pattern 
             try {
                 await this.InitializeStripeModule() // Initializing Stripe Module 
                 let ElementType= "payment";
                 let stripePaymentCardElement = "card-element"; // ID of the Stripe Payment Card Element
-                let PaymentIntentId = new PaymentIntentManager(this, this.Bill).InitializePaymentIntentRequest()
+                let paymentManager = new PaymentIntentManager(this, this.Bill)
+                let PaymentIntentId = await paymentManager.InitializePaymentIntentRequest()
                 let StripeFormElements = this.$data.stripe.elements({clientSecret: PaymentIntentId})
                 this.$data.paymentElements = StripeFormElements
 

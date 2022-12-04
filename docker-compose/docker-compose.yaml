@@ -35,13 +35,6 @@ services:
     networks:
       - cloud-infrastructure-network
 
-
-  frontend_application_service:
-    container_name: container-name-server 
-    image: controllerImage
-    ports:
-      - containerPort: 
-
 networks:
   cloud-infrastructure-network:
       external: true 

@@ -79,7 +79,7 @@ class PaymentWebhookManager {
 }
 
 applicationService.use(express.json())
-applicationService.post("/create/payment/intent/", express.raw({type: "application/json"}), async (request, response) => {
+applicationService.post("/create/payment/intent/", crossOriginResourceSharingLib(), async (request, response) => {
     // Processing the payment Intent Creation, based on the Input Data 
 
     // Setting up the Cors Headers
@@ -99,7 +99,9 @@ applicationService.post("/create/payment/intent/", express.raw({type: "applicati
             payment_method_types: "card",
             metadata: CustomerData + {CreatedAt: Date.now()}
         })
+
         console.log(NewPaymentIntent.client_secret);
+
         if (NewPaymentIntent.error != null) {
         Logger.debug("Processing Unsuccessful Payment Intent [ERROR]: " + NewPaymentIntent.error)
         return response.status(200).send({intentSecret: NewPaymentIntent.client_secret})}
@@ -137,7 +139,6 @@ applicationService.post("/payment/webhook/", express.raw({type: "application/jso
         response.status(400).send(JSON.stringify({"Error": "Invalid Event: " + error}))
     }
 })
-// Initializing CORS Policy for the webhooks 
 
 applicationService.use(
     crossOriginResourceSharingLib(

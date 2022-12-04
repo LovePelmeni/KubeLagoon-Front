@@ -121,7 +121,6 @@
 
 <script>
 
-
 import SoftButton from "../components/SoftButton.vue";
 import * as fields_rest from "../../rest/fields.js";
 
@@ -233,7 +232,6 @@ export default {
     },
   }
 }
-
 class UniqueFieldValidator {
     // Class, Validates the Unique Fields for the Registration Form 
 
