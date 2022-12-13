@@ -46,4 +46,5 @@ class VirtualMachineHealthStateChecker {
   }
 }
 
+
 export {VirtualMachineHealthStateChecker};
