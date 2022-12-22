@@ -103,7 +103,7 @@ export default {
 
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 header {
   z-index: 99;
   flex-direction: row;
